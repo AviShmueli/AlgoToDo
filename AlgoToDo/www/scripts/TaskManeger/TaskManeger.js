@@ -6,10 +6,10 @@
         .controller('TaskManegerCtrl', TaskManegerCtrl);
 
     TaskManegerCtrl.$inject = [ 
-        '$scope', '$location', '$mdBottomSheet', '$mdSidenav', '$mdDialog', 'datacontext', 'lodash', 'socket', '$cordovaDialogs'
+        '$scope', '$location', '$mdBottomSheet', '$mdSidenav', '$mdDialog', 'datacontext', 'lodash', 'socket', '$cordovaLocalNotification', '$cordovaSms'
     ];
 
-    function TaskManegerCtrl($scope, $location, $mdBottomSheet, $mdSidenav, $mdDialog, datacontext, lodash, socket, $cordovaDialogs) {
+    function TaskManegerCtrl($scope, $location, $mdBottomSheet, $mdSidenav, $mdDialog, datacontext, lodash, socket, $cordovaLocalNotification, $cordovaSms) {
 
         var vm = this;
         
@@ -34,10 +34,31 @@
             vm.userName = vm.userlogin.name;
             vm.userConnected = true;
 
-            $cordovaDialogs.alert(vm.userName + ' התחבר למערכת בהצלחה', 'משתמש התחבר בהצלחה', 'button name')
-            .then(function () {
-                // callback success
-            });
+            /*
+            $cordovaSms
+              .send('+972542240608', 'אבי התותח', options)
+              .then(function () {
+                  // Success! SMS was sent
+              }, function (error) {
+                  // An error occurred
+              });
+              */
+
+            
+
+            /*
+            // use to schedule notifications to the user about tasks that not been get atention yet
+            $cordovaLocalNotification.schedule({
+                id: 1,
+                title: 'Title here',
+                text: 'Text here',
+                data: {
+                    customProperty: 'custom value'
+                }
+            }).then(function (result) {
+                // ...
+            });*/
+            
         };
         
         
@@ -65,6 +86,21 @@
         // when new task received from the server
         socket.on('new-task', function(data) {
             vm.onGoingActivityies.push(data);
+
+            var alarmTime = new Date();
+            alarmTime.setMinutes(alarmTime.getSeconds() + 1);
+
+            $cordovaLocalNotification.add({
+                id: "1234",
+                date: alarmTime,
+                message: "יש לך משימה אחת חדשה",
+                title: "משימה חדשה",
+                autoCancel: true,
+                sound: 'res://platform_default',
+                icon: 'res://icon'
+            }).then(function () {
+                console.log("The notification has been set");
+            });
         });
 
         

@@ -5,9 +5,9 @@
         .module('TaskManeger.logger')
         .factory('logger', logger);
 
-    logger.$inject = ['$log', '$mdToast'];
+    logger.$inject = ['$log', '$mdToast', '$cordovaToast'];
 
-    function logger($log, $mdToast) {
+    function logger($log, $mdToast, $cordovaToast) {
         var service = {
             showToasts: true,
 
@@ -26,6 +26,16 @@
         function error(message, data, title) {
             //toastr.error(message, title);
             $log.error('Error: ' + message, data);
+
+            /*
+            $cordovaToast
+            .show('Here is a message', 'long', 'center')
+            .then(function (success) {
+                // success
+            }, function (error) {
+                // error
+            });
+            */
         }
 
         function info(message, data, title) {
