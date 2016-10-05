@@ -4,7 +4,7 @@ var express = require('express');
 var path = require('path');
 var mongodb = require('mongodb').MongoClient;
 var ObjectID = require('mongodb').ObjectID;
-var mongoUrl = 'mongodb://avi@algo.bz:avi3011algo@ds033996.mlab.com:33996/algotodo_db_01';
+var mongoUrl = 'mongodb://admin:avi3011algo@ds033996.mlab.com:33996/algotodo_db_01';
 var bodyParser = require('body-parser');
 var app = express();
 
@@ -97,9 +97,16 @@ io.on('connection', function (socket) {
 
         //add task to Mongo
         var newTask = task;
+        mongodb.connect(mongoUrl, function (err, db) {
+            var collection = db.collection('tasks');
 
-        // send the new task to the employee
-        socket.broadcast.to(reciver).emit('new-task', newTask);
+            collection.insert(task,
+                function (err, results) {
+                    console.log(results.ops[0]);
+                    // send the new task to the employee
+                    socket.broadcast.to(reciver).emit('new-task', results.ops[0]);
+                });
+        });
 
         // if we whant to brodcast the message to all users
         // socket.broadcast.emit('task-received', data);

@@ -17,7 +17,7 @@
 
             var req = {
                 method: 'POST',
-                url: 'https://algotodo.herokuapp.com/TaskManeger/newTask',
+                url: '/TaskManeger/newTask',
                 data: {
                     task: task
                 }
@@ -31,7 +31,7 @@
         var getAllTasks = function() {
             var req = {
                 method: 'GET',
-                url: 'https://algotodo.herokuapp.com/TaskManeger/getTasks'
+                url: '/TaskManeger/getTasks'
             };
 
             return $http(req);
