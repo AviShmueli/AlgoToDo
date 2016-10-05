@@ -24,6 +24,12 @@ app.use(bodyParser.urlencoded({
 }));
 app.use(bodyParser.json());
 
+app.use(express.static('AlgoToDo/www'));
+app.use(express.static('AlgoToDo/bower_components'));
+app.use(express.static('AlgoToDo/node_modules'));
+app.use(express.static('www'));
+app.use(express.static('bower_components'));
+app.use(express.static('node_modules'));
 app.use(express.static('/www'));
 app.use(express.static('/bower_components'));
 app.use(express.static('/node_modules'));
