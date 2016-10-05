@@ -13,6 +13,7 @@
         'ngCookies',
         'ngStorage',
         'ngLodash',
+        'ngCordova',
 
         /*
          * Everybody has access to these.

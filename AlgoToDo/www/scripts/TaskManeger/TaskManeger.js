@@ -6,10 +6,10 @@
         .controller('TaskManegerCtrl', TaskManegerCtrl);
 
     TaskManegerCtrl.$inject = [ 
-        '$scope', '$location', '$mdBottomSheet', '$mdSidenav', '$mdDialog', 'datacontext', 'lodash', 'socket'
+        '$scope', '$location', '$mdBottomSheet', '$mdSidenav', '$mdDialog', 'datacontext', 'lodash', 'socket', '$cordovaDialogs'
     ];
 
-    function TaskManegerCtrl($scope, $location, $mdBottomSheet, $mdSidenav, $mdDialog, datacontext, lodash, socket) {
+    function TaskManegerCtrl($scope, $location, $mdBottomSheet, $mdSidenav, $mdDialog, datacontext, lodash, socket, $cordovaDialogs) {
 
         var vm = this;
         
@@ -33,6 +33,11 @@
             
             vm.userName = vm.userlogin.name;
             vm.userConnected = true;
+
+            $cordovaDialogs.alert(vm.userName + ' התחבר למערכת בהצלחה', 'משתמש התחבר בהצלחה', 'button name')
+            .then(function () {
+                // callback success
+            });
         };
         
         
