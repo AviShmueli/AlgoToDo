@@ -31,8 +31,9 @@ app.use(express.static('../www'));
 app.use(express.static('../bower_components'));
 app.use(express.static('../node_modules'));
 
-server.listen(port, function (err) {
+server.listen(process.env.PORT || 5002, function (err) {
     console.log('avi: running server on port ' + port);
+    console.log("Express server listening on port %d in %s mode", this.address().port, app.settings.env);
 });
 
 // -------- Socket.io --------//
