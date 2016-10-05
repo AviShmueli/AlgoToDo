@@ -4,7 +4,7 @@ var express = require('express');
 var path = require('path');
 var mongodb = require('mongodb').MongoClient;
 var ObjectID = require('mongodb').ObjectID;
-var mongoUrl = 'mongodb://localhost:27017/TaskManeger';
+var mongoUrl = 'mongodb://avi@algo.bz:avi3011algo@ds033996.mlab.com:33996/algotodo_db_01';
 var bodyParser = require('body-parser');
 var app = express();
 
