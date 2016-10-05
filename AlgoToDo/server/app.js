@@ -59,18 +59,14 @@ io.on('connection', function (socket) {
     socket.on('get-tasks', function (data) {
         // get user tasks
         var userName = data.userName;
-        var taskList1 = [{
-            name: 'אבי שמואלי'
-        }];
-        var taskList2 = [{
-            name: 'מישהו אחר'
-        }];
-        if (userName === 'אבי שמואלי') {
-            socket.emit('users-tasks', taskList1);
-        } else {
-            socket.emit('users-tasks', taskList2);
-        }
-
+        mongodb.connect(mongoUrl, function (err, db) {
+            var collection = db.collection('tasks');
+            collection.find({ employee: userName }).limit(200).toArray(function (err, result) {
+                socket.emit('users-tasks', result);
+                db.close();
+            });
+            console.log('user asks for all tasks');
+        });
     });
 
     // response to the client call for Login and join the chat

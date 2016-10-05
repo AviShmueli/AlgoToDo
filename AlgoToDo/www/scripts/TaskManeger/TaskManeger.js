@@ -156,7 +156,7 @@
             
 
             // using regular http to insert task
-            datacontext.saveNewTask(task);
+            //datacontext.saveNewTask(task);
 
             // clean the form
             datacontext.newTask = {};
