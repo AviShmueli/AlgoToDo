@@ -1,0 +1,31 @@
+<md-dialog aria-label="Mango (Fruit)" dir="rtl" layout="column" flex="50">
+    <md-toolbar>
+        <div class="md-toolbar-tools">
+            <h2>משימה חדשה</h2>
+        </div>
+    </md-toolbar>
+    <md-dialog-content class="md-padding" layout-margin>
+        <form name="userForm">
+            <div layout layout-sm="column">
+                <md-input-container flex> <label>שם המשימה</label> <input ng-model="vm.task.name" md-select-on-focus="true"> </md-input-container>
+            </div>
+            <div layout layout-sm="column">
+                <md-input-container flex> <label>שם העובד</label> <input ng-model="vm.task.employee"> </md-input-container>
+            </div>
+            <div layout layout-sm="column">
+                <md-input-container flex class="md-block">
+                    <label>תיאור המשימה</label>
+                    <!--<textarea ng-model="vm.task.descriptio" md-maxlength="150" rows="5"></textarea>-->
+                    <input ng-model="vm.task.description">
+                </md-input-container>
+            </div>
+            <div layout layout-sm="column">
+                <md-input-container flex> <label>סניף</label> <input ng-model="vm.task.branch"> </md-input-container>
+            </div>
+        </form>
+    </md-dialog-content>
+    <div class="md-actions" layout="row"> <span flex></span>
+        <md-button ng-click="vm.cancel()"> ביטול </md-button>
+        <md-button ng-click="vm.save()" class="md-primary"> שמור </md-button>
+    </div>
+</md-dialog>

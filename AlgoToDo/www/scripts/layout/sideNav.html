@@ -1,0 +1,62 @@
+﻿<md-sidenav class="md-sidenav-right md-whiteframe-z2 " md-component-id="left " md-is-locked-open="$mdMedia( 'gt-md') ">
+    <md-toolbar class="md-tall md-hue-2 ">
+        <span flex></span>
+        <div layout="column" layout-align="end center" class="md-toolbar-tools-bottom inset ">
+            <user-avatar></user-avatar>
+            <span></span>
+            <div>{{vm.userName}}</div>
+            <div>מנהל סניף רמת החייל</div>
+        </div>
+    </md-toolbar>
+    <md-list>
+        <!--<md-subheader>
+            <span flex></span>
+            <span>התחברות</span>
+        </md-subheader>
+        <md-item>
+            <md-item-content md-ink-ripple layout="row " layout-align="start center ">
+                <md-button aria-label="Search " ng-click="vm.login() ">
+                    <ng-md-icon icon="login "></ng-md-icon>
+                    <md-tooltip md-direction="right ">התחבר</md-tooltip>
+                </md-button>
+                <md-input-container flex dir="rtl">
+                    <label>שם משתמש</label>
+                    <input ng-model="vm.userName ">
+                </md-input-container>
+            </md-item-content>
+        </md-item>-->
+        <md-divider></md-divider>
+        <md-item ng-repeat="item in vm.menu ">
+            <a>
+                <md-item-content md-ink-ripple layout="row " layout-align="start center ">
+                    <div class="inset ">
+                        <ng-md-icon icon="{{item.icon}} "></ng-md-icon>
+                    </div>
+                    <span flex></span>
+                    <div class="inset ">
+                        {{item.title}}
+                    </div>
+                </md-item-content>
+            </a>
+        </md-item>
+        <md-divider></md-divider>
+        <md-subheader>
+            <span flex></span>
+            <span>ניהול</span>
+        </md-subheader>
+        <md-item ng-repeat="item in vm.admin ">
+            <a>
+                <md-item-content md-ink-ripple layout="row " layout-align="start center ">
+                    <div class="inset ">
+                        <ng-md-icon icon="{{item.icon}} "></ng-md-icon>
+                    </div>
+                    <span flex></span>
+                    <div class="inset ">
+                        {{item.title}}
+                    </div>
+                </md-item-content>
+            </a>
+        </md-item>
+        <md-divider></md-divider>
+    </md-list>
+</md-sidenav>
