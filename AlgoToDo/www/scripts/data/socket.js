@@ -8,7 +8,7 @@
     socket.$inject = ['$rootScope'];
 
     function socket($rootScope) {
-        var socket = io.connect('http://localhost:5001');
+        var socket = io.connect('https://algotodo.herokuapp.com');
 
         return {
             on: on,
