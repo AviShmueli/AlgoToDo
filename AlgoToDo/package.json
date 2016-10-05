@@ -1,7 +1,9 @@
 {
   "name": "AlgoToDo",
   "version": "1.0.0",
-  "start": "node server/app.js",
+  "scripts": {
+    "start": "node server/app.js"
+  },
   "private": true,
   "dependencies": {
     "body-parser": "^1.15.2",
