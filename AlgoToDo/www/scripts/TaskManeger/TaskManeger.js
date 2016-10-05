@@ -6,10 +6,10 @@
         .controller('TaskManegerCtrl', TaskManegerCtrl);
 
     TaskManegerCtrl.$inject = [ 
-        '$scope', '$location', '$mdBottomSheet', '$mdSidenav', '$mdDialog', 'datacontext', 'lodash'/*, 'socket'*/
+        '$scope', '$location', '$mdBottomSheet', '$mdSidenav', '$mdDialog', 'datacontext', 'lodash', 'socket'
     ];
 
-    function TaskManegerCtrl($scope, $location, $mdBottomSheet, $mdSidenav, $mdDialog, datacontext, lodash/*, socket*/) {
+    function TaskManegerCtrl($scope, $location, $mdBottomSheet, $mdSidenav, $mdDialog, datacontext, lodash, socket) {
 
         var vm = this;
         
@@ -19,7 +19,7 @@
 
         vm.login = function() {
             // login 
-            /*socket.emit('join', {
+            socket.emit('join', {
                 userName: vm.userlogin.name
             });
 
@@ -29,13 +29,13 @@
             // ask server to send the user tasks
             socket.emit('get-tasks', {
                 userName: vm.userlogin.name
-            });*/
+            });
             
             vm.userName = vm.userlogin.name;
             vm.userConnected = true;
         };
         
-        /*
+        
 
         // the response to the all-usersr from the server
         // get from the server the list of users that are connected
@@ -62,7 +62,7 @@
             vm.onGoingActivityies.push(data);
         });
 
-        */
+        
 
         vm.toggleSidenav = function(menuId) {
             $mdSidenav(menuId).toggle();
@@ -147,16 +147,16 @@
             // add the employee id to the task
             var id = lodash.get(vm.users[task.employee], 'socketid');
 
-            /*
+            
             // send the new task to the server
             socket.emit('create-task', {
                 task: task,
                 to: id
             });
-            */
+            
 
             // using regular http to insert task
-            datacontext.saveNewTask(task);
+            //datacontext.saveNewTask(task);
 
             // clean the form
             datacontext.newTask = {};
