@@ -1,7 +1,30 @@
 * {
     -webkit-tap-highlight-color: rgba(0,0,0,0);
 }
-
+md-dialog.fullscreen-dialog {
+    max-width: 100%;
+    max-height: 100%;
+    width: 95%;
+    height: 95%;
+    border-radius: 0;
+}
+.circle {
+  position: absolute;
+  left: 10px;
+    top: 30px;
+    width: 16px;
+    height: 16px;
+   background: rgb(255,110,64); 
+   -moz-border-radius: 70px; 
+   -webkit-border-radius: 70px; 
+   border-radius: 70px;
+}
+.circle .number{ 
+    font-size: 10px;  
+    top: 3px;
+    position: absolute;
+    left: 3px; 
+}
 body {
     -webkit-touch-callout: none;
     -webkit-text-size-adjust: none;
@@ -30,6 +53,7 @@ body {
     font-family: 'RobotoRegular', 'Droid Sans', 'Segoe UI', Segoe, 'San Francisco', 'Helvetica Neue', Helvetica, Arial, Geneva, sans-serif;
     font-size:12px;
 }
+
 
 .app {
     background: url(../images/cordova.png) no-repeat center top; 
@@ -148,8 +172,28 @@ md-sidenav ng-md-icon {
 
 /* ----- login form  ------- */
 
+.login-content:before {
+    content: ' ';
+    display: block;
+    position: absolute;
+    left: 2px;
+    top: 0px;
+    width: 100%;
+    height: 100%;
+    /* z-index: 1; */
+    opacity: 0.6;
+    background-image: url(../images/algologo1.png);
+    background-repeat: no-repeat;
+    background-position: center top;
+    -ms-background-size: cover;
+    -o-background-size: cover;
+    -moz-background-size: cover;
+    /* -webkit-background-size: cover; */
+    /* background-size: cover; */
+}
+
 .login {
-    background: #eee;
+        opacity: 0.9 !important;
     -webkit-font-smoothing: antialiased;
 }
 
@@ -161,6 +205,7 @@ md-sidenav ng-md-icon {
 .login>h1,
 .login>h3 {
     font-weight: 300;
+    font-weight: bold;
 }
 
 .login>h1 {
@@ -176,6 +221,7 @@ md-sidenav ng-md-icon {
     margin: 4em auto;
     padding: 3em 2em 2em 2em;
     background: #fafafa;
+    opacity: 0.9 !important;
     border: 1px solid #ebebeb;
     box-shadow: rgba(0, 0, 0, 0.14902) 0px 1px 1px 0px, rgba(0, 0, 0, 0.09804) 0px 1px 2px 0px;
 }

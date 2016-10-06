@@ -6,18 +6,19 @@
         .controller('TaskManegerCtrl', TaskManegerCtrl);
 
     TaskManegerCtrl.$inject = [ 
-        '$scope', '$location', '$mdBottomSheet', '$mdSidenav', '$mdDialog', 'datacontext', 'lodash', 'socket', '$cordovaLocalNotification', '$cordovaSms'
+        '$scope', '$location', '$mdMedia', '$mdBottomSheet', '$mdSidenav', '$mdDialog', 'datacontext', 'lodash', 'socket', '$cordovaLocalNotification', '$cordovaSms'
     ];
 
-    function TaskManegerCtrl($scope, $location, $mdBottomSheet, $mdSidenav, $mdDialog, datacontext, lodash, socket, $cordovaLocalNotification, $cordovaSms) {
+    function TaskManegerCtrl($scope, $location, $mdMedia, $mdBottomSheet, $mdSidenav, $mdDialog, datacontext, lodash, socket, $cordovaLocalNotification, $cordovaSms) {
 
         var vm = this;
-        
+       
+        vm.isSmallScrean = $mdMedia('sm');
         vm.userConnected = false;
         vm.userName = ''; //'אבי שמואלי';
         vm.userlogin = {};
 
-        vm.login = function() {
+        vm.login = function () {
             // login 
             socket.emit('join', {
                 userName: vm.userlogin.name
@@ -60,8 +61,6 @@
             });*/
             
         };
-        
-        
 
         // the response to the all-usersr from the server
         // get from the server the list of users that are connected

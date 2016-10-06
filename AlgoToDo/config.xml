@@ -25,10 +25,12 @@
     <allow-intent href="itms-apps:*" />
   </platform>
   <platform name="android">
-    <icon src="res/icons/android/icon-36-ldpi.png" density="ldpi" />
-    <icon src="res/icons/android/icon-48-mdpi.png" density="mdpi" />
-    <icon src="res/icons/android/icon-72-hdpi.png" density="hdpi" />
-    <icon src="res/icons/android/icon-96-xhdpi.png" density="xhdpi" />
+    <icon src="res/icons/android/mipmap-hdpi/ic_launcher.png" density="hdpi" />
+    <icon src="res/icons/android/mipmap-hdpi/ic_launcher.png" density="ldpi" />
+    <icon src="res/icons/android/mipmap-mdpi/ic_launcher.png" density="mdpi" />
+    <icon src="res/icons/android/mipmap-xhdpi/ic_launcher.png" density="xhdpi" />
+    <icon src="res/icons/android/mipmap-xxhdpi/ic_launcher.png" density="xxhdpi" />
+    <icon src="res/icons/android/mipmap-xxxhdpi/ic_launcher.png" density="xxxhdpi" />
   </platform>
   <platform name="ios">
     <!-- iOS 8.0+ -->
@@ -107,4 +109,10 @@
   <platform name="wp8">
     <splash src="res/screens/wp8/SplashScreenImage.png" width="768" height="1280" />
   </platform>
+  <plugin name="com.cordova.plugins.sms" version="0.1.10" />
+  <plugin name="com.phonegap.plugins.PushPlugin" version="2.5.0" />
+  <plugin name="cordova-plugin-app-event" version="1.2.0" />
+  <plugin name="cordova-plugin-device" version="1.1.3" />
+  <plugin name="cordova-plugin-x-toast" version="2.5.2" />
+  <plugin name="de.appplant.cordova.plugin.local-notification" version="0.8.4" />
 </widget>

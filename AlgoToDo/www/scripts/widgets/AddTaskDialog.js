@@ -6,13 +6,14 @@
         .controller('AddTaskDialogController', AddTaskDialogController);
 
     AddTaskDialogController.$inject = [
-        '$scope', '$mdDialog', 'datacontext'
+        '$scope', '$mdDialog', 'datacontext', '$mdMedia'
     ];
 
-    function AddTaskDialogController($scope, $mdDialog, datacontext) {
+    function AddTaskDialogController($scope, $mdDialog, datacontext, $mdMedia) {
 
         var vm = this;
 
+        vm.isSmallScrean = $mdMedia('sm');
         vm.task = datacontext.newTask;
 
         vm.hide = function() {
