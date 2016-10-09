@@ -123,7 +123,7 @@
                                         <md-divider md-inset hide-sm ng-if="!$last"></md-divider>
                                         <md-divider hide-gt-sm ng-if="!$last"></md-divider>
                                     </md-item>
-                                    <md-item>
+                                    <md-item ng-hide="(vm.onGoingActivityies() | filter:{ to: vm.userlogin.name, status: 'inProgress' }).length > 0">
                                         <md-item-content>
                                             <h3> אין משימות פתוחות כרגע! </h3>
                                         </md-item-content>
@@ -142,7 +142,7 @@
                         <md-card flex-gt-sm="90" flex-gt-md="80" flex-sm="100">
                             <md-card-content dir="rtl">
                                 <md-list>
-                                    <md-item ng-repeat="item in vm.onGoingActivityies() | filter:{ status: 'inProgress' } | filter:vm.search">
+                                    <md-item ng-repeat="item in vm.onGoingActivityies() | filter:{ status: 'inProgress', from: vm.userlogin.name } | filter:vm.search">
                                         <md-item-content>
                                             <div class="md-tile-left inset">
                                                 <user-avatar></user-avatar>
