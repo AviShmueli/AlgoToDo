@@ -6,12 +6,12 @@
     </md-toolbar>
     <md-dialog-content flex md-scroll-y class="md-padding" layout-margin>
         <form name="userForm">
-            <div layout layout-sm="column">
+            <!--<div layout layout-sm="column">
                 <md-input-container flex> 
                     <label>שם המשימה</label> 
                     <input ng-model="vm.task.name" md-select-on-focus="true"> 
                 </md-input-container>
-            </div>
+            </div>-->
             <div layout layout-sm="column">
                 <md-input-container flex> 
                     <label>שם העובד</label> 
@@ -30,6 +30,6 @@
     </md-dialog-content>
     <div class="md-actions" layout="row"> <span flex></span>
         <md-button ng-click="vm.cancel()"> ביטול </md-button>
-        <md-button ng-click="vm.save()" class="md-primary"> שמור </md-button>
+        <md-button ng-click="vm.save()" class="md-primary"> שלח </md-button>
     </div>
 </md-dialog>

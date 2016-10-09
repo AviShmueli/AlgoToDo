@@ -13,14 +13,14 @@
         self.tasksList = [];
         self.newTask = {};
         self.users = [];
-        var appDomain = 'https://algotodo.herokuapp.com';
-        //var appDomain = '';
+        self.appDomain = 'https://algotodo.herokuapp.com';
+        //self.appDomain = '';
 
         var saveNewTask = function(task) {
 
             var req = {
                 method: 'POST',
-                url: appDomain + '/TaskManeger/newTask',
+                url: self.appDomain + '/TaskManeger/newTask',
                 data: {
                     task: task
                 }
@@ -38,7 +38,7 @@
         var getAllTasks = function() {
             var req = {
                 method: 'GET',
-                url: appDomain + '/TaskManeger/getTasks'
+                url: self.appDomain + '/TaskManeger/getTasks'
             };
 
             $http(req).then(function (response) {
@@ -51,7 +51,7 @@
             
             var req = {
                 method: 'POST',
-                url: appDomain + '/TaskManeger/updateTaskStatus',
+                url: self.appDomain + '/TaskManeger/updateTaskStatus',
                 data: {
                     task: task
                 }
@@ -81,6 +81,7 @@
         }
 
         var service = {
+            appDomain: self.appDomain,
             users: self.users,
             getTaskList: getTaskList,
             addTaskToTaskList: addTaskToTaskList,

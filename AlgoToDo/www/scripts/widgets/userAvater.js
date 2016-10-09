@@ -6,7 +6,7 @@
         .directive('userAvatar', function() {
             return {
                 replace: true,
-                templateUrl: 'scripts/widgets/userAvater.svg'
+                templateUrl: '/scripts/widgets/userAvater.svg'
             };
         });
 })();

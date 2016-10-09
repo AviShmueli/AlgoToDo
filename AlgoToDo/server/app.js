@@ -139,8 +139,10 @@ io.on('connection', function (socket) {
 app.post('/TaskManeger/newTask', function (req, res) {
 
     var task = req.body.task;
-    var to = users[task.to].id;
-
+    var to = '';
+    if (users[task.to] !== undefined) {
+        to = users[task.to].id;
+    }
     //add task to Mongo
     mongodb.connect(mongoUrl, function (err, db) {
         var collection = db.collection('tasks');
@@ -149,7 +151,9 @@ app.post('/TaskManeger/newTask', function (req, res) {
             function (err, results) {
 
                 // send the new task to the employee and return it to the maneger
-                io.to(to).emit('new-task', results.ops[0]);
+                if (to !== '') {
+                    io.to(to).emit('new-task', results.ops[0]);
+                }
 
                 res.send(results.ops[0]);
                 db.close();
@@ -160,7 +164,10 @@ app.post('/TaskManeger/newTask', function (req, res) {
 app.post('/TaskManeger/updateTaskStatus', function (req, res) {
 
     var task = req.body.task;
-    var from = users[task.from].id;
+    var from = '';
+    if (users[task.from] !== undefined) {
+        from = users[task.from].id;
+    }
 
     //add task to Mongo
     mongodb.connect(mongoUrl, function (err, db) {
@@ -170,7 +177,9 @@ app.post('/TaskManeger/updateTaskStatus', function (req, res) {
             function (err, results) {
                 
                 // send the updated task to the maneger and return it to the employee
-                io.to(from).emit('updated-task', results);
+                if (from !== '') {
+                    io.to(from).emit('updated-task', results);
+                }
 
                 res.send(results);
                 db.close();

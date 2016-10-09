@@ -21,6 +21,9 @@
         //vm.userlogin.name = 'אבי';
 
         vm.login = function () {
+
+            vm.userlogin.avatarUrl = datacontext.appDomain + '/images/man-' + Math.floor((Math.random() * 8) + 1) + '.svg';
+
             // login 
             socket.emit('join', {
                 userName: vm.userlogin.name
