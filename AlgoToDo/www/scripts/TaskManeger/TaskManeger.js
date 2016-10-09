@@ -18,7 +18,7 @@
         vm.userConnected = false;
         vm.userName = ''; //'אבי שמואלי';
         vm.userlogin = {};
-        vm.userlogin.name = 'אבי';
+        //vm.userlogin.name = 'אבי';
 
         vm.login = function () {
             // login 
