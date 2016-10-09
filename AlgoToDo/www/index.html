@@ -175,7 +175,7 @@
                         <md-card flex-gt-sm="90" flex-gt-md="80" flex-sm="100">
                             <md-card-content dir="rtl">
                                 <md-list>
-                                    <md-item ng-repeat="item in vm.onGoingActivityies() | filter:{ status: 'done' } | filter:vm.search">
+                                    <md-item ng-repeat="item in vm.onGoingActivityies() | filter:{ status: 'done', from: vm.userlogin.name } | filter:vm.search">
                                         <md-item-content>
                                             <div class="md-tile-left inset" hide-sm>
                                                 <user-avatar></user-avatar>

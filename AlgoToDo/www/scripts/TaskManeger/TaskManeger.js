@@ -87,7 +87,7 @@
             datacontext.addTaskToTaskList(newTask);
             logger.info("Got new task", newTask);
 
-            if (newTask.from != vm.userlogin.name && $window.cordova !== undefined) {
+            if (newTask.from !== vm.userlogin.name && $window.cordova !== undefined) {
                 var alarmTime = new Date();
                 alarmTime.setMinutes(alarmTime.getSeconds() + 1);
 

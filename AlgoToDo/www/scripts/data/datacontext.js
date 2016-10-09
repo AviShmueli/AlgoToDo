@@ -76,7 +76,7 @@
         }
 
         var replaceTask = function (task) {
-            var foundIndex = self.tasksList.findIndex(x => x._id == task._id);
+            var foundIndex = self.tasksList.findIndex(x => x._id === task._id);
             self.tasksList[foundIndex] = task;
         }
 
