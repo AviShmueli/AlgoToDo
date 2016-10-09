@@ -15,7 +15,7 @@
             <div layout layout-sm="column">
                 <md-input-container flex> 
                     <label>שם העובד</label> 
-                    <input ng-model="vm.task.employee"> 
+                    <input ng-model="vm.task.to"> 
                 </md-input-container>
             </div>
             <div layout layout-sm="column">
@@ -25,12 +25,7 @@
                     <input ng-model="vm.task.description">
                 </md-input-container>
             </div>
-            <div layout layout-sm="column">
-                <md-input-container flex> 
-                    <label>סניף</label> 
-                    <input ng-model="vm.task.branch"> 
-                </md-input-container>
-            </div>
+            <!-- https://github.com/logbon72/angular-material-datetimepicker -->
         </form>
     </md-dialog-content>
     <div class="md-actions" layout="row"> <span flex></span>

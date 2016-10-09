@@ -9,6 +9,7 @@
 
     function socket($rootScope) {
         var socket = io.connect('https://algotodo.herokuapp.com');
+        //var socket = io.connect('http://localhost:5001');
 
         return {
             on: on,

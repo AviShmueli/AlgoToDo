@@ -14,7 +14,12 @@
                     'default': '500',
                     'hue-1': '50'
                 })
-                .accentPalette('deep-orange');
+                .accentPalette('deep-orange', {
+                    'default': '400', // by default use shade 400 from the pink palette for primary intentions
+                    'hue-1': '100', // use shade 100 for the <code>md-hue-1</code> class
+                    'hue-2': 'A400',
+                    'hue-3': 'A700'
+                });
             $mdThemingProvider.theme('input', 'default')
                 .primaryPalette('grey');
         });
