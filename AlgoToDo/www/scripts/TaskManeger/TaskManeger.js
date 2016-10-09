@@ -84,10 +84,11 @@
         socket.on('new-task', function(data) {
             
             var newTask = data;
-            datacontext.addTaskToTaskList(newTask);
+            
             logger.info("Got new task", newTask);
 
             if (newTask.from !== vm.userlogin.name && $window.cordova !== undefined) {
+                datacontext.addTaskToTaskList(newTask);
                 var alarmTime = new Date();
                 alarmTime.setMinutes(alarmTime.getSeconds() + 1);
 
