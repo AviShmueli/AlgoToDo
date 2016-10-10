@@ -7,13 +7,13 @@
 
     TaskManegerCtrl.$inject = [ 
         '$scope', 'logger', '$location', 'cordovaPlugins',
-        'appConfig', '$mdMedia', '$mdBottomSheet',
+        'appConfig', '$mdMedia', '$mdBottomSheet','$filter',
         '$mdSidenav', '$mdDialog', 'datacontext', 'lodash',
         'socket'
     ];
 
     function TaskManegerCtrl($scope, logger, $location, cordovaPlugins,
-                            appConfig, $mdMedia, $mdBottomSheet,
+                            appConfig, $mdMedia, $mdBottomSheet,$filter,
                             $mdSidenav, $mdDialog, datacontext, lodash,
                             socket) {
 
@@ -24,7 +24,10 @@
         vm.userConnected = false;
         vm.userName = ''; //'אבי שמואלי';
         vm.userlogin = {};
-        vm.userlogin.name = 'אבי';
+        //vm.userlogin.name = 'אבי';
+        vm.myTasksCount = function () {
+            return $filter('filter')(vm.onGoingActivityies(), { to: vm.userlogin.name, status: 'inProgress' }).length;
+        }
 
         vm.login = function () {
 

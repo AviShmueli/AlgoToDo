@@ -23,7 +23,7 @@
     <span layout="column " ng-include="'scripts/layout/sideNav.html'"></span>-->
 
 
-    <div layout="column" class="relative" layout-fill role="main">
+    <div layout="column" class="relative" layout-fill role="main" >
         
         <span ng-show="vm.userConnected">
             <md-toolbar ng-show="!vm.showSearch">
@@ -47,9 +47,12 @@
                     <md-tab id="tab1" aria-controls="tab1-content">
                         <ng-md-icon icon="assignment_ind"></ng-md-icon>
                         <br />
-                        <div class="circle" ng-init="vm.myTasksCount = (vm.onGoingActivityies() | filter:{ to: vm.userlogin.name, status: 'inProgress' }).length" ng-if="vm.myTasksCount > 0">
-                            <span class="number">{{vm.myTasksCount}}</span>
-                        </div>
+                        <!--<div class="circle" ng-if="vm.myTasksCount() > 0">
+                            <span class="number">{{vm.myTasksCount()}}</span>
+                        </div>-->
+                        <md-button ng-if="vm.myTasksCount() > 0" class="md-fab md-mini indication-fab" aria-label="done">
+                            {{vm.myTasksCount()}}
+                        </md-button>
                         <span style="font-size: 10px">המשימות שלי</span>
                     </md-tab>
                     <md-tab id="tab2" aria-controls="tab2-content">
@@ -127,7 +130,7 @@
                                         <md-divider md-inset hide-sm ng-if="!$last"></md-divider>
                                         <md-divider hide-gt-sm ng-if="!$last"></md-divider>
                                     </md-item>
-                                    <md-item ng-hide="(vm.onGoingActivityies() | filter:{ to: vm.userlogin.name, status: 'inProgress' }).length > 0">
+                                    <md-item ng-hide="vm.myTasksCount() > 0">
                                         <md-item-content>
                                             <h3> אין משימות פתוחות כרגע! </h3>
                                         </md-item-content>
