@@ -14,6 +14,7 @@
         'ngStorage',
         'ngLodash',
         'ngCordova',
+        'angularLoad',
 
         /*
          * Everybody has access to these.
@@ -23,7 +24,8 @@
         'TaskManeger.widgets',
         'TaskManeger.core',
         'TaskManeger.data',
-        'TaskManeger.logger'
+        'TaskManeger.logger',
+        'TaskManeger.cordova'
         
         /*
          * Feature areas

@@ -5,11 +5,10 @@
         .module('TaskManeger.data')
         .factory('socket', socket);
 
-    socket.$inject = ['$rootScope'];
+    socket.$inject = ['$rootScope', 'appConfig'];
 
-    function socket($rootScope) {
-        var socket = io.connect('https://algotodo.herokuapp.com');
-        //var socket = io.connect('http://localhost:5001');
+    function socket($rootScope, appConfig) {
+        var socket = io.connect(appConfig.appDomain);
 
         return {
             on: on,

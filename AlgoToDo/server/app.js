@@ -5,6 +5,7 @@ var path = require('path');
 var mongodb = require('mongodb').MongoClient;
 var ObjectID = require('mongodb').ObjectID;
 var mongoUrl = 'mongodb://admin:avi3011algo@ds033996.mlab.com:33996/algotodo_db_01';
+//var mongoUrl = 'mongodb://localhost:27017/TaskManeger';
 var bodyParser = require('body-parser');
 var app = express();
 
@@ -42,7 +43,6 @@ app.use(express.static('../bower_components'));
 app.use(express.static('../node_modules'));
 
 server.listen(process.env.PORT || 5002, function (err) {
-    console.log('avi: running server on port ' + port);
     console.log("Express server listening on port %d in %s mode", this.address().port, app.settings.env);
 });
 
@@ -190,7 +190,7 @@ app.post('/TaskManeger/updateTaskStatus', function (req, res) {
 app.get('/TaskManeger/getTasks', function (req, res) {
 
     mongodb.connect(mongoUrl, function (err, db) {
-
+        console.log(err);
         var collection = db.collection('tasks');
         collection.find({}).limit(200).toArray(function (err, result) {
             res.send(result);

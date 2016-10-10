@@ -4,12 +4,17 @@
 .md-tile-content .from {
     color: rgb(0,188,212);
     font-size: 14px;
+    font-weight: bold;
 }
 .md-tile-content .time {
-    font-size: 12px;
+    font-size: 14px;
         font-weight: bold;
 }
-
+.md-tile-content .head-icon{
+    transform: rotate(180deg);
+    margin-left: 10px;
+    margin-right: 10px;
+}
 .md-tile-content .description {
     font-size: 14px;
 }

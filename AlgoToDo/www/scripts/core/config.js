@@ -2,7 +2,7 @@
     'use strict';
 
     angular.module('TaskManeger.core')
-        .config(function($mdThemingProvider) {
+        .config(function ($mdThemingProvider) {
             var customBlueMap = $mdThemingProvider.extendPalette('light-blue', {
                 'contrastDefaultColor': 'light',
                 'contrastDarkColors': ['50'],
@@ -22,6 +22,14 @@
                 });
             $mdThemingProvider.theme('input', 'default')
                 .primaryPalette('grey');
-        });
+        })
+        .service('appConfig', function () {
+            return {
+                appDomain: 
+                     'https://algotodo.herokuapp.com'
+                    /* 'http://localhost:5001' */
+                
+            }
+        });;
 
 })();

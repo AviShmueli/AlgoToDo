@@ -6,10 +6,16 @@
         .controller('TaskManegerCtrl', TaskManegerCtrl);
 
     TaskManegerCtrl.$inject = [ 
-        '$scope', 'logger', '$location', '$window', '$mdMedia', '$mdBottomSheet', '$mdSidenav', '$mdDialog', 'datacontext', 'lodash', 'socket', '$cordovaLocalNotification', '$cordovaSms'
+        '$scope', 'logger', '$location', 'cordovaPlugins',
+        'appConfig', '$mdMedia', '$mdBottomSheet',
+        '$mdSidenav', '$mdDialog', 'datacontext', 'lodash',
+        'socket'
     ];
 
-    function TaskManegerCtrl($scope, logger, $location, $window, $mdMedia, $mdBottomSheet, $mdSidenav, $mdDialog, datacontext, lodash, socket, $cordovaLocalNotification, $cordovaSms) {
+    function TaskManegerCtrl($scope, logger, $location, cordovaPlugins,
+                            appConfig, $mdMedia, $mdBottomSheet,
+                            $mdSidenav, $mdDialog, datacontext, lodash,
+                            socket) {
 
         var vm = this;
         
@@ -18,11 +24,11 @@
         vm.userConnected = false;
         vm.userName = ''; //'אבי שמואלי';
         vm.userlogin = {};
-        //vm.userlogin.name = 'אבי';
+        vm.userlogin.name = 'אבי';
 
         vm.login = function () {
 
-            vm.userlogin.avatarUrl = datacontext.appDomain + '/images/man-' + Math.floor((Math.random() * 8) + 1) + '.svg';
+            vm.userlogin.avatarUrl = appConfig.appDomain + '/images/man-' + Math.floor((Math.random() * 8) + 1) + '.svg';
 
             // login 
             socket.emit('join', {
@@ -90,22 +96,10 @@
             
             logger.info("Got new task", newTask);
 
-            if (newTask.from !== vm.userlogin.name && $window.cordova !== undefined) {
-                datacontext.addTaskToTaskList(newTask);
-                var alarmTime = new Date();
-                alarmTime.setMinutes(alarmTime.getSeconds() + 1);
 
-                $cordovaLocalNotification.add({
-                    id: "1234",
-                    date: alarmTime,
-                    message: "יש לך משימה אחת חדשה",
-                    title: "משימה חדשה",
-                    autoCancel: true,
-                    sound: 'res://platform_default',
-                    icon: 'res://icon'
-                }).then(function () {
-                    logger.info("The notification has been set");
-                });
+            if (newTask.from !== vm.userlogin.name) {
+                datacontext.addTaskToTaskList(newTask);
+                cordovaPlugins.setLocalNotification();
             }
         });
 

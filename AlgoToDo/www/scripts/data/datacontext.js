@@ -5,22 +5,20 @@
         .module('TaskManeger.data')
         .service('datacontext', datacontext);
 
-    datacontext.$inject = ['$http', 'logger', 'socket', 'lodash'];
+    datacontext.$inject = ['$http', 'logger', 'socket', 'lodash', 'appConfig'];
 
-    function datacontext($http, logger, socket, lodash) {
+    function datacontext($http, logger, socket, lodash, appConfig) {
 
         var self = this;
         self.tasksList = [];
         self.newTask = {};
         self.users = [];
-        self.appDomain = 'https://algotodo.herokuapp.com';
-        //self.appDomain = '';
-
+        
         var saveNewTask = function(task) {
 
             var req = {
                 method: 'POST',
-                url: self.appDomain + '/TaskManeger/newTask',
+                url: appConfig.appDomain + '/TaskManeger/newTask',
                 data: {
                     task: task
                 }
@@ -38,7 +36,7 @@
         var getAllTasks = function() {
             var req = {
                 method: 'GET',
-                url: self.appDomain + '/TaskManeger/getTasks'
+                url: appConfig.appDomain + '/TaskManeger/getTasks'
             };
 
             $http(req).then(function (response) {
@@ -51,7 +49,7 @@
             
             var req = {
                 method: 'POST',
-                url: self.appDomain + '/TaskManeger/updateTaskStatus',
+                url: appConfig.appDomain + '/TaskManeger/updateTaskStatus',
                 data: {
                     task: task
                 }
@@ -81,7 +79,6 @@
         }
 
         var service = {
-            appDomain: self.appDomain,
             users: self.users,
             getTaskList: getTaskList,
             addTaskToTaskList: addTaskToTaskList,
