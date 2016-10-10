@@ -12,7 +12,8 @@
         var self = this;
         self.tasksList = [];
         self.newTask = {};
-        self.users = [];
+        //self.users = [];
+        self.user = {};
         
         var saveNewTask = function(task) {
 
@@ -78,11 +79,16 @@
             self.tasksList[foundIndex] = task;
         }
 
+        var getNewTask = function () {
+            return self.newTask;
+        }
+
         var service = {
-            users: self.users,
+            /*users: self.users,*/
+            user: self.user,
             getTaskList: getTaskList,
             addTaskToTaskList: addTaskToTaskList,
-            newTask: self.newTask,
+            getNewTask: getNewTask,
             saveNewTask: saveNewTask,
             getAllTasks: getAllTasks,
             updateTask: updateTask,

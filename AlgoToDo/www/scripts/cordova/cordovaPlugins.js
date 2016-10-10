@@ -5,9 +5,9 @@
         .module('TaskManeger.cordova')
         .service('cordovaPlugins', cordovaPlugins);
 
-    cordovaPlugins.$inject = ['logger', 'appConfig', '$cordovaLocalNotification', '$cordovaSms', '$window'];
+    cordovaPlugins.$inject = ['logger', 'appConfig', '$cordovaLocalNotification', '$cordovaSms', '$window', '$cordovaDialogs'];
 
-    function cordovaPlugins(logger, appConfig, $cordovaLocalNotification, $cordovaSms, $window) {
+    function cordovaPlugins(logger, appConfig, $cordovaLocalNotification, $cordovaSms, $window, $cordovaDialogs) {
 
         var self = this;
 
@@ -33,8 +33,14 @@
             });
         }
 
+        var beep = function () {
+            // beep 3 times
+            $cordovaDialogs.beep(3);
+        }
+
         var service = {
-            setLocalNotification: setLocalNotification
+            setLocalNotification: setLocalNotification,
+            beep: beep
         };
 
         return service;

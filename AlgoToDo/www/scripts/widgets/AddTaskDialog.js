@@ -14,7 +14,7 @@
         var vm = this;
 
         vm.isSmallScrean = $mdMedia('sm');
-        vm.task = datacontext.newTask;
+        vm.task = datacontext.getNewTask();
 
         vm.hide = function() {
             $mdDialog.hide();
@@ -22,7 +22,11 @@
         vm.cancel = function() {
             $mdDialog.cancel();
         };
-        vm.save = function() {
+        vm.save = function () {
+            vm.task.from = datacontext.user.name;
+            vm.task.status = 'inProgress';
+            vm.task.createTime = new Date();
+            datacontext.saveNewTask(vm.task);
             $mdDialog.hide('ok');
         };
     }

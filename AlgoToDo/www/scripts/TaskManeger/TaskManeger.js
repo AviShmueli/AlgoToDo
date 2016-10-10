@@ -28,8 +28,6 @@
 
         vm.login = function () {
 
-            vm.userlogin.avatarUrl = appConfig.appDomain + '/images/man-' + Math.floor((Math.random() * 8) + 1) + '.svg';
-
             // login 
             socket.emit('join', {
                 userName: vm.userlogin.name
@@ -43,7 +41,8 @@
                 userName: vm.userlogin.name
             });*/
             datacontext.getAllTasks();
-            
+            vm.userlogin.avatarUrl = appConfig.appDomain + '/images/man-' + Math.floor((Math.random() * 8) + 1) + '.svg';
+            datacontext.user = vm.userlogin;
             vm.userName = vm.userlogin.name;
             vm.userConnected = true;
 
@@ -73,7 +72,7 @@
 
         // the response to the all-usersr from the server
         // get from the server the list of users that are connected
-        socket.on('all-users', function(data) {
+        /*socket.on('all-users', function(data) {
 
             var users = {};
             angular.forEach(data, function(value, key) {
@@ -82,7 +81,7 @@
                 }
             });
             datacontext.users = users;
-        });
+        });*/
 
         // when the server response the users tasks
         socket.on('users-tasks', function(data) {
@@ -153,34 +152,18 @@
 
         vm.showAdd = function(ev) {
             $mdDialog.show({
-                    controller: 'AddTaskDialogController',
-                    controllerAs: 'vm',
-                    templateUrl: 'scripts/widgets/AddTaskDialog.html',
-                    targetEvent: ev
-                })
-                .then(function(answer) {
+                controller: 'AddTaskDialogController',
+                controllerAs: 'vm',
+                templateUrl: 'scripts/widgets/AddTaskDialog.html',
+                targetEvent: ev
+            }).then(function(answer) {
                     if (answer === 'ok') {
                         vm.alert = 'You said the information was "' + answer + '".';
-                        vm.addNewTask(datacontext.newTask);
                     }
                 }, function() {
                     vm.alert = 'You cancelled the dialog.';
                 });
-        };
-
-        vm.addNewTask = function(task) {
-            
-            task.from = vm.userlogin.name;
-            task.status = 'inProgress';
-            task.createTime = new Date();
-
-            // send the new task to the server
-            /*socket.emit('create-task', {
-                task: task
-            });     */     
-
-            // using regular http to insert task
-            datacontext.saveNewTask(task);
+        
         };
 
         vm.setTaskStatus = function (task, newStatus) {

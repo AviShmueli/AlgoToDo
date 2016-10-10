@@ -28,9 +28,9 @@
         <span ng-show="vm.userConnected">
             <md-toolbar ng-show="!vm.showSearch">
                 <div class="md-toolbar-tools">
-                    <md-button aria-label="Open Settings" ng-click="vm.showListBottomSheet($event)">
+                    <!--<md-button aria-label="Open Settings" ng-click="vm.showListBottomSheet($event)">
                         <ng-md-icon icon="more_vert"></ng-md-icon>
-                    </md-button>
+                    </md-button>-->
                     <md-button aria-label="Search" ng-click="vm.showSearch = !vm.showSearch">
                         <ng-md-icon icon="search"></ng-md-icon>
                     </md-button>
@@ -47,8 +47,8 @@
                     <md-tab id="tab1" aria-controls="tab1-content">
                         <ng-md-icon icon="assignment_ind"></ng-md-icon>
                         <br />
-                        <div class="circle">
-                            <span class="number">{{(vm.onGoingActivityies() | filter:{ to: vm.userlogin.name, status: 'inProgress' }).length}}</span>
+                        <div class="circle" ng-init="vm.myTasksCount = (vm.onGoingActivityies() | filter:{ to: vm.userlogin.name, status: 'inProgress' }).length" ng-if="vm.myTasksCount > 0">
+                            <span class="number">{{vm.myTasksCount}}</span>
                         </div>
                         <span style="font-size: 10px">המשימות שלי</span>
                     </md-tab>
@@ -108,7 +108,11 @@
                                                 </md-card-avatar>
                                             </div>
                                             <div class="md-tile-content">
-                                                <div layout="row"><span class="from" >{{item.from}}</span> <ng-md-icon class="head-icon" icon="send" style="fill: black" size="10"></ng-md-icon>  <span class="time">{{item.createTime | date:'HH:mm'}}</span></div>
+                                                <div layout="row">
+                                                    <span class="from" >{{item.from}}</span> 
+                                                    <ng-md-icon class="head-icon" icon="send" style="fill: black" size="10"></ng-md-icon>  
+                                                    <span class="time">{{item.createTime | date:'HH:mm'}}</span>
+                                                </div>
                                                 <!--<p>{{item.name}}</p>-->
                                                 <p class="description">
                                                     {{item.description}}

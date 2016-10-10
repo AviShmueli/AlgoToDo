@@ -14,7 +14,6 @@
         'ngStorage',
         'ngLodash',
         'ngCordova',
-        'angularLoad',
 
         /*
          * Everybody has access to these.
