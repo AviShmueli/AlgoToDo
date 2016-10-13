@@ -23,7 +23,7 @@
             $mdDialog.cancel();
         };
         vm.save = function () {
-            vm.task.from = datacontext.user.name;
+            vm.task.from = datacontext.getUserFromLocalStorage().name;
             vm.task.status = 'inProgress';
             vm.task.createTime = new Date();
             datacontext.saveNewTask(vm.task);
