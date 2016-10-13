@@ -19,7 +19,8 @@
         vm.hide = function() {
             $mdDialog.hide();
         };
-        vm.cancel = function() {
+        vm.cancel = function () {
+            datacontext.resetNewTask();
             $mdDialog.cancel();
         };
         vm.save = function () {

@@ -95,6 +95,11 @@
             delete self.$storage.user;
         }
 
+        var resetNewTask = function () {
+            // clean the form
+            self.newTask = {};
+        }
+
         var service = {
             /*users: self.users,*/
             user: self.user,
@@ -102,6 +107,7 @@
             addTaskToTaskList: addTaskToTaskList,
             getNewTask: getNewTask,
             saveNewTask: saveNewTask,
+            resetNewTask: resetNewTask,
             getAllTasks: getAllTasks,
             updateTask: updateTask,
             replaceTask: replaceTask,
