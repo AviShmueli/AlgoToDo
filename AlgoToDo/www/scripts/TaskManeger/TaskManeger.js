@@ -65,6 +65,7 @@
         vm.logOff = function () {
             datacontext.deleteUserFromLocalStorage();
             vm.userConnected = false;
+            vm.toggleSidenav('left');
         }
 
         // the response to the all-usersr from the server
