@@ -38,6 +38,30 @@
             $cordovaDialogs.beep(3);
         }
 
+
+        /*
+        $cordovaSms
+          .send('+972542240608', 'אבי התותח', options)
+          .then(function () {
+              // Success! SMS was sent
+          }, function (error) {
+              // An error occurred
+          });
+          */
+
+        /*
+        // use to schedule notifications to the user about tasks that not been get atention yet
+        $cordovaLocalNotification.schedule({
+            id: 1,
+            title: 'Title here',
+            text: 'Text here',
+            data: {
+                customProperty: 'custom value'
+            }
+        }).then(function (result) {
+            // ...
+        });*/
+
         var service = {
             setLocalNotification: setLocalNotification,
             beep: beep

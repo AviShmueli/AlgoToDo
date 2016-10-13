@@ -5,15 +5,15 @@
         .module('TaskManeger.data')
         .service('datacontext', datacontext);
 
-    datacontext.$inject = ['$http', 'logger', 'socket', 'lodash', 'appConfig'];
+    datacontext.$inject = ['$http', 'logger', 'socket', 'lodash', 'appConfig', '$localStorage'];
 
-    function datacontext($http, logger, socket, lodash, appConfig) {
+    function datacontext($http, logger, socket, lodash, appConfig, $localStorage) {
 
         var self = this;
         self.tasksList = [];
         self.newTask = {};
+        self.$storage = $localStorage;
         //self.users = [];
-        self.user = {};
         
         var saveNewTask = function(task) {
 
@@ -83,6 +83,18 @@
             return self.newTask;
         }
 
+        var saveUserToLocalStorage = function (user) {           
+            self.$storage.user = user;
+        }
+
+        var getUserFromLocalStorage = function () {
+            return self.$storage !== undefined ? self.$storage.user: undefined;
+        }
+
+        var deleteUserFromLocalStorage = function () {
+            delete self.$storage.user;
+        }
+
         var service = {
             /*users: self.users,*/
             user: self.user,
@@ -92,7 +104,10 @@
             saveNewTask: saveNewTask,
             getAllTasks: getAllTasks,
             updateTask: updateTask,
-            replaceTask: replaceTask
+            replaceTask: replaceTask,
+            saveUserToLocalStorage: saveUserToLocalStorage,
+            getUserFromLocalStorage: getUserFromLocalStorage,
+            deleteUserFromLocalStorage: deleteUserFromLocalStorage
         };
 
         return service;

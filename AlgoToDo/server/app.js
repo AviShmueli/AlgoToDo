@@ -185,7 +185,7 @@ app.post('/TaskManeger/updateTaskStatus', function (req, res) {
 });
 
 app.get('/TaskManeger/getTasks', function (req, res) {
-
+    // todo: filter - where to == me or from == me
     mongodb.connect(mongoUrl, function (err, db) {
         console.log(err);
         var collection = db.collection('tasks');

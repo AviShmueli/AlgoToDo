@@ -22,56 +22,50 @@
         vm.onGoingActivityies = function () { return datacontext.getTaskList(); }
         vm.isSmallScrean = $mdMedia('sm');
         vm.userConnected = false;
-        vm.userName = ''; //'אבי שמואלי';
-        vm.userlogin = {};
-        //vm.userlogin.name = 'אבי';
+        vm.user = {};
+        vm.appDomain = appConfig.appDomain;
         vm.myTasksCount = function () {
-            return $filter('filter')(vm.onGoingActivityies(), { to: vm.userlogin.name, status: 'inProgress' }).length;
+            return $filter('filter')(vm.onGoingActivityies(), { to: vm.user.name, status: 'inProgress' }).length;
+        }
+
+        vm.checkIfUserLogdIn = function(){
+            var user = datacontext.getUserFromLocalStorage();
+            if (user !== undefined) {
+                vm.user = user;
+                vm.login();
+            }
+        }        
+
+        vm.signIn = function () {
+            vm.user.avatarUrl =  '/images/man-' + Math.floor((Math.random() * 8) + 1) + '.svg';
+            datacontext.saveUserToLocalStorage(vm.user);
+            vm.login();
         }
 
         vm.login = function () {
 
             // login 
             socket.emit('join', {
-                userName: vm.userlogin.name
+                userName: vm.user.name
             });
 
             //force get all the users from the server
-            socket.emit('get-users');
+            //socket.emit('get-users');
 
             // ask server to send the user tasks
             /*socket.emit('get-tasks', {
-                userName: vm.userlogin.name
+                userName: vm.user.name
             });*/
             datacontext.getAllTasks();
-            vm.userlogin.avatarUrl = appConfig.appDomain + '/images/man-' + Math.floor((Math.random() * 8) + 1) + '.svg';
-            datacontext.user = vm.userlogin;
-            vm.userName = vm.userlogin.name;
+            
             vm.userConnected = true;
-
-            /*
-            $cordovaSms
-              .send('+972542240608', 'אבי התותח', options)
-              .then(function () {
-                  // Success! SMS was sent
-              }, function (error) {
-                  // An error occurred
-              });
-              */
-
-            /*
-            // use to schedule notifications to the user about tasks that not been get atention yet
-            $cordovaLocalNotification.schedule({
-                id: 1,
-                title: 'Title here',
-                text: 'Text here',
-                data: {
-                    customProperty: 'custom value'
-                }
-            }).then(function (result) {
-                // ...
-            });*/         
+        
         };
+
+        vm.logOff = function () {
+            datacontext.deleteUserFromLocalStorage();
+            vm.userConnected = false;
+        }
 
         // the response to the all-usersr from the server
         // get from the server the list of users that are connected
@@ -99,7 +93,7 @@
             logger.info("Got new task", newTask);
 
 
-            if (newTask.from !== vm.userlogin.name) {
+            if (newTask.from !== vm.user.name) {
                 datacontext.addTaskToTaskList(newTask);
                 cordovaPlugins.setLocalNotification();
             }
@@ -134,7 +128,7 @@
             title: 'רוקן משימות',
             icon: 'delete'
         }, {
-            link: 'showListBottomSheet($event)',
+            link: 'vm.showListBottomSheet($event)',
             title: 'הגדרות',
             icon: 'settings'
         }];
@@ -181,6 +175,7 @@
             datacontext.updateTask(task);
         };
 
+        vm.checkIfUserLogdIn();
     }
 
 })();
