@@ -24,6 +24,7 @@
         vm.userConnected = false;
         vm.user = {};
         vm.appDomain = appConfig.appDomain;
+        vm.registrationId = appConfig.getRegistrationId();
         vm.myTasksCount = function () {
             return $filter('filter')(vm.onGoingActivityies(), { to: vm.user.name, status: 'inProgress' }).length;
         }
@@ -32,7 +33,7 @@
             var user = datacontext.getUserFromLocalStorage();
             if (user !== undefined) {
                 vm.user = user;
-                vm.login();
+                vm.login();               
             }
         }        
 
@@ -56,10 +57,16 @@
             /*socket.emit('get-tasks', {
                 userName: vm.user.name
             });*/
-            datacontext.getAllTasks();
-            
+            datacontext.getAllTasks();            
             vm.userConnected = true;
-        
+            
+            if (vm.registrationId === '') {
+                document.addEventListener("deviceready", function () {
+                    cordovaPlugins.registerForPushNotifications();
+                }, false);
+            }
+
+            logger.info("The notification has been set", "אתה עכשיו מחובר!");
         };
 
         vm.logOff = function () {
@@ -148,13 +155,14 @@
             });
         };
 
-        vm.showAdd = function(ev) {
+        vm.showAdd = function (ev) {           
             $mdDialog.show({
                 controller: 'AddTaskDialogController',
                 controllerAs: 'vm',
                 templateUrl: 'scripts/widgets/AddTaskDialog.html',
                 targetEvent: ev
-            }).then(function(answer) {
+            }).then(function (answer) {
+                vm.registrationId = appConfig.getRegistrationId();
                     if (answer === 'ok') {
                         vm.alert = 'You said the information was "' + answer + '".';
                     }

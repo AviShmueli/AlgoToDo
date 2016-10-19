@@ -6,16 +6,9 @@ var mongodb = require('mongodb').MongoClient;
 var ObjectID = require('mongodb').ObjectID;
 var mongoUrl = 'mongodb://admin:avi3011algo@ds033996.mlab.com:33996/algotodo_db_01';
 //var mongoUrl = 'mongodb://localhost:27017/TaskManeger';
+
 var bodyParser = require('body-parser');
 var app = express();
-
-
-var http = require('http');
-
-var server = http.createServer(app);
-
-var io = require('socket.io').listen(server);
-
 var port = process.env.PORT || 5002;
 
 app.use(bodyParser.urlencoded({
@@ -39,11 +32,15 @@ app.use(express.static('../www'));
 app.use(express.static('../bower_components'));
 app.use(express.static('../node_modules'));
 
-server.listen(process.env.PORT || 5002, function (err) {
-    console.log("Express server listening on port %d in %s mode", this.address().port, app.settings.env);
-});
+
 
 // -------- Socket.io --------//
+var http = require('http');
+
+var server = http.createServer(app);
+
+var io = require('socket.io').listen(server);
+
 var users = [];
 io.on('connection', function (socket) {
     console.log('new connection made');
@@ -184,6 +181,24 @@ app.post('/TaskManeger/updateTaskStatus', function (req, res) {
     });
 });
 
+app.post('/TaskManeger/sendRegistrationId', function (req, res) {
+
+    var registrationId = req.body.registrationId;
+    var user = req.body.user;
+    user.registrationId = registrationId;
+
+    //add user to Mongo
+    mongodb.connect(mongoUrl, function (err, db) {
+        var collection = db.collection('users');
+
+        collection.insert(user,
+            function (err, results) {
+                res.send(results.ops[0]);
+                db.close();
+            });
+    });
+});
+
 app.get('/TaskManeger/getTasks', function (req, res) {
     // todo: filter - where to == me or from == me
     mongodb.connect(mongoUrl, function (err, db) {
@@ -195,4 +210,25 @@ app.get('/TaskManeger/getTasks', function (req, res) {
         });
         console.log('user asks for all tasks');
     });
+});
+
+/* ----- GCM ------ */
+var gcm = require('node-gcm');
+
+var sender = new gcm.Sender('AIzaSyD-mCE_Uv26meQTeY0Ghjt3rowocsL5KaA');
+var message = new gcm.Message({
+    data: { key1: 'msg1' }
+});
+// Specify which registration IDs to deliver the message to
+var regTokens = ['YOUR_REG_TOKEN_HERE'];
+
+// Actually send the message
+sender.send(message, { registrationTokens: regTokens }, function (err, response) {
+    if (err) console.error(err);
+    else console.log(response);
+});
+
+/* ---- Start the server ------ */
+server.listen(process.env.PORT || 5002, function (err) {
+    console.log("Express server listening on port %d in %s mode", this.address().port, app.settings.env);
 });

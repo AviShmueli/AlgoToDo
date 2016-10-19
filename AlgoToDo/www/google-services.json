@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "874351794059",
+    "firebase_url": "https://algotodo-2b6e9.firebaseio.com",
+    "project_id": "algotodo-2b6e9",
+    "storage_bucket": "algotodo-2b6e9.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:874351794059:android:5a9d75bf6ff6147c",
+        "android_client_info": {
+          "package_name": "com.algotodo.app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "874351794059-h9q6eae5kqc8t3rnbua88toqln0ptqep.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD-mCE_Uv26meQTeY0Ghjt3rowocsL5KaA"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
