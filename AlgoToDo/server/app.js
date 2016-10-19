@@ -220,13 +220,13 @@ var message = new gcm.Message({
     data: { key1: 'msg1' }
 });
 // Specify which registration IDs to deliver the message to
-var regTokens = ['YOUR_REG_TOKEN_HERE'];
+//var regTokens = ['YOUR_REG_TOKEN_HERE'];
 
 // Actually send the message
-sender.send(message, { registrationTokens: regTokens }, function (err, response) {
+/*sender.send(message, { registrationTokens: regTokens }, function (err, response) {
     if (err) console.error(err);
     else console.log(response);
-});
+});*/
 
 /* ---- Start the server ------ */
 server.listen(process.env.PORT || 5002, function (err) {
