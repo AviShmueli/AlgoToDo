@@ -6,9 +6,16 @@ var mongodb = require('mongodb').MongoClient;
 var ObjectID = require('mongodb').ObjectID;
 var mongoUrl = 'mongodb://admin:avi3011algo@ds033996.mlab.com:33996/algotodo_db_01';
 //var mongoUrl = 'mongodb://localhost:27017/TaskManeger';
+var app = express();
+
+var http = require('http');
+
+var server = http.createServer(app);
+
+var io = require('socket.io').listen(server);
 
 var bodyParser = require('body-parser');
-var app = express();
+
 var port = process.env.PORT || 5002;
 
 app.use(bodyParser.urlencoded({
@@ -32,14 +39,13 @@ app.use(express.static('../www'));
 app.use(express.static('../bower_components'));
 app.use(express.static('../node_modules'));
 
-
+/* ---- Start the server ------ */
+server.listen(process.env.PORT || 5002, function (err) {
+    console.log("Express server listening on port %d in %s mode", this.address().port, app.settings.env);
+});
 
 // -------- Socket.io --------//
-var http = require('http');
 
-var server = http.createServer(app);
-
-var io = require('socket.io').listen(server);
 
 var users = [];
 io.on('connection', function (socket) {
@@ -228,7 +234,3 @@ var message = new gcm.Message({
     else console.log(response);
 });*/
 
-/* ---- Start the server ------ */
-server.listen(process.env.PORT || 5002, function (err) {
-    console.log("Express server listening on port %d in %s mode", this.address().port, app.settings.env);
-});
