@@ -218,13 +218,13 @@ app.get('/TaskManeger/getTasks', function (req, res) {
     });
 });
 
-/* ----- GCM ------ */
+/* ----- GCM ------ 
 var gcm = require('node-gcm');
 
 var sender = new gcm.Sender('AIzaSyD-mCE_Uv26meQTeY0Ghjt3rowocsL5KaA');
 var message = new gcm.Message({
     data: { key1: 'msg1' }
-});
+});*/
 // Specify which registration IDs to deliver the message to
 //var regTokens = ['YOUR_REG_TOKEN_HERE'];
 
