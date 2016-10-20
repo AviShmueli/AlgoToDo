@@ -38,7 +38,7 @@
             var req = {
                 method: 'GET',
                 url: appConfig.appDomain + '/TaskManeger/getTasks',
-                data: {
+                params: {
                     user: self.$storage.user.name
                 }
             };
