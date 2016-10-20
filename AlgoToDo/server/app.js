@@ -62,7 +62,7 @@ var pushTaskToAndroidUser = function (task) {
     sender.send(message, { registrationTokens: regTokens }, function (err, response) {
         console.log("send message", message);
         if (err) {
-            console.error(err);
+            console.error("error while sending push notification: ", err);
         }
         else {
             console.log(response);

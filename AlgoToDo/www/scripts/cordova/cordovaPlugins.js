@@ -87,6 +87,7 @@
         $rootScope.$on('$cordovaPushV5:notificationReceived', function (event, data) {
             console.log("notificationReceived:", event, data);
             $cordovaDialogs.alert("הודעת מערכת notificationReceived", data, 'OK');
+            showToast(data);
             if (event.event == registered) {
                 showToast(data);
             }
@@ -103,6 +104,7 @@
         $rootScope.$on('$cordovaPushV5:errorOcurred', function (event, e) {
             console.log("errorOcurred:", event, e);
             $cordovaDialogs.alert("שגיאה", e, 'OK');
+            showToast("error");
             // e.message
         });
 
