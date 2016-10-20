@@ -233,15 +233,14 @@ app.post('/TaskManeger/sendRegistrationId', function (req, res) {
 app.get('/TaskManeger/getTasks', function (req, res) {
     
     var me = req.query.user;
-    console.log(req.query);
+    console.log("user asks for all tasks" ,me ,req.query);
     mongodb.connect(mongoUrl, function (err, db) {
         console.log(err);
         var collection = db.collection('tasks');
-        collection.find({$or:[{'from': 'אבי'}, {'to': 'אבי'}]}).toArray(function (err, result) {
+        collection.find({ $or: [{ 'from': me }, { 'to': me }] }).toArray(function (err, result) {
             res.send(result);
             db.close();
         });
-        console.log('user asks for all tasks');
     });
 });
 
