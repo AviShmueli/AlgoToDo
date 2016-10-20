@@ -60,6 +60,7 @@ var pushTaskToAndroidUser = function (task) {
 
     // Actually send the message
     sender.send(message, { registrationTokens: regTokens }, function (err, response) {
+        console.log("send message", message);
         if (err) {
             console.error(err);
         }
