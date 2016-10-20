@@ -56,10 +56,8 @@ var pushTaskToAndroidUser = function (task) {
     });
 
     // Specify which registration IDs to deliver the message to
-    var regTokens = users[task.to].GcmRegistrationId;
-    console.log("to: ", task.to);
-    console.log("users[task.to]: ", users[task.to]);
-    console.log("GcmRegistrationId: ", users[task.to].GcmRegistrationId);
+    var regTokens = [users[task.to].GcmRegistrationId];
+
     // Actually send the message
     sender.send(message, { registrationTokens: regTokens }, function (err, response) {
         if (err) {

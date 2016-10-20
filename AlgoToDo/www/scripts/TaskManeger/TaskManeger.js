@@ -103,7 +103,7 @@
 
             if (newTask.from !== vm.user.name) {
                 datacontext.addTaskToTaskList(newTask);
-                cordovaPlugins.setLocalNotification();
+                //cordovaPlugins.setLocalNotification();
             }
         });
 
