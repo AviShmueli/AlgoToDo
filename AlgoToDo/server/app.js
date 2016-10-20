@@ -57,7 +57,9 @@ var pushTaskToAndroidUser = function (task) {
 
     // Specify which registration IDs to deliver the message to
     var regTokens = users[task.to].GcmRegistrationId;
-
+    console.log("to: ", tasks.to);
+    console.log("users[task.to]: ", users[task.to]);
+    console.log("GcmRegistrationId: ", users[task.to].GcmRegistrationId);
     // Actually send the message
     sender.send(message, { registrationTokens: regTokens }, function (err, response) {
         if (err) {
@@ -233,7 +235,6 @@ app.post('/TaskManeger/sendRegistrationId', function (req, res) {
 app.get('/TaskManeger/getTasks', function (req, res) {
     
     var me = req.query.user;
-    //console.log("user asks for all tasks\n", req.query);
     mongodb.connect(mongoUrl, function (err, db) {
         console.log(err);
         var collection = db.collection('tasks');
