@@ -37,7 +37,10 @@
         var getAllTasks = function() {
             var req = {
                 method: 'GET',
-                url: appConfig.appDomain + '/TaskManeger/getTasks'
+                url: appConfig.appDomain + '/TaskManeger/getTasks',
+                data: {
+                    user: self.$storage.user.name
+                }
             };
 
             $http(req).then(function (response) {

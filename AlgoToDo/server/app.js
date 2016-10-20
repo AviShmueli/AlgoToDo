@@ -60,10 +60,14 @@ var pushTaskToAndroidUser = function (task) {
 
     // Actually send the message
     sender.send(message, { registrationTokens: regTokens }, function (err, response) {
-        if (err) console.error(err);
-        else console.log(response);
+        if (err) {
+            console.error(err);
+        }
+        else {
+            console.log(response);
+        }
     });
-}
+};
 
 // -------- Socket.io --------//
 
@@ -227,11 +231,13 @@ app.post('/TaskManeger/sendRegistrationId', function (req, res) {
 });
 
 app.get('/TaskManeger/getTasks', function (req, res) {
-    // todo: filter - where to == me or from == me
+    
+    var me = req.query.user;
+    console.log(req.query);
     mongodb.connect(mongoUrl, function (err, db) {
         console.log(err);
         var collection = db.collection('tasks');
-        collection.find({}).limit(200).toArray(function (err, result) {
+        collection.find({$or:[{'from': 'אבי'}, {'to': 'אבי'}]}).toArray(function (err, result) {
             res.send(result);
             db.close();
         });
