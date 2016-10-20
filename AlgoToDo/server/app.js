@@ -232,8 +232,8 @@ app.post('/TaskManeger/sendRegistrationId', function (req, res) {
 
 app.get('/TaskManeger/getTasks', function (req, res) {
     
-    //var me = req.data.user;
-    console.log("user asks for all tasks\n", req.query);
+    var me = req.query.user;
+    //console.log("user asks for all tasks\n", req.query);
     mongodb.connect(mongoUrl, function (err, db) {
         console.log(err);
         var collection = db.collection('tasks');
