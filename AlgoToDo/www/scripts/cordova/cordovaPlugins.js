@@ -5,9 +5,9 @@
         .module('TaskManeger.cordova')
         .service('cordovaPlugins', cordovaPlugins);
 
-    cordovaPlugins.$inject = ['$rootScope', 'appConfig', '$mdDialog', '$cordovaLocalNotification', '$cordovaSms', '$window', '$cordovaDialogs', '$cordovaToast', '$cordovaPushV5'];
+    cordovaPlugins.$inject = ['$rootScope', 'datacontext', 'appConfig', '$mdDialog', '$cordovaLocalNotification', '$cordovaSms', '$window', '$cordovaDialogs', '$cordovaToast', '$cordovaPushV5'];
 
-    function cordovaPlugins($rootScope, appConfig, $mdDialog, $cordovaLocalNotification, $cordovaSms, $window, $cordovaDialogs, $cordovaToast, $cordovaPushV5) {
+    function cordovaPlugins($rootScope, datacontext, appConfig, $mdDialog, $cordovaLocalNotification, $cordovaSms, $window, $cordovaDialogs, $cordovaToast, $cordovaPushV5) {
 
         var self = this;
 
@@ -74,7 +74,7 @@
                 // register to get registrationId
                 $cordovaPushV5.register().then(function (registrationId) {
                     appConfig.setRegistrationId(registrationId);
-                    $rootScope.datacontext.sendRegistrationIdToServer(registrationId);
+                    datacontext.sendRegistrationIdToServer(registrationId);
                 }, function (error) {
                     showToast(error);
                     $cordovaDialogs.alert("שגיאה", registrationId, 'OK');

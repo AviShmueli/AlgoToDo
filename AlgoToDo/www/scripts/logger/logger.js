@@ -5,9 +5,9 @@
         .module('TaskManeger.logger')
         .factory('logger', logger);
 
-    logger.$inject = ['$log', '$mdToast', 'cordovaPlugins'];
+    logger.$inject = ['$log', '$mdToast'];
 
-    function logger($log, $mdToast, cordovaPlugins) {
+    function logger($log, $mdToast) {
         var service = {
             showToasts: true,
 
@@ -29,7 +29,7 @@
         }
 
         function info(message, data, title) {
-            $mdToast.showSimple('Hello');
+            //$mdToast.showSimple('Hello');
             $log.info('Info: ' + message, data);
             //cordovaPlugins.showToast(data);
         }

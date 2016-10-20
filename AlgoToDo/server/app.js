@@ -44,8 +44,28 @@ server.listen(process.env.PORT || 5002, function (err) {
     console.log("Express server listening on port %d in %s mode", this.address().port, app.settings.env);
 });
 
-// -------- Socket.io --------//
+/* ----- GCM ------ */
+var gcm = require('node-gcm');
 
+var sender = new gcm.Sender('AIzaSyD-mCE_Uv26meQTeY0Ghjt3rowocsL5KaA');
+
+var pushTaskToAndroidUser = function (task) {
+
+    var message = new gcm.Message({
+        data: { task: task }
+    });
+
+    // Specify which registration IDs to deliver the message to
+    var regTokens = users[task.to].GcmRegistrationId;
+
+    // Actually send the message
+    sender.send(message, { registrationTokens: regTokens }, function (err, response) {
+        if (err) console.error(err);
+        else console.log(response);
+    });
+}
+
+// -------- Socket.io --------//
 
 var users = [];
 io.on('connection', function (socket) {
@@ -153,6 +173,7 @@ app.post('/TaskManeger/newTask', function (req, res) {
                 // send the new task to the employee and return it to the maneger
                 if (to !== '') {
                     io.to(to).emit('new-task', results.ops[0]);
+                    pushTaskToAndroidUser(task);
                 }
 
                 res.send(results.ops[0]);
@@ -192,7 +213,7 @@ app.post('/TaskManeger/sendRegistrationId', function (req, res) {
     var registrationId = req.body.registrationId;
     var user = req.body.user;
     user.registrationId = registrationId;
-
+    users[user.name].GcmRegistrationId = registrationId;
     //add user to Mongo
     mongodb.connect(mongoUrl, function (err, db) {
         var collection = db.collection('users');
@@ -217,20 +238,4 @@ app.get('/TaskManeger/getTasks', function (req, res) {
         console.log('user asks for all tasks');
     });
 });
-
-/* ----- GCM ------ 
-var gcm = require('node-gcm');
-
-var sender = new gcm.Sender('AIzaSyD-mCE_Uv26meQTeY0Ghjt3rowocsL5KaA');
-var message = new gcm.Message({
-    data: { key1: 'msg1' }
-});*/
-// Specify which registration IDs to deliver the message to
-//var regTokens = ['YOUR_REG_TOKEN_HERE'];
-
-// Actually send the message
-/*sender.send(message, { registrationTokens: regTokens }, function (err, response) {
-    if (err) console.error(err);
-    else console.log(response);
-});*/
 
