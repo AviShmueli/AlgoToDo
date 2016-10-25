@@ -20,7 +20,7 @@
         }
       ],
       "api_key": [
-        { "current_key": "AIzaSyDPJtKwWeftuwuneEWs-WlLII6LE7lGeMk" }
+        { "current_key" :  "AIzaSyDPJtKwWeftuwuneEWs-WlLII6LE7lGeMk"  }
       ],
       "services": {
         "analytics_service": {

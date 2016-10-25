@@ -47,7 +47,7 @@ server.listen(process.env.PORT || 5002, function (err) {
 /* ----- GCM ------ */
 var gcm = require('node-gcm');
 
-var sender = new gcm.Sender('AIzaSyD-mCE_Uv26meQTeY0Ghjt3rowocsL5KaA');
+var sender = new gcm.Sender('AIzaSyDPJtKwWeftuwuneEWs-WlLII6LE7lGeMk');
 
 var pushTaskToAndroidUser = function (task) {
 
