@@ -52,7 +52,20 @@ var sender = new gcm.Sender('AIzaSyDPJtKwWeftuwuneEWs-WlLII6LE7lGeMk');
 var pushTaskToAndroidUser = function (task) {
 
     var message = new gcm.Message({
-        data: { task: task }
+        collapseKey: 'demo',
+        priority: 'high',
+        contentAvailable: true,
+        delayWhileIdle: true,
+        dryRun: true,
+        data: {
+            task: task
+        },
+        notification: {
+            title: "Hello, World",
+            icon: "ic_launcher",
+            body: "This is a notification that will be displayed ASAP."
+        }
+        
     });
 
     // Specify which registration IDs to deliver the message to
