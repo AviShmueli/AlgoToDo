@@ -25,6 +25,7 @@
         vm.user = {};
         vm.appDomain = appConfig.appDomain;
         vm.registrationId = appConfig.getRegistrationId();
+        vm.progressActivated = true;
 
         vm.onGoingActivityies = function () { return datacontext.getTaskList(); }
         vm.myTasksCount = function () {
@@ -189,7 +190,8 @@
         vm.checkIfUserLogdIn();
 
         vm.reloadTasks = function () {
-            mRefresh();
+            vm.progressActivated = false;
+            cordovaPlugins.showToast("down swip");
         }
     }
 

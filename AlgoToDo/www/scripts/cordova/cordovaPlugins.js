@@ -8,12 +8,12 @@
     cordovaPlugins.$inject = ['$rootScope', 'datacontext', 'appConfig', '$mdDialog',
                               '$cordovaLocalNotification', '$cordovaSms', '$window',
                               '$cordovaDialogs', '$cordovaToast', '$cordovaPushV5',
-                              '$cordovaBadge'];
+                              '$cordovaBadge', '$cordovaDevice'];
 
     function cordovaPlugins($rootScope, datacontext, appConfig, $mdDialog,
                             $cordovaLocalNotification, $cordovaSms, $window,
                             $cordovaDialogs, $cordovaToast, $cordovaPushV5,
-                            $cordovaBadge) {
+                            $cordovaBadge, $cordovaDevice) {
 
         var self = this;
 
@@ -102,6 +102,10 @@
             
         }
 
+        var getDeviceDetails = function() {
+            return $cordovaDevice.getDevice();
+        }
+
         // triggered every time notification received
         $rootScope.$on('$cordovaPushV5:notificationReceived', function (event, data) {
             console.log("notificationReceived:", event, data);
@@ -158,7 +162,8 @@
             showToast: showToast,
             registerForPushNotifications: registerForPushNotifications,
             sendSmS: sendSmS,
-            clearAppBadge: clearAppBadge
+            clearAppBadge: clearAppBadge,
+            getDeviceDetails: getDeviceDetails
         };
 
         return service;

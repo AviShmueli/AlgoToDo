@@ -10,10 +10,9 @@
     <meta name="format-detection" content="telephone=no">
     <meta name="msapplication-tap-highlight" content="no">
     <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width">
-
-    <link href="scripts/lib/angular-material.min.css" rel="stylesheet" />
+    
+    <link href="css/angular-material.min.css" rel="stylesheet" />
     <link rel="stylesheet" type="text/css" href="css/index.css">
-    <link rel="stylesheet" type="text/css" href="/angular-pull-to-refresh/dist/angular-pull-to-refresh.min.css">
     <title>AlgoToDo</title>
 </head>
 <body layout="row" ng-controller="TaskManegerCtrl as vm" ng-cloak>
@@ -90,8 +89,9 @@
         <md-button style="z-index: 21" class="md-fab md-fab-bottom-right" aria-label="Add" ng-click="vm.showAdd($event)" ng-if="vm.userConnected">
             <ng-md-icon icon="add"></ng-md-icon>
         </md-button>
-        <md-content flex md-scroll-y ng-show="vm.userConnected" pull-to-refresh="vm.reloadTasks()">             
-            <ui-view layout="column" layout-fill layout-padding>
+        <md-content flex md-scroll-y ng-show="vm.userConnected" >  
+            <!--<md-progress-circular md-mode="indeterminate" ng-disabled="!vm.progressActivated"></md-progress-circular>-->       
+            <ui-view layout="column" layout-fill layout-padding >
                 <div class="inset" hide-sm></div>
                 <ng-switch on="data.selectedIndex" class="tabpanel-container">
                     <div role="tabpanel"
@@ -101,7 +101,7 @@
                          md-swipe-left="next()"
                          md-swipe-right="previous()"
                          layout="row" layout-align="center center">
-                        <md-card flex-gt-sm="90" flex-gt-md="80" flex-sm="100">
+                        <md-card flex-gt-sm="90" flex-gt-md="80" flex-sm="100" >
                             <md-card-content dir="rtl">
                                 <md-list>
                                     <md-item ng-repeat="item in vm.onGoingActivityies() |  filter:{ to: vm.user.name, status: 'inProgress' }  | filter:vm.search">
@@ -239,7 +239,6 @@
                 <span></span>
                 <div>{{vm.user.name}}</div>
                 <div>{{vm.user.title}}</div>
-                <div>{{vm.registrationId}}</div>
             </div>
         </md-toolbar>
         <md-list>
@@ -299,8 +298,6 @@
     <script src="scripts/lib/ng-lodash.min.js"></script>
     <script src="scripts/lib/ngStorage.min.js"></script>
     <script src="scripts/lib/angular-cookies.js"></script>
-    <script src="/angular-load/angular-load.min.js"></script>
-    <script src="/angular-pull-to-refresh/dist/angular-pull-to-refresh.min.js"></script>
 
     <script type="text/javascript" src="scripts/lib/ng-cordova.js"></script>
     <script type="text/javascript" src="cordova.js"></script>

@@ -14,7 +14,6 @@
         'ngStorage',
         'ngLodash',
         'ngCordova',
-        'mgcrea.pullToRefresh',
 
         /*
          * Everybody has access to these.
