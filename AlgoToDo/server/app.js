@@ -61,7 +61,7 @@ var pushTaskToAndroidUser = function (task) {
             task: task,
             title: task.from,
             sound: 'default',
-            icon: 'res://icon',
+            icon: 'res://icons/android/icon-48-mdpi.png',
             body: task.description,
             badge: "1"
         }
