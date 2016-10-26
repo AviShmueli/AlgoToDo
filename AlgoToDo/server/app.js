@@ -59,10 +59,10 @@ var pushTaskToAndroidUser = function (task) {
         delayWhileIdle: true,
         data: {
             task: task,
-            title: "משימה חדשה",
-            sound: "true",
+            title: task.from,
+            sound: 'default',
             icon: 'res://icon',
-            body: "יש לך משימה אחת חדשה, הקש כדי לראות את המשימה",
+            body: task.description,
             badge: "1"
         }
         
