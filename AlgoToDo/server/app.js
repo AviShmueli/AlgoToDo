@@ -57,7 +57,6 @@ var pushTaskToAndroidUser = function (task) {
         priority: 'high',
         contentAvailable: true,
         delayWhileIdle: true,
-        dryRun: true,
         data: {
             task: task
         },
@@ -73,7 +72,6 @@ var pushTaskToAndroidUser = function (task) {
     var regTokens = [GcmRegistrationIdsCache[task.to].GcmRegistrationId];
     console.log("sending message to: ", task.to);
     console.log("with GcmRegistrationId: ", regTokens);
-    console.log("\nall users: ", users);
 
     // Actually send the message
     sender.send(message, { registrationTokens: regTokens }, function (err, response) {
