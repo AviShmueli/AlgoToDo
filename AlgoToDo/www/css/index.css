@@ -42,22 +42,12 @@ md-dialog.fullscreen-dialog {
     left: 6px;
     color: white;
 }
-.circle {
-  position: absolute;
-  left: 10px;
-    top: 30px;
-    width: 16px;
-    height: 16px;
-   background: rgb(255,110,64); 
-   -moz-border-radius: 70px; 
-   -webkit-border-radius: 70px; 
-   border-radius: 70px;
-}
-.circle .number{ 
-    font-size: 10px;  
-    top: 3px;
-    position: absolute;
-    left: 3px; 
+md-badge{
+  margin: 0 0 0 8px;
+  background-color: rgb(255,110,64);
+  color: white;
+  padding: 2px 4px;
+  border-radius: 25%;
 }
 body {
     -webkit-touch-callout: none;

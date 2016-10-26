@@ -28,6 +28,9 @@
         "phonegap-plugin-push": {
             "SENDER_ID": "algotodo-2b6e9",
             "PACKAGE_NAME": "io.cordova.myapp007182"
+        },
+        "cordova-plugin-badge": {
+            "PACKAGE_NAME": "io.cordova.myapp007182"
         }
     },
     "dependent_plugins": {

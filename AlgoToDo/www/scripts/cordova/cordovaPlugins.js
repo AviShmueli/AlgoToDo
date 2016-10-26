@@ -127,6 +127,10 @@
             // e.message
         });
 
+        document.addEventListener("resume", function () {
+            clearAppBadge();
+        }, false);
+
         var sendSmS = function (to) {
             //CONFIGURATION
             var options = {
@@ -153,7 +157,8 @@
             beep: beep,
             showToast: showToast,
             registerForPushNotifications: registerForPushNotifications,
-            sendSmS: sendSmS
+            sendSmS: sendSmS,
+            clearAppBadge: clearAppBadge
         };
 
         return service;

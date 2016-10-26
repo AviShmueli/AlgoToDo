@@ -65,7 +65,7 @@
                     cordovaPlugins.registerForPushNotifications();
                 }, false);
             }
-
+            
             logger.info("The notification has been set", "אתה עכשיו מחובר!");
         };
 
