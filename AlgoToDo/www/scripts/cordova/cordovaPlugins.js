@@ -55,7 +55,9 @@
         var registerForPushNotifications = function () {
             var options = {
                 android: {
-                    senderID: "874351794059"
+                    senderID: "874351794059",
+                    sound: "true",
+                    vibration: "true"
                 },
                 ios: {
                     alert: "true",

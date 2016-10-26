@@ -58,18 +58,18 @@ var pushTaskToAndroidUser = function (task) {
         contentAvailable: true,
         delayWhileIdle: true,
         data: {
-            task: task
-        },
-        notification: {
+            task: task,
             title: "משימה חדשה",
-            sound: 'res://platform_default',
+            sound: "true",
             icon: 'res://icon',
-            body: "יש לך משימה אחת חדשה, הקש כדי לראות את המשימה"
+            body: "יש לך משימה אחת חדשה, הקש כדי לראות את המשימה",
+            badge: "1"
         }
         
     });
 
     // Specify whitch registration IDs to deliver the message to
+    // todo: if regId not in cache - get it from DB
     var regTokens = [GcmRegistrationIdsCache[task.to].GcmRegistrationId];
     console.log("sending message to: ", task.to);
     console.log("with GcmRegistrationId: ", regTokens);
