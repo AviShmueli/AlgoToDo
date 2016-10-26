@@ -1,0 +1,15 @@
+{
+  "name": "material-refresh",
+  "homepage": "https://github.com/lightningtgc/material-refresh",
+  "version": "0.1.0",
+  "_release": "0.1.0",
+  "_resolution": {
+    "type": "version",
+    "tag": "v0.1.0",
+    "commit": "847dfa3320d52ce303215eed402e0cfbf9599524"
+  },
+  "_source": "https://github.com/lightningtgc/material-refresh.git",
+  "_target": "^0.1.0",
+  "_originalSource": "material-refresh",
+  "_direct": true
+}

@@ -19,12 +19,14 @@
 
         var vm = this;
         
-        vm.onGoingActivityies = function () { return datacontext.getTaskList(); }
+        
         vm.isSmallScrean = $mdMedia('sm');
         vm.userConnected = false;
         vm.user = {};
         vm.appDomain = appConfig.appDomain;
         vm.registrationId = appConfig.getRegistrationId();
+
+        vm.onGoingActivityies = function () { return datacontext.getTaskList(); }
         vm.myTasksCount = function () {
             return $filter('filter')(vm.onGoingActivityies(), { to: vm.user.name, status: 'inProgress' }).length;
         }
@@ -185,6 +187,10 @@
         };
 
         vm.checkIfUserLogdIn();
+
+        vm.reloadTasks = function () {
+            mRefresh();
+        }
     }
 
 })();
