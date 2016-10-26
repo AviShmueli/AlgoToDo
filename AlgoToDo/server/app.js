@@ -59,11 +59,11 @@ var pushTaskToAndroidUser = function (task) {
         delayWhileIdle: true,
         data: {
             additionalData: task,
-            title: task.from,
+            title: "משימה חדשה",
             sound: 'default',
             icon: 'res://icons/android/icon-48-mdpi.png',
-            body: task.description,
-            badge: "1"
+            body: task.description/*,
+            badge: "1"*/
         }
         
     });
