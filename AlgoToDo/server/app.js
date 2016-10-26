@@ -61,9 +61,10 @@ var pushTaskToAndroidUser = function (task) {
             task: task
         },
         notification: {
-            title: "Hello, World",
-            icon: "ic_launcher",
-            body: "This is a notification that will be displayed ASAP."
+            title: "משימה חדשה",
+            sound: 'res://platform_default',
+            icon: 'res://icon',
+            body: "יש לך משימה אחת חדשה, הקש כדי לראות את המשימה"
         }
         
     });

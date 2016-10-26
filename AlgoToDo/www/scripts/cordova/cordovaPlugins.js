@@ -86,8 +86,8 @@
         // triggered every time notification received
         $rootScope.$on('$cordovaPushV5:notificationReceived', function (event, data) {
             console.log("notificationReceived:", event, data);
-            $cordovaDialogs.alert("הודעת מערכת notificationReceived", data, 'OK');
-            showToast(data);
+            //$cordovaDialogs.alert("הודעת מערכת notificationReceived", data, 'OK');
+            //showToast(data);
             if (event.event == registered) {
                 showToast(data);
             }
