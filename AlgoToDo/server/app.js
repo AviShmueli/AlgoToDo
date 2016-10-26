@@ -48,6 +48,7 @@ server.listen(process.env.PORT || 5002, function (err) {
 var gcm = require('node-gcm');
 
 var sender = new gcm.Sender('AIzaSyDPJtKwWeftuwuneEWs-WlLII6LE7lGeMk');
+var GcmRegistrationIdsCache = {};
 
 var pushTaskToAndroidUser = function (task) {
 
@@ -68,8 +69,8 @@ var pushTaskToAndroidUser = function (task) {
         
     });
 
-    // Specify which registration IDs to deliver the message to
-    var regTokens = [users[task.to].GcmRegistrationId];
+    // Specify whitch registration IDs to deliver the message to
+    var regTokens = [GcmRegistrationIdsCache[task.to].GcmRegistrationId];
     console.log("sending message to: ", task.to);
     console.log("with GcmRegistrationId: ", regTokens);
     console.log("\nall users: ", users);
@@ -236,9 +237,12 @@ app.post('/TaskManeger/sendRegistrationId', function (req, res) {
     console.log("the user just register to messaging: ", user);
     console.log("with GcmRegistrationId: ", registrationId);
 
-    //console.log("users[task.to]: ", users[task.to]);
     user.registrationId = registrationId;
-    users[user.name].GcmRegistrationId = registrationId;
+
+    if (GcmRegistrationIdsCache[user.name] === undefined) {
+        GcmRegistrationIdsCache[user.name] = {'userName': user.name, GcmRegistrationId: registrationId}
+    }
+
     //add user to Mongo
     mongodb.connect(mongoUrl, function (err, db) {
         var collection = db.collection('users');
