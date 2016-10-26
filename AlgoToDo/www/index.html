@@ -13,7 +13,7 @@
 
     <link href="scripts/lib/angular-material.min.css" rel="stylesheet" />
     <link rel="stylesheet" type="text/css" href="css/index.css">
-    <link rel="stylesheet" type="text/css" href="/material-refresh/material-refresh.min.css">
+    <link rel="stylesheet" type="text/css" href="/angular-pull-to-refresh/dist/angular-pull-to-refresh.min.css">
     <title>AlgoToDo</title>
 </head>
 <body layout="row" ng-controller="TaskManegerCtrl as vm" ng-cloak>
@@ -90,7 +90,7 @@
         <md-button style="z-index: 21" class="md-fab md-fab-bottom-right" aria-label="Add" ng-click="vm.showAdd($event)" ng-if="vm.userConnected">
             <ng-md-icon icon="add"></ng-md-icon>
         </md-button>
-        <md-content flex md-scroll-y ng-show="vm.userConnected" md-swipe-down="vm.reloadTasks()">             
+        <md-content flex md-scroll-y ng-show="vm.userConnected" pull-to-refresh="vm.reloadTasks()">             
             <ui-view layout="column" layout-fill layout-padding>
                 <div class="inset" hide-sm></div>
                 <ng-switch on="data.selectedIndex" class="tabpanel-container">
@@ -300,7 +300,7 @@
     <script src="scripts/lib/ngStorage.min.js"></script>
     <script src="scripts/lib/angular-cookies.js"></script>
     <script src="/angular-load/angular-load.min.js"></script>
-    <script src="/material-refresh/material-refresh.min.js"></script>
+    <script src="/angular-pull-to-refresh/dist/angular-pull-to-refresh.min.js"></script>
 
     <script type="text/javascript" src="scripts/lib/ng-cordova.js"></script>
     <script type="text/javascript" src="cordova.js"></script>
