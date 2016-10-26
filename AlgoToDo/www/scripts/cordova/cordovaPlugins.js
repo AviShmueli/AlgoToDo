@@ -5,9 +5,15 @@
         .module('TaskManeger.cordova')
         .service('cordovaPlugins', cordovaPlugins);
 
-    cordovaPlugins.$inject = ['$rootScope', 'datacontext', 'appConfig', '$mdDialog', '$cordovaLocalNotification', '$cordovaSms', '$window', '$cordovaDialogs', '$cordovaToast', '$cordovaPushV5'];
+    cordovaPlugins.$inject = ['$rootScope', 'datacontext', 'appConfig', '$mdDialog',
+                              '$cordovaLocalNotification', '$cordovaSms', '$window',
+                              '$cordovaDialogs', '$cordovaToast', '$cordovaPushV5',
+                              '$cordovaBadge'];
 
-    function cordovaPlugins($rootScope, datacontext, appConfig, $mdDialog, $cordovaLocalNotification, $cordovaSms, $window, $cordovaDialogs, $cordovaToast, $cordovaPushV5) {
+    function cordovaPlugins($rootScope, datacontext, appConfig, $mdDialog,
+                            $cordovaLocalNotification, $cordovaSms, $window,
+                            $cordovaDialogs, $cordovaToast, $cordovaPushV5,
+                            $cordovaBadge) {
 
         var self = this;
 
@@ -82,6 +88,17 @@
                     $cordovaDialogs.alert("שגיאה", registrationId, 'OK');
                 })
             });
+            
+        }
+
+        var clearAppBadge = function () {
+            document.addEventListener("deviceready", function () {
+                $cordovaBadge.clear().then(function () {
+                    // You have permission, badge cleared.
+                }, function (err) {
+                    // You do not have permission.
+                });
+            }, false);
             
         }
 

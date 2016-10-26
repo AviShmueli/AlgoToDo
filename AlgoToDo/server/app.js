@@ -58,7 +58,7 @@ var pushTaskToAndroidUser = function (task) {
         contentAvailable: true,
         delayWhileIdle: true,
         data: {
-            task: task,
+            additionalData: task,
             title: task.from,
             sound: 'default',
             icon: 'res://icons/android/icon-48-mdpi.png',
