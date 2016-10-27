@@ -70,20 +70,23 @@ var pushTaskToAndroidUser = function (task) {
 
     // Specify whitch registration IDs to deliver the message to
     // todo: if regId not in cache - get it from DB
-    var regTokens = [GcmRegistrationIdsCache[task.to].GcmRegistrationId];
-    console.log("sending message to: ", task.to);
-    console.log("with GcmRegistrationId: ", regTokens);
+    if (GcmRegistrationIdsCache[task.to] !== undefined) {
+        var regTokens = [GcmRegistrationIdsCache[task.to].GcmRegistrationId];
+        console.log("sending message to: ", task.to);
+        console.log("with GcmRegistrationId: ", regTokens);
 
-    // Actually send the message
-    sender.send(message, { registrationTokens: regTokens }, function (err, response) {
-        console.log("send message", message);
-        if (err) {
-            console.error("error while sending push notification: ", err);
-        }
-        else {
-            console.log(response);
-        }
-    });
+        // Actually send the message
+        sender.send(message, { registrationTokens: regTokens }, function (err, response) {
+            console.log("send message", message);
+            if (err) {
+                console.error("error while sending push notification: ", err);
+            }
+            else {
+                console.log(response);
+            }
+        });
+    }
+
 };
 
 // -------- Socket.io --------//

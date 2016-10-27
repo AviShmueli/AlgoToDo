@@ -26,7 +26,7 @@
             };
 
             $http(req).then(function (response) {
-                logger.success('המשימה נשלחה בהצלחה!', response.data);
+                logger.info('המשימה נשלחה בהצלחה!', response.data, 2000);
                 self.tasksList.push(response.data);
 
                 // clean the form
