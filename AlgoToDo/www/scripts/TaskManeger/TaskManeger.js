@@ -9,23 +9,23 @@
         '$scope', 'logger', '$location', 'cordovaPlugins',
         'appConfig', '$mdMedia', '$mdBottomSheet','$filter',
         '$mdSidenav', '$mdDialog', 'datacontext', 'lodash',
-        'socket'
+        'socket', '$mdToast'
     ];
 
     function TaskManegerCtrl($scope, logger, $location, cordovaPlugins,
                             appConfig, $mdMedia, $mdBottomSheet,$filter,
                             $mdSidenav, $mdDialog, datacontext, lodash,
-                            socket) {
+                            socket, $mdToast) {
 
         var vm = this;
         
-        
+        vm.selectedIndex = 1;
         vm.isSmallScrean = $mdMedia('sm');
         vm.userConnected = false;
         vm.user = {};
         vm.appDomain = appConfig.appDomain;
         vm.registrationId = appConfig.getRegistrationId();
-        vm.progressActivated = true;
+        vm.progressActivated = false;
 
         vm.onGoingActivityies = function () { return datacontext.getTaskList(); }
         vm.myTasksCount = function () {
@@ -69,7 +69,7 @@
                 }, false);
             }
             
-            logger.info("The notification has been set", "אתה עכשיו מחובר!");
+            logger.info("אתה עכשיו מחובר!", null, 1000);
         };
 
         vm.logOff = function () {
@@ -101,7 +101,7 @@
             
             var newTask = data;
             
-            logger.info("Got new task", newTask);
+            //logger.info("Got new task", newTask);
 
 
             if (newTask.from !== vm.user.name) {
@@ -190,8 +190,14 @@
         vm.checkIfUserLogdIn();
 
         vm.reloadTasks = function () {
-            vm.progressActivated = false;
-            cordovaPlugins.showToast("down swip");
+            vm.progressActivated = true;
+            var simpleToast = logger.info("טוען נתונים...", null, 10000);
+            datacontext.getAllTasksSync().then(function (response) {
+                logger.success("getAllTasks", response.data);
+                datacontext.setTaskList(response.data);
+                vm.progressActivated = false;
+                $mdToast.hide(simpleToast);
+            });;
         }
     }
 

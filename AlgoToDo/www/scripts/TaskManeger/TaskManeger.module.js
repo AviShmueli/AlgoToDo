@@ -14,6 +14,7 @@
         'ngStorage',
         'ngLodash',
         'ngCordova',
+        'ngMessages',
 
         /*
          * Everybody has access to these.

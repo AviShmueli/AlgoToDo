@@ -25,39 +25,35 @@
 
     <div layout="column" class="relative" layout-fill role="main" >
         
-        <span ng-show="vm.userConnected">
+        <div ng-show="vm.userConnected">
             <md-toolbar ng-show="!vm.showSearch">
                 <div class="md-toolbar-tools">
                     <!--<md-button aria-label="Open Settings" ng-click="vm.showListBottomSheet($event)">
                         <ng-md-icon icon="more_vert"></ng-md-icon>
                     </md-button>-->
-                    <md-button aria-label="Search" ng-click="vm.showSearch = !vm.showSearch">
+                    <md-button class="md-icon-button" aria-label="Search" ng-click="vm.showSearch = !vm.showSearch">
                         <ng-md-icon icon="search"></ng-md-icon>
                     </md-button>
                     <span flex></span>
-                    <h3>
-                        ניהול משימות
-                    </h3>
-                    <span flex="10"></span>
-                    <md-button ng-click="vm.toggleSidenav('left')" aria-label="Menu">
+                    <h2>
+                        <span style="color:white">ניהול משימות</span>
+                    </h2>
+                    <!--<span flex="10"></span>-->
+                    <md-button class="md-icon-button" ng-click="vm.toggleSidenav('left')" aria-label="Menu">
                         <ng-md-icon icon="menu"></ng-md-icon>
                     </md-button>
                 </div>
-                <md-tabs md-stretch-tabs class="md-primary" md-selected="data.selectedIndex">
+                <md-tabs md-stretch-tabs class="md-primary main-tabs" md-selected="vm.selectedIndex">
                     <md-tab id="tab1" aria-controls="tab1-content">
-                        <ng-md-icon icon="assignment_ind"></ng-md-icon>
-                        <br />
-                        <!--<div class="circle" ng-if="vm.myTasksCount() > 0">
-                            <span class="number">{{vm.myTasksCount()}}</span>
-                        </div>-->
-                        <md-button ng-if="vm.myTasksCount() > 0" class="md-fab md-mini indication-fab" aria-label="done">
-                            {{vm.myTasksCount()}}
-                        </md-button>
-                        <span style="font-size: 10px">המשימות שלי</span>
-                    </md-tab>
-                    <md-tab id="tab2" aria-controls="tab2-content">
                         <ng-md-icon icon="assignment"></ng-md-icon>
                         <br /><span style="font-size: 10px">בתהליך</span>
+                    </md-tab>
+                    <md-tab id="tab2" aria-controls="tab2-content">
+                        <ng-md-icon icon="assignment_ind"></ng-md-icon>
+                        <br />
+                        <md-badge ng-if="vm.myTasksCount() > 0">{{vm.myTasksCount()}}</md-badge>
+                        <span style="font-size: 10px">המשימות שלי</span>
+
                     </md-tab>
                     <md-tab id="tab3" aria-controls="tab3-content">
                         <ng-md-icon icon="done_all"></ng-md-icon>
@@ -85,124 +81,119 @@
                     </md-button>
                 </div>
             </md-toolbar>
-        </span>
-        <md-button style="z-index: 21" class="md-fab md-fab-bottom-right" aria-label="Add" ng-click="vm.showAdd($event)" ng-if="vm.userConnected">
-            <ng-md-icon icon="add"></ng-md-icon>
-        </md-button>
+        </div>
+        <md-fab-trigger>
+            <md-button style="z-index: 21" class="md-fab md-fab-bottom-right" aria-label="Add" ng-click="vm.showAdd($event)" ng-if="vm.userConnected">
+                <ng-md-icon class="add-icon" icon="add"></ng-md-icon>
+            </md-button>
+        </md-fab-trigger>
         <md-content flex md-scroll-y ng-show="vm.userConnected" >  
-            <!--<md-progress-circular md-mode="indeterminate" ng-disabled="!vm.progressActivated"></md-progress-circular>-->       
-            <ui-view layout="column" layout-fill layout-padding >
-                <div class="inset" hide-sm></div>
-                <ng-switch on="data.selectedIndex" class="tabpanel-container">
+            <md-progress-linear md-mode="indeterminate" ng-disabled="!vm.progressActivated"></md-progress-linear>       
+            <ui-view layout="column" layout-fill>
+                <!--<div class="inset" hide-sm></div>-->
+                <ng-switch on="vm.selectedIndex" class="tabpanel-container">
                     <div role="tabpanel"
                          id="tab1-content"
                          aria-labelledby="tab1"
                          ng-switch-when="0"
-                         md-swipe-left="next()"
-                         md-swipe-right="previous()"
-                         layout="row" layout-align="center center">
-                        <md-card flex-gt-sm="90" flex-gt-md="80" flex-sm="100" >
-                            <md-card-content dir="rtl">
-                                <md-list>
-                                    <md-item ng-repeat="item in vm.onGoingActivityies() |  filter:{ to: vm.user.name, status: 'inProgress' }  | filter:vm.search">
-                                        <md-item-content>
-                                            <div class="md-tile-left inset">
-                                                <md-card-avatar>
-                                                    <img class="md-user-avatar user-avatar" ng-src="{{vm.appDomain + vm.user.avatarUrl}}">
-                                                </md-card-avatar>
-                                            </div>
-                                            <div class="md-tile-content">
-                                                <div layout="row">
-                                                    <span class="from" >{{item.from}}</span> 
-                                                    <ng-md-icon class="head-icon" icon="send" style="fill: black" size="10"></ng-md-icon>  
-                                                    <span class="time">{{item.createTime | date:'HH:mm'}}</span>
-                                                </div>
-                                                <!--<p>{{item.name}}</p>-->
-                                                <p class="description">
-                                                    {{item.description}}
-                                                </p>
-                                            </div>
-                                            <div class="md-tile-left inset">
-                                                <md-button class="md-fab md-mini md-icon-button md-hue-2" style="background-color: blue" ng-click="vm.setTaskStatus(item, 'done')" aria-label="done">
-                                                    <ng-md-icon icon="done"></ng-md-icon>
-                                                </md-button>
-                                            </div>
-                                        </md-item-content>
-                                        <md-divider md-inset hide-sm ng-if="!$last"></md-divider>
-                                        <md-divider hide-gt-sm ng-if="!$last"></md-divider>
-                                    </md-item>
-                                    <md-item ng-hide="vm.myTasksCount() > 0">
-                                        <md-item-content>
-                                            <h3> אין משימות פתוחות כרגע! </h3>
-                                        </md-item-content>
-                                    </md-item>
-                                </md-list>
-                            </md-card-content>
-                        </md-card>
+                         md-swipe-left="vm.selectedIndex = 1"
+                         md-swipe-down="vm.reloadTasks()"
+                         layout="row" layout-align="center center">                            
+                           <md-list flex dir="rtl" ng-show="(vm.onGoingActivityies() | filter:{ status: 'inProgress', from: vm.user.name }).length > 0">
+                                <md-list-item ng-repeat="item in vm.onGoingActivityies() | filter:{ status: 'inProgress', from: vm.user.name } | filter:vm.search" class="noright task-item" style="margin-top: 7px">
+                                    <md-card-avatar>
+                                        <img alt="{{item.from}}" ng-src="{{vm.appDomain + vm.user.avatarUrl}}" class="md-avatar user-avatar" style="margin-right: 0;" />
+                                    </md-card-avatar>
+                                    <div class="md-tile-content" flex="100" style="margin-bottom: 14px;">
+                                        <div layout="row">
+                                            <span class="from">{{item.to}}</span>
+                                            <!--<ng-md-icon class="head-icon" icon="send" style="fill: black" size="10"></ng-md-icon>-->
+                                            <span flex></span>
+                                            <span class="time">{{item.createTime | date:'HH:mm'}}</span>
+                                        </div>
+                                        <div layout="row" style="font-size: 14px;">
+                                            {{item.description}}
+                                        </div>
+                                    </div>
+                                    <md-divider md-inset ng-if="!$last"></md-divider>
+                                </md-list-item>
+                                <md-divider></md-divider>
+                            </md-list>
+                           <md-list dir="rtl" ng-hide="(vm.onGoingActivityies() | filter:{ status: 'inProgress', from: vm.user.name }).length > 0">
+                                <md-item>
+                                    <md-item-content>
+                                        <h3> אין משימות פתוחות כרגע! </h3>
+                                    </md-item-content>
+                                </md-item>
+                                <md-divider></md-divider>
+                            </md-list>
                     </div>
                     <div role="tabpanel"
                          id="tab2-content"
                          aria-labelledby="tab2"
                          ng-switch-when="1"
-                         md-swipe-left="next()"
-                         md-swipe-right="previous()"
+                         md-swipe-left="vm.selectedIndex = 2"
+                         md-swipe-right="vm.selectedIndex = 0"
+                         md-swipe-down="vm.reloadTasks()"
                          layout="row" layout-align="center center">
-                        <md-card flex-gt-sm="90" flex-gt-md="80" flex-sm="100">
-                            <md-card-content dir="rtl">
-                                <md-list>
-                                    <md-item ng-repeat="item in vm.onGoingActivityies() | filter:{ status: 'inProgress', from: vm.user.name } | filter:vm.search">
-                                        <md-item-content>
-                                            <div class="md-tile-left inset">
-                                                <md-card-avatar>
-                                                    <img class="md-user-avatar user-avatar" ng-src="{{vm.appDomain + vm.user.avatarUrl}}">
-                                                </md-card-avatar>
-                                            </div>
-                                            <div class="md-tile-content">
-                                                <div layout="row"><span class="from">{{item.to}}</span> <ng-md-icon class="head-icon" icon="send" style="fill: black" size="10"></ng-md-icon>  <span class="time">{{item.createTime | date:'HH:mm'}}</span></div>
-                                                <!--<p>{{item.name}}</p>-->
-                                                <p class="description">
-                                                    {{item.description}}
-                                                </p>
-                                            </div>
-                                        </md-item-content>                        
-                                        <md-divider md-inset hide-sm ng-if="!$last"></md-divider>
-                                        <md-divider hide-gt-sm ng-if="!$last"></md-divider>
-                                    </md-item>
-                                    <md-item ng-hide="(vm.onGoingActivityies() | filter:{ status: 'inProgress', from: vm.user.name }).length > 0">
-                                        <md-item-content>
-                                            <h3> אין משימות פתוחות כרגע! </h3>
-                                        </md-item-content>
-                                    </md-item>
-                                </md-list>
-                            </md-card-content>
-                        </md-card>
+                           <md-list dir="rtl">
+                                <md-list-item ng-repeat="item in vm.onGoingActivityies() |  filter:{ to: vm.user.name, status: 'inProgress' }  | filter:vm.search" class="noright task-item" style="margin-top: 7px">
+                                    <md-card-avatar>
+                                        <img alt="{{item.from}}" ng-src="{{vm.appDomain + vm.user.avatarUrl}}" class="md-avatar user-avatar" style="margin-right: 0;" />
+                                    </md-card-avatar>
+                                    <div class="md-tile-content" flex="100" style="margin-bottom: 14px;">
+                                        <div layout="row">
+                                            <span class="from">{{item.from}}</span>
+                                            <!--<ng-md-icon class="head-icon" icon="send" style="fill: black" size="10"></ng-md-icon>-->
+                                            <span flex></span>
+                                            <span class="time">{{item.createTime | date:'HH:mm'}}</span>
+                                        </div>
+                                        <div layout="row" style="font-size: 14px;">
+                                            {{item.description}}
+                                        </div>
+                                    </div>
+                                    <md-button class="md-fab md-mini md-icon-button md-secondary" style="background-color: rgba(105, 178, 137, 0.95);" ng-click="vm.setTaskStatus(item, 'done')" aria-label="done">
+                                        <ng-md-icon icon="done"></ng-md-icon>
+                                    </md-button>
+                                    <md-divider md-inset ng-if="!$last"></md-divider>
+                                </md-list-item>
+
+                                <md-item ng-hide="vm.myTasksCount() > 0">
+                                    <md-item-content>
+                                        <h3> אין משימות פתוחות כרגע! </h3>
+                                    </md-item-content>
+                                </md-item>
+                                <md-divider></md-divider>
+                            </md-list>
                     </div>
                     <div role="tabpanel"
                          id="tab3-content"
                          aria-labelledby="tab3"
                          ng-switch-when="2"
-                         md-swipe-left="next()"
-                         md-swipe-right="previous()"
+                         md-swipe-right="vm.selectedIndex = 1"
+                         md-swipe-down="vm.reloadTasks()"
                          layout="row" layout-align="center center">
-                        <md-card flex-gt-sm="90" flex-gt-md="80" flex-sm="100">
-                            <md-card-content dir="rtl">
-                                <md-list>
-                                    <md-item ng-repeat="item in vm.onGoingActivityies() | filter:{ status: 'done', from: vm.user.name } | filter:vm.search | orderBy: 'doneTime':true">
-                                        <md-item-content>
-                                            <div class="md-tile-content">
-                                                <div layout="row"><span class="from">{{item.to}}</span> <ng-md-icon class="head-icon" icon="send" style="fill: black" size="10"></ng-md-icon>  <span class="time">{{item.createTime | date:'HH:mm'}}</span></div>
-                                                <!--<p>{{item.name}}</p>-->
-                                                <p class="description">
-                                                    {{item.description}}
-                                                </p>
+                           <md-list flex dir="rtl">
+                                    <md-list-item ng-repeat="item in vm.onGoingActivityies() | filter:{ status: 'done', from: vm.user.name } | filter:vm.search | orderBy: 'doneTime':true" class="noright task-item" style="margin-top: 7px">
+                                        <div class="md-tile-content" flex="100" style="margin-bottom: 14px;">
+                                            <div layout="row">
+                                                <span class="from">{{item.to}}</span>
+                                                <!--<ng-md-icon class="head-icon" icon="send" style="fill: black" size="10"></ng-md-icon>-->
+                                                <span flex></span>
+                                                
+                                                <span class="time">{{item.createTime | date:'HH:mm'}}</span>
+                                                <ng-md-icon icon="timer" size="20"></ng-md-icon>
                                             </div>
-                                        </md-item-content>
-                                        <md-divider md-inset hide-sm ng-if="!$last"></md-divider>
-                                        <md-divider hide-gt-sm ng-if="!$last"></md-divider>
-                                    </md-item>
+                                            <div layout="row">                                              
+                                                <span style="font-size: 14px;">{{item.description}}</span>
+                                                <span flex></span>
+                                                <span class="time">{{item.doneTime | date:'HH:mm'}}</span>
+                                                <ng-md-icon icon="timer_off" size="20"></ng-md-icon>
+                                            </div>
+                                        </div>
+                                        <md-divider ng-if="!$last"></md-divider>
+                                    </md-list-item>
                                 </md-list>
-                            </md-card-content>
-                        </md-card>
                     </div>
                 </ng-switch>
             </ui-view>
@@ -234,7 +225,7 @@
             <span flex></span>
             <div layout="column" layout-align="end center" class="md-toolbar-tools-bottom inset">
                 <md-card-avatar>
-                    <img class="md-user-avatar user-avatar" ng-src="{{vm.appDomain + vm.user.avatarUrl}}">
+                    <img class="md-user-avatar user-avatar-big" ng-src="{{vm.appDomain + vm.user.avatarUrl}}">
                 </md-card-avatar>
                 <span></span>
                 <div>{{vm.user.name}}</div>
@@ -298,14 +289,15 @@
     <script src="scripts/lib/ng-lodash.min.js"></script>
     <script src="scripts/lib/ngStorage.min.js"></script>
     <script src="scripts/lib/angular-cookies.js"></script>
+    <script src="scripts/lib/angular-messages.min.js"></script>
 
     <script type="text/javascript" src="scripts/lib/ng-cordova.js"></script>
     <script type="text/javascript" src="cordova.js"></script>
     <script type="text/javascript" src="scripts/platformOverrides.js"></script>
     <script type="text/javascript" src="scripts/index.js"></script>
 
-    <script src="https://algotodo.herokuapp.com/socket.io/socket.io.js "></script>
-    <!--<script src="http://localhost:5001/socket.io/socket.io.js "></script>-->
+    <!--<script src="https://algotodo.herokuapp.com/socket.io/socket.io.js "></script>-->
+    <script src="http://localhost:5001/socket.io/socket.io.js "></script>
 
     <script src="scripts/TaskManeger/TaskManeger.module.js "></script>
     <script src="scripts/core/core.module.js "></script>

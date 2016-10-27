@@ -19,6 +19,10 @@
     font-size: 14px;
 }
 
+.task-item .md-secondary-container{
+   margin-right: 8px !important;
+}
+
 md-dialog.fullscreen-dialog {
     max-width: 100%;
     max-height: 100%;
@@ -27,28 +31,26 @@ md-dialog.fullscreen-dialog {
     border-radius: 0;
 }
 
-.indication-fab{
-    background-color: rgb(255,110,64) !important;
-    width: 16px !important;
-    height: 16px !important;
+/*md-autocomplete > md-autocomplete-wrap > button {
+    right: 90% !important;
+}*/
+.add-icon{
     position: absolute;
-    left: 30%;
-    top: 30%;
+    top: 6px;
+    left: 16px;
 }
-.indication-fab > span{
-    font-size: 10px;
-    position: absolute;
-    top: 1px;
-    left: 6px;
-    color: white;
+
+.md-autocomplete-suggestions {
+    text-align: right;
 }
+
 md-badge{
-  margin: 0 0 0 8px;
   background-color: rgb(255,110,64);
   color: white;
-  padding: 2px 4px;
-  border-radius: 25%;
+  padding: 1px 6px;
+  border-radius: 99%;
 }
+
 body {
     -webkit-touch-callout: none;
     -webkit-text-size-adjust: none;
@@ -191,10 +193,22 @@ md-sidenav ng-md-icon {
 
 .user-avatar {
     border-radius: 99%;
-    width: 64px;
+    width: 54px !important;
+    height: 54px !important;
         background-color: lightcoral;
 }
 
+.user-avatar-big {
+    border-radius: 99%;
+    width: 72px !important;
+    height: 72px !important;
+        background-color: lightcoral;
+}
+
+.main-tabs md-tab-item{
+    line-height: 16px;
+    padding: 0;
+}
 
 /* ----- login form  ------- */
 

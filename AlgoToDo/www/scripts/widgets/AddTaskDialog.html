@@ -13,13 +13,35 @@
                 </md-input-container>
             </div>-->
             <div layout layout-sm="column">
-                <md-input-container flex> 
+                <!--<md-input-container flex> 
                     <label>נמען</label> 
                     <span style="color:red" ng-show="newTaskForm.to.$dirty && newTaskForm.to.$invalid">
                         <span ng-show="newTaskForm.to.$error.required">נמען הוא שדה חובה</span>
                     </span>
                     <input ng-model="vm.task.to" type="text" name="to" required>
-</md-input-container>
+                </md-input-container>-->
+                <md-autocomplete flex
+                                 placeholder="נמען"
+                                 md-min-length="1"
+                                 md-no-cache="true"
+                                 md-selected-item="vm.selectedItem"
+                                 md-search-text="vm.searchText"
+                                 md-items="user in vm.querySearch(vm.searchText)"
+                                 md-item-text="user.fullName"
+                                 md-floating-label="נמען"
+                                 md-no-asterisk="true"
+                                 md-require-match>
+                    <md-item-template style="text-align: right">
+                        <span md-highlight-text="vm.searchText">{{user.fullName}}</span>
+                    </md-item-template>
+                    <!--<md-not-found>
+                        הנמען שחיפשת לא קיים
+                    </md-not-found>
+                    <div ng-messages="newTaskForm.taskTo.$error" ng-if="newTaskForm.taskTo.$touched">
+                        <div ng-message="required">נמען הוא שדה <b>חובה</b></div>
+                        <div ng-message="md-require-match">נא לבחור נמען מתוך הרשימה</div>
+                    </div>-->
+                </md-autocomplete>
             </div>
             <div layout layout-sm="column">
                 <md-input-container flex class="md-block">

@@ -28,20 +28,23 @@
             $log.error('Error: ' + message, data);           
         }
 
-        function info(message, data, title) {
-            //$mdToast.showSimple('Hello');
+        function info(message, data, toastTime) {
+            var simpleToast = $mdToast.build({
+                hideDelay: toastTime,
+                position: 'bottom right',
+                template: '<md-toast>' +
+                             '<div class="md-toast-content" dir="rtl">' +
+                                message +
+                             '</div>' +
+                          '</md-toast>',
+            });
+            $mdToast.show(simpleToast);
             $log.info('Info: ' + message, data);
             //cordovaPlugins.showToast(data);
+            return simpleToast;
         }
 
         function success(message, data, title) {
-
-            $mdToast.show({
-                textContent: message,
-                position: 'top left',
-                hideDelay: 3000
-            });
-
             $log.info('Success: ' + message, data);
         }
 

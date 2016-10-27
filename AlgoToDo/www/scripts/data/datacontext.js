@@ -5,9 +5,9 @@
         .module('TaskManeger.data')
         .service('datacontext', datacontext);
 
-    datacontext.$inject = ['$http', 'logger', 'socket', 'lodash', 'appConfig', '$localStorage'];
+    datacontext.$inject = ['$http', 'logger', 'socket', 'lodash', 'appConfig', '$localStorage', '$mdToast'];
 
-    function datacontext($http, logger, socket, lodash, appConfig, $localStorage) {
+    function datacontext($http, logger, socket, lodash, appConfig, $localStorage, $mdToast) {
 
         var self = this;
         self.tasksList = [];
@@ -34,7 +34,8 @@
             }, function () { });
         };
 
-        var getAllTasks = function() {
+        var getAllTasks = function () {
+            var simpleToast = logger.info("טוען נתונים...", null, 10000);
             var req = {
                 method: 'GET',
                 url: appConfig.appDomain + '/TaskManeger/getTasks',
@@ -46,7 +47,20 @@
             $http(req).then(function (response) {
                 logger.success("getAllTasks", response.data);
                 self.tasksList = response.data;
+                $mdToast.hide(simpleToast);
             });
+        };
+
+        var getAllTasksSync = function () {
+            var req = {
+                method: 'GET',
+                url: appConfig.appDomain + '/TaskManeger/getTasks',
+                params: {
+                    user: self.$storage.user.name
+                }
+            };
+
+            return $http(req);
         };
         
         var updateTask = function (task) {
@@ -71,6 +85,10 @@
 
         var getTaskList = function () {
             return self.tasksList;
+        }
+
+        var setTaskList = function (newList) {
+            self.tasksList = newList;
         }
         
         var addTaskToTaskList = function (task) {
@@ -123,6 +141,7 @@
             /*users: self.users,*/
             user: self.user,
             getTaskList: getTaskList,
+            setTaskList: setTaskList,
             addTaskToTaskList: addTaskToTaskList,
             getNewTask: getNewTask,
             saveNewTask: saveNewTask,
@@ -133,7 +152,8 @@
             saveUserToLocalStorage: saveUserToLocalStorage,
             getUserFromLocalStorage: getUserFromLocalStorage,
             deleteUserFromLocalStorage: deleteUserFromLocalStorage,
-            sendRegistrationIdToServer: sendRegistrationIdToServer
+            sendRegistrationIdToServer: sendRegistrationIdToServer,
+            getAllTasksSync: getAllTasksSync
         };
 
         return service;

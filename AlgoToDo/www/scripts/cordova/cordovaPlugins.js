@@ -50,9 +50,9 @@
             }, false);
         }
 
-        var showToast = function (info) {
+        var showToast = function (info, duration) {
             document.addEventListener("deviceready", function () {
-                $cordovaToast.show(info, 'long', 'center')
+                $cordovaToast.show(info, duration ? duration : 'short', 'center')
                 .then(function (success) {});
             }, false);
             
