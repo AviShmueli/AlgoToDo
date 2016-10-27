@@ -30,8 +30,8 @@
 
             return {
                 appDomain: 
-                     //'https://algotodo.herokuapp.com'
-                    'http://localhost:5001' 
+                     'https://algotodo.herokuapp.com'
+                    //'http://localhost:5001' 
                 , getRegistrationId: function () { return self.registrationId }
                 , setRegistrationId: function (newValue) { self.registrationId = newValue }
             }
