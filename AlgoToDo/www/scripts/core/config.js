@@ -38,5 +38,8 @@
                 , setRegistrationId: function (newValue) { self.registrationId = newValue; }
             };
         })
+        .run(function (amMoment) {
+            amMoment.changeLocale('he');
+        });
 
 })();

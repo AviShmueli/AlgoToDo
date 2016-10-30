@@ -9,13 +9,13 @@
         '$scope', 'logger', '$location', 'cordovaPlugins',
         'appConfig', '$mdMedia', '$mdBottomSheet','$filter',
         '$mdSidenav', '$mdDialog', 'datacontext', 'lodash',
-        'socket', '$mdToast'
+        'socket', '$mdToast', 'moment'
     ];
 
     function TaskManegerCtrl($scope, logger, $location, cordovaPlugins,
                             appConfig, $mdMedia, $mdBottomSheet,$filter,
                             $mdSidenav, $mdDialog, datacontext, lodash,
-                            socket, $mdToast) {
+                            socket, $mdToast, moment) {
 
         var vm = this;
         
@@ -220,6 +220,14 @@
 
         vm.reloadTasks = function () {
             loadTasks();
+        }
+
+        vm.getTotalTaskTime = function (task) {
+            var end = new Date(task.doneTime)
+            var start = new Date(task.createTime);
+            var totalInMillisconds = end.getTime() - start.getTime();
+            var totalTime = moment.duration(totalInMillisconds);
+            return moment.duration(totalInMillisconds).humanize();
         }
 
         document.addEventListener("resume", function () {         

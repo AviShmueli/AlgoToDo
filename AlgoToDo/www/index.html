@@ -179,16 +179,15 @@
                                             <div layout="row">
                                                 <span class="from">{{item.to}}</span>
                                                 <!--<ng-md-icon class="head-icon" icon="send" style="fill: black" size="10"></ng-md-icon>-->
-                                                <span flex></span>
-                                                
-                                                <span class="time">{{item.createTime | date:'HH:mm'}}</span>
+                                                <span flex></span>                                                
+                                                <span class="time">{{vm.getTotalTaskTime(item)}}</span>
                                                 <ng-md-icon icon="timer" size="20"></ng-md-icon>
                                             </div>
                                             <div layout="row">                                              
                                                 <span style="font-size: 14px;">{{item.description}}</span>
-                                                <span flex></span>
+                                                <!--<span flex></span>
                                                 <span class="time">{{item.doneTime | date:'HH:mm'}}</span>
-                                                <ng-md-icon icon="timer_off" size="20"></ng-md-icon>
+                                                <ng-md-icon icon="timer_off" size="20"></ng-md-icon>-->
                                             </div>
                                         </div>
                                         <md-divider ng-if="!$last"></md-divider>
@@ -290,6 +289,10 @@
     <script src="scripts/lib/ngStorage.min.js"></script>
     <script src="scripts/lib/angular-cookies.js"></script>
     <script src="scripts/lib/angular-messages.min.js"></script>
+    
+    <script src="scripts/lib/moment.js"></script>
+    <script src="scripts/lib/he.js"></script>
+    <script src="scripts/lib/angular-moment.min.js"></script>
 
     <script type="text/javascript" src="scripts/lib/ng-cordova.js"></script>
     <script type="text/javascript" src="cordova.js"></script>

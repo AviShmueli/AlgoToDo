@@ -16,6 +16,7 @@
         'ngCordova',
         'ngMessages',
         'ngAnimate',
+        'angularMoment',
 
         /*
          * Everybody has access to these.
