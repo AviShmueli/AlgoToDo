@@ -25,7 +25,7 @@
                     { fullName: 'אריאל', name: 'אריאל', userAvater: '/dsa/dsa/dsa.png' }];//datacontext.getAllUsersFroLocalStorage();
 
         function querySearch(query) {
-            var results = query ? vm.users.filter(createFilterFor(query)) : self.states;
+            var results = query ? vm.users.filter(createFilterFor(query)) : vm.users;
             /*var deferred = $q.defer();
             $timeout(function () { deferred.resolve(results); }, Math.random() * 1000, false);
             return deferred.promise;*/
