@@ -2,7 +2,9 @@
     'use strict';
 
     angular.module('TaskManeger.core')
-        .config(function ($mdThemingProvider) {
+        .config(function ($mdThemingProvider, $compileProvider, $animateProvider) {
+            $compileProvider.debugInfoEnabled(false);
+            //$animateProvider.classNameFilter(/\banimated\b/);
             var customBlueMap = $mdThemingProvider.extendPalette('light-blue', {
                 'contrastDefaultColor': 'light',
                 'contrastDarkColors': ['50'],
@@ -29,12 +31,12 @@
             self.registrationId = '';
 
             return {
-                appDomain: 
+                appDomain:
                      'https://algotodo.herokuapp.com'
-                    //'http://localhost:5001' 
-                , getRegistrationId: function () { return self.registrationId }
-                , setRegistrationId: function (newValue) { self.registrationId = newValue }
-            }
-        });;
+                //'http://localhost:5001' 
+                , getRegistrationId: function () { return self.registrationId; }
+                , setRegistrationId: function (newValue) { self.registrationId = newValue; }
+            };
+        })
 
 })();

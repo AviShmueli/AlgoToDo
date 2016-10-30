@@ -15,6 +15,7 @@
         'ngLodash',
         'ngCordova',
         'ngMessages',
+        'ngAnimate',
 
         /*
          * Everybody has access to these.

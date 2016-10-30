@@ -10,9 +10,6 @@
         "com.cordova.plugins.sms": {
             "PACKAGE_NAME": "io.cordova.myapp007182"
         },
-        "com.phonegap.plugins.PushPlugin": {
-            "PACKAGE_NAME": "io.cordova.myapp007182"
-        },
         "cordova-plugin-whitelist": {
             "PACKAGE_NAME": "io.cordova.myapp007182"
         },

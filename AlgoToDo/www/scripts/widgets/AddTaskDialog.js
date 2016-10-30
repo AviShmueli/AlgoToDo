@@ -21,6 +21,7 @@
         vm.querySearch = querySearch;
         vm.users = [{ fullName: 'אבי', name: 'אבי', userAvater: '/dsa/dsa/dsa.png' },
                     { fullName: 'דינה', name: 'דינה', userAvater: '/dsa/dsa/dsa.png' },
+                    { fullName: 'רעיה', name: 'רעיה', userAvater: '/dsa/dsa/dsa.png' },
                     { fullName: 'אריאל', name: 'אריאל', userAvater: '/dsa/dsa/dsa.png' }];//datacontext.getAllUsersFroLocalStorage();
 
         function querySearch(query) {

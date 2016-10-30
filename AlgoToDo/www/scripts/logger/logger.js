@@ -36,7 +36,7 @@
                              '<div class="md-toast-content" dir="rtl">' +
                                 message +
                              '</div>' +
-                          '</md-toast>',
+                          '</md-toast>'
             });
             $mdToast.show(simpleToast);
             $log.info('Info: ' + message, data);

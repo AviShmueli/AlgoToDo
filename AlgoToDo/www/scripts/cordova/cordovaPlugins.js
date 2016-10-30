@@ -8,18 +8,18 @@
     cordovaPlugins.$inject = ['$rootScope', 'datacontext', 'appConfig', '$mdDialog',
                               '$cordovaLocalNotification', '$cordovaSms', '$window',
                               '$cordovaDialogs', '$cordovaToast', '$cordovaPushV5',
-                              '$cordovaBadge', '$cordovaDevice'];
+                              '$cordovaBadge', '$cordovaDevice', '$log'];
 
     function cordovaPlugins($rootScope, datacontext, appConfig, $mdDialog,
                             $cordovaLocalNotification, $cordovaSms, $window,
                             $cordovaDialogs, $cordovaToast, $cordovaPushV5,
-                            $cordovaBadge, $cordovaDevice) {
+                            $cordovaBadge, $cordovaDevice, $log) {
 
         var self = this;
 
         var isMobileDevice = function () {
             return $window.cordova !== undefined;
-        }
+        };
 
         var setLocalNotification = function () {
             if (!isMobileDevice()) return;
@@ -40,23 +40,23 @@
                 });
             }, false);
 
-            
-        }
+
+        };
 
         var beep = function () {
             // beep 3 times
             document.addEventListener("deviceready", function () {
                 $cordovaDialogs.beep(3);
             }, false);
-        }
+        };
 
         var showToast = function (info, duration) {
             document.addEventListener("deviceready", function () {
                 $cordovaToast.show(info, duration ? duration : 'short', 'center')
-                .then(function (success) {});
+                .then(function (success) { });
             }, false);
-            
-        }
+
+        };
 
         var registerForPushNotifications = function () {
             var options = {
@@ -72,7 +72,7 @@
                 },
                 windows: {}
             };
-            
+
             $cordovaPushV5.initialize(options).then(function (result) {
                 // start listening for new notifications
                 $cordovaPushV5.onNotification();
@@ -86,10 +86,10 @@
                 }, function (error) {
                     showToast(error);
                     $cordovaDialogs.alert("שגיאה", registrationId, 'OK');
-                })
+                });
             });
-            
-        }
+
+        };
 
         var clearAppBadge = function () {
             document.addEventListener("deviceready", function () {
@@ -99,19 +99,19 @@
                     // You do not have permission.
                 });
             }, false);
-            
-        }
 
-        var getDeviceDetails = function() {
+        };
+
+        var getDeviceDetails = function () {
             return $cordovaDevice.getDevice();
-        }
+        };
 
         // triggered every time notification received
         $rootScope.$on('$cordovaPushV5:notificationReceived', function (event, data) {
-            console.log("notificationReceived:", event, data);
+            $log.info('notificationReceived: ' + event, data);
             //$cordovaDialogs.alert("הודעת מערכת notificationReceived", data, 'OK');
             //showToast(data);
-            if (event.event == registered) {
+            if (event.event === registered) {
                 showToast(data);
             }
 
@@ -125,7 +125,7 @@
 
         // triggered every time error occurs
         $rootScope.$on('$cordovaPushV5:errorOcurred', function (event, e) {
-            console.log("errorOcurred:", event, e);
+            $log.info('errorOcurred: ' + event, e);
             $cordovaDialogs.alert("שגיאה", e, 'OK');
             showToast("error");
             // e.message
@@ -154,7 +154,7 @@
                       showToast("SMS wasent sent...");
                   });
             }, false);
-        }
+        };
 
         var service = {
             setLocalNotification: setLocalNotification,

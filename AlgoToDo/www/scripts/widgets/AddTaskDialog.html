@@ -1,4 +1,4 @@
-<md-dialog aria-label="Mango (Fruit)" dir="rtl" layout="column" ng-class="{'fullscreen-dialog': vm.isSmallScrean}" >
+<md-dialog aria-label="Mango (Fruit)" dir="rtl" layout="column" ng-class="{'fullscreen-dialog': vm.isSmallScrean}" flex="66">
     <md-toolbar>
         <div class="md-toolbar-tools">
             <h2>משימה חדשה</h2>
@@ -6,60 +6,49 @@
     </md-toolbar>
     <md-dialog-content flex md-scroll-y class="md-padding" layout-margin>
         <form name="newTaskForm" novalidate>
-            <!--<div layout layout-sm="column">
-                <md-input-container flex> 
-                    <label>שם המשימה</label> 
-                    <input ng-model="vm.task.name" md-select-on-focus="true"> 
-                </md-input-container>
-            </div>-->
             <div layout layout-sm="column">
-                <!--<md-input-container flex> 
-                    <label>נמען</label> 
-                    <span style="color:red" ng-show="newTaskForm.to.$dirty && newTaskForm.to.$invalid">
-                        <span ng-show="newTaskForm.to.$error.required">נמען הוא שדה חובה</span>
-                    </span>
-                    <input ng-model="vm.task.to" type="text" name="to" required>
-                </md-input-container>-->
-                <md-autocomplete flex
+                <md-autocomplete md-autofocus flex required md-require-match
+                                 md-input-name="autocompleteField"
                                  placeholder="נמען"
                                  md-min-length="1"
-                                 md-no-cache="true"
+                                 md-no-cache="false"
                                  md-selected-item="vm.selectedItem"
                                  md-search-text="vm.searchText"
                                  md-items="user in vm.querySearch(vm.searchText)"
                                  md-item-text="user.fullName"
                                  md-floating-label="נמען"
-                                 md-no-asterisk="true"
-                                 md-require-match>
+                                 md-no-asterisk="true">
                     <md-item-template style="text-align: right">
                         <span md-highlight-text="vm.searchText">{{user.fullName}}</span>
                     </md-item-template>
-                    <!--<md-not-found>
+                    <md-not-found>
                         הנמען שחיפשת לא קיים
                     </md-not-found>
-                    <div ng-messages="newTaskForm.taskTo.$error" ng-if="newTaskForm.taskTo.$touched">
+                    <div ng-messages="newTaskForm.autocompleteField.$error" ng-if="newTaskForm.autocompleteField.$touched">
                         <div ng-message="required">נמען הוא שדה <b>חובה</b></div>
                         <div ng-message="md-require-match">נא לבחור נמען מתוך הרשימה</div>
-                    </div>-->
+                    </div>
                 </md-autocomplete>
             </div>
             <div layout layout-sm="column">
                 <md-input-container flex class="md-block">
                     <label>תיאור המשימה</label>
-                    <textarea name="description" ng-model="vm.task.description" md-maxlength="150" rows="2" required></textarea>
+                    <textarea name="description" ng-model="vm.task.description" md-maxlength="150" rows="2" required md-no-asterisk="true" md-no-autogrow></textarea>
                     <span style="color:red" ng-show="newTaskForm.description.$dirty && newTaskForm.description.$invalid">
                         <span ng-show="newTaskForm.description.$error.required">נא להכניס תיאור למשימה</span>
                     </span>
-</md-input-container>
+                </md-input-container>
             </div>
             <!-- https://github.com/logbon72/angular-material-datetimepicker -->
-            <div class="md-actions" layout="row">
+            <!--<div class="md-actions" layout="row">
                 <span flex></span>
-                <md-button ng-click="vm.cancel()"> ביטול </md-button>
-                <md-button type="submit" ng-click="vm.save()" ng-disabled="newTaskForm.$invalid" class="md-primary"> שלח </md-button>
-            </div>
+                
+            </div>-->
         
         </form>
     </md-dialog-content>
-    
+    <md-dialog-actions>
+        <md-button ng-click="vm.cancel()"> ביטול </md-button>
+        <md-button type="submit" ng-click="vm.save()" ng-disabled="newTaskForm.$invalid" class="md-primary"> שלח </md-button>
+    </md-dialog-actions>
 </md-dialog>

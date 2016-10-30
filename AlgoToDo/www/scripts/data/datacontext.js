@@ -85,41 +85,41 @@
 
         var getTaskList = function () {
             return self.tasksList;
-        }
+        };
 
         var setTaskList = function (newList) {
             self.tasksList = newList;
-        }
+        };
         
         var addTaskToTaskList = function (task) {
             self.tasksList.push(task);
-        }
+        };
 
         var replaceTask = function (task) {
             var foundIndex = self.tasksList.findIndex(x => x._id === task._id);
             self.tasksList[foundIndex] = task;
-        }
+        };
 
         var getNewTask = function () {
             return self.newTask;
-        }
+        };
 
-        var saveUserToLocalStorage = function (user) {           
+        var saveUserToLocalStorage = function (user) {
             self.$storage.user = user;
-        }
+        };
 
         var getUserFromLocalStorage = function () {
-            return self.$storage !== undefined ? self.$storage.user: undefined;
-        }
+            return self.$storage !== undefined ? self.$storage.user : undefined;
+        };
 
         var deleteUserFromLocalStorage = function () {
             delete self.$storage.user;
-        }
+        };
 
         var resetNewTask = function () {
             // clean the form
             self.newTask = {};
-        }
+        };
 
         var sendRegistrationIdToServer = function (registrationId) {
             var req = {
@@ -135,7 +135,7 @@
                 self.$storage.user.registrationId = registrationId;
                 logger.success('מזהה רישום נשלח לשרת בהצלחה', response.data);
             }, function () { });
-        }
+        };
 
         var service = {
             /*users: self.users,*/

@@ -27,24 +27,24 @@
         vm.registrationId = appConfig.getRegistrationId();
         vm.progressActivated = false;
 
-        vm.onGoingActivityies = function () { return datacontext.getTaskList(); }
+        vm.onGoingActivityies = function () { return datacontext.getTaskList(); };
         vm.myTasksCount = function () {
             return $filter('filter')(vm.onGoingActivityies(), { to: vm.user.name, status: 'inProgress' }).length;
-        }
+        };
 
-        vm.checkIfUserLogdIn = function(){
+        vm.checkIfUserLogdIn = function () {
             var user = datacontext.getUserFromLocalStorage();
             if (user !== undefined) {
                 vm.user = user;
-                vm.login();               
+                vm.login();
             }
-        }        
+        };
 
         vm.signIn = function () {
-            vm.user.avatarUrl =  '/images/man-' + Math.floor((Math.random() * 8) + 1) + '.svg';
+            vm.user.avatarUrl = '/images/man-' + Math.floor((Math.random() * 8) + 1) + '.svg';
             datacontext.saveUserToLocalStorage(vm.user);
             vm.login();
-        }
+        };
 
         vm.login = function () {
 
@@ -76,7 +76,7 @@
             datacontext.deleteUserFromLocalStorage();
             vm.userConnected = false;
             vm.toggleSidenav('left');
-        }
+        };
 
         // the response to the all-usersr from the server
         // get from the server the list of users that are connected
@@ -163,7 +163,8 @@
                 controller: 'AddTaskDialogController',
                 controllerAs: 'vm',
                 templateUrl: 'scripts/widgets/AddTaskDialog.html',
-                targetEvent: ev
+                targetEvent: ev,
+                fullscreen: true
             }).then(function (answer) {
                 vm.registrationId = appConfig.getRegistrationId();
                     if (answer === 'ok') {
@@ -197,8 +198,8 @@
                 datacontext.setTaskList(response.data);
                 vm.progressActivated = false;
                 $mdToast.hide(simpleToast);
-            });;
-        }
+            });
+        };
     }
 
 })();

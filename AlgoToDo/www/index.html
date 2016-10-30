@@ -43,7 +43,7 @@
                         <ng-md-icon icon="menu"></ng-md-icon>
                     </md-button>
                 </div>
-                <md-tabs md-stretch-tabs class="md-primary main-tabs" md-selected="vm.selectedIndex">
+                <md-tabs md-stretch-tabs="always" class="md-primary main-tabs" md-selected="vm.selectedIndex">
                     <md-tab id="tab1" aria-controls="tab1-content">
                         <ng-md-icon icon="assignment"></ng-md-icon>
                         <br /><span style="font-size: 10px">בתהליך</span>
@@ -53,7 +53,6 @@
                         <br />
                         <md-badge ng-if="vm.myTasksCount() > 0">{{vm.myTasksCount()}}</md-badge>
                         <span style="font-size: 10px">המשימות שלי</span>
-
                     </md-tab>
                     <md-tab id="tab3" aria-controls="tab3-content">
                         <ng-md-icon icon="done_all"></ng-md-icon>
@@ -83,7 +82,7 @@
             </md-toolbar>
         </div>
         <md-fab-trigger>
-            <md-button style="z-index: 21" class="md-fab md-fab-bottom-right" aria-label="Add" ng-click="vm.showAdd($event)" ng-if="vm.userConnected">
+            <md-button style="z-index: 21" class="md-fab md-fab-bottom-right" aria-label="Add" ng-click="vm.showAdd($event)" ng-if="vm.userConnected" md-no-ink="true">
                 <ng-md-icon class="add-icon" icon="add"></ng-md-icon>
             </md-button>
         </md-fab-trigger>
@@ -136,7 +135,7 @@
                          md-swipe-right="vm.selectedIndex = 0"
                          md-swipe-down="vm.reloadTasks()"
                          layout="row" layout-align="center center">
-                           <md-list dir="rtl">
+                           <md-list flex dir="rtl">
                                 <md-list-item ng-repeat="item in vm.onGoingActivityies() |  filter:{ to: vm.user.name, status: 'inProgress' }  | filter:vm.search" class="noright task-item" style="margin-top: 7px">
                                     <md-card-avatar>
                                         <img alt="{{item.from}}" ng-src="{{vm.appDomain + vm.user.avatarUrl}}" class="md-avatar user-avatar" style="margin-right: 0;" />
