@@ -31,7 +31,7 @@
         function info(message, data, toastTime) {
             var simpleToast = $mdToast.build({
                 hideDelay: toastTime,
-                position: 'bottom right',
+                position: 'bottom left',
                 template: '<md-toast>' +
                              '<div class="md-toast-content" dir="rtl">' +
                                 message +

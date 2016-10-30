@@ -32,6 +32,26 @@
             return $filter('filter')(vm.onGoingActivityies(), { to: vm.user.name, status: 'inProgress' }).length;
         };
 
+        var activateProgress = function (toastText) {
+            vm.progressActivated = true;
+            return logger.info(toastText, null, 10000);
+        }
+
+        var deactivateProgress = function (toast) {
+            $mdToast.hide(toast);
+        }
+
+
+        var loadTasks = function () {
+            var loadingToast = activateProgress("טוען נתונים...");
+            datacontext.getAllTasksSync().then(function (response) {
+                logger.success("getAllTasks", response.data);
+                datacontext.setTaskList(response.data);
+                vm.progressActivated = false;
+                deactivateProgress(loadingToast);
+            });
+        };
+
         vm.checkIfUserLogdIn = function () {
             var user = datacontext.getUserFromLocalStorage();
             if (user !== undefined) {
@@ -60,7 +80,7 @@
             /*socket.emit('get-tasks', {
                 userName: vm.user.name
             });*/
-            datacontext.getAllTasks();            
+            loadTasks();
             vm.userConnected = true;
             
             if (vm.registrationId === '') {
@@ -191,15 +211,11 @@
         vm.checkIfUserLogdIn();
 
         vm.reloadTasks = function () {
-            vm.progressActivated = true;
-            var simpleToast = logger.info("טוען נתונים...", null, 10000);
-            datacontext.getAllTasksSync().then(function (response) {
-                logger.success("getAllTasks", response.data);
-                datacontext.setTaskList(response.data);
-                vm.progressActivated = false;
-                $mdToast.hide(simpleToast);
-            });
-        };
+            loadTasks();
+        }
+
+
+
     }
 
 })();

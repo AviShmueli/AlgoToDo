@@ -31,6 +31,11 @@
     border-radius: 0;
 }
 
+.texterea-font-size{
+    line-height: 18px !important;
+    font-size: 14px !important;
+}
+
 /*md-autocomplete > md-autocomplete-wrap > button {
     right: 90% !important;
 }*/
@@ -305,5 +310,6 @@ md-sidenav ng-md-icon {
 .login .md-button.md-primary.md-fab:not([disabled]):hover {
     background-color: #357DDC;
 }
+
 
 

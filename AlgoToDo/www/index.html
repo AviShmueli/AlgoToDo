@@ -43,7 +43,7 @@
                         <ng-md-icon icon="menu"></ng-md-icon>
                     </md-button>
                 </div>
-                <md-tabs md-stretch-tabs="always" class="md-primary main-tabs" md-selected="vm.selectedIndex">
+                <md-tabs md-stretch-tabs="always" class="md-primary main-tabs" md-selected="vm.selectedIndex" md-swipe-content="true">
                     <md-tab id="tab1" aria-controls="tab1-content">
                         <ng-md-icon icon="assignment"></ng-md-icon>
                         <br /><span style="font-size: 10px">בתהליך</span>
@@ -98,7 +98,7 @@
                          md-swipe-left="vm.selectedIndex = 1"
                          md-swipe-down="vm.reloadTasks()"
                          layout="row" layout-align="center center">                            
-                           <md-list flex dir="rtl" ng-show="(vm.onGoingActivityies() | filter:{ status: 'inProgress', from: vm.user.name }).length > 0">
+                           <md-list flex flex-gt-sm="50" flex-md="66" dir="rtl" ng-show="(vm.onGoingActivityies() | filter:{ status: 'inProgress', from: vm.user.name }).length > 0">
                                 <md-list-item ng-repeat="item in vm.onGoingActivityies() | filter:{ status: 'inProgress', from: vm.user.name } | filter:vm.search" class="noright task-item" style="margin-top: 7px">
                                     <md-card-avatar>
                                         <img alt="{{item.from}}" ng-src="{{vm.appDomain + vm.user.avatarUrl}}" class="md-avatar user-avatar" style="margin-right: 0;" />
@@ -135,7 +135,7 @@
                          md-swipe-right="vm.selectedIndex = 0"
                          md-swipe-down="vm.reloadTasks()"
                          layout="row" layout-align="center center">
-                           <md-list flex dir="rtl">
+                           <md-list flex-gt-sm="50" flex-md="66" flex dir="rtl" ng-show="vm.myTasksCount() > 0">
                                 <md-list-item ng-repeat="item in vm.onGoingActivityies() |  filter:{ to: vm.user.name, status: 'inProgress' }  | filter:vm.search" class="noright task-item" style="margin-top: 7px">
                                     <md-card-avatar>
                                         <img alt="{{item.from}}" ng-src="{{vm.appDomain + vm.user.avatarUrl}}" class="md-avatar user-avatar" style="margin-right: 0;" />
@@ -156,14 +156,15 @@
                                     </md-button>
                                     <md-divider md-inset ng-if="!$last"></md-divider>
                                 </md-list-item>
-
-                                <md-item ng-hide="vm.myTasksCount() > 0">
-                                    <md-item-content>
-                                        <h3> אין משימות פתוחות כרגע! </h3>
-                                    </md-item-content>
-                                </md-item>
-                                <md-divider></md-divider>
-                            </md-list>
+                               </md-list>
+                               <md-list dir="rtl" ng-hide="vm.myTasksCount() > 0">
+                                   <md-item >
+                                       <md-item-content>
+                                           <h3> אין משימות פתוחות כרגע! </h3>
+                                       </md-item-content>
+                                   </md-item>
+                                   <md-divider></md-divider>
+                               </md-list>
                     </div>
                     <div role="tabpanel"
                          id="tab3-content"
@@ -172,7 +173,7 @@
                          md-swipe-right="vm.selectedIndex = 1"
                          md-swipe-down="vm.reloadTasks()"
                          layout="row" layout-align="center center">
-                           <md-list flex dir="rtl">
+                           <md-list flex-gt-sm="50" flex-md="66" flex dir="rtl">
                                     <md-list-item ng-repeat="item in vm.onGoingActivityies() | filter:{ status: 'done', from: vm.user.name } | filter:vm.search | orderBy: 'doneTime':true" class="noright task-item" style="margin-top: 7px">
                                         <div class="md-tile-content" flex="100" style="margin-bottom: 14px;">
                                             <div layout="row">
