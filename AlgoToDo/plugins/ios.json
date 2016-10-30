@@ -27,7 +27,7 @@
             "PACKAGE_NAME": "io.cordova.myapp007182"
         },
         "cordova-plugin-badge": {
-            "PACKAGE_NAME": "io.cordova.myapp007182"
+            "PACKAGE_NAME": "com.algotodo.app"
         }
     },
     "dependent_plugins": {

@@ -118,7 +118,7 @@
   <plugin name="phonegap-plugin-push" version="1.8.3">
     <variable name="SENDER_ID" value="874351794059" />
   </plugin>
-  <plugin name="cordova-plugin-badge" version="0.7.3" src="https://github.com/katzer/cordova-plugin-badge.git" />
+  <plugin name="cordova-plugin-badge" version="0.7.2" src="https://github.com/katzer/cordova-plugin-badge.git" />
   <plugin name="com.phonegap.plugins.PushPlugin" version="2.5.0" />
   <preference name="android-minSdkVersion" value="14" />
   <preference name="android-maxSdkVersion" value="24" />

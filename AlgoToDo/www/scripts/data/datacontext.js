@@ -73,9 +73,7 @@
                 }
             };
 
-            $http(req).then(function (response) {
-                logger.success('המשימה עודכנה בהצלחה!', response.data);
-            }, function () { });
+            return $http(req);
 
             // send the new task to the server
             /*socket.emit('update-task', {

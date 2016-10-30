@@ -102,6 +102,16 @@
 
         };
 
+        var setBadge = function (num) {
+            document.addEventListener("deviceready", function () {
+                $cordovaBadge.set(num).then(function () {
+                    //showToast(" You have permission, badge set.");
+                }, function (err) {
+                    //showToast(" You do not have permission");
+                });
+            }, false);
+        }
+
         var getDeviceDetails = function () {
             return $cordovaDevice.getDevice();
         };
@@ -131,9 +141,9 @@
             // e.message
         });
 
-        document.addEventListener("resume", function () {
+        /*document.addEventListener("resume", function () {
             clearAppBadge();
-        }, false);
+        }, false);*/
 
         var sendSmS = function (to) {
             //CONFIGURATION
@@ -163,7 +173,8 @@
             registerForPushNotifications: registerForPushNotifications,
             sendSmS: sendSmS,
             clearAppBadge: clearAppBadge,
-            getDeviceDetails: getDeviceDetails
+            getDeviceDetails: getDeviceDetails,
+            setBadge: setBadge
         };
 
         return service;

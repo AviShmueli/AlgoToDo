@@ -26,10 +26,14 @@
         vm.appDomain = appConfig.appDomain;
         vm.registrationId = appConfig.getRegistrationId();
         vm.progressActivated = false;
+        vm.myTasksCount = 0;
 
-        vm.onGoingActivityies = function () { return datacontext.getTaskList(); };
-        vm.myTasksCount = function () {
-            return $filter('filter')(vm.onGoingActivityies(), { to: vm.user.name, status: 'inProgress' }).length;
+        vm.onGoingActivityies = function () { return datacontext.getTaskList(); };      
+
+        var setMyTaskCount = function () {
+            var count = $filter('filter')(datacontext.getTaskList(), { to: vm.user.name, status: 'inProgress' }).length;
+            cordovaPlugins.setBadge(count);
+            vm.myTasksCount = count;
         };
 
         var activateProgress = function (toastText) {
@@ -47,6 +51,7 @@
             datacontext.getAllTasksSync().then(function (response) {
                 logger.success("getAllTasks", response.data);
                 datacontext.setTaskList(response.data);
+                setMyTaskCount();
                 vm.progressActivated = false;
                 deactivateProgress(loadingToast);
             });
@@ -126,6 +131,7 @@
 
             if (newTask.from !== vm.user.name) {
                 datacontext.addTaskToTaskList(newTask);
+                setMyTaskCount();
                 //cordovaPlugins.setLocalNotification();
             }
         });
@@ -134,6 +140,7 @@
         socket.on('updated-task', function (data) {
             logger.success('משימה עודכנה', data.value);
             datacontext.replaceTask(data.value);
+            setMyTaskCount();
         });
 
         vm.toggleSidenav = function(menuId) {
@@ -163,8 +170,6 @@
             title: 'הגדרות',
             icon: 'settings'
         }];
-
-        vm.alert = '';
 
         vm.showListBottomSheet = function($event) {
             vm.alert = '';
@@ -205,7 +210,10 @@
                 task.seenTime = new Date();
             }
 
-            datacontext.updateTask(task);
+            datacontext.updateTask(task).then(function (response) {
+                logger.success('המשימה עודכנה בהצלחה!', response.data);
+                setMyTaskCount();
+            }, function () { });
         };
 
         vm.checkIfUserLogdIn();
@@ -214,6 +222,9 @@
             loadTasks();
         }
 
+        document.addEventListener("resume", function () {         
+            vm.selectedIndex = 1;
+        }, false);
 
 
     }
