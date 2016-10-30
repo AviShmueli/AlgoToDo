@@ -63,7 +63,7 @@ var pushTaskToAndroidUser = function (task) {
             sound: 'default',
             icon: 'res://icons/android/icon-48-mdpi.png',
             body: task.description,
-            badge: "1"
+            badge: "*"
         }
         
     });
