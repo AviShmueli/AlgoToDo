@@ -24,7 +24,6 @@
         vm.userConnected = false;
         vm.user = {};
         vm.appDomain = appConfig.appDomain;
-        vm.registrationId = appConfig.getRegistrationId();
         vm.progressActivated = false;
         vm.myTasksCount = 0;
 
@@ -177,7 +176,6 @@
                 targetEvent: ev,
                 fullscreen: true
             }).then(function (answer) {
-                vm.registrationId = appConfig.getRegistrationId();
                     if (answer === 'ok') {
                         vm.alert = 'You said the information was "' + answer + '".';
                     }
