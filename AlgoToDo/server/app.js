@@ -238,9 +238,9 @@ app.post('/TaskManeger/registerUser', function (req, res) {
     console.log("the user just register to the app: ", user);
     console.log("with GcmRegistrationId: ", user.GcmRegistrationId);
 
-    if (GcmRegistrationIdsCache[user.name] === undefined) {
-        GcmRegistrationIdsCache[user.name] = {'userName': user.name, GcmRegistrationId: registrationId}
-    }
+    //if (GcmRegistrationIdsCache[user.name] === undefined) {
+    //    GcmRegistrationIdsCache[user.name] = {'userName': user.name, GcmRegistrationId: registrationId}
+    //}
 
     //add user to Mongo
     mongodb.connect(mongoUrl, function (err, db) {
@@ -249,7 +249,9 @@ app.post('/TaskManeger/registerUser', function (req, res) {
         collection.insert(user,
             function (err, results) {
                 var newUser = results.ops[0];
-                GcmRegistrationIdsCache[newUser.name] = { 'userName': newUser.name, GcmRegistrationId: newUser.GcmRegistrationId }
+                if (newUser.GcmRegistrationId != undefined) {
+                    GcmRegistrationIdsCache[newUser.name] = { 'userName': newUser.name, GcmRegistrationId: newUser.GcmRegistrationId }
+                }
                 res.send(newUser);
                 db.close();
             });
