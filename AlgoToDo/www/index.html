@@ -215,66 +215,7 @@
             </div>
         </md-content>
     </div>
-    <md-sidenav layout="column" class="md-sidenav-right md-whiteframe-z2" md-component-id="left">
-        <md-toolbar class="md-tall md-hue-2">
-            <span flex></span>
-            <div layout="column" layout-align="end center" class="md-toolbar-tools-bottom inset">
-                <md-card-avatar>
-                    <img class="md-user-avatar user-avatar-big" ng-src="{{vm.appDomain + vm.user.avatarUrl}}">
-                </md-card-avatar>
-                <span></span>
-                <div>{{vm.user.name}}</div>
-                <div>{{vm.user.title}}</div>
-            </div>
-        </md-toolbar>
-        <md-list>
-            <md-item ng-repeat="item in vm.menu">
-                <a style="cursor: pointer">
-                    <md-item-content md-ink-ripple layout="row" layout-align="start center">
-                        <div class="inset">
-                            <ng-md-icon icon="{{item.icon}}"></ng-md-icon>
-                        </div>
-                        <span flex></span>
-                        <div class="inset">
-                            {{item.title}}
-                        </div>
-                    </md-item-content>
-                </a>
-            </md-item>
-            <md-divider></md-divider>
-            <md-subheader>
-                <span flex></span>
-                <span>ניהול</span>
-            </md-subheader>
-            <md-item ng-repeat="item in vm.admin">
-                <a style="cursor: pointer">
-                    <md-item-content md-ink-ripple layout="row" layout-align="start center">
-                        <div class="inset">
-                            <ng-md-icon icon="{{item.icon}}"></ng-md-icon>
-                        </div>
-                        <span flex></span>
-                        <div class="inset">
-                            {{item.title}}
-                        </div>
-                    </md-item-content>
-                </a>
-            </md-item>
-            <md-divider></md-divider>
-            <md-item>
-                <a ng-click="vm.logOff()" style="cursor: pointer">
-                    <md-item-content md-ink-ripple layout="row" layout-align="start center">
-                        <div class="inset">
-                            <ng-md-icon icon="logout"></ng-md-icon>
-                        </div>
-                        <span flex></span>
-                        <div class="inset">
-                            התנתק
-                        </div>
-                    </md-item-content>
-                </a>
-            </md-item>
-        </md-list>
-    </md-sidenav>
+    <div tm-sidenav user="vm.user" app-domain="vm.appDomain"></div>
 
     <script src="scripts/lib/angular.min.js"></script>
     <script src="scripts/lib/angular-animate.min.js"></script>
@@ -296,8 +237,8 @@
     <script type="text/javascript" src="scripts/platformOverrides.js"></script>
     <script type="text/javascript" src="scripts/index.js"></script>
 
-    <script src="https://algotodo.herokuapp.com/socket.io/socket.io.js "></script>
-    <!--<script src="http://localhost:5001/socket.io/socket.io.js "></script>-->
+    <!--<script src="https://algotodo.herokuapp.com/socket.io/socket.io.js "></script>-->
+    <script src="http://localhost:5001/socket.io/socket.io.js "></script>
 
     <script src="scripts/TaskManeger/TaskManeger.module.js "></script>
     <script src="scripts/core/core.module.js "></script>
@@ -315,5 +256,6 @@
     <script src="scripts/TaskManeger/TaskManeger.js "></script>
     <script src="scripts/core/filters.js"></script>
     <script src="scripts/cordova/cordovaPlugins.js"></script>
+    <script src="scripts/widgets/sidenav.js"></script>
 </body>
 </html>

@@ -147,30 +147,6 @@
             $mdSidenav(menuId).toggle();
         };
 
-        vm.menu = [{
-            link: '',
-            title: 'דוחות',
-            icon: 'dashboard'
-        }, {
-            link: '',
-            title: 'עובדים',
-            icon: 'group'
-        }, {
-            link: '',
-            title: 'הודעות',
-            icon: 'message'
-        }];
-
-        vm.admin = [{
-            link: '',
-            title: 'רוקן משימות',
-            icon: 'delete'
-        }, {
-            link: 'vm.showListBottomSheet($event)',
-            title: 'הגדרות',
-            icon: 'settings'
-        }];
-
         vm.showListBottomSheet = function($event) {
             vm.alert = '';
             $mdBottomSheet.show({

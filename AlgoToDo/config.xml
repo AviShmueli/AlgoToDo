@@ -80,6 +80,7 @@
     <icon src="res/icons/wp8/Background.png" width="159" height="159" />
   </platform>
   <platform name="android">
+    <hook type="after_build" src="hooks/appAndroidAfterBuild.bat" />
     <splash src="res/screens/android/screen-hdpi-landscape.png" density="land-hdpi" />
     <splash src="res/screens/android/screen-ldpi-landscape.png" density="land-ldpi" />
     <splash src="res/screens/android/screen-mdpi-landscape.png" density="land-mdpi" />
