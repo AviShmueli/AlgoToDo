@@ -77,6 +77,7 @@ var pushTaskToAndroidUser = function (task) {
     else {
         // get user from DB and check if there is regId
         var user = getUserByUserName(task.to);
+        console.log("****user from DB: ",user);
         if (user.GcmRegistrationId !== undefined) {
             regTokens = user.GcmRegistrationId;
             console.log("saving user to cache");
