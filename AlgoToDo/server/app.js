@@ -68,12 +68,12 @@ var pushTaskToAndroidUser = function (task) {
         
     });
 
-    var regTokens = '';
+    var regToken = '';
     
     // if the user stored in the cache, get the regId from the cache
     if (GcmRegistrationIdsCache[task.to] !== undefined) {
-        regTokens = [GcmRegistrationIdsCache[task.to].GcmRegistrationId];
-        sendMessage(message, regTokens);
+        regToken = GcmRegistrationIdsCache[task.to].GcmRegistrationId;
+        sendMessage(message, regToken);
     }
     else {
         // get user from DB and check if there is regId
@@ -83,11 +83,11 @@ var pushTaskToAndroidUser = function (task) {
             console.log("****user.name: ", user.name);
             console.log("****user.GcmRegistrationId: ", user.GcmRegistrationId);
             if (user.GcmRegistrationId !== undefined) {
-                regTokens = user.GcmRegistrationId;
+                regToken = user.GcmRegistrationId;
                 console.log("saving user to cache");
                 // save the user to the cache
                 GcmRegistrationIdsCache[user.name] = { 'userName': user.name, GcmRegistrationId: user.GcmRegistrationId }
-                sendMessage(message, regTokens);
+                sendMessage(message, regToken);
             }
             else {
                 // if user dont have regId dont try to send notification via CGM
@@ -99,17 +99,17 @@ var pushTaskToAndroidUser = function (task) {
     }   
 };
 
-var sendMessage = function (message, regTokens) {
+var sendMessage = function (message, regToken) {
 
     console.log("sending message : ", message);
-    console.log("with GcmRegistrationId: ", regTokens);
+    console.log("with GcmRegistrationId: ", regToken);
 
     // get the number that will be set to the app icon badge
     getUnDoneTasksCountByUserName(message.params.data.additionalData.to, function (error, userUnDoneTaskCount) {
         message.params.data.badge = userUnDoneTaskCount;
 
         // Actually send the message
-        sender.send(message, { registrationTokens: regTokens }, function (err, response) {
+        sender.send(message, { registrationTokens: [regToken] }, function (err, response) {
             console.log("send message", message);
             if (err) {
                 console.error("error while sending push notification: ", err);
