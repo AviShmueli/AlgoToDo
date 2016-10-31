@@ -73,43 +73,51 @@ var pushTaskToAndroidUser = function (task) {
     // if the user stored in the cache, get the regId from the cache
     if (GcmRegistrationIdsCache[task.to] !== undefined) {
         regTokens = [GcmRegistrationIdsCache[task.to].GcmRegistrationId];
+        sendMessage(message, regTokens);
     }
     else {
         // get user from DB and check if there is regId
-        var user = getUserByUserName(task.to);
-        console.log("****user from DB: ",user);
-        if (user.GcmRegistrationId !== undefined) {
-            regTokens = user.GcmRegistrationId;
-            console.log("saving user to cache");
-            // save the user to the cache
-            GcmRegistrationIdsCache[user.name] = { 'userName': user.name, GcmRegistrationId: user.GcmRegistrationId }
-        }
-        else {
-            // if user dont have regId dont try to send notification via CGM
-            // todo: insert here code for sending notification via Apple Notification Service
-            return;
-        }
-    }
+        getUserByUserName(task.to, function (error, user) {
+            console.log("****user from DB: ", user);
+            if (user.GcmRegistrationId !== undefined) {
+                regTokens = user.GcmRegistrationId;
+                console.log("saving user to cache");
+                // save the user to the cache
+                GcmRegistrationIdsCache[user.name] = { 'userName': user.name, GcmRegistrationId: user.GcmRegistrationId }
+                sendMessage(message, regTokens);
+            }
+            else {
+                // if user dont have regId dont try to send notification via CGM
+                // todo: insert here code for sending notification via Apple Notification Service
+                return;
+            }
+        });
+        
+    }   
+};
 
-    console.log("sending message to: ", task.to);
+var sendMessage = function (message, regTokens) {
+
+    console.log("sending message : ", message);
     console.log("with GcmRegistrationId: ", regTokens);
 
     // get the number that will be set to the app icon badge
-    var userUnDoneTaskCount = getUnDoneTasksCountByUserName(task.to);
-    message.data.badge = userUnDoneTaskCount;
+    getUnDoneTasksCountByUserName(task.to, function (error, userUnDoneTaskCount) {
+        message.data.badge = userUnDoneTaskCount;
 
-    // Actually send the message
-    sender.send(message, { registrationTokens: regTokens }, function (err, response) {
-        console.log("send message", message);
-        if (err) {
-            console.error("error while sending push notification: ", err);
-        }
-        else {
-            console.log(response);
-        }
+        // Actually send the message
+        sender.send(message, { registrationTokens: regTokens }, function (err, response) {
+            console.log("send message", message);
+            if (err) {
+                console.error("error while sending push notification: ", err);
+            }
+            else {
+                console.log(response);
+            }
+        });
     });
-};
-
+    
+}
 // -------- Socket.io --------//
 
 var users = [];
@@ -299,29 +307,27 @@ app.get('/TaskManeger/getTasks', function (req, res) {
     });
 });
 
-var getUserByUserName = function (userName) {
-    var user = {};
+var getUserByUserName = function (userName, callback) {
+
     mongodb.connect(mongoUrl, function (err, db) {
         var collection = db.collection('users');
         collection.find({ 'name': userName }, {'_id':true,'name':true,'GcmRegistrationId':true}).toArray(function (err, result) {
             db.close();
             console.log("find user: ",result);
-            user = result;
+            callback(err, result)
         });
     });
-    return user;
 }
 
-var getUnDoneTasksCountByUserName = function (userName) {
-    var count = {};
+var getUnDoneTasksCountByUserName = function (userName, callback) {
+
     mongodb.connect(mongoUrl, function (err, db) {
         var collection = db.collection('tasks');
         collection.count({ 'to': userName,'status': 'inProgress' },function (err, result) {
             db.close();
             console.log("total unDone Task: ", result);
-            count = result;
+            callback(err, result)
         });
     });
-    return count;
 }
 
