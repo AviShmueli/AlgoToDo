@@ -67,7 +67,7 @@
         vm.signUp = function () {
             vm.user.avatarUrl = '/images/man-' + Math.floor((Math.random() * 8) + 1) + '.svg';            
 
-            if (cordovaPlugins.isMobileDevice) {            
+            if (cordovaPlugins.isMobileDevice()) {            
                 document.addEventListener("deviceready", function () {
                     cordovaPlugins.registerForPushNotifications().then(function (registrationId) {
                         vm.user.GcmRegistrationId = registrationId;                    
