@@ -13,7 +13,8 @@
             restrict: 'A',
             scope: {
                 'user': '=',
-                'appDomain': '='
+                'appDomain': '=',
+                'logOff': '&'
             },
         };
 
@@ -22,6 +23,7 @@
 
             vm.appDomain = $scope.appDomain;
             vm.user = $scope.user;
+            vm.logOff = $scope.logOff;
 
             vm.menu = [{
                 link: '',
