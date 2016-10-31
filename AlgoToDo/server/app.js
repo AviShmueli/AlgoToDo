@@ -78,7 +78,7 @@ var pushTaskToAndroidUser = function (task) {
     else {
         // get user from DB and check if there is regId
         getUserByUserName(task.to, function (error, user) {
-            console.log("****user from DB: ", user);
+            console.log("****user.GcmRegistrationId: ", user.GcmRegistrationId);
             if (user.GcmRegistrationId !== undefined) {
                 regTokens = user.GcmRegistrationId;
                 console.log("saving user to cache");
@@ -225,13 +225,11 @@ app.post('/TaskManeger/newTask', function (req, res) {
 
                 // if the employee is now online send the new task by Socket.io
                 if (to !== '' && task.to !== task.from) {
-                    console.log("socket.io SENDING");
                     io.to(to).emit('new-task', results.ops[0]);
                 }
                 console.log("trying to send new task", task);
                 // if this task is not from me to me, send notification to the user
                 if (task.to !== task.from) {
-                    console.log("pushNotifications SENDING");
                     pushTaskToAndroidUser(task);
                 }
 
