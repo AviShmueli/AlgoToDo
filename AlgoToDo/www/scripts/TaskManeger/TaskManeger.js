@@ -234,6 +234,11 @@
             vm.selectedIndex = 1;
         }, false);
 
+        vm.searchKeypress = function (event) {
+            if (event.keyCode === 13) {
+                vm.showSearch = !vm.showSearch;
+            }
+        }
 
     }
 

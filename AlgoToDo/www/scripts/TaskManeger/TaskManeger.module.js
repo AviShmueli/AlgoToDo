@@ -17,6 +17,7 @@
         'ngMessages',
         'ngAnimate',
         'angularMoment',
+        'ngSanitize',
 
         /*
          * Everybody has access to these.
