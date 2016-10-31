@@ -119,24 +119,19 @@
             self.newTask = {};
         };
 
-        var sendRegistrationIdToServer = function (registrationId) {
+        var registerUser = function (user) {
             var req = {
                 method: 'POST',
-                url: appConfig.appDomain + '/TaskManeger/sendRegistrationId',
+                url: appConfig.appDomain + '/TaskManeger/registerUser',
                 data: {
-                    registrationId: registrationId,
                     user: self.$storage.user
                 }
             };
 
-            $http(req).then(function (response) {
-                self.$storage.user.registrationId = registrationId;
-                logger.success('מזהה רישום נשלח לשרת בהצלחה', response.data);
-            }, function () { });
+            return $http(req);
         };
 
         var service = {
-            /*users: self.users,*/
             user: self.user,
             getTaskList: getTaskList,
             setTaskList: setTaskList,
@@ -150,7 +145,7 @@
             saveUserToLocalStorage: saveUserToLocalStorage,
             getUserFromLocalStorage: getUserFromLocalStorage,
             deleteUserFromLocalStorage: deleteUserFromLocalStorage,
-            sendRegistrationIdToServer: sendRegistrationIdToServer,
+            registerUser: registerUser,
             getAllTasksSync: getAllTasksSync
         };
 

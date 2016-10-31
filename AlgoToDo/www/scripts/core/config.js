@@ -28,14 +28,10 @@
         .service('appConfig', function () {
             var self = this;
 
-            self.registrationId = '';
-
             return {
                 appDomain:
-                    // 'https://algotodo.herokuapp.com'
-                'http://localhost:5001' 
-                , getRegistrationId: function () { return self.registrationId; }
-                , setRegistrationId: function (newValue) { self.registrationId = newValue; }
+                'https://algotodo.herokuapp.com'
+                //'http://localhost:5001'  
             };
         })
         .run(function (amMoment) {

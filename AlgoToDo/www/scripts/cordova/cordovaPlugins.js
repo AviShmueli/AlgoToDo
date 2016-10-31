@@ -80,13 +80,7 @@
                 $cordovaPushV5.onError();
 
                 // register to get registrationId
-                $cordovaPushV5.register().then(function (registrationId) {
-                    appConfig.setRegistrationId(registrationId);
-                    datacontext.sendRegistrationIdToServer(registrationId);
-                }, function (error) {
-                    showToast(error);
-                    $cordovaDialogs.alert("שגיאה", registrationId, 'OK');
-                });
+                return $cordovaPushV5.register();
             });
 
         };

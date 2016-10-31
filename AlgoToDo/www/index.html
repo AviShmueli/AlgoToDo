@@ -194,27 +194,9 @@
             </ui-view>
         </md-content>
         
-        <md-content flex md-scroll-y ng-if="!vm.userConnected" class="login-content">
-            <div layout="row" layout-align="center center">
-                <div class="login">
-                    <h1>התחברות למערכת</h1>
-                    <h3>נא להכניס שם משתמש וסיסמא</h3>
-                    <form name="clientLogin" dir="rtl">
-                        <md-input-container flex>
-                            <label>שם משתמש</label>
-                            <input ng-model="vm.user.name " name="userName " type="text" placeholder="שם משתמש " ng-required="false ">
-                        </md-input-container>
-                        <md-input-container flex>
-                            <label>סיסמא</label>
-                            <input ng-model="vm.user.password " type="text" placeholder="סיסמא " ng-required="false " name="userPassword ">
-                        </md-input-container>
+        <div tm-sign-up user="vm.user" sign-up="vm.signUp()" ng-if="!vm.userConnected"></div>
+        </div>
 
-                        <md-button class="md-raised md-primary " ng-click="vm.signIn()">היכנס</md-button>
-                    </form>
-                </div>
-            </div>
-        </md-content>
-    </div>
     <div tm-sidenav user="vm.user" app-domain="vm.appDomain" log-off="vm.logOff()"></div>
 
     <script src="scripts/lib/angular.min.js"></script>
@@ -237,8 +219,8 @@
     <script type="text/javascript" src="scripts/platformOverrides.js"></script>
     <script type="text/javascript" src="scripts/index.js"></script>
 
-    <!--<script src="https://algotodo.herokuapp.com/socket.io/socket.io.js "></script>-->
-    <script src="http://localhost:5001/socket.io/socket.io.js "></script>
+    <script src="https://algotodo.herokuapp.com/socket.io/socket.io.js "></script>
+    <!--<script src="http://localhost:5001/socket.io/socket.io.js "></script>-->
 
     <script src="scripts/TaskManeger/TaskManeger.module.js "></script>
     <script src="scripts/core/core.module.js "></script>
@@ -257,5 +239,6 @@
     <script src="scripts/core/filters.js"></script>
     <script src="scripts/cordova/cordovaPlugins.js"></script>
     <script src="scripts/widgets/sidenav.js"></script>
+    <script src="scripts/widgets/signUp.js"></script>
 </body>
 </html>

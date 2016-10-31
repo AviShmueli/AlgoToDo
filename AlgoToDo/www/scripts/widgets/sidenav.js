@@ -15,7 +15,7 @@
                 'user': '=',
                 'appDomain': '=',
                 'logOff': '&'
-            },
+            }
         };
 
         function sidenavController($scope) {

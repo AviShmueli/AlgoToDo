@@ -39,11 +39,11 @@
         var activateProgress = function (toastText) {
             vm.progressActivated = true;
             return logger.info(toastText, null, 10000);
-        }
+        };
 
         var deactivateProgress = function (toast) {
             $mdToast.hide(toast);
-        }
+        };
 
 
         var loadTasks = function () {
@@ -65,10 +65,26 @@
             }
         };
 
-        vm.signIn = function () {
-            vm.user.avatarUrl = '/images/man-' + Math.floor((Math.random() * 8) + 1) + '.svg';
-            datacontext.saveUserToLocalStorage(vm.user);
-            vm.login();
+        vm.signUp = function () {
+            vm.user.avatarUrl = '/images/man-' + Math.floor((Math.random() * 8) + 1) + '.svg';            
+
+            document.addEventListener("deviceready", function () {
+                cordovaPlugins.registerForPushNotifications().then(function (registrationId) {
+                    vm.user.GcmRegistrationId = registrationId;                    
+
+                    datacontext.registerUser(vm.user).then(function (response) {
+                        datacontext.saveUserToLocalStorage(response.data);
+                        logger.success('המשתמש נרשם בהצלחה', response.data);
+                        vm.login();
+                    }, function () { });
+                    
+                }, function (error) {
+                    showToast(error);
+                    $cordovaDialogs.alert("שגיאה", registrationId, 'OK');
+                });
+            }, false);
+            
+            
         };
 
         vm.login = function () {
@@ -86,13 +102,7 @@
                 userName: vm.user.name
             });*/
             loadTasks();
-            vm.userConnected = true;
-            
-            if (vm.registrationId === '') {
-                document.addEventListener("deviceready", function () {
-                    cordovaPlugins.registerForPushNotifications();
-                }, false);
-            }
+            vm.userConnected = true;           
             
             logger.info("אתה עכשיו מחובר!", null, 1000);
         };
@@ -196,15 +206,15 @@
 
         vm.reloadTasks = function () {
             loadTasks();
-        }
+        };
 
         vm.getTotalTaskTime = function (task) {
-            var end = new Date(task.doneTime)
+            var end = new Date(task.doneTime);
             var start = new Date(task.createTime);
             var totalInMillisconds = end.getTime() - start.getTime();
             var totalTime = moment.duration(totalInMillisconds);
             return moment.duration(totalInMillisconds).humanize();
-        }
+        };
 
         document.addEventListener("resume", function () {         
             vm.selectedIndex = 1;
@@ -214,7 +224,7 @@
             if (event.keyCode === 13) {
                 vm.showSearch = !vm.showSearch;
             }
-        }
+        };
 
     }
 

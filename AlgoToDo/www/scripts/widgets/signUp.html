@@ -1,0 +1,50 @@
+﻿<div layout="column" layout-padding="" dir="rtl" class="login-form" ng-cloak="">
+    <div layout-align="center center" class="login-text">
+        <h1>הרשמה למערכת</h1>
+        <h3>ברוכים הבאים למערכת ™AlgoToDo</h3>
+        <h3>לפניך טופס הרשמה קצר</h3>
+    </div>
+    <form name="signUpForm">
+        <md-content class="md-no-momentum" layout-padding>
+            <md-input-container class="md-block">
+                <md-icon ng-md-icon icon="person"></md-icon>
+                <input md-no-asterisk name="name" ng-model="vm.user.name" type="text" placeholder="שם פרטי ומשפחה" ng-required="true">
+                <div ng-messages="signUpForm.name.$error">
+                    <div ng-message="required">שם הוא שדה חובה</div>
+                </div>
+            </md-input-container>
+
+            <md-input-container class="md-block">
+                <md-icon ng-md-icon icon="phone"></md-icon>
+                <input md-no-asterisk name="phone" ng-model="vm.user.phone" type="text"
+                       ng-pattern="/^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/"
+                       placeholder="מספר טלפון" ng-required="true">
+                <div ng-messages="signUpForm.phone.$error">
+                    <div ng-message="required">טלפון הוא שדה חובה</div>
+                    <div ng-message="pattern">נא להכניס מספר טלפון חוקי</div>
+                </div>
+            </md-input-container>
+
+            <md-input-container class="md-block">
+                <md-icon ng-md-icon icon="email" class="email"></md-icon>
+                <input md-no-asterisk name="email" ng-model="vm.user.email" type="email"
+                       placeholder="דואר אלקטרוני" ng-required="true" ng-pattern="/^.+@.+\..+$/" minlength="10">
+                <div ng-messages="signUpForm.email.$error">
+                    <div ng-message-exp="['minlength', 'pattern']">נא להכניס כתובת מייל חוקית</div>
+                    <div ng-message="required">דואר אלקטרוני הוא שדה חובה</div>
+                </div>
+            </md-input-container>
+
+            <md-input-container class="md-block">
+                <md-icon ng-md-icon icon="place"></md-icon>
+                <input ng-model="vm.user.address" type="text" placeholder="כתובת (לא חובה)">
+            </md-input-container>
+        </md-content>
+        <md-input-container>
+            <md-checkbox md-no-asterisk ng-required="true" aria-label="acceptTerms" ng-model="vm.user.acceptTerms">אני מסכים לתנאי השימוש</md-checkbox>
+        </md-input-container>
+        <section layout="row" layout-align="center center" layout-wrap>
+            <md-button flex class="md-raised md-primary" ng-click="vm.signUp()" ng-disabled="signUpForm.$invalid">הירשם</md-button>
+        </section>
+    </form>
+</div>

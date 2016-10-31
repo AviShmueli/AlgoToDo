@@ -232,14 +232,11 @@ app.post('/TaskManeger/updateTaskStatus', function (req, res) {
     });
 });
 
-app.post('/TaskManeger/sendRegistrationId', function (req, res) {
+app.post('/TaskManeger/registerUser', function (req, res) {
 
-    var registrationId = req.body.registrationId;
     var user = req.body.user;
-    console.log("the user just register to messaging: ", user);
-    console.log("with GcmRegistrationId: ", registrationId);
-
-    user.registrationId = registrationId;
+    console.log("the user just register to the app: ", user);
+    console.log("with GcmRegistrationId: ", user.GcmRegistrationId);
 
     if (GcmRegistrationIdsCache[user.name] === undefined) {
         GcmRegistrationIdsCache[user.name] = {'userName': user.name, GcmRegistrationId: registrationId}
@@ -251,7 +248,9 @@ app.post('/TaskManeger/sendRegistrationId', function (req, res) {
 
         collection.insert(user,
             function (err, results) {
-                res.send(results.ops[0]);
+                var newUser = results.ops[0];
+                GcmRegistrationIdsCache[newUser.name] = { 'userName': newUser.name, GcmRegistrationId: newUser.GcmRegistrationId }
+                res.send(newUser);
                 db.close();
             });
     });
