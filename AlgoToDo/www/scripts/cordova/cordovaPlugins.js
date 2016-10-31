@@ -18,7 +18,8 @@
         var self = this;
 
         var isMobileDevice = function () {
-            return $window.cordova !== undefined;
+            return document.URL.indexOf( 'http://' ) === -1 && document.URL.indexOf( 'https://' ) === -1;
+
         };
 
         var setLocalNotification = function () {
