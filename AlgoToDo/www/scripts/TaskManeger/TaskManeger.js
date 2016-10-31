@@ -67,21 +67,20 @@
         vm.signUp = function () {
             vm.user.avatarUrl = '/images/man-' + Math.floor((Math.random() * 8) + 1) + '.svg';            
 
-            if (cordovaPlugins.isMobileDevice()) {            
+            if (cordovaPlugins.isMobileDevice()) {
                 document.addEventListener("deviceready", function () {
-                    cordovaPlugins.registerForPushNotifications().then(function (registrationId) {
-                        vm.user.GcmRegistrationId = registrationId;                    
-
-                        datacontext.registerUser(vm.user).then(function (response) {
-                            datacontext.saveUserToLocalStorage(response.data);
-                            logger.success('המשתמש נרשם בהצלחה', response.data);
-                            vm.login();
-                        }, function () { });
-                    
+                    cordovaPlugins.initializePushV5().then(function () {
+                        cordovaPlugins.registerForPushNotifications().then(function (registrationId) {
+                            vm.user.GcmRegistrationId = registrationId;
+                            datacontext.registerUser(vm.user).then(function (response) {
+                                datacontext.saveUserToLocalStorage(response.data);
+                                logger.success('המשתמש נרשם בהצלחה', response.data);
+                                vm.login();
+                            }, function () { });                       
+                         });                    
                     }, function (error) {
-                        showToast(error);
-                        $cordovaDialogs.alert("שגיאה", registrationId, 'OK');
-                    });
+                        logger.error("אירעה שגיאה ברישום המשתמש",error);
+                       });
                 }, false);
             }
             else {
@@ -89,7 +88,9 @@
                     datacontext.saveUserToLocalStorage(response.data);
                     logger.success('המשתמש נרשם בהצלחה', response.data);
                     vm.login();
-                }, function () { });
+                }, function (error) {
+                    logger.error("אירעה שגיאה ברישום המשתמש", error);
+                });
             }
             
         };

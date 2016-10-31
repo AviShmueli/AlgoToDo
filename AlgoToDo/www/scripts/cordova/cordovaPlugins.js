@@ -59,7 +59,7 @@
 
         };
 
-        var registerForPushNotifications = function () {
+        var initializePushV5 = function () {
             var options = {
                 android: {
                     senderID: "874351794059",
@@ -74,17 +74,20 @@
                 windows: {}
             };
 
-            $cordovaPushV5.initialize(options).then(function (result) {
-                // start listening for new notifications
-                $cordovaPushV5.onNotification();
-                // start listening for errors
-                $cordovaPushV5.onError();
-
-                // register to get registrationId
-                return $cordovaPushV5.register();
-            });
+            return $cordovaPushV5.initialize(options);
 
         };
+
+        var registerForPushNotifications = function () {
+            // start listening for new notifications
+            $cordovaPushV5.onNotification();
+
+            // start listening for errors
+            $cordovaPushV5.onError();
+
+            // register to get registrationId
+            return $cordovaPushV5.register();
+        }
 
         var clearAppBadge = function () {
             document.addEventListener("deviceready", function () {
@@ -170,7 +173,8 @@
             clearAppBadge: clearAppBadge,
             getDeviceDetails: getDeviceDetails,
             setBadge: setBadge,
-            isMobileDevice: isMobileDevice
+            isMobileDevice: isMobileDevice,
+            initializePushV5: initializePushV5
         };
 
         return service;

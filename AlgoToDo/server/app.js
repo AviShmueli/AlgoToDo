@@ -195,7 +195,7 @@ app.post('/TaskManeger/newTask', function (req, res) {
             function (err, results) {
 
                 // send the new task to the employee and return it to the maneger
-                if (to !== '') {
+                if (task.to !== task.from) {
                     io.to(to).emit('new-task', results.ops[0]);
                     pushTaskToAndroidUser(task);
                 }
@@ -249,7 +249,7 @@ app.post('/TaskManeger/registerUser', function (req, res) {
         collection.insert(user,
             function (err, results) {
                 var newUser = results.ops[0];
-                if (newUser.GcmRegistrationId != undefined) {
+                if (newUser.GcmRegistrationId !== undefined) {
                     GcmRegistrationIdsCache[newUser.name] = { 'userName': newUser.name, GcmRegistrationId: newUser.GcmRegistrationId }
                 }
                 res.send(newUser);
