@@ -52,8 +52,6 @@ var GcmRegistrationIdsCache = {};
 
 var pushTaskToAndroidUser = function (task) {
 
-    var userUnDoneTaskCount = getUnDoneTasksCountByUserName(task.to);
-
     var message = new gcm.Message({
         collapseKey: 'demo',
         priority: 'high',
@@ -64,8 +62,8 @@ var pushTaskToAndroidUser = function (task) {
             title: "משימה חדשה מ" + task.from,
             sound: 'default',
             icon: 'res://icons/android/icon-48-mdpi.png',
-            body: task.description/*,
-            badge: "1"*/
+            body: task.description,
+            badge: "1"
         }
         
     });
@@ -74,13 +72,14 @@ var pushTaskToAndroidUser = function (task) {
     
     // if the user stored in the cache, get the regId from the cache
     if (GcmRegistrationIdsCache[task.to] !== undefined) {
-        regTokens = [GcmRegistrationIdsCache[task.to].GcmRegistrationId];       
+        regTokens = [GcmRegistrationIdsCache[task.to].GcmRegistrationId];
     }
     else {
         // get user from DB and check if there is regId
         var user = getUserByUserName(task.to);
         if (user.GcmRegistrationId !== undefined) {
             regTokens = user.GcmRegistrationId;
+            console.log("saving user to cache");
             // save the user to the cache
             GcmRegistrationIdsCache[user.name] = { 'userName': user.name, GcmRegistrationId: user.GcmRegistrationId }
         }
