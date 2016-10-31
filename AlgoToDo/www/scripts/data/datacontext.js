@@ -124,7 +124,7 @@
                 method: 'POST',
                 url: appConfig.appDomain + '/TaskManeger/registerUser',
                 data: {
-                    user: self.$storage.user
+                    user: user
                 }
             };
 
