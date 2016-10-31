@@ -105,7 +105,7 @@ var sendMessage = function (message, regTokens) {
     console.log("with GcmRegistrationId: ", regTokens);
 
     // get the number that will be set to the app icon badge
-    getUnDoneTasksCountByUserName(task.to, function (error, userUnDoneTaskCount) {
+    getUnDoneTasksCountByUserName(message.data.additionalData.to, function (error, userUnDoneTaskCount) {
         message.data.badge = userUnDoneTaskCount;
 
         // Actually send the message
