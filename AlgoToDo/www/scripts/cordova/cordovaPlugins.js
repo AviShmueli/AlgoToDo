@@ -168,7 +168,8 @@
             sendSmS: sendSmS,
             clearAppBadge: clearAppBadge,
             getDeviceDetails: getDeviceDetails,
-            setBadge: setBadge
+            setBadge: setBadge,
+            isMobileDevice: isMobileDevice
         };
 
         return service;

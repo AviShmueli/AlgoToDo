@@ -67,22 +67,30 @@
         vm.signUp = function () {
             vm.user.avatarUrl = '/images/man-' + Math.floor((Math.random() * 8) + 1) + '.svg';            
 
-            document.addEventListener("deviceready", function () {
-                cordovaPlugins.registerForPushNotifications().then(function (registrationId) {
-                    vm.user.GcmRegistrationId = registrationId;                    
+            if (cordovaPlugins.isMobileDevice) {            
+                document.addEventListener("deviceready", function () {
+                    cordovaPlugins.registerForPushNotifications().then(function (registrationId) {
+                        vm.user.GcmRegistrationId = registrationId;                    
 
-                    datacontext.registerUser(vm.user).then(function (response) {
-                        datacontext.saveUserToLocalStorage(response.data);
-                        logger.success('המשתמש נרשם בהצלחה', response.data);
-                        vm.login();
-                    }, function () { });
+                        datacontext.registerUser(vm.user).then(function (response) {
+                            datacontext.saveUserToLocalStorage(response.data);
+                            logger.success('המשתמש נרשם בהצלחה', response.data);
+                            vm.login();
+                        }, function () { });
                     
-                }, function (error) {
-                    showToast(error);
-                    $cordovaDialogs.alert("שגיאה", registrationId, 'OK');
-                });
-            }, false);
-            
+                    }, function (error) {
+                        showToast(error);
+                        $cordovaDialogs.alert("שגיאה", registrationId, 'OK');
+                    });
+                }, false);
+            }
+            else {
+                datacontext.registerUser(vm.user).then(function (response) {
+                    datacontext.saveUserToLocalStorage(response.data);
+                    logger.success('המשתמש נרשם בהצלחה', response.data);
+                    vm.login();
+                }, function () { });
+            }
             
         };
 
