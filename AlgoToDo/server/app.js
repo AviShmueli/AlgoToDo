@@ -194,13 +194,19 @@ app.post('/TaskManeger/newTask', function (req, res) {
         collection.insert(task,
             function (err, results) {
 
-                // send the new task to the employee and return it to the maneger
-                if (task.to !== task.from) {
+                // if the employee is now online send the new task by Socket.io
+                if (to !== '' && task.to !== task.from) {
                     io.to(to).emit('new-task', results.ops[0]);
+                }
+
+                // if this task is not from me to me, send notification to the user
+                if (task.to !== task.from) {
                     pushTaskToAndroidUser(task);
                 }
 
+                // return the new task to the sender
                 res.send(results.ops[0]);
+
                 db.close();
             });
     });
