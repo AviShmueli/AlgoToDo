@@ -312,7 +312,7 @@ var getUserByUserName = function (userName, callback) {
 
     mongodb.connect(mongoUrl, function (err, db) {
         var collection = db.collection('users');
-        collection.findOne({ 'name': userName }, { '_id': true, 'name': true, 'GcmRegistrationId': true }).toArray(function (err, result) {
+        collection.findOne({ 'name': userName }, { '_id': true, 'name': true, 'GcmRegistrationId': true }, function (err, result) {
             db.close();
             console.log("find user: ",result);
             callback(err, result)
