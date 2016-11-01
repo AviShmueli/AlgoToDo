@@ -6,10 +6,10 @@
         .controller('AddTaskDialogController', AddTaskDialogController);
 
     AddTaskDialogController.$inject = [
-        '$scope', '$mdDialog', 'datacontext', '$mdMedia'
+        '$scope', '$mdDialog', 'datacontext', '$mdMedia', '$q'
     ];
 
-    function AddTaskDialogController($scope, $mdDialog, datacontext, $mdMedia) {
+    function AddTaskDialogController($scope, $mdDialog, datacontext, $mdMedia, $q) {
 
         var vm = this;
 
@@ -25,11 +25,20 @@
                     { fullName: 'אריאל', name: 'אריאל', userAvater: '/dsa/dsa/dsa.png' }];//datacontext.getAllUsersFroLocalStorage();
 
         function querySearch(query) {
-            var results = query ? vm.users.filter(createFilterFor(query)) : vm.users;
+            //var results = query ? vm.users.filter(createFilterFor(query)) : vm.users;
+
             /*var deferred = $q.defer();
             $timeout(function () { deferred.resolve(results); }, Math.random() * 1000, false);
             return deferred.promise;*/
-            return results;
+
+            var deferred = $q.defer();
+
+            datacontext.searchUsers(query).then(function (response) {
+                logger.success("search result: ", response.data);
+                deferred.resolve(response.data);
+            });
+
+            return deferred.promise;
         }
 
         function createFilterFor(query) {

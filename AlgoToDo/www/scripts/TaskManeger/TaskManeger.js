@@ -96,7 +96,7 @@
         };
 
         vm.login = function () {
-
+            angular.element(document.querySelectorAll('html')).removeClass("hight-auto");
             // login 
             socket.emit('join', {
                 userName: vm.user.name

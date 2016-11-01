@@ -49,6 +49,12 @@
     text-align: right;
 }
 
+.rotate svg {
+    -ms-transform: rotate(180deg); /* IE 9 */
+    -webkit-transform: rotate(180deg); /* Chrome, Safari, Opera */
+    transform: rotate(180deg);
+}
+
 md-badge{
   background-color: rgb(255,110,64);
   color: white;
@@ -61,11 +67,11 @@ body {
     -webkit-text-size-adjust: none;
     -webkit-user-select: none;
     -ms-text-size-adjust: none;
-	background-color:#E4E4E4;
-    background-image:linear-gradient(top, #A7A7A7 0%, #E4E4E4 51%);
-    background-image:-webkit-linear-gradient(top, #A7A7A7 0%, #E4E4E4 51%);
-    background-image:-ms-linear-gradient(top, #A7A7A7 0%, #E4E4E4 51%);
-    background-image:-webkit-gradient(
+	//background-color:#E4E4E4;
+   // background-image:linear-gradient(top, #A7A7A7 0%, #E4E4E4 51%);
+    //background-image:-webkit-linear-gradient(top, #A7A7A7 0%, #E4E4E4 51%);
+    //background-image:-ms-linear-gradient(top, #A7A7A7 0%, #E4E4E4 51%);
+    //background-image:-webkit-gradient(
         linear,
         left top,
         left bottom,
@@ -76,15 +82,25 @@ body {
     font-family:'HelveticaNeue-Light', 'HelveticaNeue', Helvetica, Arial, sans-serif;
     font-size:12px;
     height:100%;
+    min-height:100%;
     margin:0;
     padding:0;
     width:100%;
-	background: url(../images/mb-bg-fb-07.png) no-repeat center top; 
-    background-color:#32383d;
+    background: url(../images/wg_blurred_backgrounds_18.jpg) no-repeat center top; 
+    //background-color:rgb(42, 114, 160);
     font-family: 'RobotoRegular', 'Droid Sans', 'Segoe UI', Segoe, 'San Francisco', 'Helvetica Neue', Helvetica, Arial, Geneva, sans-serif;
     font-size:12px;
+    background-size:cover
 }
 
+html{
+   background: url(../images/wg_blurred_backgrounds_18.jpg) no-repeat center top; 
+   background-size: cover;
+   min-height: 100%;
+}
+.hight-auto{
+   height: auto;
+}
 
 .app {
     background: url(../images/mb-bg-fb-07.png) no-repeat center top; 
@@ -216,7 +232,7 @@ md-sidenav ng-md-icon {
 }
 
 /* ----- login form  ------- */
-
+/*
 .login-content:before {
     content: ' ';
     display: block;
@@ -225,7 +241,7 @@ md-sidenav ng-md-icon {
     top: 0;
     width: 100%;
     height: 100%;
-    /* z-index: 1; */
+    // z-index: 1; 
     opacity: 0.6;
     background-image: url(../images/algologo1.png);
     background-repeat: no-repeat;
@@ -233,11 +249,18 @@ md-sidenav ng-md-icon {
     -ms-background-size: cover;
     -o-background-size: cover;
     -moz-background-size: cover;
-    /* -webkit-background-size: cover; */
-    /* background-size: cover; */
-}
+    // -webkit-background-size: cover; 
+    // background-size: cover; 
+}*/
 
 .login-form .md-no-momentum {
+        opacity: 0.85 !important;
+    -webkit-font-smoothing: antialiased;
+}
+
+.login-form {
+    height: auto;
+    min-height: 100%;
         opacity: 0.85 !important;
     -webkit-font-smoothing: antialiased;
 }
@@ -253,13 +276,13 @@ md-sidenav ng-md-icon {
 }
 
 .login-text>h1 {
-    color: #e1ec0e;
+    color: rgb(255,112,67);
 }
 
 .login-text>h3 {
     color: #dcad4a;
 }
-
+/*
 .login>form {
     width: 340px;
     margin: 4em auto;
@@ -308,6 +331,6 @@ md-sidenav ng-md-icon {
 .login .md-button.md-primary.md-fab:not([disabled]):hover {
     background-color: #357DDC;
 }
-
+*/
 
 

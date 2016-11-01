@@ -1,11 +1,13 @@
 <md-dialog aria-label="Mango (Fruit)" dir="rtl" layout="column" ng-class="{'fullscreen-dialog': vm.isSmallScrean}">
     <md-toolbar>
         <div class="md-toolbar-tools">                          
-            <md-button type="submit" ng-click="vm.save()" ng-disabled="newTaskForm.$invalid"> שלח </md-button>
-            <span flex></span>
-            <h3 style="color:white">משימה חדשה</h3>
             <md-button class="md-icon-button" ng-click="vm.cancel()">
-                <ng-md-icon icon="close" aria-label="Close dialog"></ng-md-icon>
+                <ng-md-icon icon="arrow_forward" aria-label="Close dialog"></ng-md-icon>
+            </md-button>           
+            <h3 style="color:white">משימה חדשה</h3>
+            <span flex></span>
+            <md-button class="md-icon-button" type="submit" ng-click="vm.save()" ng-disabled="newTaskForm.$invalid">
+                <ng-md-icon class="rotate" icon="send" aria-label="send"></ng-md-icon> 
             </md-button>
         </div>
     </md-toolbar>

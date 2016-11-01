@@ -16,7 +16,7 @@
 
             <md-input-container class="md-block">
                 <md-icon ng-md-icon icon="phone"></md-icon>
-                <input md-no-asterisk name="phone" ng-model="vm.user.phone" type="text"
+                <input md-no-asterisk name="phone" ng-model="vm.user.phone" type="tel"
                        ng-pattern="/^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/"
                        placeholder="מספר טלפון" ng-required="true">
                 <div ng-messages="signUpForm.phone.$error">

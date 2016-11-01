@@ -131,6 +131,18 @@
             return $http(req);
         };
 
+        var searchUsers = function (string) {
+            var req = {
+                method: 'GET',
+                url: appConfig.appDomain + '/TaskManeger/searchUsers',
+                params: {
+                    queryString: string
+                }
+            };
+
+            return $http(req);
+        };
+
         var service = {
             user: self.user,
             getTaskList: getTaskList,
@@ -146,7 +158,8 @@
             getUserFromLocalStorage: getUserFromLocalStorage,
             deleteUserFromLocalStorage: deleteUserFromLocalStorage,
             registerUser: registerUser,
-            getAllTasksSync: getAllTasksSync
+            getAllTasksSync: getAllTasksSync,
+            searchUsers: searchUsers
         };
 
         return service;

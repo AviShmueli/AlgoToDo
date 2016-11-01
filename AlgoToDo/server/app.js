@@ -308,6 +308,19 @@ app.get('/TaskManeger/getTasks', function (req, res) {
     });
 });
 
+app.get('/TaskManeger/searchUsers', function (req, res) {
+
+    var string = req.query.queryString;
+    mongodb.connect(mongoUrl, function (err, db) {
+        var collection = db.collection('users');
+        collection.find({ 'name': '/' + string + '/' }, { '_id': true, 'name': true, 'avatarUrl': true }, function (err, result) {
+            db.close();
+            console.log("find users: ", result);
+            res.send(result);
+        });
+    });
+});
+
 var getUserByUserName = function (userName, callback) {
 
     mongodb.connect(mongoUrl, function (err, db) {
