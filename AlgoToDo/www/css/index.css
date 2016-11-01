@@ -218,6 +218,12 @@ md-sidenav ng-md-icon {
     height: 54px !important;
         background-color: lightcoral;
 }
+.user-avatar-small {
+    border-radius: 99%;
+    width: 24px !important;
+    height: 24px !important;
+    background-color: lightcoral;
+}
 
 .user-avatar-big {
     border-radius: 99%;
@@ -231,6 +237,31 @@ md-sidenav ng-md-icon {
     padding: 0;
 }
 
+ .autocomplete-custom-template li {
+  border-bottom: 1px solid #ccc;
+  height: auto;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  white-space: normal; }
+
+ .autocomplete-custom-template li:last-child {
+  border-bottom-width: 0; }
+
+ .autocomplete-custom-template .item-title,
+ .autocomplete-custom-template .item-metadata {
+  display: block;
+  line-height: 2; }
+
+ .autocomplete-custom-template .item-title .user-name-template{
+    position: relative;
+    right: 30px;
+    top: -2px;
+ }
+
+  .autocomplete-custom-template .item-title .user-avatar-template{
+    position: absolute;
+    right: 14px;
+ }
 /* ----- login form  ------- */
 /*
 .login-content:before {

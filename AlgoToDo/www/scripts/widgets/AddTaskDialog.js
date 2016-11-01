@@ -6,16 +6,17 @@
         .controller('AddTaskDialogController', AddTaskDialogController);
 
     AddTaskDialogController.$inject = [
-        '$scope', '$mdDialog', 'datacontext', '$mdMedia', '$q'
+        '$scope', '$mdDialog', 'datacontext', '$mdMedia', '$q', 'logger', 'appConfig'
     ];
 
-    function AddTaskDialogController($scope, $mdDialog, datacontext, $mdMedia, $q) {
+    function AddTaskDialogController($scope, $mdDialog, datacontext, $mdMedia, $q, logger, appConfig) {
 
         var vm = this;
 
         vm.isSmallScrean = $mdMedia('sm');
         vm.task = datacontext.getNewTask();
 
+        vm.appDomain = appConfig.appDomain;
         vm.selectedItem = null;
         vm.searchText = null;
         vm.querySearch = querySearch;
@@ -25,19 +26,30 @@
                     { fullName: 'אריאל', name: 'אריאל', userAvater: '/dsa/dsa/dsa.png' }];//datacontext.getAllUsersFroLocalStorage();
 
         function querySearch(query) {
-            //var results = query ? vm.users.filter(createFilterFor(query)) : vm.users;
+            var matchesUsersFromCache = [];
 
-            /*var deferred = $q.defer();
-            $timeout(function () { deferred.resolve(results); }, Math.random() * 1000, false);
-            return deferred.promise;*/
+            // get all users stored in the cache
+            var cachedUsers = datacontext.getAllCachedUsers().values();
 
+            // search for match user
+            for (var user of cachedUsers) {
+                if (user.name.includes(query)) {
+                    matchesUsersFromCache.push(user);
+                }
+            }
+
+            // if found, return it
+            if (matchesUsersFromCache.length > 0) {
+                return matchesUsersFromCache;
+            }
+
+            // if no users found in the cache, search in DB
             var deferred = $q.defer();
-
             datacontext.searchUsers(query).then(function (response) {
                 logger.success("search result: ", response.data);
+                datacontext.addUsersToUsersCache(response.data);
                 deferred.resolve(response.data);
             });
-
             return deferred.promise;
         }
 

@@ -311,9 +311,11 @@ app.get('/TaskManeger/getTasks', function (req, res) {
 app.get('/TaskManeger/searchUsers', function (req, res) {
 
     var string = req.query.queryString;
+    var query = { 'name': { "$regex": string, "$options": "i" } };
+    console.log("serching for user: ",string);
     mongodb.connect(mongoUrl, function (err, db) {
         var collection = db.collection('users');
-        collection.find({ 'name': '/' + string + '/' }, { '_id': true, 'name': true, 'avatarUrl': true }, function (err, result) {
+        collection.find(query, { '_id': true, 'name': true, 'avatarUrl': true }).toArray(function (err, result) {
             db.close();
             console.log("find users: ", result);
             res.send(result);

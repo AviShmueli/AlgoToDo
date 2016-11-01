@@ -13,8 +13,8 @@
         self.tasksList = [];
         self.newTask = {};
         self.$storage = $localStorage;
-        //self.users = [];
-        
+        self.$storage.usersCache = new Map()
+
         var saveNewTask = function(task) {
 
             var req = {
@@ -143,6 +143,18 @@
             return $http(req);
         };
 
+        var addUsersToUsersCache = function (usersList) {
+            _.each(usersList, function (user) {
+                if (!self.$storage.usersCache.has(user._id)) {
+                    self.$storage.usersCache.set(user._id, user);
+                }
+            })
+        }
+        
+        var getAllCachedUsers = function () {
+            return self.$storage.usersCache;
+        }
+
         var service = {
             user: self.user,
             getTaskList: getTaskList,
@@ -159,7 +171,9 @@
             deleteUserFromLocalStorage: deleteUserFromLocalStorage,
             registerUser: registerUser,
             getAllTasksSync: getAllTasksSync,
-            searchUsers: searchUsers
+            searchUsers: searchUsers,
+            addUsersToUsersCache: addUsersToUsersCache,
+            getAllCachedUsers: getAllCachedUsers
         };
 
         return service;

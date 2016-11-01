@@ -22,11 +22,17 @@
                                  md-selected-item="vm.selectedItem"
                                  md-search-text="vm.searchText"
                                  md-items="user in vm.querySearch(vm.searchText)"
-                                 md-item-text="user.fullName"
+                                 md-item-text="user.name"
                                  md-floating-label="נמען"
-                                 md-no-asterisk="true">
-                    <md-item-template style="text-align: right">
-                        <span md-highlight-text="vm.searchText">{{user.fullName}}</span>
+                                 md-no-asterisk="true"
+                                 md-menu-class="autocomplete-custom-template">
+                    <md-item-template style="text-align: right">   
+                        <span class="item-title">
+                            <span class="user-name-template" md-highlight-text="vm.searchText">{{user.name}}</span>
+                            <md-card-avatar class="user-avatar-template">
+                                <img alt="{{item.name}}" ng-src="{{vm.appDomain + user.avatarUrl}}" class="md-avatar user-avatar-small" style="margin-right: 0;" />
+                            </md-card-avatar>
+                        </span>                                                                 
                     </md-item-template>
                     <md-not-found>
                         הנמען שחיפשת לא קיים
