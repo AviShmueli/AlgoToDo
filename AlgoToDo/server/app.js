@@ -1,5 +1,13 @@
 ﻿/*jshint esversion: 6 */
 
+/*
+*
+* NOTE: in order to install new packeges,
+*       the "npm install" command shold run from
+*       algotodo main solution folder and not from the algotodo project folder!!!
+*
+*/
+
 var express = require('express');
 var path = require('path');
 var mongodb = require('mongodb').MongoClient;
