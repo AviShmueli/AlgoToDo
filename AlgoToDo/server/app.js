@@ -40,7 +40,7 @@ app.use(express.static('../bower_components'));
 app.use(express.static('../node_modules'));
 
 /* ----- Loggly ------*/
-var winston = require('winston');
+var winston = require('winston'); 
 require('winston-loggly-bulk');
 
 winston.add(winston.transports.Loggly, {
