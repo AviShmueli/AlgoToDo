@@ -4,6 +4,8 @@ var express = require('express');
 var path = require('path');
 var mongodb = require('mongodb').MongoClient;
 var ObjectID = require('mongodb').ObjectID;
+var winston = require('winston');
+require('winston-loggly-bulk');
 var mongoUrl = 'mongodb://admin:avi3011algo@ds033996.mlab.com:33996/algotodo_db_01';
 //var mongoUrl = 'mongodb://localhost:27017/TaskManeger';
 var app = express();
@@ -40,8 +42,7 @@ app.use(express.static('../bower_components'));
 app.use(express.static('../node_modules'));
 
 /* ----- Loggly ------*/
-var winston = require('winston'); 
-require('winston-loggly-bulk');
+
 
 winston.add(winston.transports.Loggly, {
     token: "666c914a-b76a-4aff-8c61-f7d45d681abf",
