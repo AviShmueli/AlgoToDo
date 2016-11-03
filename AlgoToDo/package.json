@@ -2,7 +2,7 @@
   "name": "AlgoToDo",
   "version": "1.0.0",
   "scripts": {
-    "start": "node server/app.js"
+    "start": "npm install"
   },
   "private": true,
   "dependencies": {
