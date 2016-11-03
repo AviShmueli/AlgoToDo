@@ -82,7 +82,7 @@ var pushTaskToAndroidUser = function (task) {
             additionalData: task,
             title: "משימה חדשה מ" + task.from,
             sound: 'default',
-            icon: 'res://www//images//algologo.png',
+            icon: 'res://icon',
             body: task.description,
             badge: "1"
         }
