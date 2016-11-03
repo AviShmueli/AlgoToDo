@@ -18,6 +18,7 @@
         'ngAnimate',
         'angularMoment',
         'ngSanitize',
+        'logglyLogger',
 
         /*
          * Everybody has access to these.

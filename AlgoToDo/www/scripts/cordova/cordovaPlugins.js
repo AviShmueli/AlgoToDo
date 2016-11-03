@@ -117,11 +117,7 @@
         // triggered every time notification received
         $rootScope.$on('$cordovaPushV5:notificationReceived', function (event, data) {
             $log.info('notificationReceived: ' + event, data);
-            //$cordovaDialogs.alert("הודעת מערכת notificationReceived", data, 'OK');
-            //showToast(data);
-            if (event.event === registered) {
-                showToast(data);
-            }
+            datacontext.addTaskToTaskList(data.additionalData);
 
             // data.message,
             // data.title,
@@ -135,7 +131,6 @@
         $rootScope.$on('$cordovaPushV5:errorOcurred', function (event, e) {
             $log.info('errorOcurred: ' + event, e);
             $cordovaDialogs.alert("שגיאה", e, 'OK');
-            showToast("error");
             // e.message
         });
 

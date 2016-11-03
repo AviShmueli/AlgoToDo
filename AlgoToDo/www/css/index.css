@@ -67,17 +67,17 @@ body {
     -webkit-text-size-adjust: none;
     -webkit-user-select: none;
     -ms-text-size-adjust: none;
-	//background-color:#E4E4E4;
-   // background-image:linear-gradient(top, #A7A7A7 0%, #E4E4E4 51%);
-    //background-image:-webkit-linear-gradient(top, #A7A7A7 0%, #E4E4E4 51%);
-    //background-image:-ms-linear-gradient(top, #A7A7A7 0%, #E4E4E4 51%);
-    //background-image:-webkit-gradient(
+	/*background-color:#E4E4E4;
+    background-image:linear-gradient(top, #A7A7A7 0%, #E4E4E4 51%);
+    background-image:-webkit-linear-gradient(top, #A7A7A7 0%, #E4E4E4 51%);
+    background-image:-ms-linear-gradient(top, #A7A7A7 0%, #E4E4E4 51%);
+    background-image:-webkit-gradient(
         linear,
         left top,
         left bottom,
         color-stop(0, #A7A7A7),
         color-stop(0.51, #E4E4E4)
-    );
+    );*/
     background-attachment:fixed;
     font-family:'HelveticaNeue-Light', 'HelveticaNeue', Helvetica, Arial, sans-serif;
     font-size:12px;
@@ -87,7 +87,7 @@ body {
     padding:0;
     width:100%;
     background: url(../images/wg_blurred_backgrounds_18.jpg) no-repeat center top; 
-    //background-color:rgb(42, 114, 160);
+    /*background-color:rgb(42, 114, 160);*/
     font-family: 'RobotoRegular', 'Droid Sans', 'Segoe UI', Segoe, 'San Francisco', 'Helvetica Neue', Helvetica, Arial, Geneva, sans-serif;
     font-size:12px;
     background-size:cover

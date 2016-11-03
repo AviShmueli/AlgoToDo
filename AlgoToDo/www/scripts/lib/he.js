@@ -35,7 +35,7 @@
             nextDay: '[מחר ב] <b>LT</b',
             nextWeek: 'dddd [ב] <b>LT</b',
             lastDay : '[אתמול ב] <b>LT</b',
-            lastWeek: 'dddd [האחרון ב] <b>LT</b>',
+            lastWeek: 'dddd [ב] <b>LT</b>',
             sameElse: '<b>L</b'
         },
         relativeTime : {

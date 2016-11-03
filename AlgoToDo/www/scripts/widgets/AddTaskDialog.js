@@ -14,16 +14,12 @@
         var vm = this;
 
         vm.isSmallScrean = $mdMedia('sm');
-        vm.task = datacontext.getNewTask();
+        vm.task = {};
 
         vm.appDomain = appConfig.appDomain;
         vm.selectedItem = null;
         vm.searchText = null;
         vm.querySearch = querySearch;
-        vm.users = [{ fullName: 'אבי', name: 'אבי', userAvater: '/dsa/dsa/dsa.png' },
-                    { fullName: 'דינה', name: 'דינה', userAvater: '/dsa/dsa/dsa.png' },
-                    { fullName: 'רעיה', name: 'רעיה', userAvater: '/dsa/dsa/dsa.png' },
-                    { fullName: 'אריאל', name: 'אריאל', userAvater: '/dsa/dsa/dsa.png' }];//datacontext.getAllUsersFroLocalStorage();
 
         function querySearch(query) {
             var matchesUsersFromCache = [];
@@ -65,16 +61,14 @@
             $mdDialog.hide();
         };
         vm.cancel = function () {
-            datacontext.resetNewTask();
+            vm.task = {};
             $mdDialog.cancel();
         };
         vm.save = function () {
             vm.task.to = vm.selectedItem.name;
-            vm.task.from = datacontext.getUserFromLocalStorage().name;
-            vm.task.status = 'inProgress';
-            vm.task.createTime = new Date();
-            datacontext.saveNewTask(vm.task);
-            $mdDialog.hide('ok');
+            $mdDialog.hide(vm.task);
+            // clean the form
+            vm.task = {};
         };
     }
 

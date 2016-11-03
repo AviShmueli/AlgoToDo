@@ -23,7 +23,7 @@
         return service;
         /////////////////////
 
-        function error(message, data, title) {
+        function error(message, data) {
             //toastr.error(message, title);
             $log.error('Error: ' + message, data);           
         }

@@ -44,7 +44,6 @@
             $mdToast.hide(toast);
         };
 
-
         var loadTasks = function () {
             var loadingToast = activateProgress("טוען נתונים...");
             datacontext.getAllTasksSync().then(function (response) {
@@ -69,6 +68,7 @@
 
             if (cordovaPlugins.isMobileDevice()) {
                 document.addEventListener("deviceready", function () {
+                    vm.user.device = cordovaPlugins.getDeviceDetails();
                     cordovaPlugins.initializePushV5().then(function () {
                         cordovaPlugins.registerForPushNotifications().then(function (registrationId) {
                             vm.user.GcmRegistrationId = registrationId;
@@ -132,31 +132,25 @@
                 }
             });
             datacontext.users = users;
-        });*/
+        });
 
         // when the server response the users tasks
         socket.on('users-tasks', function(data) {
             datacontext.tasksList = data;
-        });
+        });*/
 
         // when new task received from the server
-        socket.on('new-task', function(data) {
-            
+        socket.on('new-task', function(data) {           
             var newTask = data;
-            
-            //logger.info("Got new task", newTask);
-
-
             if (newTask.from !== vm.user.name) {
                 datacontext.addTaskToTaskList(newTask);
                 setMyTaskCount();
-                //cordovaPlugins.setLocalNotification();
             }
         });
 
         // when the server response the users tasks
         socket.on('updated-task', function (data) {
-            logger.success('משימה עודכנה', data.value);
+            //logger.success('משימה עודכנה', data.value);
             datacontext.replaceTask(data.value);
             setMyTaskCount();
         });
@@ -184,12 +178,17 @@
                 templateUrl: 'scripts/widgets/AddTaskDialog.html',
                 targetEvent: ev,
                 fullscreen: true
-            }).then(function (answer) {
-                    if (answer === 'ok') {
-                        vm.alert = 'You said the information was "' + answer + '".';
-                    }
-                }, function() {
-                    vm.alert = 'You cancelled the dialog.';
+            }).then(function (task) {
+                task.from = datacontext.getUserFromLocalStorage().name;
+                task.status = 'inProgress';
+                task.createTime = new Date();
+                datacontext.saveNewTask(task).then(function (response) {
+                        logger.info('המשימה נשלחה בהצלחה!', response.data, 2000);
+                        datacontext.addTaskToTaskList(response.data);
+                        setMyTaskCount();
+                }, function (error) {
+                    logger.error('Error while tring to add new task ', error);
+                });;
                 });
         
         };
@@ -206,10 +205,10 @@
             datacontext.updateTask(task).then(function (response) {
                 logger.success('המשימה עודכנה בהצלחה!', response.data);
                 setMyTaskCount();
-            }, function () { });
+            }, function (error) {
+                logger.error('Error while tring to update task ', error);
+            });
         };
-
-        vm.checkIfUserLogdIn();
 
         vm.reloadTasks = function () {
             loadTasks();
@@ -232,6 +231,8 @@
                 vm.showSearch = !vm.showSearch;
             }
         };
+
+        vm.checkIfUserLogdIn();
 
     }
 

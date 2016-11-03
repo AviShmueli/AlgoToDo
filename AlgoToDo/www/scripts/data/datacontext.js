@@ -11,7 +11,6 @@
 
         var self = this;
         self.tasksList = [];
-        self.newTask = {};
         self.$storage = $localStorage;
         self.$storage.usersCache = new Map()
 
@@ -25,13 +24,7 @@
                 }
             };
 
-            $http(req).then(function (response) {
-                logger.info('המשימה נשלחה בהצלחה!', response.data, 2000);
-                self.tasksList.push(response.data);
-
-                // clean the form
-                self.newTask = {};
-            }, function () { });
+            return $http(req)
         };
 
         var getAllTasks = function () {
@@ -45,7 +38,7 @@
             };
 
             $http(req).then(function (response) {
-                logger.success("getAllTasks", response.data);
+                //logger.success("getAllTasks", response.data);
                 self.tasksList = response.data;
                 $mdToast.hide(simpleToast);
             });
@@ -98,10 +91,6 @@
             self.tasksList[foundIndex] = task;
         };
 
-        var getNewTask = function () {
-            return self.newTask;
-        };
-
         var saveUserToLocalStorage = function (user) {
             self.$storage.user = user;
         };
@@ -112,11 +101,6 @@
 
         var deleteUserFromLocalStorage = function () {
             delete self.$storage.user;
-        };
-
-        var resetNewTask = function () {
-            // clean the form
-            self.newTask = {};
         };
 
         var registerUser = function (user) {
@@ -160,9 +144,7 @@
             getTaskList: getTaskList,
             setTaskList: setTaskList,
             addTaskToTaskList: addTaskToTaskList,
-            getNewTask: getNewTask,
             saveNewTask: saveNewTask,
-            resetNewTask: resetNewTask,
             getAllTasks: getAllTasks,
             updateTask: updateTask,
             replaceTask: replaceTask,

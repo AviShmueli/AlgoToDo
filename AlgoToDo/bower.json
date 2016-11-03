@@ -19,7 +19,8 @@
     "ngCordova": "^0.1.27-alpha",
     "moment": "^2.15.2",
     "angular-moment": "^1.0.0",
-    "angular-sanitize": "^1.5.8"
+    "angular-sanitize": "^1.5.8",
+    "angular-loggly-logger": "^0.2.4"
   },
   "resolutions": {
     "angular": "1.3.6"

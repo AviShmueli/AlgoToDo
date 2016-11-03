@@ -39,6 +39,18 @@ app.use(express.static('../www'));
 app.use(express.static('../bower_components'));
 app.use(express.static('../node_modules'));
 
+/* ----- Loggly ------*/
+var winston = require('winston');
+require('winston-loggly-bulk');
+
+winston.add(winston.transports.Loggly, {
+    token: "666c914a-b76a-4aff-8c61-f7d45d681abf",
+    subdomain: "algotodo",
+    tags: ["AlgoTodo-Node-Server"],
+    json: true
+});
+
+
 /* ---- Start the server ------ */
 server.listen(process.env.PORT || 5002, function (err) {
     console.log("Express server listening on port %d in %s mode", this.address().port, app.settings.env);
@@ -61,7 +73,7 @@ var pushTaskToAndroidUser = function (task) {
             additionalData: task,
             title: "משימה חדשה מ" + task.from,
             sound: 'default',
-            icon: 'res://icons/android/icon-48-mdpi.png',
+            icon: 'res://icons/android/icon-72-hdpi.png',
             body: task.description,
             badge: "1"
         }
@@ -78,15 +90,11 @@ var pushTaskToAndroidUser = function (task) {
     else {
         // get user from DB and check if there is regId
         getUserByUserName(task.to, function (error, user) {
-            console.log("****user: ", user);
-            console.log("****user.id: ", user._id);
-            console.log("****user.name: ", user.name);
-            console.log("****user.GcmRegistrationId: ", user.GcmRegistrationId);
             if (user.GcmRegistrationId !== undefined) {
                 regToken = user.GcmRegistrationId;
-                console.log("saving user to cache");
+
                 // save the user to the cache
-                GcmRegistrationIdsCache[user.name] = { 'userName': user.name, GcmRegistrationId: user.GcmRegistrationId }
+                GcmRegistrationIdsCache[user.name] = { 'userName': user.name, GcmRegistrationId: user.GcmRegistrationId };
                 sendMessage(message, regToken);
             }
             else {
@@ -113,21 +121,36 @@ var sendMessage = function (message, regToken) {
             console.log("send message", message);
             if (err) {
                 console.error("error while sending push notification: ", err);
+                winston.log('Error', "error while sending push notification: ", err);
             }
             else {
                 console.log(response);
             }
         });
     });
-    
-}
+
+};
+
 // -------- Socket.io --------//
 
 var users = [];
 io.on('connection', function (socket) {
     console.log('new connection made');
 
-    //send to the client all the users when Login
+    // response to the client call for Login and join the chat
+    socket.on('join', function (data) {
+        socket.userName = data.userName;
+        users[socket.userName] = socket;
+        var userObj = {
+            userName: data.userName,
+            socketid: socket.id
+        };
+        users.push(userObj);
+        //console.log(userObj.userName + ' just connected!!');
+        io.emit('all-users', users);
+    });
+
+    /* //send to the client all the users when Login
     socket.on('get-users', function () {
         socket.emit('all-users', users);
     });
@@ -144,24 +167,11 @@ io.on('connection', function (socket) {
             });
         });
     });
-
-    // response to the client call for Login and join the chat
-    socket.on('join', function (data) {
-        socket.userName = data.userName;
-        users[socket.userName] = socket;
-        var userObj = {
-            userName: data.userName,
-            socketid: socket.id
-        };
-        users.push(userObj);
-        console.log(userObj.userName + ' just connected!!');
-        io.emit('all-users', users);
-    });
-
+    
     //get the new task and save it to MongoClient
     //then send message to the emploee with the task
     socket.on('create-task', function (data) {
-        /* ---- curently not in use becuse cano't emit to both the "to" and the "from" clients -------- */
+        // ---- curently not in use becuse cano't emit to both the "to" and the "from" clients -------- //
         var task = data.task;
         var to = users[task.to].id;
         var from = users[task.from].id;
@@ -187,7 +197,7 @@ io.on('connection', function (socket) {
     //get task and update it in MongoClient
     //then send message to the maneger with the task
     socket.on('update-task', function (data) {
-        /* ---- curently not in use becuse cano't emit to both the "to" and the "from" clients -------- */
+        // ---- curently not in use becuse cano't emit to both the "to" and the "from" clients -------- //
         var task = data.task;
 
         //update task
@@ -207,7 +217,7 @@ io.on('connection', function (socket) {
         // if we whant to brodcast the message to all users
         // socket.broadcast.emit('task-received', data);
     });
-
+    */
 });
 
 // -------- DAL ------------- //
@@ -221,26 +231,34 @@ app.post('/TaskManeger/newTask', function (req, res) {
     }
     //add task to Mongo
     mongodb.connect(mongoUrl, function (err, db) {
+
+        if (err) {
+            winston.log('Error', "error while trying to connect MongoDB: ", err);
+        }
+
         var collection = db.collection('tasks');
 
-        collection.insert(task,
-            function (err, results) {
+        collection.insert(task, function (err, results) {
 
-                // if the employee is now online send the new task by Socket.io
-                if (to !== '' && task.to !== task.from) {
-                    io.to(to).emit('new-task', results.ops[0]);
-                }
-                console.log("trying to send new task", task);
-                // if this task is not from me to me, send notification to the user
-                if (task.to !== task.from) {
-                    pushTaskToAndroidUser(task);
-                }
+            if (err) {
+                winston.log('Error', "error while trying to add new Task: ", err);
+            }
 
-                // return the new task to the sender
-                res.send(results.ops[0]);
+            // if the employee is now online send the new task by Socket.io
+            if (to !== '' && task.to !== task.from) {
+                io.to(to).emit('new-task', results.ops[0]);
+            }
+            console.log("trying to send new task", task);
+            // if this task is not from me to me, send notification to the user
+            if (task.to !== task.from) {
+                pushTaskToAndroidUser(task);
+            }
 
-                db.close();
-            });
+            // return the new task to the sender
+            res.send(results.ops[0]);
+
+            db.close();
+        });
     });
 });
 
@@ -254,6 +272,11 @@ app.post('/TaskManeger/updateTaskStatus', function (req, res) {
 
     //add task to Mongo
     mongodb.connect(mongoUrl, function (err, db) {
+
+        if (err) {
+            winston.log('Error', "error while trying to connect MongoDB: ", err);
+        }
+
         var collection = db.collection('tasks');
 
         collection.findAndModify({ _id: ObjectID(task._id) }, [['_id', 'asc']], { $set: { 'status': task.status, 'doneTime': task.doneTime, 'seenTime': task.seenTime } }, {new: true},
@@ -276,23 +299,28 @@ app.post('/TaskManeger/registerUser', function (req, res) {
     console.log("the user just register to the app: ", user);
     console.log("with GcmRegistrationId: ", user.GcmRegistrationId);
 
-    //if (GcmRegistrationIdsCache[user.name] === undefined) {
-    //    GcmRegistrationIdsCache[user.name] = {'userName': user.name, GcmRegistrationId: registrationId}
-    //}
-
     //add user to Mongo
     mongodb.connect(mongoUrl, function (err, db) {
+
+        if (err) {
+            winston.log('Error', "error while trying to connect MongoDB: ", err);
+        }
+
         var collection = db.collection('users');
 
-        collection.insert(user,
-            function (err, results) {
-                var newUser = results.ops[0];
-                if (newUser.GcmRegistrationId !== undefined) {
-                    GcmRegistrationIdsCache[newUser.name] = { 'userName': newUser.name, GcmRegistrationId: newUser.GcmRegistrationId }
-                }
-                res.send(newUser);
-                db.close();
-            });
+        collection.insert(user, function (err, results) {
+
+            if (err) {
+                winston.log('Error', "error while trying register new user: ", err);
+            }
+
+            var newUser = results.ops[0];
+            if (newUser.GcmRegistrationId !== undefined) {
+                GcmRegistrationIdsCache[newUser.name] = { 'userName': newUser.name, GcmRegistrationId: newUser.GcmRegistrationId };
+            }
+            res.send(newUser);
+            db.close();
+        });
     });
 });
 
@@ -300,8 +328,18 @@ app.get('/TaskManeger/getTasks', function (req, res) {
     
     var me = req.query.user;
     mongodb.connect(mongoUrl, function (err, db) {
+
+        if (err) {
+            winston.log('Error', "error while trying to connect MongoDB: ", err);
+        }
+
         var collection = db.collection('tasks');
         collection.find({ $or: [{ 'from': me }, { 'to': me }] }).toArray(function (err, result) {
+
+            if (err) {
+                winston.log('Error', "error while trying to get all Tasks: ", err);
+            }
+
             res.send(result);
             db.close();
         });
@@ -312,10 +350,20 @@ app.get('/TaskManeger/searchUsers', function (req, res) {
 
     var string = req.query.queryString;
     var query = { 'name': { "$regex": string, "$options": "i" } };
-    console.log("serching for user: ",string);
+
     mongodb.connect(mongoUrl, function (err, db) {
+
+        if (err) {
+            winston.log('Error', "error while trying to connect MongoDB: ", err);
+        }
+
         var collection = db.collection('users');
         collection.find(query, { '_id': true, 'name': true, 'avatarUrl': true }).toArray(function (err, result) {
+
+            if (err) {
+                winston.log('Error', "error while trying search user: ", err);
+            }
+
             db.close();
             console.log("find users: ", result);
             res.send(result);
@@ -326,23 +374,38 @@ app.get('/TaskManeger/searchUsers', function (req, res) {
 var getUserByUserName = function (userName, callback) {
 
     mongodb.connect(mongoUrl, function (err, db) {
+
+        if (err) {
+            winston.log('Error', "error while trying to connect MongoDB: ", err);
+        }
+
         var collection = db.collection('users');
         collection.findOne({ 'name': userName }, { '_id': true, 'name': true, 'GcmRegistrationId': true }, function (err, result) {
             db.close();
-            console.log("find user: ",result);
-            callback(err, result)
+            console.log("find user: ", result);
+            callback(err, result);
         });
     });
-}
+};
 
 var getUnDoneTasksCountByUserName = function (userName, callback) {
 
     mongodb.connect(mongoUrl, function (err, db) {
+
+        if (err) {
+            winston.log('Error', "error while trying to connect MongoDB: ", err);
+        }
+
         var collection = db.collection('tasks');
-        collection.count({ 'to': userName,'status': 'inProgress' },function (err, result) {
+        collection.count({ 'to': userName, 'status': 'inProgress' }, function (err, result) {
+
+            if (err) {
+                winston.log('Error', "error while trying to get UnDone Tasks Count: ", err);
+            }
+
             db.close();
             console.log("total unDone Task: ", result);
-            callback(err, result)
+            callback(err, result);
         });
     });
 }

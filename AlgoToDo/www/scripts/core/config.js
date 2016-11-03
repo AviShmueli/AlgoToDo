@@ -2,7 +2,8 @@
     'use strict';
 
     angular.module('TaskManeger.core')
-        .config(function ($mdThemingProvider, $compileProvider, $animateProvider) {
+        .config(function ($mdThemingProvider, $compileProvider, $animateProvider, LogglyLoggerProvider) {
+            LogglyLoggerProvider.inputToken('666c914a-b76a-4aff-8c61-f7d45d681abf').sendConsoleErrors(true);
             $compileProvider.debugInfoEnabled(false);
             //$animateProvider.classNameFilter(/\banimated\b/);
             var customBlueMap = $mdThemingProvider.extendPalette('light-blue', {
@@ -31,7 +32,7 @@
             return {
                 appDomain:
                      'https://algotodo.herokuapp.com'
-                //'http://localhost:5001'  
+               // 'http://localhost:5001'  
             };
         })
         .run(function (amMoment) {
