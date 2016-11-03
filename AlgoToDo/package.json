@@ -2,7 +2,8 @@
   "name": "AlgoToDo",
   "version": "1.0.0",
   "scripts": {
-    "start": "npm install"
+    "heroku-prebuild": "npm install",
+    "start": "node server/app.js"
   },
   "private": true,
   "dependencies": {
