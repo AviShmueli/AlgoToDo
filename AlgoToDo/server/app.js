@@ -87,7 +87,7 @@ var pushTaskToAndroidUser = function (task) {
             body: task.description,
             badge: "1"
         }
-        
+         
     });
 
     var regToken = '';
