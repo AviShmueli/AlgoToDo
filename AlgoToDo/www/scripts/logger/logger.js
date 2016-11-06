@@ -15,7 +15,7 @@
             info: info,
             success: success,
             warning: warning,
-
+            toast: toast,
             // straight to console; bypass toastr
             log: $log.log
         };
@@ -28,7 +28,11 @@
             $log.error('Error: ' + message, data);           
         }
 
-        function info(message, data, toastTime) {
+        function info(message, data) {           
+            $log.info('Info: ' + message, data);
+        }
+
+        function toast(message, data, toastTime) {
             var simpleToast = $mdToast.build({
                 hideDelay: toastTime,
                 position: 'bottom left',
@@ -39,8 +43,6 @@
                           '</md-toast>'
             });
             $mdToast.show(simpleToast);
-            $log.info('Info: ' + message, data);
-            //cordovaPlugins.showToast(data);
             return simpleToast;
         }
 

@@ -28,7 +28,7 @@
         };
 
         var getAllTasks = function () {
-            var simpleToast = logger.info("טוען נתונים...", null, 10000);
+            var simpleToast = logger.toast("טוען נתונים...", null, 10000);
             var req = {
                 method: 'GET',
                 url: appConfig.appDomain + '/TaskManeger/getTasks',

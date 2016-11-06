@@ -37,7 +37,7 @@
 
         var activateProgress = function (toastText) {
             vm.progressActivated = true;
-            return logger.info(toastText, null, 10000);
+            return logger.toast(toastText, null, 10000);
         };
 
         var deactivateProgress = function (toast) {
@@ -46,8 +46,7 @@
 
         var loadTasks = function () {
             var loadingToast = activateProgress("טוען נתונים...");
-            datacontext.getAllTasksSync().then(function (response) {
-                logger.success("getAllTasks", response.data);
+            datacontext.getAllTasksSync().then(function (response) {                
                 datacontext.setTaskList(response.data);
                 setMyTaskCount();
                 vm.progressActivated = false;
@@ -74,22 +73,22 @@
                             vm.user.GcmRegistrationId = registrationId;
                             datacontext.registerUser(vm.user).then(function (response) {
                                 datacontext.saveUserToLocalStorage(response.data);
-                                logger.success('המשתמש נרשם בהצלחה', response.data);
+                                logger.success('user signUp successfuly', response.data);
                                 vm.login();
                             }, function () { });                       
                          });                    
                     }, function (error) {
-                        logger.error("אירעה שגיאה ברישום המשתמש",error);
+                        logger.error("error while trying to register user to app", error);
                        });
                 }, false);
             }
             else {
                 datacontext.registerUser(vm.user).then(function (response) {
                     datacontext.saveUserToLocalStorage(response.data);
-                    logger.success('המשתמש נרשם בהצלחה', response.data);
+                    logger.success('user signUp successfuly', response.data);
                     vm.login();
                 }, function (error) {
-                    logger.error("אירעה שגיאה ברישום המשתמש", error);
+                    logger.error("error while trying to register user to app", error);
                 });
             }
             
@@ -112,7 +111,8 @@
             loadTasks();
             vm.userConnected = true;           
             
-            logger.info("אתה עכשיו מחובר!", null, 1000);
+            logger.info("user is now connected", vm.user);
+            logger.toast("אתה עכשיו מחובר!", null, 1000);
         };
 
         vm.logOff = function () {
@@ -183,7 +183,8 @@
                 task.status = 'inProgress';
                 task.createTime = new Date();
                 datacontext.saveNewTask(task).then(function (response) {
-                        logger.info('המשימה נשלחה בהצלחה!', response.data, 2000);
+                        logger.toast('המשימה נשלחה בהצלחה!', response.data, 2000);
+                        logger.info('task added sucsessfuly', response.data);
                         datacontext.addTaskToTaskList(response.data);
                         setMyTaskCount();
                 }, function (error) {

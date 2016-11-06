@@ -28,6 +28,9 @@
         },
         "cordova-plugin-badge": {
             "PACKAGE_NAME": "com.algotodo.app"
+        },
+        "cordova-plugin-crosswalk-webview": {
+            "PACKAGE_NAME": "com.algotodo.app"
         }
     },
     "dependent_plugins": {
