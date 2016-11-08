@@ -7,38 +7,26 @@
         "files": {}
     },
     "installed_plugins": {
-        "com.cordova.plugins.sms": {
-            "PACKAGE_NAME": "io.cordova.myapp007182"
-        },
         "cordova-plugin-whitelist": {
-            "PACKAGE_NAME": "io.cordova.myapp007182"
+            "PACKAGE_NAME": "com.algotodo.app"
         },
         "cordova-plugin-x-toast": {
-            "PACKAGE_NAME": "io.cordova.myapp007182"
-        },
-        "de.appplant.cordova.plugin.local-notification": {
-            "PACKAGE_NAME": "io.cordova.myapp007182"
-        },
-        "cordova-plugin-dialogs": {
-            "PACKAGE_NAME": "io.cordova.myapp007182"
-        },
-        "phonegap-plugin-push": {
-            "SENDER_ID": "algotodo-2b6e9",
-            "PACKAGE_NAME": "io.cordova.myapp007182"
+            "PACKAGE_NAME": "com.algotodo.app"
         },
         "cordova-plugin-badge": {
             "PACKAGE_NAME": "com.algotodo.app"
         },
-        "cordova-plugin-crosswalk-webview": {
+        "phonegap-plugin-push": {
+            "SENDER_ID": "874351794059",
+            "PACKAGE_NAME": "com.algotodo.app"
+        },
+        "cordova-plugin-device": {
             "PACKAGE_NAME": "com.algotodo.app"
         }
     },
     "dependent_plugins": {
         "cordova-plugin-app-event": {
-            "PACKAGE_NAME": "io.cordova.myapp007182"
-        },
-        "cordova-plugin-device": {
-            "PACKAGE_NAME": "io.cordova.myapp007182"
+            "PACKAGE_NAME": "com.algotodo.app"
         }
     }
 }

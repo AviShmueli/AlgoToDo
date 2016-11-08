@@ -65,7 +65,7 @@
             $mdDialog.cancel();
         };
         vm.save = function () {
-            vm.task.to = vm.selectedItem.name;
+            vm.task.to = vm.selectedItem;
             $mdDialog.hide(vm.task);
             // clean the form
             vm.task = {};

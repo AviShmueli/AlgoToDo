@@ -5,14 +5,14 @@
         .module('TaskManeger.cordova')
         .service('cordovaPlugins', cordovaPlugins);
 
-    cordovaPlugins.$inject = ['$rootScope', 'datacontext', 'appConfig', '$mdDialog',
-                              '$cordovaLocalNotification', '$cordovaSms', '$window',
-                              '$cordovaDialogs', '$cordovaToast', '$cordovaPushV5',
+    cordovaPlugins.$inject = ['$rootScope', 'datacontext', 'appConfig', '$mdDialog'/*,
+                              '$cordovaLocalNotification'*//*, '$cordovaSms'*/, '$window',
+                              /*'$cordovaDialogs',*/ '$cordovaToast', '$cordovaPushV5',
                               '$cordovaBadge', '$cordovaDevice', '$log'];
 
     function cordovaPlugins($rootScope, datacontext, appConfig, $mdDialog,
-                            $cordovaLocalNotification, $cordovaSms, $window,
-                            $cordovaDialogs, $cordovaToast, $cordovaPushV5,
+                            /*$cordovaLocalNotification, *//*$cordovaSms,*/ $window,
+                            /*$cordovaDialogs,*/ $cordovaToast, $cordovaPushV5,
                             $cordovaBadge, $cordovaDevice, $log) {
 
         var self = this;
@@ -23,7 +23,7 @@
         };
 
         var setLocalNotification = function () {
-            if (!isMobileDevice()) return;
+            /*if (!isMobileDevice()) return;
             var alarmTime = new Date();
             alarmTime.setMinutes(alarmTime.getSeconds() + 1);
 
@@ -40,15 +40,8 @@
                     //logger.info("The notification has been set");
                 });
             }, false);
+            */
 
-
-        };
-
-        var beep = function () {
-            // beep 3 times
-            document.addEventListener("deviceready", function () {
-                $cordovaDialogs.beep(3);
-            }, false);
         };
 
         var showToast = function (info, duration) {
@@ -129,8 +122,7 @@
 
         // triggered every time error occurs
         $rootScope.$on('$cordovaPushV5:errorOcurred', function (event, e) {
-            $log.info('errorOcurred: ' + event, e);
-            $cordovaDialogs.alert("שגיאה", e, 'OK');
+            $log.error('errorOcurred: ' + event, e);            
             // e.message
         });
 
@@ -147,7 +139,7 @@
                     intent: '' // send SMS without open any other app
                 }
             };
-
+            /*
             document.addEventListener("deviceready", function () {
                 $cordovaSms
                   .send('+972542240608', 'אבי התותח', options)
@@ -156,12 +148,11 @@
                   }, function (error) {
                       showToast("SMS wasent sent...");
                   });
-            }, false);
+            }, false);*/
         };
 
         var service = {
             setLocalNotification: setLocalNotification,
-            beep: beep,
             showToast: showToast,
             registerForPushNotifications: registerForPushNotifications,
             sendSmS: sendSmS,

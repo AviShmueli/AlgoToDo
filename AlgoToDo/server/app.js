@@ -81,7 +81,7 @@ var pushTaskToAndroidUser = function (task) {
         time_to_live: 3,
         data: {
             additionalData: task,
-            title: "משימה חדשה מ" + task.from,
+            title: "משימה חדשה מ" + task.from.name,
             sound: 'default',
             icon: 'res://icon',
             body: task.description,
@@ -93,18 +93,18 @@ var pushTaskToAndroidUser = function (task) {
     var regToken = '';
     
     // if the user stored in the cache, get the regId from the cache
-    if (GcmRegistrationIdsCache[task.to] !== undefined) {
-        regToken = GcmRegistrationIdsCache[task.to].GcmRegistrationId;
+    if (GcmRegistrationIdsCache[task.to._id] !== undefined) {
+        regToken = GcmRegistrationIdsCache[task.to._id].GcmRegistrationId;
         sendMessage(message, regToken);
     }
     else {
         // get user from DB and check if there is regId
-        getUserByUserName(task.to, function (error, user) {
+        getUserByUserId(task.to._id, function (error, user) {
             if (user.GcmRegistrationId !== undefined) {
                 regToken = user.GcmRegistrationId;
 
                 // save the user to the cache
-                GcmRegistrationIdsCache[user.name] = { 'userName': user.name, GcmRegistrationId: user.GcmRegistrationId };
+                GcmRegistrationIdsCache[user._id] = { 'userId': user._id, 'userName': user.name, 'GcmRegistrationId': user.GcmRegistrationId };
                 sendMessage(message, regToken);
             }
             else {
@@ -122,8 +122,9 @@ var sendMessage = function (message, regToken) {
     console.log("sending message : ", message);
     console.log("with GcmRegistrationId: ", regToken);
 
+    var task = message.params.data.additionalData;
     // get the number that will be set to the app icon badge
-    getUnDoneTasksCountByUserName(message.params.data.additionalData.to, function (error, userUnDoneTaskCount) {
+    getUnDoneTasksCountByUserId(task.to._id, function (error, userUnDoneTaskCount) {
         message.params.data.badge = userUnDoneTaskCount;
 
         // Actually send the message
@@ -149,15 +150,15 @@ io.on('connection', function (socket) {
 
     // response to the client call for Login and join the chat
     socket.on('join', function (data) {
-        socket.userName = data.userName;
-        users[socket.userName] = socket;
+        socket.userId = data._id;
+        users[socket.userId] = socket;
         var userObj = {
-            userName: data.userName,
+            userId: data._id,
             socketid: socket.id
         };
         users.push(userObj);
         //console.log(userObj.userName + ' just connected!!');
-        io.emit('all-users', users);
+        //io.emit('all-users', users);
     });
 
     /* //send to the client all the users when Login
@@ -236,8 +237,8 @@ app.post('/TaskManeger/newTask', function (req, res) {
 
     var task = req.body.task;
     var to = '';
-    if (users[task.to] !== undefined) {
-        to = users[task.to].id;
+    if (users[task.to._id] !== undefined) {
+        to = users[task.to._id].id;
     }
     //add task to Mongo
     mongodb.connect(mongoUrl, function (err, db) {
@@ -255,12 +256,12 @@ app.post('/TaskManeger/newTask', function (req, res) {
             }
 
             // if the employee is now online send the new task by Socket.io
-            if (to !== '' && task.to !== task.from) {
+            if (to !== '' && task.to._id !== task.from._id) {
                 io.to(to).emit('new-task', results.ops[0]);
             }
             console.log("trying to send new task", task);
             // if this task is not from me to me, send notification to the user
-            if (task.to !== task.from) {
+            if (task.to._id !== task.from._id) {
                 pushTaskToAndroidUser(task);
             }
 
@@ -276,8 +277,8 @@ app.post('/TaskManeger/updateTaskStatus', function (req, res) {
 
     var task = req.body.task;
     var from = '';
-    if (users[task.from] !== undefined) {
-        from = users[task.from].id;
+    if (users[task.from._id] !== undefined) {
+        from = users[task.from._id].id;
     }
 
     //add task to Mongo
@@ -326,7 +327,7 @@ app.post('/TaskManeger/registerUser', function (req, res) {
 
             var newUser = results.ops[0];
             if (newUser.GcmRegistrationId !== undefined) {
-                GcmRegistrationIdsCache[newUser.name] = { 'userName': newUser.name, GcmRegistrationId: newUser.GcmRegistrationId };
+                GcmRegistrationIdsCache[newUser._id] = { 'userId': user._id, 'userName': newUser.name, GcmRegistrationId: newUser.GcmRegistrationId };
             }
             res.send(newUser);
             db.close();
@@ -381,7 +382,7 @@ app.get('/TaskManeger/searchUsers', function (req, res) {
     });
 });
 
-var getUserByUserName = function (userName, callback) {
+var getUserByUserId = function (userId, callback) {
 
     mongodb.connect(mongoUrl, function (err, db) {
 
@@ -390,7 +391,7 @@ var getUserByUserName = function (userName, callback) {
         }
 
         var collection = db.collection('users');
-        collection.findOne({ 'name': userName }, { '_id': true, 'name': true, 'GcmRegistrationId': true }, function (err, result) {
+        collection.findOne({ '_id': userId }, { '_id': true, 'name': true, 'GcmRegistrationId': true }, function (err, result) {
             db.close();
             console.log("find user: ", result);
             callback(err, result);
@@ -398,7 +399,7 @@ var getUserByUserName = function (userName, callback) {
     });
 };
 
-var getUnDoneTasksCountByUserName = function (userName, callback) {
+var getUnDoneTasksCountByUserId = function (userId, callback) {
 
     mongodb.connect(mongoUrl, function (err, db) {
 
@@ -407,7 +408,7 @@ var getUnDoneTasksCountByUserName = function (userName, callback) {
         }
 
         var collection = db.collection('tasks');
-        collection.count({ 'to': userName, 'status': 'inProgress' }, function (err, result) {
+        collection.count({ 'to._id': userId, 'status': 'inProgress' }, function (err, result) {
 
             if (err) {
                 winston.log('Error', "error while trying to get UnDone Tasks Count: ", err);

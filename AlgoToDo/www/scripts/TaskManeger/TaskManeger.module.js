@@ -19,6 +19,7 @@
         'angularMoment',
         'ngSanitize',
         'logglyLogger',
+        'infomofo.angularMdPullToRefresh',
 
         /*
          * Everybody has access to these.

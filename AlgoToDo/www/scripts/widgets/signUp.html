@@ -41,10 +41,15 @@
             </md-input-container>
         </md-content>
         <md-input-container>
-            <md-checkbox md-no-asterisk ng-required="true" aria-label="acceptTerms" ng-model="vm.user.acceptTerms">אני מסכים לתנאי השימוש</md-checkbox>
+            <md-checkbox md-no-asterisk ng-required="true" aria-label="acceptTerms" ng-model="vm.user.acceptTerms">
+                <span style="font-size: x-small">
+                    אנא קרא בקפידה את <a href="#">תנאי השירות</a>.
+                    השימוש בשירותי ™AlgoToDo, באתר או במערכת של חברת ™AlgoToDo מותנה בהסכמה מלאה לתנאים אלה.
+                </span> 
+            </md-checkbox>
         </md-input-container>
         <section layout="row" layout-align="center center" layout-wrap>
-            <md-button flex class="md-raised md-primary" ng-click="vm.signUp()" ng-disabled="signUpForm.$invalid">הירשם</md-button>
+            <md-button class="md-raised md-primary" ng-click="vm.signUp()" ng-disabled="signUpForm.$invalid">הירשם</md-button>
         </section>
     </form>
 </div>

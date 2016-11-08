@@ -33,7 +33,7 @@
                 method: 'GET',
                 url: appConfig.appDomain + '/TaskManeger/getTasks',
                 params: {
-                    user: self.$storage.user.name
+                    user: self.$storage.user._id
                 }
             };
 
@@ -49,7 +49,7 @@
                 method: 'GET',
                 url: appConfig.appDomain + '/TaskManeger/getTasks',
                 params: {
-                    user: self.$storage.user.name
+                    user: self.$storage.user._id
                 }
             };
 

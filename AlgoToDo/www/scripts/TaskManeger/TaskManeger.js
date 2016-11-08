@@ -9,13 +9,13 @@
         '$scope', 'logger', '$location', 'cordovaPlugins',
         'appConfig', '$mdMedia', '$mdBottomSheet','$filter',
         '$mdSidenav', '$mdDialog', 'datacontext', 'lodash',
-        'socket', '$mdToast', 'moment'
+        'socket', '$mdToast', 'moment', '$q'
     ];
 
     function TaskManegerCtrl($scope, logger, $location, cordovaPlugins,
                             appConfig, $mdMedia, $mdBottomSheet,$filter,
                             $mdSidenav, $mdDialog, datacontext, lodash,
-                            socket, $mdToast, moment) {
+                            socket, $mdToast, moment, $q) {
 
         var vm = this;
         
@@ -30,7 +30,7 @@
         vm.onGoingActivityies = function () { return datacontext.getTaskList(); };      
 
         var setMyTaskCount = function () {
-            var count = $filter('filter')(datacontext.getTaskList(), { to: vm.user.name, status: 'inProgress' }).length;
+            var count = $filter('filter')(datacontext.getTaskList(), { 'to._id' : vm.user._id, status: 'inProgress' }).length;
             cordovaPlugins.setBadge(count);
             vm.myTasksCount = count;
         };
@@ -64,25 +64,36 @@
 
         vm.signUp = function () {
             vm.user.avatarUrl = '/images/man-' + Math.floor((Math.random() * 8) + 1) + '.svg';            
-
+            
             if (cordovaPlugins.isMobileDevice()) {
+                
                 document.addEventListener("deviceready", function () {
                     vm.user.device = cordovaPlugins.getDeviceDetails();
-                    cordovaPlugins.initializePushV5().then(function () {
-                        cordovaPlugins.registerForPushNotifications().then(function (registrationId) {
-                            vm.user.GcmRegistrationId = registrationId;
-                            datacontext.registerUser(vm.user).then(function (response) {
-                                datacontext.saveUserToLocalStorage(response.data);
-                                logger.success('user signUp successfuly', response.data);
-                                vm.login();
-                            }, function () { });                       
-                         });                    
-                    }, function (error) {
-                        logger.error("error while trying to register user to app", error);
-                       });
+                    if (vm.user.device.platform === 'iOS') {
+                        datacontext.registerUser(vm.user).then(function (response) {
+                            datacontext.saveUserToLocalStorage(response.data);
+                            logger.success('user signUp successfuly', response.data);
+                            vm.login();
+                        }, function () { });
+                    }
+                    else {
+                        cordovaPlugins.initializePushV5().then(function () {
+                            cordovaPlugins.registerForPushNotifications().then(function (registrationId) {
+                                vm.user.GcmRegistrationId = registrationId;
+                                datacontext.registerUser(vm.user).then(function (response) {
+                                    datacontext.saveUserToLocalStorage(response.data);
+                                    logger.success('user signUp successfuly', response.data);
+                                    vm.login();
+                                }, function () { });
+                            });
+                        }, function (error) {
+                            logger.error("error while trying to register user to app", error);
+                        });
+                    }
                 }, false);
             }
             else {
+                logger.success('i am not a mobile', null);
                 datacontext.registerUser(vm.user).then(function (response) {
                     datacontext.saveUserToLocalStorage(response.data);
                     logger.success('user signUp successfuly', response.data);
@@ -98,7 +109,7 @@
             angular.element(document.querySelectorAll('html')).removeClass("hight-auto");
             // login 
             socket.emit('join', {
-                userName: vm.user.name
+                userId: vm.user._id
             });
 
             //force get all the users from the server
@@ -142,7 +153,7 @@
         // when new task received from the server
         socket.on('new-task', function(data) {           
             var newTask = data;
-            if (newTask.from !== vm.user.name) {
+            if (newTask.from._id !== vm.user._id) {
                 datacontext.addTaskToTaskList(newTask);
                 setMyTaskCount();
             }
@@ -179,7 +190,8 @@
                 targetEvent: ev,
                 fullscreen: true
             }).then(function (task) {
-                task.from = datacontext.getUserFromLocalStorage().name;
+                var user = datacontext.getUserFromLocalStorage();
+                task.from = { '_id': user._id, 'name': user.name, 'avatarUrl': user.avatarUrl};
                 task.status = 'inProgress';
                 task.createTime = new Date();
                 datacontext.saveNewTask(task).then(function (response) {
@@ -212,7 +224,13 @@
         };
 
         vm.reloadTasks = function () {
-            loadTasks();
+            var deferred = $q.defer();
+            datacontext.getAllTasksSync().then(function (response) {
+                datacontext.setTaskList(response.data);
+                setMyTaskCount();
+                deferred.resolve();
+            });
+            return deferred.promise;
         };
 
         vm.getTotalTaskTime = function (task) {
@@ -225,6 +243,7 @@
 
         document.addEventListener("resume", function () {         
             vm.selectedIndex = 1;
+            //vm.login();
         }, false);
 
         vm.searchKeypress = function (event) {
