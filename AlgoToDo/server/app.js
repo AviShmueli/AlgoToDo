@@ -240,6 +240,12 @@ app.post('/TaskManeger/newTask', function (req, res) {
     if (users[task.to._id] !== undefined) {
         to = users[task.to._id].id;
     }
+
+    var toId = task.to._id;
+    var fromId = task.from._id;
+    task.to._id = ObjectID(toId);
+    task.from._id = ObjectID(fromId);
+
     //add task to Mongo
     mongodb.connect(mongoUrl, function (err, db) {
 
@@ -337,21 +343,27 @@ app.post('/TaskManeger/registerUser', function (req, res) {
 
 app.get('/TaskManeger/getTasks', function (req, res) {
     
-    var me = req.query.user;
+    var userId = req.query.userId;
     mongodb.connect(mongoUrl, function (err, db) {
 
         if (err) {
             winston.log('Error', "error while trying to connect MongoDB: ", err);
         }
 
+        
+        //var o_id = BSON.ObjectID.createFromHexString(userId);
+        
+        console.log('ObjectID.isValid: ', ObjectID.isValid(userId));
+
+        //console.log('userId: ', o_id);
         var collection = db.collection('tasks');
-        collection.find({ $or: [{ 'from': me }, { 'to': me }] }).toArray(function (err, result) {
+        collection.find({ $or: [{ 'from._id': new ObjectID(userId) }, { 'to._id': new ObjectID(userId) }] }).toArray(function (err, result) {
 
             if (err) {
                 winston.log('Error', "error while trying to get all Tasks: ", err);
             }
 
-            res.send(result);
+            res.send(result); 
             db.close();
         });
     });
@@ -391,7 +403,7 @@ var getUserByUserId = function (userId, callback) {
         }
 
         var collection = db.collection('users');
-        collection.findOne({ '_id': userId }, { '_id': true, 'name': true, 'GcmRegistrationId': true }, function (err, result) {
+        collection.findOne({ '_id': ObjectID(userId) }, { '_id': true, 'name': true, 'GcmRegistrationId': true }, function (err, result) {
             db.close();
             console.log("find user: ", result);
             callback(err, result);
@@ -408,7 +420,7 @@ var getUnDoneTasksCountByUserId = function (userId, callback) {
         }
 
         var collection = db.collection('tasks');
-        collection.count({ 'to._id': userId, 'status': 'inProgress' }, function (err, result) {
+        collection.count({ 'to._id': ObjectID(userId), 'status': 'inProgress' }, function (err, result) {
 
             if (err) {
                 winston.log('Error', "error while trying to get UnDone Tasks Count: ", err);

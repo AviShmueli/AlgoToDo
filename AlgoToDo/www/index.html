@@ -92,11 +92,11 @@
                          aria-labelledby="tab1"
                          ng-switch-when="0"
                          md-swipe-left="vm.selectedIndex = 1"
-                         layout="row" layout-align="center center">                            
-                           <md-list flex flex-gt-sm="50" flex-md="66" dir="rtl" ng-show="(vm.onGoingActivityies() | filter:{ status: 'inProgress', 'from._id': vm.user._id, 'to._id': '!' + vm.user._id }).length > 0">
-                                <md-list-item ng-repeat="item in vm.onGoingActivityies() | filter:{ status: 'inProgress', 'from._id': vm.user._id, 'to._id': '!' + vm.user._id } | filter:vm.search" class="noright task-item" style="margin-top: 7px">
+                         layout="row" layout-align="center center">              
+                           <md-list flex flex-gt-sm="50" flex-md="66" dir="rtl" ng-show="(vm.onGoingActivityies() | tasksInProgress: vm.user._id).length > 0">
+                                <md-list-item ng-repeat="item in vm.onGoingActivityies() | tasksInProgress: vm.user._id | filter:vm.search" class="noright task-item" style="margin-top: 7px">
                                     <md-card-avatar>
-                                        <img alt="{{item.from.name}}" ng-src="{{vm.appDomain + vm.from.avatarUrl}}" class="md-avatar user-avatar" style="margin-right: 0;" />
+                                        <img alt="{{item.to.name}}" ng-src="{{vm.appDomain + item.to.avatarUrl}}" class="md-avatar user-avatar" style="margin-right: 0;" />
                                     </md-card-avatar>
                                     <div class="md-tile-content" flex="100" style="margin-bottom: 14px;">
                                         <div layout="row">
@@ -113,7 +113,7 @@
                                 </md-list-item>
                                 <md-divider></md-divider>
                             </md-list>
-                           <md-list dir="rtl" ng-hide="(vm.onGoingActivityies() | filter:{ status: 'inProgress', 'from._id' vm.user._id, 'to._id': '!' + vm.user._id }).length > 0">
+                           <md-list dir="rtl" ng-hide="(vm.onGoingActivityies() | tasksInProgress: vm.user._id).length > 0">
                                 <md-item>
                                     <md-item-content>
                                         <h3> אין משימות פתוחות כרגע! </h3>
@@ -130,9 +130,9 @@
                          md-swipe-right="vm.selectedIndex = 0"
                          layout="row" layout-align="center center">
                            <md-list flex-gt-sm="50" flex-md="66" flex dir="rtl" ng-show="vm.myTasksCount > 0">
-                                <md-list-item ng-repeat="item in vm.onGoingActivityies() |  filter:{ 'to._id': vm.user._id, status: 'inProgress' }  | filter:vm.search" class="noright task-item" style="margin-top: 7px">
+                                <md-list-item ng-repeat="item in vm.onGoingActivityies() | myTasks: vm.user._id | filter:vm.search" class="noright task-item" style="margin-top: 7px">
                                     <md-card-avatar>
-                                        <img alt="{{item.from.name}}" ng-src="{{vm.appDomain + vm.from.avatarUrl}}" class="md-avatar user-avatar" style="margin-right: 0;" />
+                                        <img alt="{{item.from.name}}" ng-src="{{vm.appDomain + item.from.avatarUrl}}" class="md-avatar user-avatar" style="margin-right: 0;" />
                                     </md-card-avatar>
                                     <div class="md-tile-content" flex="100" style="margin-bottom: 14px;">
                                         <div layout="row">
@@ -168,7 +168,7 @@
                          md-swipe-right="vm.selectedIndex = 1"
                          layout="row" layout-align="center center">
                            <md-list flex-gt-sm="50" flex-md="66" flex dir="rtl">
-                                    <md-list-item ng-repeat="item in vm.onGoingActivityies() | filter:{ status: 'done', from._id: vm.user._id} | filter:vm.search | orderBy: 'doneTime':true" class="noright task-item" style="margin-top: 7px">
+                                    <md-list-item ng-repeat="item in vm.onGoingActivityies() | filter:{ status: 'done', 'from._id': vm.user._id} | filter:vm.search | orderBy: 'doneTime':true" class="noright task-item" style="margin-top: 7px">
                                         <div class="md-tile-content" flex="100" style="margin-bottom: 14px;">
                                             <div layout="row">
                                                 <span class="from">{{item.to.name}}</span>
@@ -221,8 +221,8 @@
     <script type="text/javascript" src="scripts/platformOverrides.js"></script>
     <script type="text/javascript" src="scripts/index.js"></script>
 
-    <script src="https://algotodo.herokuapp.com/socket.io/socket.io.js "></script>
-    <!--<script src="http://localhost:5001/socket.io/socket.io.js "></script>-->
+    <!--<script src="https://algotodo.herokuapp.com/socket.io/socket.io.js "></script>-->
+    <script src="http://localhost:5001/socket.io/socket.io.js "></script>
 
     <script src="scripts/TaskManeger/TaskManeger.module.js "></script>
     <script src="scripts/core/core.module.js "></script>

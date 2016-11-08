@@ -49,7 +49,7 @@
                 method: 'GET',
                 url: appConfig.appDomain + '/TaskManeger/getTasks',
                 params: {
-                    user: self.$storage.user._id
+                    userId: self.$storage.user._id
                 }
             };
 

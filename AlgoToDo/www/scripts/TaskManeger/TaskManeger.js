@@ -30,7 +30,7 @@
         vm.onGoingActivityies = function () { return datacontext.getTaskList(); };      
 
         var setMyTaskCount = function () {
-            var count = $filter('filter')(datacontext.getTaskList(), { 'to._id' : vm.user._id, status: 'inProgress' }).length;
+            var count = $filter('myTasks')(datacontext.getTaskList(), vm.user._id).length;
             cordovaPlugins.setBadge(count);
             vm.myTasksCount = count;
         };
