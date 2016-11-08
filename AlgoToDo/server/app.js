@@ -241,8 +241,7 @@ app.post('/TaskManeger/newTask', function (req, res) {
     if (users[task.to._id] !== undefined) {
         to = users[task.to._id].id;
     }
-    console.log("this is id:", task.to._id);
-    console.log("this is users:", users);
+
     var toId = task.to._id;
     var fromId = task.from._id;
     task.to._id = ObjectID(toId);
