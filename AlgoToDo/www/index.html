@@ -93,8 +93,8 @@
                          ng-switch-when="0"
                          md-swipe-left="vm.selectedIndex = 1"
                          layout="row" layout-align="center center">                            
-                           <md-list flex flex-gt-sm="50" flex-md="66" dir="rtl" ng-show="(vm.onGoingActivityies() | filter:{ status: 'inProgress', from._id: vm.user._id, to._id: '!' + vm.user._id }).length > 0">
-                                <md-list-item ng-repeat="item in vm.onGoingActivityies() | filter:{ status: 'inProgress', from._id: vm.user._id, to._id: '!' + vm.user._id } | filter:vm.search" class="noright task-item" style="margin-top: 7px">
+                           <md-list flex flex-gt-sm="50" flex-md="66" dir="rtl" ng-show="(vm.onGoingActivityies() | filter:{ status: 'inProgress', 'from._id': vm.user._id, 'to._id': '!' + vm.user._id }).length > 0">
+                                <md-list-item ng-repeat="item in vm.onGoingActivityies() | filter:{ status: 'inProgress', 'from._id': vm.user._id, 'to._id': '!' + vm.user._id } | filter:vm.search" class="noright task-item" style="margin-top: 7px">
                                     <md-card-avatar>
                                         <img alt="{{item.from.name}}" ng-src="{{vm.appDomain + vm.from.avatarUrl}}" class="md-avatar user-avatar" style="margin-right: 0;" />
                                     </md-card-avatar>
@@ -113,7 +113,7 @@
                                 </md-list-item>
                                 <md-divider></md-divider>
                             </md-list>
-                           <md-list dir="rtl" ng-hide="(vm.onGoingActivityies() | filter:{ status: 'inProgress', from: vm.user.name, to: '!' + vm.user.name }).length > 0">
+                           <md-list dir="rtl" ng-hide="(vm.onGoingActivityies() | filter:{ status: 'inProgress', 'from._id' vm.user._id, 'to._id': '!' + vm.user._id }).length > 0">
                                 <md-item>
                                     <md-item-content>
                                         <h3> אין משימות פתוחות כרגע! </h3>
@@ -130,7 +130,7 @@
                          md-swipe-right="vm.selectedIndex = 0"
                          layout="row" layout-align="center center">
                            <md-list flex-gt-sm="50" flex-md="66" flex dir="rtl" ng-show="vm.myTasksCount > 0">
-                                <md-list-item ng-repeat="item in vm.onGoingActivityies() |  filter:{ to._id: vm.user._id, status: 'inProgress' }  | filter:vm.search" class="noright task-item" style="margin-top: 7px">
+                                <md-list-item ng-repeat="item in vm.onGoingActivityies() |  filter:{ 'to._id': vm.user._id, status: 'inProgress' }  | filter:vm.search" class="noright task-item" style="margin-top: 7px">
                                     <md-card-avatar>
                                         <img alt="{{item.from.name}}" ng-src="{{vm.appDomain + vm.from.avatarUrl}}" class="md-avatar user-avatar" style="margin-right: 0;" />
                                     </md-card-avatar>
@@ -168,10 +168,10 @@
                          md-swipe-right="vm.selectedIndex = 1"
                          layout="row" layout-align="center center">
                            <md-list flex-gt-sm="50" flex-md="66" flex dir="rtl">
-                                    <md-list-item ng-repeat="item in vm.onGoingActivityies() | filter:{ status: 'done', from: vm.user.name } | filter:vm.search | orderBy: 'doneTime':true" class="noright task-item" style="margin-top: 7px">
+                                    <md-list-item ng-repeat="item in vm.onGoingActivityies() | filter:{ status: 'done', from._id: vm.user._id} | filter:vm.search | orderBy: 'doneTime':true" class="noright task-item" style="margin-top: 7px">
                                         <div class="md-tile-content" flex="100" style="margin-bottom: 14px;">
                                             <div layout="row">
-                                                <span class="from">{{item.to}}</span>
+                                                <span class="from">{{item.to.name}}</span>
                                                 <!--<ng-md-icon class="head-icon" icon="send" style="fill: black" size="10"></ng-md-icon>-->
                                                 <span flex></span>                                                
                                                 <span class="time">{{vm.getTotalTaskTime(item)}}</span>
