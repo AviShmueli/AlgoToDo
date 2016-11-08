@@ -27,10 +27,11 @@
             return filtered;
         };
     }).filter('doneTasks', function () {
-        return function (tasks) {
+        return function (tasks, userId) {
             var filtered = [];
             angular.forEach(tasks, function (task) {
-                if (task.status === 'inProgress') {
+                if (task.status === 'done' &&
+                    task.from._id === userId) {
                     filtered.push(task);
                 }
             });

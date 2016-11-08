@@ -73,6 +73,7 @@
                         datacontext.registerUser(vm.user).then(function (response) {
                             datacontext.saveUserToLocalStorage(response.data);
                             logger.success('user signUp successfuly', response.data);
+                            vm.user = response.data;
                             vm.login();
                         }, function () { });
                     }
@@ -83,6 +84,7 @@
                                 datacontext.registerUser(vm.user).then(function (response) {
                                     datacontext.saveUserToLocalStorage(response.data);
                                     logger.success('user signUp successfuly', response.data);
+                                    vm.user = response.data;
                                     vm.login();
                                 }, function () { });
                             });
@@ -97,6 +99,7 @@
                 datacontext.registerUser(vm.user).then(function (response) {
                     datacontext.saveUserToLocalStorage(response.data);
                     logger.success('user signUp successfuly', response.data);
+                    vm.user = response.data;
                     vm.login();
                 }, function (error) {
                     logger.error("error while trying to register user to app", error);

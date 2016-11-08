@@ -168,7 +168,7 @@
                          md-swipe-right="vm.selectedIndex = 1"
                          layout="row" layout-align="center center">
                            <md-list flex-gt-sm="50" flex-md="66" flex dir="rtl">
-                                    <md-list-item ng-repeat="item in vm.onGoingActivityies() | filter:{ status: 'done', 'from._id': vm.user._id} | filter:vm.search | orderBy: 'doneTime':true" class="noright task-item" style="margin-top: 7px">
+                                    <md-list-item ng-repeat="item in vm.onGoingActivityies() | doneTasks: vm.user._id | filter:vm.search | orderBy: 'doneTime':true" class="noright task-item" style="margin-top: 7px">
                                         <div class="md-tile-content" flex="100" style="margin-bottom: 14px;">
                                             <div layout="row">
                                                 <span class="from">{{item.to.name}}</span>

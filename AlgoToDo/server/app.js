@@ -150,10 +150,11 @@ io.on('connection', function (socket) {
 
     // response to the client call for Login and join the chat
     socket.on('join', function (data) {
-        socket.userId = data._id;
+        console.log("this is data: ", data);
+        socket.userId = data.userId;
         users[socket.userId] = socket;
         var userObj = {
-            userId: data._id,
+            userId: data.userId,
             socketid: socket.id
         };
         users.push(userObj);
@@ -240,7 +241,8 @@ app.post('/TaskManeger/newTask', function (req, res) {
     if (users[task.to._id] !== undefined) {
         to = users[task.to._id].id;
     }
-
+    console.log("this is id:", task.to._id);
+    console.log("this is users:", users);
     var toId = task.to._id;
     var fromId = task.from._id;
     task.to._id = ObjectID(toId);
@@ -350,12 +352,6 @@ app.get('/TaskManeger/getTasks', function (req, res) {
             winston.log('Error', "error while trying to connect MongoDB: ", err);
         }
 
-        
-        //var o_id = BSON.ObjectID.createFromHexString(userId);
-        
-        console.log('ObjectID.isValid: ', ObjectID.isValid(userId));
-
-        //console.log('userId: ', o_id);
         var collection = db.collection('tasks');
         collection.find({ $or: [{ 'from._id': new ObjectID(userId) }, { 'to._id': new ObjectID(userId) }] }).toArray(function (err, result) {
 
@@ -388,7 +384,6 @@ app.get('/TaskManeger/searchUsers', function (req, res) {
             }
 
             db.close();
-            console.log("find users: ", result);
             res.send(result);
         });
     });
@@ -405,7 +400,6 @@ var getUserByUserId = function (userId, callback) {
         var collection = db.collection('users');
         collection.findOne({ '_id': ObjectID(userId) }, { '_id': true, 'name': true, 'GcmRegistrationId': true }, function (err, result) {
             db.close();
-            console.log("find user: ", result);
             callback(err, result);
         });
     });
@@ -427,7 +421,6 @@ var getUnDoneTasksCountByUserId = function (userId, callback) {
             }
 
             db.close();
-            console.log("total unDone Task: ", result);
             callback(err, result);
         });
     });
