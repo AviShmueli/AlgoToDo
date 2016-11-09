@@ -82,7 +82,8 @@
                 <ng-md-icon class="add-icon" icon="add"></ng-md-icon>
             </md-button>
         </md-fab-trigger>
-        <md-content flex md-scroll-y ng-show="vm.userConnected" im-pull-to-refresh refresh-function="vm.reloadTasks()">  
+        <!--im-pull-to-refresh refresh-function="vm.reloadTasks()"-->
+        <md-content flex md-scroll-y ng-show="vm.userConnected">  
             <ui-view layout="column" layout-fill>
                 <!--<div class="inset" hide-sm></div>-->
                 <ng-switch on="vm.selectedIndex" class="tabpanel-container">

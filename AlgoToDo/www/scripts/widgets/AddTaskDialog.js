@@ -22,7 +22,7 @@
         vm.querySearch = querySearch;
 
         function querySearch(query) {
-            /*var matchesUsersFromCache = [];
+            var matchesUsersFromCache = [];
 
             // get all users stored in the cache
             var cachedUsers = datacontext.getAllCachedUsers().values();
@@ -37,7 +37,7 @@
             // if found, return it
             if (matchesUsersFromCache.length > 0) {
                 return matchesUsersFromCache;
-            }*/
+            }
 
             // if no users found in the cache, search in DB
             var deferred = $q.defer();
