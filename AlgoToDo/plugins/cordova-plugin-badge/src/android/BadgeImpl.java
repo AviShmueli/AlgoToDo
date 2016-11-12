@@ -40,7 +40,7 @@ class BadgeImpl {
     /**
      * The name for the shared preferences key
      */
-    private static final String KEY = "badge";
+    protected static final String KEY = "badge";
 
     /**
      * Clears the badge of the app icon.
@@ -48,7 +48,7 @@ class BadgeImpl {
      * @param ctx
      * The application context.
      */
-    void clearBadge (Context ctx) {
+    protected void clearBadge (Context ctx) {
         saveBadge(0, ctx);
         ShortcutBadger.removeCount(ctx);
     }
@@ -61,7 +61,7 @@ class BadgeImpl {
      * @param callback
      * The function to be exec as the callback.
      */
-    void getBadge (CallbackContext callback, Context ctx) {
+    protected void getBadge (CallbackContext callback, Context ctx) {
         SharedPreferences settings = getSharedPreferences(ctx);
         int badge = settings.getInt(KEY, 0);
         PluginResult result;
@@ -79,7 +79,7 @@ class BadgeImpl {
      * @param ctx
      * The application context
      */
-    void setBadge (JSONArray args, Context ctx) {
+    protected void setBadge (JSONArray args, Context ctx) {
         int badge = args.optInt(0);
 
         saveBadge(badge, ctx);
@@ -95,7 +95,7 @@ class BadgeImpl {
      * @param ctx
      * The application context.
      */
-    private void saveBadge (int badge, Context ctx) {
+    protected void saveBadge (int badge, Context ctx) {
         SharedPreferences.Editor editor = getSharedPreferences(ctx).edit();
 
         editor.putInt(KEY, badge);
@@ -108,7 +108,7 @@ class BadgeImpl {
      * @param callback
      * The function to be exec as the callback
      */
-    void hasPermission (final CallbackContext callback) {
+    protected void hasPermission (final CallbackContext callback) {
         PluginResult result = new PluginResult(PluginResult.Status.OK, true);
 
         callback.sendPluginResult(result);

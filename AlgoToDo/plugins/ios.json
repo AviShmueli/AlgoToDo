@@ -13,9 +13,6 @@
         "cordova-plugin-x-toast": {
             "PACKAGE_NAME": "com.algotodo.app"
         },
-        "cordova-plugin-badge": {
-            "PACKAGE_NAME": "com.algotodo.app"
-        },
         "phonegap-plugin-push": {
             "SENDER_ID": "874351794059",
             "PACKAGE_NAME": "com.algotodo.app"
@@ -24,9 +21,5 @@
             "PACKAGE_NAME": "com.algotodo.app"
         }
     },
-    "dependent_plugins": {
-        "cordova-plugin-app-event": {
-            "PACKAGE_NAME": "com.algotodo.app"
-        }
-    }
+    "dependent_plugins": {}
 }
