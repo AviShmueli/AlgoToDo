@@ -146,6 +146,7 @@
         };
 
         vm.logOff = function () {
+            angular.element(document.querySelectorAll('html')).addClass("hight-auto");
             datacontext.deleteUserFromLocalStorage();
             vm.userConnected = false;
             vm.toggleSidenav('left');

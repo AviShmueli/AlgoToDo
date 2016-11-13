@@ -150,7 +150,6 @@ io.on('connection', function (socket) {
 
     // response to the client call for Login and join the chat
     socket.on('join', function (data) {
-        console.log("this is data: ", data);
         socket.userId = data.userId;
         users[socket.userId] = socket;
         var userObj = {
@@ -268,7 +267,7 @@ app.post('/TaskManeger/newTask', function (req, res) {
             }
             console.log("trying to send new task", task);
             // if this task is not from me to me, send notification to the user
-            if (task.to._id !== task.from._id) {
+            if (task.to._id !== task.from._id && task.to) {
                 pushTaskToAndroidUser(task);
             }
 
@@ -314,6 +313,9 @@ app.post('/TaskManeger/updateTaskStatus', function (req, res) {
 app.post('/TaskManeger/registerUser', function (req, res) {
 
     var user = req.body.user;
+    if (user.hasOwnProperty('_id')) {
+        delete user._id;
+    }
     console.log("the user just register to the app: ", user);
     console.log("with GcmRegistrationId: ", user.GcmRegistrationId);
 
@@ -346,7 +348,7 @@ app.get('/TaskManeger/getTasks', function (req, res) {
     
     var userId = req.query.userId;
     mongodb.connect(mongoUrl, function (err, db) {
-
+        console.log("this is the userId:",userId);
         if (err) {
             winston.log('Error', "error while trying to connect MongoDB: ", err);
         }
