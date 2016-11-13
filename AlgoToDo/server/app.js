@@ -99,9 +99,9 @@ var pushTaskToAndroidUser = function (task) {
     }
     else {
         // get user from DB and check if there is regId
-        console.log("2");
+        console.log("2", task.to._id);
         getUserByUserId(task.to._id, function (error, user) {
-            console.log("3");
+            console.log("3", user);
             if (user.GcmRegistrationId !== undefined) {
                 console.log("4");
                 regToken = user.GcmRegistrationId;
