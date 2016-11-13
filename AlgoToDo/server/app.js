@@ -262,9 +262,7 @@ app.post('/TaskManeger/newTask', function (req, res) {
             }
 
             // if the employee is now online send the new task by Socket.io
-            console.log("task.to._id:", task.to._id);
-            console.log("task.from._id:", task.from._id);
-            console.log("are diffrent? : ", task.to._id !== task.from._id);
+            console.log("to:", to);
             if (to !== '' && task.to._id !== task.from._id) {
                 io.to(to).emit('new-task', results.ops[0]);
             }
