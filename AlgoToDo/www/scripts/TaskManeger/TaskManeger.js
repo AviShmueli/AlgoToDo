@@ -98,7 +98,7 @@
                                 vm.user.ApnRegistrationId = registrationId;
                             }
                             if (vm.user.device.platform === 'Android') {
-                                vm.user.ApnRegistrationId = registrationId;
+                                vm.user.GcmRegistrationId = registrationId;
                             }
                             datacontext.registerUser(vm.user).then(function (response) {
                                 datacontext.saveUserToLocalStorage(response.data);
@@ -150,6 +150,7 @@
             datacontext.deleteUserFromLocalStorage();
             vm.userConnected = false;
             vm.toggleSidenav('left');
+            cordovaPlugins.clearAppBadge();
         };
 
         // the response to the all-usersr from the server
