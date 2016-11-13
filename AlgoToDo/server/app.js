@@ -93,13 +93,17 @@ var pushTaskToAndroidUser = function (task) {
     
     // if the user stored in the cache, get the regId from the cache
     if (GcmRegistrationIdsCache[task.to._id] !== undefined) {
+        console.log("1");
         regToken = GcmRegistrationIdsCache[task.to._id].GcmRegistrationId;
         sendMessage(message, regToken);
     }
     else {
         // get user from DB and check if there is regId
+        console.log("2");
         getUserByUserId(task.to._id, function (error, user) {
+            console.log("3");
             if (user.GcmRegistrationId !== undefined) {
+                console.log("4");
                 regToken = user.GcmRegistrationId;
 
                 // save the user to the cache
@@ -107,6 +111,7 @@ var pushTaskToAndroidUser = function (task) {
                 sendMessage(message, regToken);
             }
             else {
+                console.log("5");
                 // if user dont have regId dont try to send notification via CGM
                 // todo: insert here code for sending notification via Apple Notification Service
                 return;
