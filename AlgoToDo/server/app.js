@@ -78,7 +78,6 @@ var pushTaskToAndroidUser = function (task) {
         priority: 'high',
         contentAvailable: true,
         delayWhileIdle: true,
-        time_to_live: 3,
         data: {
             additionalData: task,
             title: "משימה חדשה מ" + task.from.name,
