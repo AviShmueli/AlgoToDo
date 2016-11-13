@@ -388,6 +388,25 @@ app.get('/TaskManeger/searchUsers', function (req, res) {
     });
 });
 
+app.get('/TaskManeger/isUserExist', function (req, res) {
+
+    var userPhone = req.query.userPhone;
+    var userEmail = req.query.userEmail;
+    
+    mongodb.connect(mongoUrl, function (err, db) {
+                    
+        if (err) {
+            winston.log('Error', "error while trying to connect MongoDB: ", err);
+        }
+
+        var collection = db.collection('users');
+        collection.findOne({ 'email': userEmail, 'phone': userPhone }, function (err, result) {
+            db.close();
+            res.send(result);
+        });
+    });
+});
+
 var getUserByUserId = function (userId, callback) {
 
     mongodb.connect(mongoUrl, function (err, db) {

@@ -139,6 +139,19 @@
             return self.$storage.usersCache;
         }
 
+        var checkIfUserExist = function (user) {
+            var req = {
+                method: 'GET',
+                url: appConfig.appDomain + '/TaskManeger/isUserExist',
+                params: {
+                    userEmail: user.email,
+                    userPhone: user.phone
+                }
+            };
+
+            return $http(req);
+        }
+
         var service = {
             user: self.user,
             getTaskList: getTaskList,
@@ -155,7 +168,8 @@
             getAllTasksSync: getAllTasksSync,
             searchUsers: searchUsers,
             addUsersToUsersCache: addUsersToUsersCache,
-            getAllCachedUsers: getAllCachedUsers
+            getAllCachedUsers: getAllCachedUsers,
+            checkIfUserExist: checkIfUserExist
         };
 
         return service;

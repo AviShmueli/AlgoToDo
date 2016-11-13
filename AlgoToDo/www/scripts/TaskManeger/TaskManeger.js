@@ -63,39 +63,56 @@
         };
 
         vm.signUp = function () {
-            vm.user.avatarUrl = '/images/man-' + Math.floor((Math.random() * 8) + 1) + '.svg';            
-            
+
+            datacontext.checkIfUserExist(vm.user).then(function (response) {
+                var user = response.data;
+                if (user !== '') {
+                    datacontext.saveUserToLocalStorage(user);
+                    vm.user = user;
+                    vm.login();
+                }
+                else {
+                    vm.registerUser();
+                }
+
+            }, function (error) {
+                logger.error("error while trying to check If User Exist", error);
+            });
+
+        };
+
+        vm.registerUser = function () {
+
+            vm.user.avatarUrl = '/images/man-' + Math.floor((Math.random() * 8) + 1) + '.svg';
+
             if (cordovaPlugins.isMobileDevice()) {
-                
+
                 document.addEventListener("deviceready", function () {
+
                     vm.user.device = cordovaPlugins.getDeviceDetails();
-                    if (vm.user.device.platform === 'iOS') {
-                        datacontext.registerUser(vm.user).then(function (response) {
-                            datacontext.saveUserToLocalStorage(response.data);
-                            logger.success('user signUp successfuly', response.data);
-                            vm.user = response.data;
-                            vm.login();
-                        }, function () { });
-                    }
-                    else {
-                        cordovaPlugins.initializePushV5().then(function () {
-                            cordovaPlugins.registerForPushNotifications().then(function (registrationId) {
-                                vm.user.GcmRegistrationId = registrationId;
-                                datacontext.registerUser(vm.user).then(function (response) {
-                                    datacontext.saveUserToLocalStorage(response.data);
-                                    logger.success('user signUp successfuly', response.data);
-                                    vm.user = response.data;
-                                    vm.login();
-                                }, function () { });
-                            });
-                        }, function (error) {
-                            logger.error("error while trying to register user to app", error);
+
+                    cordovaPlugins.initializePushV5().then(function () {
+                        cordovaPlugins.registerForPushNotifications().then(function (registrationId) {
+
+                            if (vm.user.device.platform === 'iOS') {
+                                vm.user.ApnRegistrationId = registrationId;
+                            }
+                            if (vm.user.device.platform === 'Android') {
+                                vm.user.ApnRegistrationId = registrationId;
+                            }
+                            datacontext.registerUser(vm.user).then(function (response) {
+                                datacontext.saveUserToLocalStorage(response.data);
+                                logger.success('user signUp successfuly', response.data);
+                                vm.user = response.data;
+                                vm.login();
+                            }, function () { });
                         });
-                    }
+                    }, function (error) {
+                        logger.error("error while trying to register user to app", error);
+                    });
                 }, false);
             }
             else {
-                logger.success('i am not a mobile', null);
                 datacontext.registerUser(vm.user).then(function (response) {
                     datacontext.saveUserToLocalStorage(response.data);
                     logger.success('user signUp successfuly', response.data);
@@ -105,8 +122,7 @@
                     logger.error("error while trying to register user to app", error);
                 });
             }
-            
-        };
+        }
 
         vm.login = function () {
             angular.element(document.querySelectorAll('html')).removeClass("hight-auto");
