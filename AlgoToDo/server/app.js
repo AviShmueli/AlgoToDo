@@ -267,7 +267,7 @@ app.post('/TaskManeger/newTask', function (req, res) {
             }
             console.log("trying to send new task", task);
             // if this task is not from me to me, send notification to the user
-            if (task.to._id !== task.from._id && task.to) {
+            if (task.to._id !== task.from._id) {
                 pushTaskToAndroidUser(task);
             }
 
@@ -348,13 +348,13 @@ app.get('/TaskManeger/getTasks', function (req, res) {
     
     var userId = req.query.userId;
     mongodb.connect(mongoUrl, function (err, db) {
-        console.log("this is the userId:",userId);
+
         if (err) {
             winston.log('Error', "error while trying to connect MongoDB: ", err);
         }
 
         var collection = db.collection('tasks');
-        collection.find({ $or: [{ 'from._id': new ObjectID(userId) }, { 'to._id': new ObjectID(userId) }] }).toArray(function (err, result) {
+        collection.find({ $or: [{ 'from._id': new ObjectID(userId) }, { 'to._id': new ObjectID(userId) }] }, { "sort": ['createTime', 'asc'] }).toArray(function (err, result) {
 
             if (err) {
                 winston.log('Error', "error while trying to get all Tasks: ", err);
