@@ -83,13 +83,14 @@ var pushTaskToAndroidUser = function (task) {
             sound: 'default',
             icon: 'www/images/icon.png',
             body: task.description,
-            badge: "1"
+            badge: "1",
+            "content-available": "1"
         }
          
     });
 
     message.addData('notId', task.from._id);
-    message.addData('content-available', '1');
+    //message.addData('content-available', '1');
     message.addData('image', 'www/images/algologo1.png');
     message.addData('style', 'inbox');
     message.addData('summaryText', 'יש לך %n% משימות חדשות');
