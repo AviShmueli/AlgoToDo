@@ -89,7 +89,7 @@ var pushTaskToAndroidUser = function (task) {
     });
 
     message.addData('content-available', '1');
-
+    message.addData('image', 'www/images/' + task.from.avatarUrl);
     var regToken = '';
     
     // if the user stored in the cache, get the regId from the cache

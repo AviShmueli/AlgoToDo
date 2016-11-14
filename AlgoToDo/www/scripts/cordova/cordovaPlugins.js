@@ -57,7 +57,8 @@
                 android: {
                     senderID: "874351794059",
                     sound: "true",
-                    vibration: "true"
+                    vibration: "true",
+                    iconColor: "#00bcd4"
                 },
                 ios: {
                     alert: "true",
