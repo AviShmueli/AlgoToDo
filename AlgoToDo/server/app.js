@@ -408,6 +408,11 @@ app.get('/TaskManeger/isUserExist', function (req, res) {
 
         var collection = db.collection('users');
         collection.findOne({ 'email': userEmail, 'phone': userPhone }, function (err, result) {
+
+            if (err) {
+                winston.log('Error', "error while trying to check if user Exist: ", err);
+            }
+
             db.close();
             res.send(result);
         });
