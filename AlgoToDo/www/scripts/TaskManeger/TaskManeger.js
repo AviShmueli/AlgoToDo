@@ -65,8 +65,9 @@
         vm.signUp = function () {
 
             datacontext.checkIfUserExist(vm.user).then(function (response) {
-                var user = response.data;
-                if (user !== '') {
+                
+                if (response.data !== null && response.data !== '') {
+                    var user = response.data;
                     datacontext.saveUserToLocalStorage(user);
                     vm.user = user;
                     vm.login();
