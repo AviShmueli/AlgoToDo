@@ -74,7 +74,7 @@ var GcmRegistrationIdsCache = {};
 var pushTaskToAndroidUser = function (task) {
 
     var message = new gcm.Message({
-        collapseKey: 'demo',
+        collapseKey: task.from._id,
         priority: 'high',
         delayWhileIdle: true,
         data: {
