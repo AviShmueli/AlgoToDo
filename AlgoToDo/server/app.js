@@ -90,7 +90,7 @@ var pushTaskToAndroidUser = function (task) {
     message.addData('content-available', '1');
     message.addData('image', 'www/images/' + task.from.avatarUrl);
     message.addData('style', 'inbox');
-    message.addData('summaryText', 'There are %n% notifications');
+    message.addData('summaryText', 'יש לך %n% משימות חדשות');
     console.log("*****this check to see if pushes are working 1******");
     var regToken = '';
     
