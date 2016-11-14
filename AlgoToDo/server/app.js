@@ -84,7 +84,7 @@ var pushTaskToAndroidUser = function (task) {
             icon: 'www/images/icon.png',
             body: task.description,
             badge: "1",
-            "content-available": "1"
+            content_available: "1"
         }
          
     });
