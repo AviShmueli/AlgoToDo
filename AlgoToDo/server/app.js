@@ -74,7 +74,7 @@ var GcmRegistrationIdsCache = {};
 var pushTaskToAndroidUser = function (task) {
 
     var message = new gcm.Message({
-        collapseKey: task.from._id,
+        collapseKey: "demo",
         priority: 'high',
         delayWhileIdle: true,
         data: {
@@ -88,6 +88,7 @@ var pushTaskToAndroidUser = function (task) {
          
     });
 
+    message.addData('notId', task.from._id);
     message.addData('content-available', '1');
     message.addData('image', 'www/images/algologo1.png');
     message.addData('style', 'inbox');
