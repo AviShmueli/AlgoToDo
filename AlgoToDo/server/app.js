@@ -81,6 +81,7 @@ var pushTaskToAndroidUser = function (task) {
             additionalData: task,
             title: "משימה חדשה מ" + task.from.name,
             sound: 'default',
+            icon: 'res://defult',
             body: task.description,
             badge: "1"
         }
@@ -88,7 +89,7 @@ var pushTaskToAndroidUser = function (task) {
     });
 
     message.addData('content-available', '1');
-    message.addData('image', 'www/images/algologo.png');
+    message.addData('image', 'www/images/algologo1.png');
     message.addData('style', 'inbox');
     message.addData('summaryText', 'יש לך %n% משימות חדשות');
     console.log("*****this check to see if pushes are working 1******");
