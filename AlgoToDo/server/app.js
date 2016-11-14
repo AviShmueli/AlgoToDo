@@ -412,9 +412,14 @@ app.get('/TaskManeger/isUserExist', function (req, res) {
             if (err) {
                 winston.log('Error', "error while trying to check if user Exist: ", err);
             }
-            console.log("result: ",result);
+
             db.close();
-            res.send(result);
+            if (result === null) {
+                res.send('');
+            }
+            else {
+                res.send(result);
+            }
         });
     });
 });
