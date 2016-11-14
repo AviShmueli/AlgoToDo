@@ -74,7 +74,7 @@ var GcmRegistrationIdsCache = {};
 var pushTaskToAndroidUser = function (task) {
 
     var message = new gcm.Message({
-        collapseKey: "demo",
+        collapseKey: task.from._id,
         priority: 'high',
         delayWhileIdle: true,
         data: {
@@ -93,7 +93,6 @@ var pushTaskToAndroidUser = function (task) {
     message.addData('image', 'www/images/algologo1.png');
     message.addData('style', 'inbox');
     message.addData('summaryText', 'יש לך %n% משימות חדשות');
-    console.log("*****this check to see if pushes are working 1******");
     var regToken = '';
     
     // if the user stored in the cache, get the regId from the cache
