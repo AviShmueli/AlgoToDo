@@ -91,7 +91,7 @@ var pushTaskToAndroidUser = function (task) {
     message.addData('image', 'www/images/' + task.from.avatarUrl);
     message.addData('style', 'inbox');
     message.addData('summaryText', 'There are %n% notifications');
-
+    console.log("*****this check to see if pushes are working 1******");
     var regToken = '';
     
     // if the user stored in the cache, get the regId from the cache
