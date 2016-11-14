@@ -81,7 +81,6 @@ var pushTaskToAndroidUser = function (task) {
             additionalData: task,
             title: "משימה חדשה מ" + task.from.name,
             sound: 'default',
-            icon: 'res://icon',
             body: task.description,
             badge: "1"
         }
