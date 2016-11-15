@@ -19,7 +19,6 @@
 
         var isMobileDevice = function () {
             return document.URL.indexOf( 'http://' ) === -1 && document.URL.indexOf( 'https://' ) === -1;
-
         };
 
         var setLocalNotification = function () {
@@ -57,8 +56,7 @@
                 android: {
                     senderID: "874351794059",
                     sound: "true",
-                    vibration: "true",
-                    iconColor: "#00bcd4"
+                    vibration: "true"
                 },
                 ios: {
                     alert: "true",
@@ -109,29 +107,27 @@
         };
 
         document.addEventListener("deviceready", function () {
-        // triggered every time notification received
-        $rootScope.$on('$cordovaPushV5:notificationReceived', function (event, data) {
-            $log.info('notificationReceived: ' + event, data);
-            datacontext.addTaskToTaskList(data.additionalData);
+            // triggered every time notification received
+            $rootScope.$on('$cordovaPushV5:notificationReceived', function (event, data) {
+                $log.info('notificationReceived: ' + event, data);
+                datacontext.addTaskToTaskList(data.additionalData);
 
-            // data.message,
-            // data.title,
-            // data.count,
-            // data.sound,
-            // data.image,
-            // data.additionalData
-        });
+                // data.message,
+                // data.title,
+                // data.count,
+                // data.sound,
+                // data.image,
+                // data.additionalData
+            });
 
-        // triggered every time error occurs
-        $rootScope.$on('$cordovaPushV5:errorOcurred', function (event, e) {
-            $log.error('errorOcurred: ' + event, e);            
-            // e.message
-        });
+            // triggered every time error occurs
+            $rootScope.$on('$cordovaPushV5:errorOcurred', function (event, e) {
+                $log.error('errorOcurred: ' + event, e);            
+                // e.message
+            });
 
-        /*document.addEventListener("resume", function () {
-            clearAppBadge();
-        }, false);*/
         }, false);
+
         var sendSmS = function (to) {
             //CONFIGURATION
             var options = {
