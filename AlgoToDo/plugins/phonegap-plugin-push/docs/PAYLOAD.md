@@ -17,6 +17,7 @@
   - [Background Notifications](#background-notifications)
     - [Use of content-available: true](#use-of-content-available-true)
   - [Huawei and Xiaomi Phones](#huawei-and-xiaomi-phones)
+  - [Application force closed](#application-force-closed)
   - [Visibility](#visibility-of-notifications)
   - [Badges](#badges)
   - [Support for Twilio Notify](#support-for-twilio-notify)
@@ -946,6 +947,38 @@ These phones have a particular quirk that when the app is force closed that you 
 - On your Huawei device go to Settings > Protected apps > check "My App" where.
 - On your Xiaomi makes sure your phone has the "Auto-start" property enabled for your app.
 
+### Application force closed
+
+If you add `force-start: 1` to the data payload the application will be restarted in background even if it was force closed.
+
+```javascript
+{
+    "registration_ids": ["my device id"],
+    "data": {
+    	"title": "Force Start",
+    	"message": "This notification should restart the app",
+    	"force-start": 1
+    }
+}
+```
+
+Here is an example using node-gcm that sends the above JSON:
+
+```javascript
+var gcm = require('node-gcm');
+// Replace these with your own values.
+var apiKey = "replace with API key";
+var deviceID = "my device id";
+var service = new gcm.Sender(apiKey);
+var message = new gcm.Message();
+message.addData('title', 'Force Start');
+message.addData('message', 'This notification should restart the app');
+message.addData('force-start', 1);
+service.send(message, { registrationTokens: [ deviceID ] }, function (err, response) {
+	if(err) console.error(err);
+	else 	console.log(response);
+});
+```
 
 ## Visibility of Notifications
 
