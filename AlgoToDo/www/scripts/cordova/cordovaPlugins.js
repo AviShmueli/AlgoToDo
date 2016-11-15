@@ -108,6 +108,7 @@
             return $cordovaDevice.getDevice();
         };
 
+        document.addEventListener("deviceready", function () {
         // triggered every time notification received
         $rootScope.$on('$cordovaPushV5:notificationReceived', function (event, data) {
             $log.info('notificationReceived: ' + event, data);
@@ -130,7 +131,7 @@
         /*document.addEventListener("resume", function () {
             clearAppBadge();
         }, false);*/
-
+        }, false);
         var sendSmS = function (to) {
             //CONFIGURATION
             var options = {
