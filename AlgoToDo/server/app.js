@@ -88,7 +88,7 @@ var options = {
 cert: cert,
 key: key,
 pfx: pfx,
-roduction: true,
+//roduction: true,
     passphrase: 'avi3011algo'
 };
 
