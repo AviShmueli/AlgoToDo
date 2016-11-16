@@ -67,9 +67,13 @@ server.listen(process.env.PORT || 5002, function (err) {
 
 /* ----- APN ------ */
 var apn = require('apn');
-var pfx = path.join(__dirname, './ApnCertificates/sandbox/Certificates.p12');
-var cert = path.join(__dirname, './ApnCertificates/sandbox/cert.pem');
-var key = path.join(__dirname, './ApnCertificates/sandbox/key.pem');
+//var pfx = path.join(__dirname, './ApnCertificates/sandbox/Certificates.p12');
+//var cert = path.join(__dirname, './ApnCertificates/sandbox/cert.pem');
+//var key = path.join(__dirname, './ApnCertificates/sandbox/key.pem');
+
+var pfx = path.join(__dirname, './ApnCertificates/production/prod_Certificates.p12');
+var cert = path.join(__dirname, './ApnCertificates/production/aps_prod_cert.pem');
+var key = path.join(__dirname, './ApnCertificates/production/aps_prod_key.pem');
 
 console.log("pfx: ", pfx);
 console.log("cert: ", cert);
