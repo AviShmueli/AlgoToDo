@@ -1,4 +1,4 @@
-﻿/*jshint esversion: 6 */
+/*jshint esversion: 6 */
 
 /*
 *
@@ -67,9 +67,9 @@ server.listen(process.env.PORT || 5002, function (err) {
 
 /* ----- APN ------ */
 var apn = require('apn');
-var pfx = path.join(__dirname, './ApnCertificates/Certificates.p12');
-var cert = path.join(__dirname, './ApnCertificates/cert.pem');
-var key = path.join(__dirname, './ApnCertificates/key.pem');
+var pfx = path.join(__dirname, './ApnCertificates/sandbox/Certificates.p12');
+var cert = path.join(__dirname, './ApnCertificates/sandbox/cert.pem');
+var key = path.join(__dirname, './ApnCertificates/sandbox/key.pem');
 
 console.log("pfx: ", pfx);
 console.log("cert: ", cert);
@@ -84,7 +84,7 @@ var options = {
 cert: cert,
 key: key,
 pfx: pfx,
-roduction: false,
+roduction: true,
     passphrase: 'avi3011algo'
 };
 
@@ -95,6 +95,7 @@ console.log("apnProvider: ", apnProvider);
 var pushTaskToAppleUser = function(task){
     
     var deviceToken = 'f16a3c6261a8d3512c2a968a3f1430d8a76baa598c92625f10d21f749baddba4';//task.ApnRegistrationId;
+    
     
     var note = new apn.Notification();
     
