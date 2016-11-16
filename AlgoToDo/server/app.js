@@ -65,11 +65,76 @@ server.listen(process.env.PORT || 5002, function (err) {
     console.log("Express server listening on port %d in %s mode", this.address().port, app.settings.env);
 });
 
+/* ----- APN ------ */
+var apn = require('apn');
+var pfx = path.join(__dirname, './ApnCertificates/Certificates.p12');
+var cert = path.join(__dirname, './ApnCertificates/cert.pem');
+var key = path.join(__dirname, './ApnCertificates/key.pem');
+
+console.log("pfx: ", pfx);
+console.log("cert: ", cert);
+console.log("key: ", key);
+
+var options = {
+    /*token: {
+     key: pfx,
+     keyId: "T0K3NK3Y1D",
+     teamId: "TYMZRJ5DHP",
+     },*/
+cert: cert,
+key: key,
+pfx: pfx,
+roduction: false,
+    passphrase: 'avi3011algo'
+};
+
+var apnProvider = new apn.Provider(options);
+
+console.log("apnProvider: ", apnProvider);
+
+var pushTaskToAppleUser = function(task){
+    
+    var deviceToken = 'f16a3c6261a8d3512c2a968a3f1430d8a76baa598c92625f10d21f749baddba4';//task.ApnRegistrationId;
+    
+    var note = new apn.Notification();
+    
+    note.expiry = Math.floor(Date.now() / 1000) + 3600; // Expires 1 hour from now.
+    note.badge = 1;
+    note.priority = 10;
+    note.sound = "ping.aiff";
+    note.alert = "\uD83D\uDCE7 \u2709 You have a new message";
+    note.payload = {'messageFrom': 'John Appleseed'};
+    note.topic = "com.algotodo.app";
+    
+    //getUnDoneTasksCountByUserId(task.to._id, function (error, userUnDoneTaskCount) {
+        //note.badge = userUnDoneTaskCount;
+                                
+        // Actually send the message
+        apnProvider.send(note, deviceToken).then(function (response) {
+           console.log("send message", note);
+                                                 
+           if (response.failed.length > 0) {
+              console.error("error while sending push notification to apple user: ", response.failed);
+              winston.log('Error', "error while sending push notification to apple user: ", response.failed);
+           }
+           else {
+              console.log(response.sent);
+           }
+         });
+     //});
+    
+
+}
+
+pushTaskToAppleUser({});
+
 /* ----- GCM ------ */
 var gcm = require('node-gcm');
 
 var sender = new gcm.Sender('AIzaSyDPJtKwWeftuwuneEWs-WlLII6LE7lGeMk');
 var GcmRegistrationIdsCache = {};
+
+
 
 var pushTaskToAndroidUser = function (task) {
 
