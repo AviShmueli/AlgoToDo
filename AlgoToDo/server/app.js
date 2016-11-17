@@ -97,6 +97,8 @@ var apnProvider = new apn.Provider(options);
 
 var sendApnMessage = function(task, userUnDoneTaskCount, ApnRegistrationId){
     
+    console.log("I am in sendApnMessage function");
+
     var deviceTokenInHex = Buffer.from(ApnRegistrationId, 'base64').toString('hex');
     
     var note = new apn.Notification();
@@ -109,6 +111,8 @@ var sendApnMessage = function(task, userUnDoneTaskCount, ApnRegistrationId){
     note.payload = { 'additionalData': task };
     note.topic = "com.algotodo.app";
     
+    console.log("sending message : ", note);
+    console.log("with GcmRegistrationId: ", ApnRegistrationId);
                       
     // Actually send the message
     apnProvider.send(note, ApnRegistrationId).then(function (response) {
@@ -124,29 +128,12 @@ var sendApnMessage = function(task, userUnDoneTaskCount, ApnRegistrationId){
     });
 }
 
-sendApnMessage({from:{name:'avi'}},1,"f16a3c6261a8d3512c2a968a3f1430d8a76baa598c92625f10d21f749baddba4"); 
+//sendApnMessage({from:{name:'avi'}},1,"f16a3c6261a8d3512c2a968a3f1430d8a76baa598c92625f10d21f749baddba4"); 
 
 /* ----- GCM ------ */
 var gcm = require('node-gcm');
 
 var GcmSender = new gcm.Sender('AIzaSyDPJtKwWeftuwuneEWs-WlLII6LE7lGeMk');
-
-var pushTaskToUserDevice = function (task) {
-    
-    // get user from DB and check if there GcmRegId or ApnRegId
-    getUserByUserId(task.to._id, function (error, user) {
-        // get the number that will be set to the app icon badge
-        getUnDoneTasksCountByUserId(task.to._id, function (error, userUnDoneTaskCount) {
-            if (user.GcmRegistrationId !== undefined) {
-                sendGcmMessage(task, userUnDoneTaskCount, user.GcmRegistrationId);
-            }
-            if (user.ApnRegistrationId !== undefined) {
-                sendApnMessage(task, userUnDoneTaskCount, user.ApnRegistrationId);
-            }
-        });
-        
-    });  
-};
 
 var sendGcmMessage = function (task, userUnDoneTaskCount, regToken) {
 
@@ -498,6 +485,25 @@ var getUnDoneTasksCountByUserId = function (userId, callback) {
             db.close();
             callback(err, result);
         });
+    });
+};
+
+var pushTaskToUserDevice = function (task) {
+
+    // get user from DB and check if there GcmRegId or ApnRegId
+    getUserByUserId(task.to._id, function (error, user) {
+        console.log("this is the user i have found: ", user);
+        // get the number that will be set to the app icon badge
+        getUnDoneTasksCountByUserId(task.to._id, function (error, userUnDoneTaskCount) {
+            console.log("this is the userUnDoneTaskCount i have found: ", userUnDoneTaskCount);
+            if (user.GcmRegistrationId !== undefined) {
+                sendGcmMessage(task, userUnDoneTaskCount, user.GcmRegistrationId);
+            }
+            if (user.ApnRegistrationId !== undefined) {
+                sendApnMessage(task, userUnDoneTaskCount, user.ApnRegistrationId);
+            }
+        });
+
     });
 };
 
