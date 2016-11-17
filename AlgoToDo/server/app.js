@@ -460,7 +460,7 @@ var getUserByUserId = function (userId, callback) {
         }
 
         var collection = db.collection('users');
-        collection.findOne({ '_id': ObjectID(userId) }, { '_id': true, 'name': true, 'GcmRegistrationId': true }, function (err, result) {
+        collection.findOne({ '_id': ObjectID(userId) }, { '_id': true, 'name': true, 'GcmRegistrationId': true, 'ApnRegistrationId': true }, function (err, result) {
             db.close();
             callback(err, result);
         });
@@ -503,7 +503,6 @@ var pushTaskToUserDevice = function (task) {
                 sendApnMessage(task, userUnDoneTaskCount, user.ApnRegistrationId);
             }
         });
-
     });
 };
 
