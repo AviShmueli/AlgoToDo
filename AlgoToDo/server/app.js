@@ -124,7 +124,7 @@ var sendApnMessage = function(task, userUnDoneTaskCount, ApnRegistrationId){
     });
 }
 
-sendApnMessage({from:{name:'avi'}},1,"f16a3c6261a8d3512c2a968a3f1430d8a76baa598c92625f10d21f749baddba4");
+sendApnMessage({from:{name:'avi'}},1,"f16a3c6261a8d3512c2a968a3f1430d8a76baa598c92625f10d21f749baddba4"); 
 
 /* ----- GCM ------ */
 var gcm = require('node-gcm');
