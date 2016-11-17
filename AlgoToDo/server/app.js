@@ -1,4 +1,4 @@
-/*jshint esversion: 6 */
+﻿/*jshint esversion: 6 */
 
 /*
 *
@@ -82,56 +82,46 @@ console.log("key: ", key);
 
 var options = {
     token: {
-     key: APNsAuthKey,
-     keyId: "JXZ3MBK8YA",
-     teamId: "TYMZRJ5DHP",
-     },
-/*
-cert: cert,
-key: key,
-pfx: pfx,
- */
-roduction: true
-    //,passphrase: 'avi3011algo'
+        key: APNsAuthKey,
+        keyId: "JXZ3MBK8YA",
+        teamId: "TYMZRJ5DHP",
+    },   
+    cert: cert,
+    key: key,
+    pfx: pfx,
+    roduction: true,
+    passphrase: 'avi3011algo'
 };
 
 var apnProvider = new apn.Provider(options);
 
-console.log("apnProvider: ", apnProvider);
-
-var pushTaskToAppleUser = function(task){
+var sendApnMessage = function(task, userUnDoneTaskCount, ApnRegistrationId){
     
-    var deviceToken = task.to.ApnRegistrationId;
-    var deviceTokenInHex = Buffer.from(deviceToken, 'base64').toString('hex');
+    var deviceTokenInHex = Buffer.from(ApnRegistrationId, 'base64').toString('hex');
     
     var note = new apn.Notification();
     
     note.expiry = Math.floor(Date.now() / 1000) + 3600; // Expires 1 hour from now.
-    note.badge = 1;
+    note.badge = userUnDoneTaskCount;
     note.priority = 10;
     note.sound = "ping.aiff";
     note.alert = "משימה חדשה מ" + task.from.name;//"\uD83D\uDCE7 \u2709 You have a new message";
-    note.payload = {'messageFrom': 'John Appleseed'};
+    note.payload = { 'additionalData': task };
     note.topic = "com.algotodo.app";
     
-    //getUnDoneTasksCountByUserId(task.to._id, function (error, userUnDoneTaskCount) {
-        //note.badge = userUnDoneTaskCount;
-                                
-        // Actually send the message
-        apnProvider.send(note, deviceToken).then(function (response) {
-           console.log("send message", note);
+                      
+    // Actually send the message
+    apnProvider.send(note, deviceToken).then(function (response) {
+        console.log("send message", note);
                                                  
-           if (response.failed.length > 0) {
-              console.error("error while sending push notification to apple user: ", response.failed);
-              winston.log('Error', "error while sending push notification to apple user: ", response.failed);
-           }
-           else {
-              console.log(response.sent);
-           }
-         });
-     //});
-    
-
+        if (response.failed.length > 0) {
+            console.error("error while sending push notification to apple user: ", response.failed);
+            winston.log('Error', "error while sending push notification to apple user: ", response.failed);
+        }
+        else {
+            console.log(response.sent);
+        }
+    });
 }
 
 //pushTaskToAppleUser({});
@@ -139,12 +129,26 @@ var pushTaskToAppleUser = function(task){
 /* ----- GCM ------ */
 var gcm = require('node-gcm');
 
-var sender = new gcm.Sender('AIzaSyDPJtKwWeftuwuneEWs-WlLII6LE7lGeMk');
-var GcmRegistrationIdsCache = {};
+var GcmSender = new gcm.Sender('AIzaSyDPJtKwWeftuwuneEWs-WlLII6LE7lGeMk');
 
+var pushTaskToUserDevice = function (task) {
+    
+    // get user from DB and check if there GcmRegId or ApnRegId
+    getUserByUserId(task.to._id, function (error, user) {
+        // get the number that will be set to the app icon badge
+        getUnDoneTasksCountByUserId(task.to._id, function (error, userUnDoneTaskCount) {
+            if (user.GcmRegistrationId !== undefined) {
+                sendGcmMessage(task, userUnDoneTaskCount, user.GcmRegistrationId);
+            }
+            if (user.ApnRegistrationId !== undefined) {
+                sendApnMessage(task, userUnDoneTaskCount, user.ApnRegistrationId);
+            }
+        });
+        
+    });  
+};
 
-
-var pushTaskToAndroidUser = function (task) {
+var sendGcmMessage = function (message, userUnDoneTaskCount, regToken) {
 
     var message = new gcm.Message({
         /*collapseKey: task.from._id,
@@ -156,9 +160,8 @@ var pushTaskToAndroidUser = function (task) {
             sound: 'default',
             icon: 'www/images/icon.png',
             body: task.description,
-            badge: "1"
+            badge: userUnDoneTaskCount
         }
-         
     });
 
     message.addData('notId', task.from._id);
@@ -166,56 +169,21 @@ var pushTaskToAndroidUser = function (task) {
     message.addData('image', 'www/images/algologo1.png');
     message.addData('style', 'inbox');
     message.addData('summaryText', 'יש לך %n% משימות חדשות');
-    var regToken = '';
-    
-    // if the user stored in the cache, get the regId from the cache
-    if (GcmRegistrationIdsCache[task.to._id] !== undefined) {
-        regToken = GcmRegistrationIdsCache[task.to._id].GcmRegistrationId;
-        sendMessage(message, regToken);
-    }
-    else {
-        // get user from DB and check if there is regId
-        getUserByUserId(task.to._id, function (error, user) {
-            if (user.GcmRegistrationId !== undefined) {
-                regToken = user.GcmRegistrationId;
-
-                // save the user to the cache
-                GcmRegistrationIdsCache[user._id] = { 'userId': user._id, 'userName': user.name, 'GcmRegistrationId': user.GcmRegistrationId };
-                sendMessage(message, regToken);
-            }
-            else {
-                // if user dont have regId dont try to send notification via CGM
-                // todo: insert here code for sending notification via Apple Notification Service
-                return;
-            }
-        });
-        
-    }   
-};
-
-var sendMessage = function (message, regToken) {
 
     console.log("sending message : ", message);
     console.log("with GcmRegistrationId: ", regToken);
 
-    var task = message.params.data.additionalData;
-    // get the number that will be set to the app icon badge
-    getUnDoneTasksCountByUserId(task.to._id, function (error, userUnDoneTaskCount) {
-        message.params.data.badge = userUnDoneTaskCount;
-
-        // Actually send the message
-        sender.send(message, { registrationTokens: [regToken] }, function (err, response) {
-            console.log("send message", message);
-            if (err) {
-                console.error("error while sending push notification: ", err);
-                winston.log('Error', "error while sending push notification: ", err);
-            }
-            else {
-                console.log(response);
-            }
-        });
+    // Actually send the message
+    GcmSender.send(message, { registrationTokens: [regToken] }, function (err, response) {
+        console.log("send message", message);
+        if (err) {
+            console.error("error while sending push notification: ", err);
+            winston.log('Error', "error while sending push notification: ", err);
+        }
+        else {
+            console.log(response);
+        }
     });
-
 };
 
 // -------- Socket.io --------//
@@ -345,7 +313,7 @@ app.post('/TaskManeger/newTask', function (req, res) {
             console.log("trying to send new task", task);
             // if this task is not from me to me, send notification to the user
             if (task.to._id !== task.from._id) {
-                pushTaskToAndroidUser(task);
+                pushTaskToUserDevice(task);
             }
 
             // return the new task to the sender
