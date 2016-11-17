@@ -103,6 +103,7 @@ var sendApnMessage = function(task, userUnDoneTaskCount, ApnRegistrationId){
     
     var note = new apn.Notification();
     
+    note.encoding = "base64";
     note.expiry = Math.floor(Date.now() / 1000) + 3600; // Expires 1 hour from now.
     note.badge = userUnDoneTaskCount;
     note.priority = 10;
