@@ -101,7 +101,7 @@ var sendApnMessage = function(task, userUnDoneTaskCount, ApnRegistrationId){
     
     var note = new apn.Notification();
     
-    note.encoding = "hex";
+    //note.encoding = "hex";
     note.expiry = Math.floor(Date.now() / 1000) + 3600; // Expires 1 hour from now.
     note.badge = userUnDoneTaskCount;
     note.priority = 10;
@@ -126,9 +126,21 @@ var sendApnMessage = function(task, userUnDoneTaskCount, ApnRegistrationId){
             console.log(response.sent);
         }
     });
+
+    apnProvider.send(note, ApnRegistrationId).then(function (response) {
+        console.log("send message", note);
+
+        if (response.failed.length > 0) {
+            console.error("error while sending push notification to apple user: ", response.failed);
+            winston.log('Error', "error while sending push notification to apple user: ", response.failed);
+        }
+        else {
+            console.log(response.sent);
+        }
+    });
 }
 
-//sendApnMessage({from:{name:'avi'}},1,"f16a3c6261a8d3512c2a968a3f1430d8a76baa598c92625f10d21f749baddba4"); 
+//sendApnMessage({from:{name:'avi'}},1,"689b02cd8e6b8689a0a8d7125d52839d57bfd0f5804ce7f3f29765bf180089d8"); 
 
 /* ----- GCM ------ */
 var gcm = require('node-gcm');
