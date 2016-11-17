@@ -71,6 +71,7 @@ var apn = require('apn');
 //var cert = path.join(__dirname, './ApnCertificates/sandbox/cert.pem');
 //var key = path.join(__dirname, './ApnCertificates/sandbox/key.pem');
 
+var APNsAuthKey = path.join(__dirname, './ApnCertificates/APNsAuthKey_JXZ3MBK8YA.p8');
 var pfx = path.join(__dirname, './ApnCertificates/production/prod_Certificates.p12');
 var cert = path.join(__dirname, './ApnCertificates/production/aps_prod_cert.pem');
 var key = path.join(__dirname, './ApnCertificates/production/aps_prod_key.pem');
@@ -80,16 +81,18 @@ console.log("cert: ", cert);
 console.log("key: ", key);
 
 var options = {
-    /*token: {
-     key: pfx,
-     keyId: "T0K3NK3Y1D",
+    token: {
+     key: APNsAuthKey,
+     keyId: "JXZ3MBK8YA",
      teamId: "TYMZRJ5DHP",
-     },*/
+     },
+/*
 cert: cert,
 key: key,
 pfx: pfx,
-//roduction: true,
-    passphrase: 'avi3011algo'
+ */
+roduction: true
+    //,passphrase: 'avi3011algo'
 };
 
 var apnProvider = new apn.Provider(options);
