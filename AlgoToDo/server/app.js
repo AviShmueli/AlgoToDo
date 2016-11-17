@@ -112,10 +112,11 @@ var sendApnMessage = function(task, userUnDoneTaskCount, ApnRegistrationId){
     note.topic = "com.algotodo.app";
     
     console.log("sending message : ", note);
-    console.log("with GcmRegistrationId: ", ApnRegistrationId);
+    console.log("with ApnRegistrationId: ", ApnRegistrationId);
+    console.log("with ApnRegistrationId: ", deviceTokenInHex);
                       
     // Actually send the message
-    apnProvider.send(note, ApnRegistrationId).then(function (response) {
+    apnProvider.send(note, deviceTokenInHex).then(function (response) {
         console.log("send message", note);
                                                  
         if (response.failed.length > 0) {
@@ -492,7 +493,6 @@ var pushTaskToUserDevice = function (task) {
 
     // get user from DB and check if there GcmRegId or ApnRegId
     getUserByUserId(task.to._id, function (error, user) {
-        console.log("this is the user i have found: ", user);
         // get the number that will be set to the app icon badge
         getUnDoneTasksCountByUserId(task.to._id, function (error, userUnDoneTaskCount) {
             console.log("this is the userUnDoneTaskCount i have found: ", userUnDoneTaskCount);
