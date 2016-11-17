@@ -106,8 +106,8 @@ var sendApnMessage = function(task, userUnDoneTaskCount, ApnRegistrationId){
     note.priority = 10;
     note.sound = "ping.aiff";
     note.alert = "משימה חדשה מ" + task.from.name;//"\uD83D\uDCE7 \u2709 You have a new message";
-    note.payload = { 'additionalData': task };
-    //note.payload = task ;
+    //note.payload = { 'additionalData': task };
+    note.payload = task ;
     note.topic = "com.algotodo.app";
     
     console.log("sending message : ", note);
