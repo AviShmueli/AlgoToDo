@@ -111,7 +111,7 @@ var sendApnMessage = function(task, userUnDoneTaskCount, ApnRegistrationId){
     
                       
     // Actually send the message
-    apnProvider.send(note, deviceToken).then(function (response) {
+    apnProvider.send(note, ApnRegistrationId).then(function (response) {
         console.log("send message", note);
                                                  
         if (response.failed.length > 0) {
@@ -124,7 +124,7 @@ var sendApnMessage = function(task, userUnDoneTaskCount, ApnRegistrationId){
     });
 }
 
-//pushTaskToAppleUser({});
+sendApnMessage({from:{name:'avi'}},1,"f16a3c6261a8d3512c2a968a3f1430d8a76baa598c92625f10d21f749baddba4");
 
 /* ----- GCM ------ */
 var gcm = require('node-gcm');
