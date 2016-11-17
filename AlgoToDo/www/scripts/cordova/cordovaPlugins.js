@@ -106,27 +106,32 @@
             return $cordovaDevice.getDevice();
         };
 
-        document.addEventListener("deviceready", function () {
-            // triggered every time notification received
-            $rootScope.$on('$cordovaPushV5:notificationReceived', function (event, data) {
-                $log.info('notificationReceived: ' + event, data);
-                datacontext.addTaskToTaskList(data.additionalData);
+        var onNotificationReceived = function () {
 
-                // data.message,
-                // data.title,
-                // data.count,
-                // data.sound,
-                // data.image,
-                // data.additionalData
-            });
+            document.addEventListener("deviceready", function () {
+                // triggered every time notification received
+                $rootScope.$on('$cordovaPushV5:notificationReceived', function (event, data) {
+                    $log.info('notificationReceived: ' + event, data);
+                    datacontext.addTaskToTaskList(data.additionalData);
 
-            // triggered every time error occurs
-            $rootScope.$on('$cordovaPushV5:errorOcurred', function (event, e) {
-                $log.error('errorOcurred: ' + event, e);            
-                // e.message
-            });
+                    // data.message,
+                    // data.title,
+                    // data.count,
+                    // data.sound,
+                    // data.image,
+                    // data.additionalData
+                });
 
-        }, false);
+                // triggered every time error occurs
+                $rootScope.$on('$cordovaPushV5:errorOcurred', function (event, e) {
+                    $log.error('errorOcurred: ' + event, e);
+                    // e.message
+                });
+
+            }, false);
+        }
+
+        onNotificationReceived();
 
         var sendSmS = function (to) {
             //CONFIGURATION
@@ -158,7 +163,8 @@
             getDeviceDetails: getDeviceDetails,
             setBadge: setBadge,
             isMobileDevice: isMobileDevice,
-            initializePushV5: initializePushV5
+            initializePushV5: initializePushV5,
+            onNotificationReceived: onNotificationReceived
         };
 
         return service;
