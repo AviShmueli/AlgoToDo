@@ -96,8 +96,6 @@ var options = {
 var apnProvider = new apn.Provider(options);
 
 var sendApnMessage = function(task, userUnDoneTaskCount, ApnRegistrationId){
-    
-    console.log("I am in sendApnMessage function");
 
     var deviceTokenInHex = Buffer.from(ApnRegistrationId, 'base64').toString('hex');
     
@@ -117,7 +115,7 @@ var sendApnMessage = function(task, userUnDoneTaskCount, ApnRegistrationId){
     console.log("with ApnRegistrationId: ", deviceTokenInHex);
                       
     // Actually send the message
-    apnProvider.send(note, deviceTokenInHex).then(function (response) {
+    apnProvider.send(note, ApnRegistrationId).then(function (response) {
         console.log("send message", note);
                                                  
         if (response.failed.length > 0) {
