@@ -148,7 +148,7 @@ var pushTaskToUserDevice = function (task) {
     });  
 };
 
-var sendGcmMessage = function (message, userUnDoneTaskCount, regToken) {
+var sendGcmMessage = function (task, userUnDoneTaskCount, regToken) {
 
     var message = new gcm.Message({
         /*collapseKey: task.from._id,
