@@ -101,13 +101,13 @@ var sendApnMessage = function(task, userUnDoneTaskCount, ApnRegistrationId){
     
     var note = new apn.Notification();
     
-    //note.encoding = "hex";
     note.expiry = Math.floor(Date.now() / 1000) + 3600; // Expires 1 hour from now.
     note.badge = userUnDoneTaskCount;
     note.priority = 10;
     note.sound = "ping.aiff";
     note.alert = "משימה חדשה מ" + task.from.name;//"\uD83D\uDCE7 \u2709 You have a new message";
-    note.payload = { 'additionalData': task };
+    //note.payload = { 'additionalData': task };
+    note.payload = task ;
     note.topic = "com.algotodo.app";
     
     console.log("sending message : ", note);
@@ -118,18 +118,6 @@ var sendApnMessage = function(task, userUnDoneTaskCount, ApnRegistrationId){
     apnProvider.send(note, deviceTokenInHex).then(function (response) {
         console.log("send message", note);
                                                  
-        if (response.failed.length > 0) {
-            console.error("error while sending push notification to apple user: ", response.failed);
-            winston.log('Error', "error while sending push notification to apple user: ", response.failed);
-        }
-        else {
-            console.log(response.sent);
-        }
-    });
-
-    apnProvider.send(note, ApnRegistrationId).then(function (response) {
-        console.log("send message", note);
-
         if (response.failed.length > 0) {
             console.error("error while sending push notification to apple user: ", response.failed);
             winston.log('Error', "error while sending push notification to apple user: ", response.failed);
