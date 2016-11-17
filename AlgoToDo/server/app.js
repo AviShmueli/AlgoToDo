@@ -101,7 +101,7 @@ var sendApnMessage = function(task, userUnDoneTaskCount, ApnRegistrationId){
     
     var note = new apn.Notification();
     
-    note.encoding = "base64";
+    note.encoding = "hex";
     note.expiry = Math.floor(Date.now() / 1000) + 3600; // Expires 1 hour from now.
     note.badge = userUnDoneTaskCount;
     note.priority = 10;
@@ -115,7 +115,7 @@ var sendApnMessage = function(task, userUnDoneTaskCount, ApnRegistrationId){
     console.log("with ApnRegistrationId: ", deviceTokenInHex);
                       
     // Actually send the message
-    apnProvider.send(note, ApnRegistrationId).then(function (response) {
+    apnProvider.send(note, deviceTokenInHex).then(function (response) {
         console.log("send message", note);
                                                  
         if (response.failed.length > 0) {
