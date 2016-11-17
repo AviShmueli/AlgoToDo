@@ -143,7 +143,7 @@
             vm.userConnected = true;           
             
             cordovaPlugins.onNotificationReceived();
-            cordovaPlugins.registerForPushNotifications();
+            cordovaPlugins.startListening();
 
             logger.info("user is now connected", vm.user);
             logger.toast("אתה עכשיו מחובר!", null, 1000);

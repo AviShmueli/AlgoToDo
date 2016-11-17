@@ -71,14 +71,19 @@
         };
 
         var registerForPushNotifications = function () {
+
+            startListening();
+
+            // register to get registrationId
+            return $cordovaPushV5.register();
+        }
+
+        var startListening = function () {
             // start listening for new notifications
             $cordovaPushV5.onNotification();
 
             // start listening for errors
             $cordovaPushV5.onError();
-
-            // register to get registrationId
-            return $cordovaPushV5.register();
         }
 
         var clearAppBadge = function () {
@@ -164,7 +169,8 @@
             setBadge: setBadge,
             isMobileDevice: isMobileDevice,
             initializePushV5: initializePushV5,
-            onNotificationReceived: onNotificationReceived
+            onNotificationReceived: onNotificationReceived,
+            startListening: startListening
         };
 
         return service;
