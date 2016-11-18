@@ -6,13 +6,13 @@
         .controller('TaskManegerCtrl', TaskManegerCtrl);
 
     TaskManegerCtrl.$inject = [ 
-        '$scope', 'logger', '$location', 'cordovaPlugins',
+        '$rootScope', '$scope', 'logger', '$location', 'cordovaPlugins',
         'appConfig', '$mdMedia', '$mdBottomSheet','$filter',
         '$mdSidenav', '$mdDialog', 'datacontext', 'lodash',
         'socket', '$mdToast', 'moment', '$q'
     ];
 
-    function TaskManegerCtrl($scope, logger, $location, cordovaPlugins,
+    function TaskManegerCtrl($rootScope, $scope, logger, $location, cordovaPlugins,
                             appConfig, $mdMedia, $mdBottomSheet,$filter,
                             $mdSidenav, $mdDialog, datacontext, lodash,
                             socket, $mdToast, moment, $q) {
