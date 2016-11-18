@@ -16,6 +16,19 @@
                             $cordovaBadge, $cordovaDevice, $log) {
 
         var self = this;
+        var PushOptions = {
+            android: {
+                senderID: "874351794059",
+                sound: "true",
+                vibration: "true"
+            },
+            ios: {
+                alert: "true",
+                badge: "true",
+                sound: "true"
+            },
+            windows: {}
+        };
 
         var isMobileDevice = function () {
             return document.URL.indexOf( 'http://' ) === -1 && document.URL.indexOf( 'https://' ) === -1;
@@ -51,39 +64,30 @@
 
         };
 
-        var initializePushV5 = function () {
-            var options = {
-                android: {
-                    senderID: "874351794059",
-                    sound: "true",
-                    vibration: "true"
-                },
-                ios: {
-                    alert: "true",
-                    badge: "true",
-                    sound: "true"
-                },
-                windows: {}
-            };
-
-            return $cordovaPushV5.initialize(options);
-
+        var initializePushV5 = function () {            
+            return $cordovaPushV5.initialize(PushOptions);
         };
 
         var registerForPushNotifications = function () {
 
-            startListening();
+            // start listening for new notifications
+            $cordovaPushV5.onNotification();
+
+            // start listening for errors
+            $cordovaPushV5.onError();
 
             // register to get registrationId
             return $cordovaPushV5.register();
         }
 
         var startListening = function () {
-            // start listening for new notifications
-            $cordovaPushV5.onNotification();
+            initializePushV5().then(function () {
+                // start listening for new notifications
+                $cordovaPushV5.onNotification();
 
-            // start listening for errors
-            $cordovaPushV5.onError();
+                // start listening for errors
+                $cordovaPushV5.onError();
+            });            
         }
 
         var clearAppBadge = function () {
