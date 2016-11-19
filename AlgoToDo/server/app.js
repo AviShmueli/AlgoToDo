@@ -295,7 +295,7 @@ app.post('/TaskManeger/newTask', function (req, res) {
             // if the employee is now online send the new task by Socket.io
             console.log("to:", to);
             if (to !== '' && task.to._id !== task.from._id) {
-                io.to(to).emit('new-task', results.ops[0]);
+                //io.to(to).emit('new-task', results.ops[0]);
             }
             console.log("trying to send new task", task);
             // if this task is not from me to me, send notification to the user
