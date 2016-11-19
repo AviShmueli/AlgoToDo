@@ -26,7 +26,7 @@
         vm.appDomain = appConfig.appDomain;
         vm.progressActivated = false;
         vm.myTasksCount = 0;
-        $scope.$root.taskcount = 0;
+        $rootScope.taskcount = 0;
 
         vm.onGoingActivityies = function () { return datacontext.getTaskList(); };      
 
@@ -34,7 +34,7 @@
             var count = $filter('myTasks')(datacontext.getTaskList(), vm.user._id).length;
             cordovaPlugins.setBadge(count);
             vm.myTasksCount = count;
-            $scope.$root.taskcount = count;
+            $rootScope.taskcount = count;
         };
 
         var activateProgress = function (toastText) {
