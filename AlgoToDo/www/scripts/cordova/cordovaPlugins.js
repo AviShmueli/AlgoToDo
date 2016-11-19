@@ -122,7 +122,7 @@
                 $rootScope.$on('$cordovaPushV5:notificationReceived', function (event, data) {
                     $log.info('notificationReceived: ' + event, data);
                     datacontext.addTaskToTaskList(data.additionalData.additionalData);
-                    setMyTaskCount();
+                    $rootScope.taskcount = data.count;
                     $rootScope.$apply()
                     // data.message,
                     // data.title,
