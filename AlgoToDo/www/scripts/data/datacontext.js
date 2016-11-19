@@ -83,7 +83,10 @@
         };
         
         var addTaskToTaskList = function (task) {
-            self.tasksList.push(task);
+            var count = self.tasksList.filter(function (t) { return t._id === task._id });
+            if (count.length === 0) {
+                self.tasksList.push(task);
+            }            
         };
 
         var replaceTask = function (task) {

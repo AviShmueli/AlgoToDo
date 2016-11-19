@@ -143,8 +143,10 @@
             vm.userConnected = true;           
             
             if (cordovaPlugins.isMobileDevice()) {
-                cordovaPlugins.startListening();
-                cordovaPlugins.onNotificationReceived();               
+                document.addEventListener("deviceready", function () {
+                    cordovaPlugins.startListening();
+                    cordovaPlugins.onNotificationReceived(); 
+                }, false);
             }
 
             logger.info("user is now connected", vm.user);
