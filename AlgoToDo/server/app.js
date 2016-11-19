@@ -105,11 +105,12 @@ var sendApnMessage = function(task, userUnDoneTaskCount, ApnRegistrationId){
     note.badge = userUnDoneTaskCount;
     note.priority = 10;
     note.sound = "ping.aiff";
-    note.alert = "משימה חדשה מ" + task.from.name;//"\uD83D\uDCE7 \u2709 You have a new message";
+    //note.alert = "משימה חדשה מ" + task.from.name;//"\uD83D\uDCE7 \u2709 You have a new message";
     note.payload = { 'additionalData': task };
     //note.payload = task ;
     note.topic = "com.algotodo.app";
-    
+    note.body = task.description;
+    note.title = "משימה חדשה מ" + task.from.name;
     console.log("sending message : ", note);
     console.log("with ApnRegistrationId: ", ApnRegistrationId);
     console.log("with ApnRegistrationId: ", deviceTokenInHex);
@@ -128,7 +129,7 @@ var sendApnMessage = function(task, userUnDoneTaskCount, ApnRegistrationId){
     });
 }
 
-//sendApnMessage({from:{name:'avi'}},1,"689b02cd8e6b8689a0a8d7125d52839d57bfd0f5804ce7f3f29765bf180089d8"); 
+//sendApnMessage({from:{name:'אבי שמואלי'},description: 'יש לך 2 דקות להגיע לפה'},1,"b83a1fe9f784c3a7a1706f8bc4e5c4146be72c74b52b858b85e8df27b54c04f9");
 
 /* ----- GCM ------ */
 var gcm = require('node-gcm');
