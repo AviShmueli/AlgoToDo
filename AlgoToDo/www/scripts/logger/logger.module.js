@@ -1,6 +1,6 @@
 (function() {
     'use strict';
 
-    angular.module('TaskManeger.logger', []);
+    angular.module('app.logger', []);
 
 })();

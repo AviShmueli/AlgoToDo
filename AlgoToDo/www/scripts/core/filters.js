@@ -1,7 +1,7 @@
 ﻿(function() {
     'use strict';
 
-    angular.module('TaskManeger.core')
+    angular.module('app.core')
     .filter('myTasks', function () {
         return function (tasks, userId) {
             var filtered = [];

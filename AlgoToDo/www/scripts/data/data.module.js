@@ -1,6 +1,6 @@
 (function() {
     'use strict';
 
-    angular.module('TaskManeger.data', []);
+    angular.module('app.data', []);
 
 })();

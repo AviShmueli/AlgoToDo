@@ -1,7 +1,7 @@
 (function() {
     'use strict';
 
-    angular.module('TaskManeger', [
+    angular.module('app', [
         /*
          * Order is not important. Angular makes a
          * pass to register all of the modules listed
@@ -26,11 +26,11 @@
          * We could place these under every feature area,
          * but this is easier to maintain.
          */
-        'TaskManeger.widgets',
-        'TaskManeger.core',
-        'TaskManeger.data',
-        'TaskManeger.logger',
-        'TaskManeger.cordova'
+        'app.widgets',
+        'app.core',
+        'app.data',
+        'app.logger',
+        'app.cordova'
         
         /*
          * Feature areas

@@ -1,7 +1,7 @@
 (function() {
     'use strict';
 
-    angular.module('TaskManeger.core')
+    angular.module('app.core')
         .config(function ($mdThemingProvider, $compileProvider, $animateProvider, LogglyLoggerProvider) {
             LogglyLoggerProvider.inputToken('666c914a-b76a-4aff-8c61-f7d45d681abf').sendConsoleErrors(true);
             $compileProvider.debugInfoEnabled(false);
@@ -31,8 +31,8 @@
 
             return {
                 appDomain:
-                     'https://algotodo.herokuapp.com'
-               // 'http://localhost:5001'  
+                    // 'https://algotodo.herokuapp.com'
+                'http://localhost:5001'  
             };
         })
         .run(function (amMoment) {

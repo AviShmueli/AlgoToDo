@@ -2,7 +2,7 @@
     'use strict';
 
     angular
-        .module('TaskManeger.widgets')
+        .module('app.widgets')
         .directive('userAvatar', function() {
             return {
                 replace: true,

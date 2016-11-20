@@ -1,6 +1,6 @@
 ﻿(function () {
     'use strict';
 
-    angular.module('TaskManeger.cordova', []);
+    angular.module('app.cordova', []);
 
 })();

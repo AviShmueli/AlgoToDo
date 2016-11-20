@@ -2,7 +2,7 @@
     'use strict';
 
     angular
-        .module('TaskManeger.logger')
+        .module('app.logger')
         .factory('logger', logger);
 
     logger.$inject = ['$log', '$mdToast'];

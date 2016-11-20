@@ -2,7 +2,7 @@
     'use strict';
 
     angular
-        .module('TaskManeger.data')
+        .module('app.data')
         .factory('socket', socket);
 
     socket.$inject = ['$rootScope', 'appConfig'];

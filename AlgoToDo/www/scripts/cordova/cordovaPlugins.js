@@ -2,7 +2,7 @@
     'use strict';
 
     angular
-        .module('TaskManeger.cordova')
+        .module('app.cordova')
         .service('cordovaPlugins', cordovaPlugins);
 
     cordovaPlugins.$inject = ['$rootScope', 'datacontext', 'appConfig', '$mdDialog'/*,

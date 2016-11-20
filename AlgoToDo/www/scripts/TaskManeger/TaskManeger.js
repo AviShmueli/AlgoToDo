@@ -2,7 +2,7 @@
     'use strict';
 
     angular
-        .module('TaskManeger')
+        .module('app')
         .controller('TaskManegerCtrl', TaskManegerCtrl);
 
     TaskManegerCtrl.$inject = [ 
@@ -86,7 +86,7 @@
 
         vm.registerUser = function () {
 
-            vm.user.avatarUrl = '/images/man-' + Math.floor((Math.random() * 8) + 1) + '.svg';
+            vm.user.avatarUrl = '/images/man-' + Math.floor((Math.random() * 9) + 1) + '.svg';
 
             if (cordovaPlugins.isMobileDevice()) {
 

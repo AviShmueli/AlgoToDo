@@ -2,7 +2,7 @@
     'use strict';
 
     angular
-        .module('TaskManeger.data')
+        .module('app.data')
         .service('datacontext', datacontext);
 
     datacontext.$inject = ['$http', 'logger', 'socket', 'lodash', 'appConfig', '$localStorage', '$mdToast'];

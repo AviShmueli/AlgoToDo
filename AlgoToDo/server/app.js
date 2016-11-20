@@ -66,19 +66,18 @@ server.listen(process.env.PORT || 5002, function (err) {
 });
 
 /* ----- APN ------ */
-var apn = require('apn');
+
 //var pfx = path.join(__dirname, './ApnCertificates/sandbox/Certificates.p12');
 //var cert = path.join(__dirname, './ApnCertificates/sandbox/cert.pem');
 //var key = path.join(__dirname, './ApnCertificates/sandbox/key.pem');
 
+/*
+var apn = require('apn');
 var APNsAuthKey = path.join(__dirname, './ApnCertificates/APNsAuthKey_JXZ3MBK8YA.p8');
 var pfx = path.join(__dirname, './ApnCertificates/production/prod_Certificates.p12');
 var cert = path.join(__dirname, './ApnCertificates/production/aps_prod_cert.pem');
 var key = path.join(__dirname, './ApnCertificates/production/aps_prod_key.pem');
 
-console.log("pfx: ", pfx);
-console.log("cert: ", cert);
-console.log("key: ", key);
 
 var options = {
     token: {
@@ -94,7 +93,7 @@ var options = {
 };
 
 var apnProvider = new apn.Provider(options);
-
+*/
 var sendApnMessage = function(task, userUnDoneTaskCount, ApnRegistrationId){
 
     var deviceTokenInHex = Buffer.from(ApnRegistrationId, 'base64').toString('hex');
