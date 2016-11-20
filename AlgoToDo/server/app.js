@@ -111,9 +111,11 @@ var sendApnMessage = function(task, userUnDoneTaskCount, ApnRegistrationId){
     note.topic = "com.algotodo.app";
     note.body = task.description;
     note.title = "משימה חדשה מ" + task.from.name;
+    note.contentAvailable = 1;
+
     console.log("sending message : ", note);
     console.log("with ApnRegistrationId: ", ApnRegistrationId);
-    console.log("with ApnRegistrationId: ", deviceTokenInHex);
+    //console.log("with ApnRegistrationId: ", deviceTokenInHex);
                       
     // Actually send the message
     apnProvider.send(note, ApnRegistrationId).then(function (response) {
@@ -296,7 +298,7 @@ app.post('/TaskManeger/newTask', function (req, res) {
             // if the employee is now online send the new task by Socket.io
             console.log("to:", to);
             if (to !== '' && task.to._id !== task.from._id) {
-                //io.to(to).emit('new-task', results.ops[0]);
+                io.to(to).emit('new-task', results.ops[0]);
             }
             console.log("trying to send new task", task);
             // if this task is not from me to me, send notification to the user
