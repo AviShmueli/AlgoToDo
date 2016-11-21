@@ -12,7 +12,8 @@
         var self = this;
         self.tasksList = [];
         self.$storage = $localStorage;
-        self.$storage.usersCache = new Map()
+        self.$storage.usersCache = new Map();
+        self.$storage.tasksList = [];
 
         var saveNewTask = function(task) {
 
@@ -28,23 +29,6 @@
         };
 
         var getAllTasks = function () {
-            var simpleToast = logger.toast("טוען נתונים...", null, 10000);
-            var req = {
-                method: 'GET',
-                url: appConfig.appDomain + '/TaskManeger/getTasks',
-                params: {
-                    user: self.$storage.user._id
-                }
-            };
-
-            $http(req).then(function (response) {
-                //logger.success("getAllTasks", response.data);
-                self.tasksList = response.data;
-                $mdToast.hide(simpleToast);
-            });
-        };
-
-        var getAllTasksSync = function () {
             var req = {
                 method: 'GET',
                 url: appConfig.appDomain + '/TaskManeger/getTasks',
@@ -75,23 +59,24 @@
         };
 
         var getTaskList = function () {
-            return self.tasksList;
+            return self.$storage.tasksList;
         };
 
         var setTaskList = function (newList) {
-            self.tasksList = newList;
+            self.$storage.tasksList = newList;
         };
         
         var addTaskToTaskList = function (task) {
-            var count = self.tasksList.filter(function (t) { return t._id === task._id });
+            var count = self.$storage.tasksList.filter(function (t) { return t._id === task._id });
+            // prevent pushing the same task
             if (count.length === 0) {
-                self.tasksList.push(task);
+                self.$storage.tasksList.push(task);
             }            
         };
 
         var replaceTask = function (task) {
-            var foundIndex = self.tasksList.findIndex(x => x._id === task._id);
-            self.tasksList[foundIndex] = task;
+            var foundIndex = self.$storage.tasksList.findIndex(x => x._id === task._id);
+            self.$storage.tasksList[foundIndex] = task;
         };
 
         var saveUserToLocalStorage = function (user) {
@@ -155,24 +140,28 @@
             return $http(req);
         }
 
+        var getTaskByTaskId = function (taskId) {
+            return getTaskList().filter(function (t) { return t._id === taskId });
+        }
+
         var service = {
             user: self.user,
             getTaskList: getTaskList,
             setTaskList: setTaskList,
             addTaskToTaskList: addTaskToTaskList,
             saveNewTask: saveNewTask,
-            getAllTasks: getAllTasks,
             updateTask: updateTask,
             replaceTask: replaceTask,
             saveUserToLocalStorage: saveUserToLocalStorage,
             getUserFromLocalStorage: getUserFromLocalStorage,
             deleteUserFromLocalStorage: deleteUserFromLocalStorage,
             registerUser: registerUser,
-            getAllTasksSync: getAllTasksSync,
+            getAllTasks: getAllTasks,
             searchUsers: searchUsers,
             addUsersToUsersCache: addUsersToUsersCache,
             getAllCachedUsers: getAllCachedUsers,
-            checkIfUserExist: checkIfUserExist
+            checkIfUserExist: checkIfUserExist,
+            getTaskByTaskId: getTaskByTaskId
         };
 
         return service;

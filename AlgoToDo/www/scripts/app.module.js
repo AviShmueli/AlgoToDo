@@ -20,6 +20,7 @@
         'ngSanitize',
         'logglyLogger',
         'infomofo.angularMdPullToRefresh',
+        'ngRoute',
 
         /*
          * Everybody has access to these.
@@ -30,8 +31,8 @@
         'app.core',
         'app.data',
         'app.logger',
-        'app.cordova'
-        
+        'app.cordova',
+        'app.tasks'
         /*
          * Feature areas
          */

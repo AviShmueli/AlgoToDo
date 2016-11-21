@@ -2,17 +2,17 @@
     'use strict';
 
     angular
-        .module('app')
-        .controller('TaskManegerCtrl', TaskManegerCtrl);
+        .module('app.tasks')
+        .controller('TasksListCtrl', TasksListCtrl);
 
-    TaskManegerCtrl.$inject = [ 
+    TasksListCtrl.$inject = [ 
         '$rootScope', '$scope', 'logger', '$location', 'cordovaPlugins',
         'appConfig', '$mdMedia', '$mdBottomSheet','$filter',
         '$mdSidenav', '$mdDialog', 'datacontext', 'lodash',
         'socket', '$mdToast', 'moment', '$q'
     ];
 
-    function TaskManegerCtrl($rootScope, $scope, logger, $location, cordovaPlugins,
+    function TasksListCtrl($rootScope, $scope, logger, $location, cordovaPlugins,
                             appConfig, $mdMedia, $mdBottomSheet,$filter,
                             $mdSidenav, $mdDialog, datacontext, lodash,
                             socket, $mdToast, moment, $q) {
@@ -48,12 +48,19 @@
 
         var loadTasks = function () {
             var loadingToast = activateProgress("טוען נתונים...");
-            datacontext.getAllTasksSync().then(function (response) {                
-                datacontext.setTaskList(response.data);
+            if (datacontext.getTaskList().length === 0) {           
+                datacontext.getAllTasks().then(function (response) {
+                    datacontext.setTaskList(response.data);
+                    setMyTaskCount();
+                    vm.progressActivated = false;
+                    deactivateProgress(loadingToast);
+                });
+            }
+            else {
                 setMyTaskCount();
                 vm.progressActivated = false;
                 deactivateProgress(loadingToast);
-            });
+            }
         };
 
         vm.checkIfUserLogdIn = function () {
@@ -86,7 +93,13 @@
 
         vm.registerUser = function () {
 
-            vm.user.avatarUrl = '/images/man-' + Math.floor((Math.random() * 9) + 1) + '.svg';
+            if (vm.user.sex === 'woman') {
+                vm.user.avatarUrl = '/images/woman-' + Math.floor((Math.random() * 15) + 1) + '.svg';
+            }
+            else{
+                vm.user.avatarUrl = '/images/man-' + Math.floor((Math.random() * 9) + 1) + '.svg';
+            }
+            
 
             if (cordovaPlugins.isMobileDevice()) {
 
@@ -152,7 +165,7 @@
             }
 
             logger.info("user is now connected", vm.user);
-            logger.toast("אתה עכשיו מחובר!", null, 1000);
+            //logger.toast("אתה עכשיו מחובר!", null, 1000);
         };
 
         vm.logOff = function () {
@@ -256,7 +269,7 @@
 
         vm.reloadTasks = function () {
             var deferred = $q.defer();
-            datacontext.getAllTasksSync().then(function (response) {
+            datacontext.getAllTasks().then(function (response) {
                 datacontext.setTaskList(response.data);
                 setMyTaskCount();
                 deferred.resolve();
@@ -282,6 +295,10 @@
                 vm.showSearch = !vm.showSearch;
             }
         };
+
+        vm.navigateToTaskPage = function (taskId) {
+            window.location = '#/task/' + taskId;
+        }
 
         vm.checkIfUserLogdIn();
 
