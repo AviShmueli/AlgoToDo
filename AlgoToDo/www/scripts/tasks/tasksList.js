@@ -47,8 +47,9 @@
         };
 
         var loadTasks = function () {
-            var loadingToast = activateProgress("טוען נתונים...");
-            if (datacontext.getTaskList().length === 0) {           
+            
+            if (datacontext.getTaskList().length === 0) {
+                var loadingToast = activateProgress("טוען נתונים...");
                 datacontext.getAllTasks().then(function (response) {
                     datacontext.setTaskList(response.data);
                     setMyTaskCount();
@@ -58,8 +59,6 @@
             }
             else {
                 setMyTaskCount();
-                vm.progressActivated = false;
-                deactivateProgress(loadingToast);
             }
         };
 

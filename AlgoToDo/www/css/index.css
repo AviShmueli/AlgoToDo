@@ -1,8 +1,39 @@
 * {
     -webkit-tap-highlight-color: rgba(0,0,0,0);
 }
-.md-tile-content .from {
-    color: rgb(0,188,212);
+.no-line-height{
+     line-height: 0 !important;
+}
+.add-comment-footer md-toolbar,
+.task-toolbar{
+    background-color: transparent !important;
+}
+.add-comment-footer .md-errors-spacer {
+    min-height: 0;
+}
+.add-comment-footer .md-fab {
+        background-color: rgb(255,112,67) !important;
+}
+.icon-fill{
+    fill: rgb(0,131,143);
+}
+.md-icon-button:disabled .icon-fill{
+    fill:rgb(193, 210, 211);
+}
+.comment-input{
+    margin: 4px 0 4px 0;
+    width: 80%;
+    background-color: rgb(250,250,250);
+    border-radius: 0 17px 17px 17px;
+    padding: 8px 20px 8px 20px;
+}
+.response-card{
+    background-color: #e8fafc;
+    border-radius: 25px;
+}
+.md-tile-content .from,
+md-card-content .from {
+    color:  rgb(0,131,143);
     font-size: 14px;
     font-weight: bold;
 }
@@ -218,6 +249,14 @@ md-sidenav ng-md-icon {
     height: 54px !important;
         background-color: lightcoral;
 }
+
+.user-avatar-med {
+    border-radius: 99%;
+    width: 36px !important;
+    height: 36px !important;
+    background-color: lightcoral;
+}
+
 .user-avatar-small {
     border-radius: 99%;
     width: 24px !important;

@@ -2,9 +2,10 @@
     'use strict';
 
     angular.module('app.core')
-        .config(function ($routeProvider, $mdThemingProvider, $compileProvider, $animateProvider, LogglyLoggerProvider) {
+        .config(function ($routeProvider, $mdThemingProvider, $compileProvider, $animateProvider, LogglyLoggerProvider, $mdGestureProvider) {
             LogglyLoggerProvider.inputToken('666c914a-b76a-4aff-8c61-f7d45d681abf').sendConsoleErrors(true);
             $compileProvider.debugInfoEnabled(false);
+            $mdGestureProvider.skipClickHijack();
             //$animateProvider.classNameFilter(/\banimated\b/);
             var customBlueMap = $mdThemingProvider.extendPalette('light-blue', {
                 'contrastDefaultColor': 'light',
@@ -28,12 +29,10 @@
 
             $routeProvider.
               when('/', {
-                  templateUrl: 'scripts/tasks/tasksList.html',
-                  controller: 'TasksListCtrl'
+                  templateUrl: 'scripts/tasks/tasksList.html'
               })
               .when('/task/:taskId', {
-                  templateUrl: 'scripts/tasks/task.html',
-                  controller: 'taskCtrl'
+                  templateUrl: 'scripts/tasks/task.html'
               });
          })
         .service('appConfig', function () {
@@ -41,8 +40,8 @@
 
             return {
                 appDomain:
-                     'https://algotodo.herokuapp.com'
-               // 'http://localhost:5001'  
+                 //    'https://algotodo.herokuapp.com'
+               'http://localhost:5001'  
             };
         })
         .run(function (amMoment) {

@@ -13,7 +13,7 @@
         self.tasksList = [];
         self.$storage = $localStorage;
         self.$storage.usersCache = new Map();
-        self.$storage.tasksList = [];
+        //self.$storage.tasksList = [];
 
         var saveNewTask = function(task) {
 
@@ -141,7 +141,11 @@
         }
 
         var getTaskByTaskId = function (taskId) {
-            return getTaskList().filter(function (t) { return t._id === taskId });
+            var result = getTaskList().filter(function (t) { return t._id === taskId });
+            if (result.length === 1) {
+                return result[0];
+            }
+            return {};
         }
 
         var service = {
