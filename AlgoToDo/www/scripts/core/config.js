@@ -41,7 +41,7 @@
             return {
                 appDomain:
                      'https://algotodo.herokuapp.com'
-              // 'http://localhost:5001'  
+               //'http://localhost:5001'  
             };
         })
         .run(function (amMoment) {

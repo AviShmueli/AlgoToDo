@@ -5,15 +5,15 @@
         .module('app.data')
         .service('datacontext', datacontext);
 
-    datacontext.$inject = ['$http', 'logger', 'socket', 'lodash', 'appConfig', '$localStorage', '$mdToast'];
+    datacontext.$inject = ['$http', 'logger', 'lodash', 'appConfig', '$localStorage', '$mdToast'];
 
-    function datacontext($http, logger, socket, lodash, appConfig, $localStorage, $mdToast) {
+    function datacontext($http, logger, lodash, appConfig, $localStorage, $mdToast) {
 
         var self = this;
         self.tasksList = [];
         self.$storage = $localStorage;
         self.$storage.usersCache = new Map();
-        //self.$storage.tasksList = [];
+        //self.socket = io.connect(appConfig.appDomain);
 
         var saveNewTask = function(task) {
 
@@ -25,7 +25,7 @@
                 }
             };
 
-            return $http(req)
+            return $http(req);
         };
 
         var getAllTasks = function () {
@@ -59,7 +59,7 @@
         };
 
         var getTaskList = function () {
-            return self.$storage.tasksList;
+            return self.$storage.tasksList !== undefined ? self.$storage.tasksList: [];
         };
 
         var setTaskList = function (newList) {
@@ -148,6 +148,23 @@
             return {};
         }
 
+        var newComment = function (taskId, comment) {
+            var req = {
+                method: 'POST',
+                url: appConfig.appDomain + '/TaskManeger/newComment',
+                data: {
+                    taskId: taskId,
+                    comment: comment
+                }
+            };
+
+            return $http(req);
+        }
+
+        var getSocket = function () {
+            //return self.socket;
+        }
+
         var service = {
             user: self.user,
             getTaskList: getTaskList,
@@ -165,7 +182,9 @@
             addUsersToUsersCache: addUsersToUsersCache,
             getAllCachedUsers: getAllCachedUsers,
             checkIfUserExist: checkIfUserExist,
-            getTaskByTaskId: getTaskByTaskId
+            getTaskByTaskId: getTaskByTaskId,
+            newComment: newComment,
+            getSocket: getSocket
         };
 
         return service;

@@ -27,6 +27,7 @@
         vm.progressActivated = false;
         vm.myTasksCount = 0;
         $rootScope.taskcount = 0;
+        vm.signUpInProggress = true;
 
         vm.onGoingActivityies = function () { return datacontext.getTaskList(); };      
 
@@ -71,9 +72,8 @@
         };
 
         vm.signUp = function () {
-
             datacontext.checkIfUserExist(vm.user).then(function (response) {
-                logger.error("response from isuserexist: ", response);
+                logger.info("response from isuserexist: ", response);
                 if (response.data !== null && response.data !== '') {
                     var user = response.data;
                     datacontext.saveUserToLocalStorage(user);
@@ -300,6 +300,7 @@
         }
 
         vm.checkIfUserLogdIn();
+     
 
     }
 

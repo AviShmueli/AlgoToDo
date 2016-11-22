@@ -123,7 +123,7 @@
                     $log.info('notificationReceived: ' + event, data);
                     datacontext.addTaskToTaskList(data.additionalData.additionalData);
                     $rootScope.taskcount = data.count;
-                    $rootScope.$apply()
+                    $rootScope.$apply();
                     // data.message,
                     // data.title,
                     // data.count,

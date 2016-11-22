@@ -56,7 +56,10 @@
             </md-checkbox>
         </md-input-container>
         <section layout="row" layout-align="center center" layout-wrap>
-            <md-button class="md-raised md-primary" ng-click="vm.signUp()" ng-disabled="signUpForm.$invalid">הירשם</md-button>
+            <md-button class="md-raised md-primary circular-progress-button" ng-click="vm.inProgress = true; vm.signUp();" ng-disabled="signUpForm.$invalid">
+                <span ng-show="!vm.inProgress">הירשם</span>
+                <md-progress-circular md-mode="indeterminate" ng-show="vm.inProgress" md-diameter="20px" class="md-accent md-hue-2"></md-progress-circular>
+            </md-button>
         </section>
     </form>
 </div>

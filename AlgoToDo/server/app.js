@@ -179,7 +179,6 @@ var sendGcmMessage = function (task, userUnDoneTaskCount, regToken) {
 
 var users = [];
 io.on('connection', function (socket) {
-    console.log('new connection made');
 
     // response to the client call for Login and join the chat
     socket.on('join', function (data) {
@@ -311,6 +310,65 @@ app.post('/TaskManeger/newTask', function (req, res) {
             db.close();
         });
     });
+});
+
+app.post('/TaskManeger/newComment', function (req, res) {
+
+    var taskId = req.body.taskId;
+    var comment = req.body.comment;
+
+    var fromId = comment.from._id;
+    comment.from._id = ObjectID(fromId);
+
+    //add task to Mongo
+    mongodb.connect(mongoUrl, function (err, db) {
+
+        if (err) {
+            winston.log('Error', "error while trying to connect MongoDB: ", err);
+        }
+
+        var collection = db.collection('tasks');
+
+        collection.findAndModify({ _id: ObjectID(taskId) }, [['_id', 'asc']],
+            { $push: { comments: comment } },{new: true},
+            function (err, results) {
+
+                if (err) {
+                    winston.log('Error', "error while trying to add new Task: ", err);
+                }
+                var task = results.value;
+                
+                var userIdToNotify = '';
+                var ioIdToNotify = '';
+                if (task.from._id.equals(comment.from._id)) {
+                    userIdToNotify = task.to._id;
+                }
+                else {
+                    userIdToNotify = task.from._id;
+                }
+
+                if (users[userIdToNotify] !== undefined) {
+                    ioIdToNotify = users[userIdToNotify].id;
+                }
+                
+                // if the employee is now online send the new task by Socket.io
+                if (userIdToNotify !== '' && !task.to._id.equals(task.from._id)) {
+                    io.to(ioIdToNotify).emit('new-comment', { taskId: task._id, newComment: comment });
+                }
+
+                // if this task is not from me to me, send notification to the user
+                //if (task.to._id !== task.from._id) {
+                //    pushTaskToUserDevice(task);
+                //}
+
+                // return the new task to the sender
+                //res.send(results.ops[0]);
+                
+                res.send('ok');
+
+                db.close();
+            });
+        });
 });
 
 app.post('/TaskManeger/updateTaskStatus', function (req, res) {

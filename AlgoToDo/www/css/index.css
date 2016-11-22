@@ -11,6 +11,11 @@
 .add-comment-footer .md-errors-spacer {
     min-height: 0;
 }
+.md-med{
+    line-height: 47px!important;
+    width: 47px!important;
+    height: 47px!important;
+}
 .add-comment-footer .md-fab {
         background-color: rgb(255,112,67) !important;
 }
@@ -419,3 +424,24 @@ md-sidenav ng-md-icon {
         max-height: 0;
         opacity: 0;
     }
+
+    .circular-progress-button {
+    height: 36px;
+}
+
+.circular-progress-button>md-progress-circular {
+    margin: auto;
+    margin-top: 0px; /* If circular does not appear at the center, change this value. */
+}
+
+.circular-progress-button>md-progress-circular .md-half-circle {
+    border-top-color: white !important;
+}
+
+.circular-progress-button>md-progress-circular .md-left>.md-half-circle {
+    border-left-color: white;
+}
+
+.circular-progress-button>md-progress-circular .md-right>.md-half-circle {
+    border-right-color: white;
+}

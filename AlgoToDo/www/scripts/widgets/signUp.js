@@ -20,6 +20,7 @@
         function signUpController($scope) {
             var vm = this;
 
+            vm.inProgress = false;
             vm.user = $scope.user;
             vm.signUp = $scope.signUp;
         }
