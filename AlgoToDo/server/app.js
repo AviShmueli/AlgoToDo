@@ -398,7 +398,7 @@ app.post('/TaskManeger/newComment', function (req, res) {
                 
                 // if the employee is now online send the new task by Socket.io
                 if (userIdToNotify !== '' && !task.to._id.equals(task.from._id)) {
-                    //io.to(ioIdToNotify).emit('new-comment', { taskId: task._id, newComment: comment });
+                    io.to(ioIdToNotify).emit('new-comment', { taskId: task._id, newComment: comment });
                 }
 
                 // if this task is not from me to me, send notification to the user
