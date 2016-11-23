@@ -237,6 +237,7 @@
                 task.from = { '_id': user._id, 'name': user.name, 'avatarUrl': user.avatarUrl};
                 task.status = 'inProgress';
                 task.createTime = new Date();
+                task.comments = [];
                 datacontext.saveNewTask(task).then(function (response) {
                         logger.toast('המשימה נשלחה בהצלחה!', response.data, 2000);
                         logger.info('task added sucsessfuly', response.data);
@@ -285,7 +286,7 @@
         };
 
         document.addEventListener("resume", function () {         
-            vm.selectedIndex = 1;
+            //vm.selectedIndex = 1;
             //vm.login();
         }, false);
 

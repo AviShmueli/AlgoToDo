@@ -16,7 +16,7 @@
                         </md-button>
                     </md-menu-item>
                     <md-menu-item>
-                        <md-button ng-disabled="!vm.taskIsFromoMe" class="no-line-height" ng-click="ctrl.redial($event)">
+                        <md-button ng-disabled="!vm.taskIsFromMe" class="no-line-height" ng-click="ctrl.redial($event)">
                             <div layout="row" flex>
                                 <ng-md-icon md-menu-align-target icon="settings_backup_restore" class="icon-fill"></ng-md-icon>
                                 <p flex style="text-align:right">שלח מחדש</p>
@@ -60,9 +60,9 @@
                     <md-card-content>
                         <div layout="row">
                             <md-card-avatar>
-                                <img alt="{{vm.task.from.name}}" ng-src="{{vm.appDomain + vm.task.from.avatarUrl}}" class="md-avatar user-avatar-small" style="margin-left: 10px;" />
+                                <img alt="user image" ng-src="{{vm.appDomain + ((vm.taskIsFromMe) ? vm.task.to.avatarUrl : vm.task.from.avatarUrl)}}" class="md-avatar user-avatar-small" style="margin-left: 10px;" />
                             </md-card-avatar>
-                            <span class="from">{{vm.task.from.name}}</span>
+                            <span class="from">{{ ((vm.taskIsFromMe) ? vm.task.to.name : vm.task.from.name)}}</span>
                             <span flex></span>
                             נשלחה&ensp;
                             <span ng-bind-html="(vm.task.createTime | amCalendar)"></span>
@@ -80,7 +80,7 @@
                         <md-button ng-disabled="!vm.taskIsToMe" class="md-icon-button" aria-label="alert">
                             <ng-md-icon icon="add_alert" class="icon-fill"></ng-md-icon>
                         </md-button>
-                        <md-button ng-disabled="!vm.taskIsFromoMe" class="md-icon-button" aria-label="redo">
+                        <md-button ng-disabled="!vm.taskIsFromMe" class="md-icon-button" aria-label="redo">
                             <ng-md-icon icon="settings_backup_restore" class="icon-fill"></ng-md-icon>
                         </md-button>
                         <md-button class="md-icon-button" aria-label="report">
@@ -110,9 +110,9 @@
             </main>
         </md-content>
     
-    <footer class="add-comment-footer">
+    <footer class="add-comment-footer" ng-if="vm.task.status !== 'done'">
         <md-toolbar class="md-scroll-shrink ">
-            <div layout="row" layout-align="center center" flex>
+            <div layout="row" layout-align="center center" flex style="padding-bottom: 8px">
                 <md-button class="md-fab md-icon-button md-med" aria-label="done" ng-click="vm.addComment()">
                     <ng-md-icon class="rotate" icon="send" size="28"></ng-md-icon>
                 </md-button>

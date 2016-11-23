@@ -16,6 +16,7 @@
                             $cordovaBadge, $cordovaDevice, $log) {
 
         var self = this;
+        self.appState = 'foreground';
         var PushOptions = {
             android: {
                 senderID: "874351794059",
@@ -119,37 +120,39 @@
 
             document.addEventListener("deviceready", function () {
                 // triggered every time notification received
-                $rootScope.$on('$cordovaPushV5:notificationReceived', function (event, data) {
-                    $log.info('notificationReceived: ' + event, data);
-                    var dataFromServer = data.additionalData.additionalData;
-                    if (dataFromServer.type === "task") {
-                        datacontext.addTaskToTaskList(dataFromServer.object);
-                        $rootScope.taskcount = data.count;
-                    }
-                    if (dataFromServer.type === "comment") {
-                        datacontext.addCommentToTask(dataFromServer.taskId, dataFromServer.object);
-                        window.location = '#/task/' + taskId;
-                    }
-
-                    $rootScope.$apply();
-                    // data.message,
-                    // data.title,
-                    // data.count,
-                    // data.sound,
-                    // data.image,
-                    // data.additionalData
-                });
+                $rootScope.$on('$cordovaPushV5:notificationReceived', handleNotificationRecive);
 
                 // triggered every time error occurs
-                $rootScope.$on('$cordovaPushV5:errorOcurred', function (event, e) {
-                    $log.error('errorOcurred: ' + event, e);
-                    // e.message
-                });
+                $rootScope.$on('$cordovaPushV5:errorOcurred', handleErrorOcurred);
 
             }, false);
         }
 
         onNotificationReceived();
+
+        var handleNotificationRecive = function (event, data) {
+            $log.info('notificationReceived: ' + event, data);
+            var dataFromServer = data.additionalData.additionalData;
+            if (dataFromServer.type === "task") {
+                datacontext.addTaskToTaskList(dataFromServer.object);
+                $rootScope.taskcount = data.count;
+                $rootScope.$apply();
+            }
+            if (dataFromServer.type === "comment") {
+                datacontext.addCommentToTask(dataFromServer.taskId, dataFromServer.object);
+                if (self.appState === 'background') {
+                    window.location = '#/task/' + dataFromServer.taskId;
+                }
+                else {
+
+                }
+            }
+        };
+
+        var handleErrorOcurred = function (event, e) {
+            $log.error('errorOcurred: ' + event, e);
+            // e.message
+        };
 
         var sendSmS = function (to) {
             //CONFIGURATION
@@ -171,6 +174,21 @@
                   });
             }, false);*/
         };
+
+        document.addEventListener("deviceready", function () {
+            document.addEventListener( 'pause', onPause.bind( this ), false );
+            document.addEventListener( 'resume', onResume.bind( this ), false );
+        }, false);
+
+
+        function onPause() {
+            self.appState = 'background';
+        };
+
+        function onResume() {
+            self.appState = 'foreground';
+        };
+
 
         var service = {
             setLocalNotification: setLocalNotification,

@@ -5,9 +5,11 @@
         .module('app.data')
         .service('datacontext', datacontext);
 
-    datacontext.$inject = ['$http', 'logger', 'lodash', 'appConfig', '$localStorage', '$mdToast'];
+    datacontext.$inject = ['$http', 'logger', 'lodash', 'appConfig',
+                           '$localStorage', '$mdToast', 'socket'];
 
-    function datacontext($http, logger, lodash, appConfig, $localStorage, $mdToast) {
+    function datacontext($http, logger, lodash, appConfig,
+                         $localStorage, $mdToast, socket) {
 
         var self = this;
         self.$storage = $localStorage;
@@ -158,11 +160,26 @@
         var addCommentToTask = function (taskId, comment) {
             var foundIndex = self.$storage.tasksList.findIndex(x => x._id === taskId);
             var taskComments = self.$storage.tasksList[foundIndex].comments;
-            var newCommentIndex_IfExist = taskComments.findIndex(x => x._id === comment._id);
-            if (newCommentIndex_IfExist !== -1) {
-                taskComments.push(comment);
+            if (taskComments === undefined) {
+                self.$storage.tasksList[foundIndex].comments = [comment];
+            }
+            else {
+                var newCommentIndex_IfExist = taskComments.findIndex(x => x._id === comment._id);
+                if (newCommentIndex_IfExist === -1) {
+                    taskComments.push(comment);
+                }
             }
         }
+
+        // when new comment received from the server
+        //socket.on('new-comment', function (data) {
+
+        //    var newComment = data.newComment;
+        //    var taskId = data.taskId;
+        //    if (taskId === vm.taskId) {
+        //        vm.task.comments.push(newComment);
+        //    }
+        //});
 
         var service = {
             user: self.user,

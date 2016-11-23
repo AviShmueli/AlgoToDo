@@ -21,7 +21,7 @@
         vm.user = datacontext.getUserFromLocalStorage();
         vm.appDomain = appConfig.appDomain;
         vm.taskIsToMe = (vm.task.to._id === vm.user._id);
-        vm.taskIsFromoMe = (vm.task.from._id === vm.user._id);
+        vm.taskIsFromMe = (vm.task.from._id === vm.user._id);
         angular.element(document.querySelectorAll('html')).removeClass("hight-auto");
 
 
@@ -58,18 +58,7 @@
             vm.task.comments.push(comment);
             datacontext.newComment(vm.task._id, comment);
             vm.newCommentText = '';
-        }
-
-        // when new comment received from the server
-        socket.on('new-comment', function (data) {
-
-            var newComment = data.newComment;
-            var taskId = data.taskId;
-
-            vm.task.comments.push(newComment);
-        });
-
-       
+        }     
 
     }
 
