@@ -30,9 +30,9 @@
         }
 
         // login 
-        //socket.emit('join', {
-        //    userId: vm.user._id
-        //});
+        socket.emit('join', {
+            userId: vm.user._id
+        });
 
         vm.goBack = function () {
             $window.history.back();
