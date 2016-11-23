@@ -79,7 +79,7 @@ var cert = path.join(__dirname, './ApnCertificates/production/aps_prod_cert.pem'
 var key = path.join(__dirname, './ApnCertificates/production/aps_prod_key.pem');
 
 
-var options = {
+var apnProviderOptions = {
     token: {
         key: APNsAuthKey,
         keyId: "JXZ3MBK8YA",
@@ -92,7 +92,7 @@ var options = {
     passphrase: 'avi3011algo'
 };
 
-var apnProvider = new apn.Provider(options);
+var apnProvider = new apn.Provider(apnProviderOptions);
 
 var sendApnMessage = function(task, userUnDoneTaskCount, ApnRegistrationId){
 
@@ -357,9 +357,9 @@ app.post('/TaskManeger/newComment', function (req, res) {
                 }
 
                 // if this task is not from me to me, send notification to the user
-                //if (task.to._id !== task.from._id) {
-                //    pushTaskToUserDevice(task);
-                //}
+                if (task.to._id !== task.from._id) {
+                    pushTaskToUserDevice(task);
+                }
 
                 // return the new task to the sender
                 //res.send(results.ops[0]);
