@@ -137,29 +137,27 @@ var gcm = require('node-gcm');
 
 var GcmSender = new gcm.Sender('AIzaSyDPJtKwWeftuwuneEWs-WlLII6LE7lGeMk');
 
-var sendGcmMessage = function (additionalData, userUnDoneTaskCount, regToken, type) {
+var sendTaskViaGcm = function (task, userUnDoneTaskCount, regToken) {
 
-    var titleTest = type === "task" ? "משימה" : "תגובה";
-    var summaryText = type === "task" ? "משימות" : "תגובות";
     var message = new gcm.Message({
         /*collapseKey: task.from._id,
         priority: 'high',
         delayWhileIdle: true,*/
         data: {
-            additionalData: additionalData,
-            title: titleTest + "חדשה מ " + additionalData.from.name,
+            additionalData: task,
+            title: "משימה חדשה מ" + task.from.name,
             sound: 'default',
             icon: 'www/images/icon.png',
-            body: additionalData.description,
+            body: task.description,
             badge: userUnDoneTaskCount
         }
     });
 
-    message.addData('notId', additionalData.from._id);
+    message.addData('notId', task.from._id);
     message.addData('content-available', '1');
     message.addData('image', 'www/images/algologo1.png');
     message.addData('style', 'inbox');
-    message.addData('summaryText', summaryText + 'יש לך %n%  חדשות ');
+    message.addData('summaryText', ' יש לך %n% משימות חדשות');
 
     console.log("sending message : ", message);
     console.log("with GcmRegistrationId: ", regToken);
@@ -360,7 +358,7 @@ app.post('/TaskManeger/newComment', function (req, res) {
 
                 // if this task is not from me to me, send notification to the user
                 if (task.to._id !== task.from._id) {
-                    pushCommentToUserDevice(comment, userIdToNotify);
+                    pushCommentToUserDevice(comment, task, userIdToNotify);
                 }
 
                 // return the new task to the sender
@@ -557,7 +555,7 @@ var pushTaskToUserDevice = function (task) {
         // get the number that will be set to the app icon badge
         getUnDoneTasksCountByUserId(task.to._id, function (error, userUnDoneTaskCount) {
             if (user.GcmRegistrationId !== undefined) {
-                sendGcmMessage(task, userUnDoneTaskCount, user.GcmRegistrationId, "task");
+                sendTaskViaGcm(task, userUnDoneTaskCount, user.GcmRegistrationId);
             }
             if (user.ApnRegistrationId !== undefined) {
                 sendApnMessage(task, userUnDoneTaskCount, user.ApnRegistrationId);
@@ -566,13 +564,13 @@ var pushTaskToUserDevice = function (task) {
     });
 };
 
-var pushCommentToUserDevice = function (comment, userIdToNotify) {
+var pushCommentToUserDevice = function (comment, task, userIdToNotify) {
 
     // get user from DB and check if there GcmRegId or ApnRegId
     getUserByUserId(userIdToNotify, function (error, user) {
 
         if (user.GcmRegistrationId !== undefined) {
-            sendGcmMessage(comment, 0, user.GcmRegistrationId, "comment");
+            sendTaskViaGcm(comment, 0, user.GcmRegistrationId);
         }
         if (user.ApnRegistrationId !== undefined) {
             sendApnMessage(comment, 0, user.ApnRegistrationId);
