@@ -144,7 +144,11 @@ var sendTaskViaGcm = function (task, userUnDoneTaskCount, regToken) {
         priority: 'high',
         delayWhileIdle: true,*/
         data: {
-            additionalData: task,
+            additionalData: {
+                type: "task",
+                object: task,
+                taskId: task._id
+            },
             title: "משימה חדשה מ" + task.from.name,
             sound: 'default',
             icon: 'www/images/icon.png',
@@ -158,6 +162,47 @@ var sendTaskViaGcm = function (task, userUnDoneTaskCount, regToken) {
     message.addData('image', 'www/images/algologo1.png');
     message.addData('style', 'inbox');
     message.addData('summaryText', ' יש לך %n% משימות חדשות');
+
+    console.log("sending message : ", message);
+    console.log("with GcmRegistrationId: ", regToken);
+
+    // Actually send the message
+    GcmSender.send(message, { registrationTokens: [regToken] }, function (err, response) {
+        console.log("send message", message);
+        if (err) {
+            console.error("error while sending push notification: ", err);
+            winston.log('Error', "error while sending push notification: ", err);
+        }
+        else {
+            console.log(response);
+        }
+    });
+};
+
+var sendCommentViaGcm = function (comment, task, regToken) {
+
+    var message = new gcm.Message({
+        /*collapseKey: task.from._id,
+        priority: 'high',
+        delayWhileIdle: true,*/
+        data: {
+            additionalData: {
+                type: "comment",
+                object: comment,
+                taskId: task._id
+            },
+            title: "תגובה חדשה מ" + comment.from.name,
+            sound: 'default',
+            icon: 'www/images/icon.png',
+            body: comment.text
+        }
+    });
+
+    message.addData('notId', task.from._id);
+    message.addData('content-available', '1');
+    message.addData('image', 'www/images/algologo1.png');
+    message.addData('style', 'inbox');
+    message.addData('summaryText', ' יש לך %n% תגובות חדשות');
 
     console.log("sending message : ", message);
     console.log("with GcmRegistrationId: ", regToken);
@@ -570,7 +615,7 @@ var pushCommentToUserDevice = function (comment, task, userIdToNotify) {
     getUserByUserId(userIdToNotify, function (error, user) {
 
         if (user.GcmRegistrationId !== undefined) {
-            sendTaskViaGcm(comment, 0, user.GcmRegistrationId);
+            sendCommentViaGcm(comment, task, user.GcmRegistrationId);
         }
         if (user.ApnRegistrationId !== undefined) {
             sendApnMessage(comment, 0, user.ApnRegistrationId);
