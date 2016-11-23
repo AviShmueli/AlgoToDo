@@ -364,7 +364,7 @@ app.post('/TaskManeger/newComment', function (req, res) {
 
     var fromId = comment.from._id;
     comment.from._id = ObjectID(fromId);
-
+    comment._id = new ObjectID();
     //add task to Mongo
     mongodb.connect(mongoUrl, function (err, db) {
 

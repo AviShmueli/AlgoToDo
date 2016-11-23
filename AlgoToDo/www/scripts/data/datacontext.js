@@ -10,7 +10,6 @@
     function datacontext($http, logger, lodash, appConfig, $localStorage, $mdToast) {
 
         var self = this;
-        self.tasksList = [];
         self.$storage = $localStorage;
         self.$storage.usersCache = new Map();
         //self.socket = io.connect(appConfig.appDomain);
@@ -51,11 +50,6 @@
             };
 
             return $http(req);
-
-            // send the new task to the server
-            /*socket.emit('update-task', {
-                task: task
-            });*/
         };
 
         var getTaskList = function () {
@@ -161,8 +155,13 @@
             return $http(req);
         }
 
-        var getSocket = function () {
-            //return self.socket;
+        var addCommentToTask = function (taskId, comment) {
+            var foundIndex = self.$storage.tasksList.findIndex(x => x._id === taskId);
+            var taskComments = self.$storage.tasksList[foundIndex].comments;
+            var newCommentIndex_IfExist = taskComments.findIndex(x => x._id === comment._id);
+            if (newCommentIndex_IfExist !== -1) {
+                taskComments.push(comment);
+            }
         }
 
         var service = {
@@ -184,7 +183,7 @@
             checkIfUserExist: checkIfUserExist,
             getTaskByTaskId: getTaskByTaskId,
             newComment: newComment,
-            getSocket: getSocket
+            addCommentToTask: addCommentToTask
         };
 
         return service;

@@ -121,13 +121,14 @@
                 // triggered every time notification received
                 $rootScope.$on('$cordovaPushV5:notificationReceived', function (event, data) {
                     $log.info('notificationReceived: ' + event, data);
-                    var data = data.additionalData.additionalData;
-                    if (data.type === "task") {
-                        datacontext.addTaskToTaskList(data.additionalData.additionalData);
+                    var dataFromServer = data.additionalData.additionalData;
+                    if (dataFromServer.type === "task") {
+                        datacontext.addTaskToTaskList(dataFromServer.object);
                         $rootScope.taskcount = data.count;
                     }
-                    if (data.type === "comment") {
-
+                    if (dataFromServer.type === "comment") {
+                        datacontext.addCommentToTask(dataFromServer.taskId, dataFromServer.object);
+                        window.location = '#/task/' + taskId;
                     }
 
                     $rootScope.$apply();
