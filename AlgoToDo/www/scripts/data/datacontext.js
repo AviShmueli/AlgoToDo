@@ -172,14 +172,12 @@
         }
 
         // when new comment received from the server
-        //socket.on('new-comment', function (data) {
+        socket.on('new-comment', function (data) {
 
-        //    var newComment = data.newComment;
-        //    var taskId = data.taskId;
-        //    if (taskId === vm.taskId) {
-        //        vm.task.comments.push(newComment);
-        //    }
-        //});
+            var newComment = data.newComment;
+            var taskId = data.taskId;
+            addCommentToTask(taskId, newComment);
+        });
 
         var service = {
             user: self.user,
