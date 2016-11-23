@@ -360,7 +360,7 @@ app.post('/TaskManeger/newComment', function (req, res) {
 
                 // if this task is not from me to me, send notification to the user
                 if (task.to._id !== task.from._id) {
-                    pushTaskToUserDevice(comment, userIdToNotify);
+                    pushCommentToUserDevice(comment, userIdToNotify);
                 }
 
                 // return the new task to the sender
