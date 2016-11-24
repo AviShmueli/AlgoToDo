@@ -94,7 +94,7 @@ var apnProviderOptions = {
 
 var apnProvider = new apn.Provider(apnProviderOptions);
 
-var sendApnMessage = function(task, userUnDoneTaskCount, ApnRegistrationId){
+var sendTaskViaApn = function(task, userUnDoneTaskCount, ApnRegistrationId){
 
     var deviceTokenInHex = Buffer.from(ApnRegistrationId, 'base64').toString('hex');
     
@@ -105,7 +105,11 @@ var sendApnMessage = function(task, userUnDoneTaskCount, ApnRegistrationId){
     note.priority = 10;
     note.sound = "ping.aiff";
     //note.alert = "משימה חדשה מ" + task.from.name;//"\uD83D\uDCE7 \u2709 You have a new message";
-    note.payload = { 'additionalData': task };
+    note.payload = { 'additionalData': {
+    type: "task",
+    object: task,
+    taskId: task._id
+    } };
     //note.payload = task ;
     note.topic = "com.algotodo.app";
     note.body = task.description;
@@ -128,6 +132,46 @@ var sendApnMessage = function(task, userUnDoneTaskCount, ApnRegistrationId){
             console.log(response.sent);
         }
     });
+}
+
+var sendCommentViaApn = function(comment, task, ApnRegistrationId){
+    
+    var deviceTokenInHex = Buffer.from(ApnRegistrationId, 'base64').toString('hex');
+    
+    var note = new apn.Notification();
+    
+    note.expiry = Math.floor(Date.now() / 1000) + 3600; // Expires 1 hour from now.
+    //note.badge = userUnDoneTaskCount;
+    note.priority = 10;
+    note.sound = "ping.aiff";
+    //note.alert = "משימה חדשה מ" + task.from.name;//"\uD83D\uDCE7 \u2709 You have a new message";
+    note.payload = { 'additionalData': {
+    type: "task",
+    object: comment,
+    taskId: task._id
+    } };
+    //note.payload = task ;
+    note.topic = "com.algotodo.app";
+    note.body = comment.text;
+    note.title = "תגובה חדשה מ" + comment.from.name;
+    note.contentAvailable = 1;
+    
+    console.log("sending message : ", note);
+    console.log("with ApnRegistrationId: ", ApnRegistrationId);
+    //console.log("with ApnRegistrationId: ", deviceTokenInHex);
+    
+    // Actually send the message
+    apnProvider.send(note, ApnRegistrationId).then(function (response) {
+                                                   console.log("send message", note);
+                                                   
+                                                   if (response.failed.length > 0) {
+                                                   console.error("error while sending push notification to apple user: ", response.failed);
+                                                   winston.log('Error', "error while sending push notification to apple user: ", response.failed);
+                                                   }
+                                                   else {
+                                                   console.log(response.sent);
+                                                   }
+                                                   });
 }
 
 //sendApnMessage({from:{name:'אבי שמואלי'},description: 'יש לך 2 דקות להגיע לפה'},1,"b83a1fe9f784c3a7a1706f8bc4e5c4146be72c74b52b858b85e8df27b54c04f9");
@@ -603,7 +647,7 @@ var pushTaskToUserDevice = function (task) {
                 sendTaskViaGcm(task, userUnDoneTaskCount, user.GcmRegistrationId);
             }
             if (user.ApnRegistrationId !== undefined) {
-                sendApnMessage(task, userUnDoneTaskCount, user.ApnRegistrationId);
+                sendTaskViaApn(task, userUnDoneTaskCount, user.ApnRegistrationId);
             }
         });
     });
@@ -618,7 +662,7 @@ var pushCommentToUserDevice = function (comment, task, userIdToNotify) {
             sendCommentViaGcm(comment, task, user.GcmRegistrationId);
         }
         if (user.ApnRegistrationId !== undefined) {
-            sendApnMessage(comment, 0, user.ApnRegistrationId);
+            sendCommentViaApn(comment, task, user.ApnRegistrationId);
         }
 
     });
