@@ -146,7 +146,7 @@ var sendCommentViaApn = function(comment, task, ApnRegistrationId){
     note.sound = "ping.aiff";
     //note.alert = "משימה חדשה מ" + task.from.name;//"\uD83D\uDCE7 \u2709 You have a new message";
     note.payload = { 'additionalData': {
-    type: "task",
+    type: "comment",
     object: comment,
     taskId: task._id
     } };
