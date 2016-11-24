@@ -116,14 +116,23 @@
             return $cordovaDevice.getDevice();
         };
 
+        var cancelEventListner_notificationReceived = null;
+        var cancelEventListner_errorOcurred = null;
+ 
         var onNotificationReceived = function () {
 
             document.addEventListener("deviceready", function () {
                 // triggered every time notification received
-                $rootScope.$on('$cordovaPushV5:notificationReceived', handleNotificationRecive);
+                if(cancelEventListner_notificationReceived !== null){
+                   cancelEventListner_notificationReceived();
+                }
+                cancelEventListner_notificationReceived = $rootScope.$on('$cordovaPushV5:notificationReceived', handleNotificationRecive);
 
                 // triggered every time error occurs
-                $rootScope.$on('$cordovaPushV5:errorOcurred', handleErrorOcurred);
+                if(cancelEventListner_errorOcurred !== null){
+                   cancelEventListner_errorOcurred();
+                }
+                cancelEventListner_errorOcurred = $rootScope.$on('$cordovaPushV5:errorOcurred', handleErrorOcurred);
 
             }, false);
         }
@@ -144,7 +153,7 @@
                     window.location = '#/task/' + dataFromServer.taskId;
                 }
                 else {
-
+                    
                 }
             }
         };
