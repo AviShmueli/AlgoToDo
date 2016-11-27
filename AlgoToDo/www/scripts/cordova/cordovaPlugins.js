@@ -8,12 +8,14 @@
     cordovaPlugins.$inject = ['$rootScope', 'datacontext', 'appConfig', '$mdDialog'/*,
                               '$cordovaLocalNotification'*//*, '$cordovaSms'*/, '$window',
                               /*'$cordovaDialogs',*/ '$cordovaToast', '$cordovaPushV5',
-                              '$cordovaBadge', '$cordovaDevice', '$log', '$mdToast'];
+                              '$cordovaBadge', '$cordovaDevice', '$log', '$mdToast',
+                              '$cordovaVibration'];
 
     function cordovaPlugins($rootScope, datacontext, appConfig, $mdDialog,
                             /*$cordovaLocalNotification, *//*$cordovaSms,*/ $window,
                             /*$cordovaDialogs,*/ $cordovaToast, $cordovaPushV5,
-                            $cordovaBadge, $cordovaDevice, $log, $mdToast) {
+                            $cordovaBadge, $cordovaDevice, $log, $mdToast,
+                            $cordovaVibration) {
 
         var self = this;
         self.appState = 'foreground';
@@ -153,32 +155,34 @@
                     window.location = '#/task/' + dataFromServer.taskId;
                 }
                 else {
-                    var simpleToast = $mdToast.build({
-                        hideDelay: 10000,
-                        position: 'top left',
-                        template: '<md-toast>' +
-                                     '<div class="md-toast-content" dir="rtl">' +
-                                        dataFromServer.object.from.name + ' הגיב על משימה,' +
-                                        + 'הקש כדי לראות את התגובה' +
-                                     '</div>' +
-                                  '</md-toast>'
-                    });
+                    if (window.location.hash.indexOf(dataFromServer.taskId) === -1) {
+                        document.addEventListener("deviceready", function () {
+                            $cordovaVibration.vibrate(300);
+                        }, false);
+                        showNewCommentToast(dataFromServer.taskId, dataFromServer.object.from.name);
+                    }
                 }
             }
         };
 
-        var simpleToast = $mdToast.build({
-            hideDelay: 4000,
-            position: 'top',
-            template: '<md-toast class="md-capsule top-toast">' +
-                         '<div class="md-toast-content" dir="rtl">' +
-                            "אבי שמואלי" + ' הגיב על משימה,' +
-                            '<br/>הקש כדי לראות את התגובה' +
-                         '</div>' +
-                      '</md-toast>'
-        });
-
-        //$mdToast.show(simpleToast);
+        var showNewCommentToast = function (taskId, name) {
+            var NewCommentToast = $mdToast.build({
+                hideDelay: 5000,
+                position: 'top',
+                template: '<md-toast class="md-capsule" id="message-toast" md-swipe-left="$root.hideToast(\'message-toast\')" md-swipe-right="$root.hideToast(\'message-toast\')">' +
+                             '<div layout="row" class="md-toast-content message-toast" dir="rtl" ng-click="$root.redirectToTaskPage(\'' + taskId + '\')"> ' +
+                                '<span flex="66" layout-padding>' +
+                                    name + ' הגיב על משימה,' +
+                                    '<br/>הקש כדי לראות את התגובה' +
+                                '</span>' +
+                                '<span layout="row" flex="33" layout-align="center center">' +
+                                    '<ng-md-icon icon="new_releases" size="48" style="fill:rgb(3, 87, 95)"></ng-md-icon>' +
+                                '</span>' +
+                             '</div>' +
+                          '</md-toast>'
+            });
+            $mdToast.show(NewCommentToast);
+        };
 
         var handleErrorOcurred = function (event, e) {
             $log.error('errorOcurred: ' + event, e);

@@ -43,9 +43,9 @@
                 </md-menu-content>
             </md-menu>
             
-            <md-button class="md-icon-button" aria-label="actions">
+            <!--<md-button class="md-icon-button" aria-label="actions">
                 <ng-md-icon icon="person_add"></ng-md-icon>
-            </md-button>
+            </md-button>-->
             <span flex></span>
             <md-button class="md-icon-button" ng-click="vm.goBack()" aria-label="Menu">
                 <ng-md-icon icon="arrow_forward"></ng-md-icon>
@@ -73,7 +73,7 @@
                     </md-card-content>
                     <md-divider></md-divider>
                     <md-card-actions layout="row" layout-align="end center">
-                        <md-button ng-if="vm.taskIsToMe" class="md-fab md-mini md-icon-button md-secondary" style="background-color: rgba(105, 178, 137, 0.95);" ng-click="vm.setTaskStatus(item, 'done')" aria-label="done">
+                        <md-button ng-if="vm.taskIsToMe" class="md-fab md-mini md-icon-button md-secondary" style="background-color: rgba(105, 178, 137, 0.95);" ng-click="vm.setTaskStatus(vm.task, 'done')" aria-label="done">
                             <ng-md-icon icon="done"></ng-md-icon>
                         </md-button>
                         <span flex></span>

@@ -1,16 +1,22 @@
 * {
     -webkit-tap-highlight-color: rgba(0,0,0,0);
 }
-/*.top-toast{
+.top-toast{
     left: 0;
     right: 0;
     width: 100%;
     max-width: 100%;
     min-width: 0;
     border-radius: 0;
-    /* bottom: 0; */
-    /* padding: 0; */
-}*/
+    bottom: auto;
+    padding: 16px 8px 4px 8px;
+}
+.message-toast{
+    background-color: rgb(247, 172, 148) !important;
+    color: rgb(3, 87, 95) !important;
+    font-weight: bold !important;
+    line-height: 30px !important;
+}
 .no-line-height{
      line-height: 0 !important;
 }

@@ -302,7 +302,16 @@
 
         vm.checkIfUserLogdIn();
      
+        $rootScope.redirectToTaskPage = function (taskId, toast) {
+            window.location = '#/task/' + taskId;
+            var toastElement = angular.element(document.querySelectorAll('#message-toast'));
+            $mdToast.hide(toastElement);
+        }
 
+        $rootScope.hideToast = function (toastId) {
+            var toastElement = angular.element(document.querySelectorAll('#' + toastId));
+            $mdToast.hide(toastElement);
+        }
     }
 
 })();
