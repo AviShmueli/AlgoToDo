@@ -62,7 +62,7 @@
                             <md-card-avatar>
                                 <img alt="user image" ng-src="{{vm.appDomain + ((vm.taskIsFromMe) ? vm.task.to.avatarUrl : vm.task.from.avatarUrl)}}" class="md-avatar user-avatar-small" style="margin-left: 10px;" />
                             </md-card-avatar>
-                            <span class="from">{{ ((vm.taskIsFromMe) ? vm.task.to.name : vm.task.from.name)}}</span>
+                            <span class="from">{{ ((vm.taskIsFromMe) ? 'ל' + vm.task.to.name : 'מ' + vm.task.from.name)}}</span>
                             <span flex></span>
                             נשלחה&ensp;
                             <span ng-bind-html="(vm.task.createTime | amCalendar)"></span>
@@ -113,7 +113,7 @@
     <footer class="add-comment-footer" ng-if="vm.task.status !== 'done'">
         <md-toolbar class="md-scroll-shrink ">
             <div layout="row" layout-align="center center" flex style="padding-bottom: 8px;padding-top: 8px;">
-                <md-button class="md-fab md-icon-button md-med" aria-label="done" ng-click="vm.addComment()">
+                <md-button class="md-fab md-icon-button md-med" aria-label="done" ng-click="vm.addComment()" ng-disabled="vm.newCommentText === ''">
                     <ng-md-icon class="rotate" icon="send" size="28"></ng-md-icon>
                 </md-button>
                 <!--<span flex="7"></span>-->

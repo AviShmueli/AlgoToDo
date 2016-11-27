@@ -62,6 +62,10 @@
         var setTaskList = function (newList) {
             self.$storage.tasksList = newList;
         };
+
+        var deleteTaskListFromLocalStorage = function () {
+            delete self.$storage.tasksList;
+        };
         
         var addTaskToTaskList = function (task) {
             var count = self.$storage.tasksList.filter(function (t) { return t._id === task._id });
@@ -73,7 +77,7 @@
         
         var replaceTask = function (task) {
             var index = arrayObjectIndexOf(self.$storage.tasksList, '_id', task._id);
-            if (idex !== -1) {
+            if (index !== -1) {
                 self.$storage.tasksList[index] = task;
             }
             //var foundIndex = self.$storage.tasksList.findIndex(x => x._id === task._id);
@@ -193,6 +197,14 @@
             var taskId = data.taskId;
             addCommentToTask(taskId, newComment);
         });
+
+        var reloadAllTasks = function () {
+            if (self.$storage.user !== undefined) {
+                getAllTasks().then(function (response) {
+                    setTaskList(response.data);
+                });
+            }           
+        };
         
         var service = {
             user: self.user,
@@ -213,7 +225,9 @@
             checkIfUserExist: checkIfUserExist,
             getTaskByTaskId: getTaskByTaskId,
             newComment: newComment,
-            addCommentToTask: addCommentToTask
+            addCommentToTask: addCommentToTask,
+            reloadAllTasks: reloadAllTasks,
+            deleteTaskListFromLocalStorage: deleteTaskListFromLocalStorage
         };
 
         return service;

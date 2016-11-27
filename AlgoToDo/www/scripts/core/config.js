@@ -33,7 +33,10 @@
               })
               .when('/task/:taskId', {
                   templateUrl: 'scripts/tasks/task.html'
-              });
+              })
+              .when('/signUp', {
+                  templateUrl: 'scripts/widgets/signUp.html'
+              });;
          })
         .service('appConfig', function () {
             var self = this;
@@ -44,7 +47,8 @@
               // 'http://localhost:5001'
             };
         })
-        .run(function (amMoment) {
+        .run(function (amMoment, datacontext) {
+            datacontext.reloadAllTasks();
             amMoment.changeLocale('he');
         });
 

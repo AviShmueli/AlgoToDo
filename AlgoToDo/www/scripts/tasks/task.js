@@ -24,7 +24,7 @@
         vm.taskIsToMe = (vm.task.to._id === vm.user._id);
         vm.taskIsFromMe = (vm.task.from._id === vm.user._id);
         angular.element(document.querySelectorAll('html')).removeClass("hight-auto");
-
+        vm.newCommentText = '';
 
         if (vm.task.comments === undefined) {
             vm.task.comments = [];

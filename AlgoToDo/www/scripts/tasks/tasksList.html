@@ -18,7 +18,7 @@
                     <ng-md-icon icon="menu"></ng-md-icon>
                 </md-button>
             </div>
-            <md-tabs md-stretch-tabs="always" class="md-primary main-tabs" md-selected="vm.selectedIndex" md-swipe-content="true">
+            <md-tabs md-stretch-tabs="always" class="md-primary main-tabs" md-selected="$root.selectedIndex" md-swipe-content="true">
                 <md-tab id="tab1" aria-controls="tab1-content">
                     <ng-md-icon icon="assignment"></ng-md-icon>
                     <br /><span style="font-size: 10px">בתהליך</span>
@@ -61,13 +61,13 @@
     <md-content flex md-scroll-y ng-show="vm.userConnected">
         <ui-view layout="column" layout-fill>
             <!--<div class="inset" hide-sm></div>-->
-            <ng-switch on="vm.selectedIndex" class="tabpanel-container">
+            <ng-switch on="$root.selectedIndex" class="tabpanel-container">
                 <!-- md-swipe-down="vm.reloadTasks()" -->
                 <div role="tabpanel"
                      id="tab1-content"
                      aria-labelledby="tab1"
                      ng-switch-when="0"
-                     md-swipe-left="vm.selectedIndex = 1"
+                     md-swipe-left="$root.selectedIndex = 1"
                      layout="row" layout-align="center center">
                     <md-list flex flex-gt-sm="50" flex-md="66" dir="rtl" ng-show="(vm.onGoingActivityies() | tasksInProgress: vm.user._id).length > 0">
                         <md-list-item ng-repeat="item in vm.onGoingActivityies() | tasksInProgress: vm.user._id | filter:vm.search" class="noright task-item" style="margin-top: 7px">
@@ -102,8 +102,8 @@
                      id="tab2-content"
                      aria-labelledby="tab2"
                      ng-switch-when="1"
-                     md-swipe-left="vm.selectedIndex = 2"
-                     md-swipe-right="vm.selectedIndex = 0"
+                     md-swipe-left="$root.selectedIndex = 2"
+                     md-swipe-right="$root.selectedIndex = 0"
                      layout="row" layout-align="center center">
                     <md-list flex-gt-sm="50" flex-md="66" flex dir="rtl" ng-show="vm.myTasksCount > 0">
                         <md-list-item ng-repeat="item in vm.onGoingActivityies() | myTasks: vm.user._id | filter:vm.search" class="noright task-item" style="margin-top: 7px" >
@@ -141,7 +141,7 @@
                      id="tab3-content"
                      aria-labelledby="tab3"
                      ng-switch-when="2"
-                     md-swipe-right="vm.selectedIndex = 1"
+                     md-swipe-right="$root.selectedIndex = 1"
                      layout="row" layout-align="center center">
                     <md-list flex-gt-sm="50" flex-md="66" flex dir="rtl">
                         <md-list-item ng-repeat="item in vm.onGoingActivityies() | doneTasks: vm.user._id | filter:vm.search | orderBy: 'doneTime':true" class="noright task-item" style="margin-top: 7px">
@@ -169,7 +169,7 @@
         </ui-view>
     </md-content>
 
-    <div tm-sign-up user="vm.user" sign-up="vm.signUp()" ng-if="!vm.userConnected"></div>
+    <!--<div tm-sign-up user="vm.user" sign-up="vm.signUp()" ng-if="!vm.userConnected"></div>-->
     <div tm-sidenav user="vm.user" app-domain="vm.appDomain" log-off="vm.logOff()"></div>
 </div>
 

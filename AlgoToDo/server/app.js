@@ -535,7 +535,12 @@ app.get('/TaskManeger/getTasks', function (req, res) {
         }
 
         var collection = db.collection('tasks');
-        collection.find({ $or: [{ 'from._id': new ObjectID(userId) }, { 'to._id': new ObjectID(userId) }] }, { "sort": ['createTime', 'asc'] }).toArray(function (err, result) {
+        collection.find({
+                $or: [
+                        { 'from._id': new ObjectID(userId) },
+                        { 'to._id': new ObjectID(userId) }
+                ]
+            }, { "sort": ['createTime', 'asc'] }).toArray(function (err, result) {
 
             if (err) {
                 winston.log('Error', "error while trying to get all Tasks: ", err);

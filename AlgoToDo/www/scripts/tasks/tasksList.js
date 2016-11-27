@@ -18,8 +18,10 @@
                             socket, $mdToast, moment, $q) {
 
         var vm = this;
-        
-        vm.selectedIndex = 1;
+
+        if ($rootScope.selectedIndex === undefined) {
+            $rootScope.selectedIndex = 1;
+        }    
         vm.isSmallScrean = $mdMedia('sm');
         vm.userConnected = false;
         vm.user = {};
@@ -63,99 +65,30 @@
             }
         };
 
-        vm.checkIfUserLogdIn = function () {
+        var checkIfUserSignIn = function () {
             var user = datacontext.getUserFromLocalStorage();
             if (user !== undefined) {
                 vm.user = user;
                 vm.login();
             }
-        };
-
-        vm.signUp = function () {
-            datacontext.checkIfUserExist(vm.user).then(function (response) {
-                logger.info("response from isuserexist: ", response);
-                if (response.data !== null && response.data !== '') {
-                    var user = response.data;
-                    datacontext.saveUserToLocalStorage(user);
-                    vm.user = user;
-                    vm.login();
-                }
-                else {
-                    vm.registerUser();
-                }
-
-            }, function (error) {
-                logger.error("error while trying to check If User Exist", error);
-            });
-
-        };
-
-        vm.registerUser = function () {
-
-            if (vm.user.sex === 'woman') {
-                vm.user.avatarUrl = '/images/woman-' + Math.floor((Math.random() * 15) + 1) + '.svg';
-            }
-            else{
-                vm.user.avatarUrl = '/images/man-' + Math.floor((Math.random() * 9) + 1) + '.svg';
-            }
-            
-
-            if (cordovaPlugins.isMobileDevice()) {
-
-                document.addEventListener("deviceready", function () {
-
-                    vm.user.device = cordovaPlugins.getDeviceDetails();
-
-                    cordovaPlugins.initializePushV5().then(function () {
-                        cordovaPlugins.registerForPushNotifications().then(function (registrationId) {
-
-                            if (vm.user.device.platform === 'iOS') {
-                                vm.user.ApnRegistrationId = registrationId;
-                            }
-                            if (vm.user.device.platform === 'Android') {
-                                vm.user.GcmRegistrationId = registrationId;
-                            }
-                            datacontext.registerUser(vm.user).then(function (response) {
-                                datacontext.saveUserToLocalStorage(response.data);
-                                logger.success('user signUp successfuly', response.data);
-                                vm.user = response.data;
-                                vm.login();
-                            }, function () { });
-                        });
-                    }, function (error) {
-                        logger.error("error while trying to register user to app", error);
-                    });
-                }, false);
-            }
             else {
-                datacontext.registerUser(vm.user).then(function (response) {
-                    datacontext.saveUserToLocalStorage(response.data);
-                    logger.success('user signUp successfuly', response.data);
-                    vm.user = response.data;
-                    vm.login();
-                }, function (error) {
-                    logger.error("error while trying to register user to app", error);
-                });
+                window.location = '#/signUp';
             }
-        }
+        };
 
         vm.login = function () {
+            // a css fix
             angular.element(document.querySelectorAll('html')).removeClass("hight-auto");
-            // login 
+
+            // login to socket.io
             socket.emit('join', {
                 userId: vm.user._id
             });
 
-            //force get all the users from the server
-            //socket.emit('get-users');
-
-            // ask server to send the user tasks
-            /*socket.emit('get-tasks', {
-                userName: vm.user.name
-            });*/
             loadTasks();
             vm.userConnected = true;           
             
+            // register for push notifications
             if (cordovaPlugins.isMobileDevice()) {
                 document.addEventListener("deviceready", function () {
                     cordovaPlugins.startListening();
@@ -164,12 +97,13 @@
             }
 
             logger.info("user is now connected", vm.user);
-            //logger.toast("אתה עכשיו מחובר!", null, 1000);
+            //logger.toast("אתה עכשיו מחובר!", null, 1000);           
         };
 
         vm.logOff = function () {
             angular.element(document.querySelectorAll('html')).addClass("hight-auto");
             datacontext.deleteUserFromLocalStorage();
+            datacontext.deleteTaskListFromLocalStorage();
             vm.userConnected = false;
             vm.toggleSidenav('left');
             cordovaPlugins.clearAppBadge();
@@ -285,10 +219,10 @@
             return moment.duration(totalInMillisconds).humanize();
         };
 
-        document.addEventListener("resume", function () {         
+        /*document.addEventListener("resume", function () {         
             //vm.selectedIndex = 1;
             //vm.login();
-        }, false);
+        }, false);*/
 
         vm.searchKeypress = function (event) {
             if (event.keyCode === 13) {
@@ -299,9 +233,7 @@
         vm.navigateToTaskPage = function (taskId) {
             window.location = '#/task/' + taskId;
         }
-
-        vm.checkIfUserLogdIn();
-     
+ 
         $rootScope.redirectToTaskPage = function (taskId, toast) {
             window.location = '#/task/' + taskId;
             var toastElement = angular.element(document.querySelectorAll('#message-toast'));
@@ -312,6 +244,8 @@
             var toastElement = angular.element(document.querySelectorAll('#' + toastId));
             $mdToast.hide(toastElement);
         }
+
+        checkIfUserSignIn();
     }
 
 })();
