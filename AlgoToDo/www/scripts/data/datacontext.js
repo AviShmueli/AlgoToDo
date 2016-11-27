@@ -72,13 +72,7 @@
         };
         
         var replaceTask = function (task) {
-            var index = -1;
-            for (var i = 0, len = self.$storage.tasksList.length; i < len; i++) {
-                if (self.$storage.tasksList[i]._id === task._id) {
-                    index = i;
-                    break;
-                }
-            }
+            var index = arrayObjectIndexOf(self.$storage.tasksList, '_id', task._id);
             if (idex !== -1) {
                 self.$storage.tasksList[index] = task;
             }
@@ -185,7 +179,7 @@
             }
         }
         
-        function arrayObjectIndexOf(myArray, searchTerm, property) {
+        function arrayObjectIndexOf(myArray, property, searchTerm) {
             for (var i = 0, len = myArray.length; i < len; i++) {
                 if (myArray[i][property] === searchTerm) return i;
             }
