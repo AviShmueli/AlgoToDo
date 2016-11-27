@@ -516,9 +516,9 @@ app.post('/TaskManeger/registerUser', function (req, res) {
             }
 
             var newUser = results.ops[0];
-            if (newUser.GcmRegistrationId !== undefined) {
+            /*if (newUser.GcmRegistrationId !== undefined) {
                 GcmRegistrationIdsCache[newUser._id] = { 'userId': user._id, 'userName': newUser.name, GcmRegistrationId: newUser.GcmRegistrationId };
-            }
+            }*/
             res.send(newUser);
             db.close();
         });

@@ -8,12 +8,12 @@
     cordovaPlugins.$inject = ['$rootScope', 'datacontext', 'appConfig', '$mdDialog'/*,
                               '$cordovaLocalNotification'*//*, '$cordovaSms'*/, '$window',
                               /*'$cordovaDialogs',*/ '$cordovaToast', '$cordovaPushV5',
-                              '$cordovaBadge', '$cordovaDevice', '$log'];
+                              '$cordovaBadge', '$cordovaDevice', '$log', '$mdToast'];
 
     function cordovaPlugins($rootScope, datacontext, appConfig, $mdDialog,
                             /*$cordovaLocalNotification, *//*$cordovaSms,*/ $window,
                             /*$cordovaDialogs,*/ $cordovaToast, $cordovaPushV5,
-                            $cordovaBadge, $cordovaDevice, $log) {
+                            $cordovaBadge, $cordovaDevice, $log, $mdToast) {
 
         var self = this;
         self.appState = 'foreground';
@@ -153,10 +153,32 @@
                     window.location = '#/task/' + dataFromServer.taskId;
                 }
                 else {
-                    
+                    var simpleToast = $mdToast.build({
+                        hideDelay: 10000,
+                        position: 'top left',
+                        template: '<md-toast>' +
+                                     '<div class="md-toast-content" dir="rtl">' +
+                                        dataFromServer.object.from.name + ' הגיב על משימה,' +
+                                        + 'הקש כדי לראות את התגובה' +
+                                     '</div>' +
+                                  '</md-toast>'
+                    });
                 }
             }
         };
+
+        var simpleToast = $mdToast.build({
+            hideDelay: 4000,
+            position: 'top',
+            template: '<md-toast class="md-capsule top-toast">' +
+                         '<div class="md-toast-content" dir="rtl">' +
+                            "אבי שמואלי" + ' הגיב על משימה,' +
+                            '<br/>הקש כדי לראות את התגובה' +
+                         '</div>' +
+                      '</md-toast>'
+        });
+
+        //$mdToast.show(simpleToast);
 
         var handleErrorOcurred = function (event, e) {
             $log.error('errorOcurred: ' + event, e);

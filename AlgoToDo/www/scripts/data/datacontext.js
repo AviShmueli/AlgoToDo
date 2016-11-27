@@ -11,9 +11,10 @@
     function datacontext($http, logger, lodash, appConfig,
                          $localStorage, $mdToast, socket) {
 
+        
         var self = this;
         self.$storage = $localStorage;
-        self.$storage.usersCache = new Map();
+        //self.$storage.usersCache = {};//new Map();
         //self.socket = io.connect(appConfig.appDomain);
 
         var saveNewTask = function(task) {
@@ -69,12 +70,22 @@
                 self.$storage.tasksList.push(task);
             }            
         };
-
+        
         var replaceTask = function (task) {
-            var foundIndex = self.$storage.tasksList.findIndex(x => x._id === task._id);
-            self.$storage.tasksList[foundIndex] = task;
+            var index = -1;
+            for (var i = 0, len = self.$storage.tasksList.length; i < len; i++) {
+                if (self.$storage.tasksList[i]._id === task._id) {
+                    index = i;
+                    break;
+                }
+            }
+            if (idex !== -1) {
+                self.$storage.tasksList[index] = task;
+            }
+            //var foundIndex = self.$storage.tasksList.findIndex(x => x._id === task._id);
+            //self.$storage.tasksList[foundIndex] = task;
         };
-
+        
         var saveUserToLocalStorage = function (user) {
             self.$storage.user = user;
         };
@@ -112,15 +123,15 @@
         };
 
         var addUsersToUsersCache = function (usersList) {
-            _.each(usersList, function (user) {
+           /* _.each(usersList, function (user) {
                 if (!self.$storage.usersCache.has(user._id)) {
                     self.$storage.usersCache.set(user._id, user);
                 }
-            })
+            })*/
         }
         
         var getAllCachedUsers = function () {
-            return self.$storage.usersCache;
+            //return self.$storage.usersCache;
         }
 
         var checkIfUserExist = function (user) {
@@ -156,19 +167,29 @@
 
             return $http(req);
         }
-
+        
         var addCommentToTask = function (taskId, comment) {
-            var foundIndex = self.$storage.tasksList.findIndex(x => x._id === taskId);
-            var taskComments = self.$storage.tasksList[foundIndex].comments;
+            var foundIndex = arrayObjectIndexOf(self.$storage.tasksList, '_id', taskId);
+            var taskComments;
+            if (foundIndex !== -1) {
+                taskComments = self.$storage.tasksList[foundIndex].comments;
+            }           
             if (taskComments === undefined) {
                 self.$storage.tasksList[foundIndex].comments = [comment];
             }
             else {
-                var newCommentIndex_IfExist = taskComments.findIndex(x => x._id === comment._id);
+                var newCommentIndex_IfExist = arrayObjectIndexOf(taskComments, '_id', comment._id);
                 if (newCommentIndex_IfExist === -1) {
                     taskComments.push(comment);
                 }
             }
+        }
+        
+        function arrayObjectIndexOf(myArray, searchTerm, property) {
+            for (var i = 0, len = myArray.length; i < len; i++) {
+                if (myArray[i][property] === searchTerm) return i;
+            }
+            return -1;
         }
 
         // when new comment received from the server
@@ -178,7 +199,7 @@
             var taskId = data.taskId;
             addCommentToTask(taskId, newComment);
         });
-
+        
         var service = {
             user: self.user,
             getTaskList: getTaskList,

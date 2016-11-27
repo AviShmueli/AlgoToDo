@@ -12,7 +12,7 @@
     function AddTaskDialogController($scope, $mdDialog, datacontext, $mdMedia, $q, logger, appConfig) {
 
         var vm = this;
-
+        
         vm.isSmallScrean = $mdMedia('sm');
         vm.task = {};
 
@@ -20,25 +20,32 @@
         vm.selectedItem = null;
         vm.searchText = null;
         vm.querySearch = querySearch;
-
+        
         function querySearch(query) {
+            /*
             var matchesUsersFromCache = [];
 
             // get all users stored in the cache
             var cachedUsers = datacontext.getAllCachedUsers().values();
-
+            
             // search for match user
-            for (var user of cachedUsers) {
-                if (user.name.includes(query)) {
-                    matchesUsersFromCache.push(user);
+            //for (var user of cachedUsers) {
+                //if (user.name.includes(query)) {
+                    //matchesUsersFromCache.push(user);
+                //}
+            //}
+
+            for (i = 0; i < cachedUsers.length; i++) {
+                if (cachedUsers[i].name.includes(query)) {
+                    matchesUsersFromCache.push(cachedUsers[i]);
                 }
             }
-
+            
             // if found, return it
             if (matchesUsersFromCache.length > 0) {
                 return matchesUsersFromCache;
             }
-
+            */
             // if no users found in the cache, search in DB
             var deferred = $q.defer();
             datacontext.searchUsers(query).then(function (response) {
@@ -48,7 +55,7 @@
             });
             return deferred.promise;
         }
-
+        
         function createFilterFor(query) {
             var lowercaseQuery = angular.lowercase(query);
 
@@ -56,7 +63,7 @@
                 return (user.fullName.indexOf(lowercaseQuery) === 0);
             };
         }
-
+        
         vm.hide = function () {
             $mdDialog.hide();
         };
@@ -70,6 +77,7 @@
             // clean the form
             vm.task = {};
         };
+        
     }
 
 })();

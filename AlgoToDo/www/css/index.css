@@ -1,6 +1,16 @@
 * {
     -webkit-tap-highlight-color: rgba(0,0,0,0);
 }
+.top-toast{
+    left: 0;
+    right: 0;
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    border-radius: 0;
+    /* bottom: 0; */
+    /* padding: 0; */
+}
 .no-line-height{
      line-height: 0 !important;
 }
