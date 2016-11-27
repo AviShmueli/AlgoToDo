@@ -53,8 +53,8 @@ app.use(express.static('../node_modules'));
 
 
 winston.add(winston.transports.Loggly, {
-    token: "666c914a-b76a-4aff-8c61-f7d45d681abf",
-    subdomain: "algotodo",
+    token: "301ae60a-8898-4a29-8dd0-cfd69ba095f5",
+    subdomain: "doneit",
     tags: ["AlgoTodo-Node-Server"],
     json: true
 });

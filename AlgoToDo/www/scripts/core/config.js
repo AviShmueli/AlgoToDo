@@ -3,7 +3,7 @@
 
     angular.module('app.core')
         .config(function ($routeProvider, $mdThemingProvider, $compileProvider, $animateProvider, LogglyLoggerProvider, $mdGestureProvider) {
-            LogglyLoggerProvider.inputToken('666c914a-b76a-4aff-8c61-f7d45d681abf').sendConsoleErrors(true);
+            LogglyLoggerProvider.inputToken('301ae60a-8898-4a29-8dd0-cfd69ba095f5').sendConsoleErrors(true);
             $compileProvider.debugInfoEnabled(false);
             $mdGestureProvider.skipClickHijack();
             //$animateProvider.classNameFilter(/\banimated\b/);
