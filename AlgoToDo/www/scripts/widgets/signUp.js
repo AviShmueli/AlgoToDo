@@ -18,7 +18,7 @@
             }
         };
 */
-    TasksListCtrl.$inject = ['$scope' ,'datacontext', 'logger', 'cordovaPlugins'];
+    signUpCtrl.$inject = ['$scope', 'datacontext', 'logger', 'cordovaPlugins'];
 
     function signUpCtrl($scope, datacontext, logger, cordovaPlugins) {
             var vm = this;
