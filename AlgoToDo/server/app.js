@@ -78,7 +78,6 @@ var pfx = path.join(__dirname, './ApnCertificates/production/prod_Certificates.p
 var cert = path.join(__dirname, './ApnCertificates/production/aps_prod_cert.pem');
 var key = path.join(__dirname, './ApnCertificates/production/aps_prod_key.pem');
 
-
 var apnProviderOptions = {
     token: {
         key: APNsAuthKey,
@@ -93,7 +92,13 @@ var apnProviderOptions = {
     heartBeat: 30000
 };
 
-var apnProvider = new apn.Provider(apnProviderOptions);
+var apnProvider;
+
+var createApnProvider = function () {
+    apnProvider = new apn.Provider(apnProviderOptions);
+}
+
+createApnProvider();
 
 var sendTaskViaApn = function(task, userUnDoneTaskCount, ApnRegistrationId){
 
@@ -147,10 +152,11 @@ var sendCommentViaApn = function(comment, task, ApnRegistrationId){
     note.sound = "ping.aiff";
     //note.alert = "משימה חדשה מ" + task.from.name;//"\uD83D\uDCE7 \u2709 You have a new message";
     note.payload = { 'additionalData': {
-    type: "comment",
-    object: comment,
-    taskId: task._id
-    } };
+                            type: "comment",
+                            object: comment,
+                            taskId: task._id
+                        }
+                    };
     //note.payload = task ;
     note.topic = "com.algotodo.app";
     note.body = comment.text;
@@ -163,16 +169,17 @@ var sendCommentViaApn = function(comment, task, ApnRegistrationId){
     
     // Actually send the message
     apnProvider.send(note, ApnRegistrationId).then(function (response) {
-                                                   console.log("send message", note);
+        console.log("send message", note);
                                                    
-                                                   if (response.failed.length > 0) {
-                                                   console.error("error while sending push notification to apple user: ", response.failed);
-                                                   winston.log('Error', "error while sending push notification to apple user: ", response.failed);
-                                                   }
-                                                   else {
-                                                   console.log(response.sent);
-                                                   }
-                                                   });
+        if (response.failed.length > 0) {
+            console.error("error while sending push notification to apple user: ", response.failed);
+            winston.log('Error', "error while sending push notification to apple user: ", response.failed);
+            createApnProvider();
+        }
+        else {
+            console.log(response.sent);
+        }
+    });
 }
 
 //sendApnMessage({from:{name:'אבי שמואלי'},description: 'יש לך 2 דקות להגיע לפה'},1,"b83a1fe9f784c3a7a1706f8bc4e5c4146be72c74b52b858b85e8df27b54c04f9");
