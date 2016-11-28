@@ -27,7 +27,6 @@
         vm.user = {};
         vm.appDomain = appConfig.appDomain;
         vm.progressActivated = false;
-        vm.myTasksCount = 0;
         $rootScope.taskcount = 0;
         vm.signUpInProggress = true;
 
@@ -36,7 +35,6 @@
         var setMyTaskCount = function () {
             var count = $filter('myTasks')(datacontext.getTaskList(), vm.user._id).length;
             cordovaPlugins.setBadge(count);
-            vm.myTasksCount = count;
             $rootScope.taskcount = count;
         };
 
@@ -131,8 +129,8 @@
         socket.on('new-task', function(data) {           
             var newTask = data;
             if (newTask.from._id !== vm.user._id) {
-                datacontext.addTaskToTaskList(newTask);
-                setMyTaskCount();
+                //datacontext.addTaskToTaskList(newTask);
+                //setMyTaskCount();
             }
         });
 

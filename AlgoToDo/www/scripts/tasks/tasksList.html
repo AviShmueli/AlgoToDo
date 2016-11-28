@@ -105,7 +105,7 @@
                      md-swipe-left="$root.selectedIndex = 2"
                      md-swipe-right="$root.selectedIndex = 0"
                      layout="row" layout-align="center center">
-                    <md-list flex-gt-sm="50" flex-md="66" flex dir="rtl" ng-show="vm.myTasksCount > 0">
+                    <md-list flex-gt-sm="50" flex-md="66" flex dir="rtl" ng-show="$root.taskcount > 0">
                         <md-list-item ng-repeat="item in vm.onGoingActivityies() | myTasks: vm.user._id | filter:vm.search" class="noright task-item" style="margin-top: 7px" >
                             <md-card-avatar>
                                 <img alt="{{item.from.name}}" ng-src="{{vm.appDomain + item.from.avatarUrl}}" class="md-avatar user-avatar" style="margin-right: 0;" />
@@ -128,7 +128,7 @@
                         </md-list-item>
                         <md-divider></md-divider>
                     </md-list>
-                    <md-list dir="rtl" ng-hide="vm.myTasksCount > 0">
+                    <md-list dir="rtl" ng-hide="$root.taskcount > 0">
                         <md-item>
                             <md-item-content>
                                 <h3> אין משימות פתוחות כרגע! </h3>
