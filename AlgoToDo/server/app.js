@@ -89,7 +89,8 @@ var apnProviderOptions = {
     key: key,
     pfx: pfx,
     roduction: true,
-    passphrase: 'avi3011algo'
+    passphrase: 'avi3011algo',
+    heartBeat: 30000
 };
 
 var apnProvider = new apn.Provider(apnProviderOptions);
