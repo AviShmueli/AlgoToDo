@@ -26,7 +26,7 @@ var io = require('socket.io').listen(server);
 
 var bodyParser = require('body-parser');
 
-var port = process.env.PORT || 5002;
+var port = process.env.PORT || 5001;
 
 app.use(bodyParser.urlencoded({
     extended: false
@@ -61,7 +61,7 @@ winston.add(winston.transports.Loggly, {
 
 
 /* ---- Start the server ------ */
-server.listen(process.env.PORT || 5002, function (err) {
+server.listen(process.env.PORT || 5001, function (err) {
     console.log("Express server listening on port %d in %s mode", this.address().port, app.settings.env);
 });
 
@@ -96,7 +96,7 @@ var apnProvider;
 
 var createApnProvider = function () {
     apnProvider = new apn.Provider(apnProviderOptions);
-}
+};
 
 createApnProvider();
 
@@ -138,7 +138,7 @@ var sendTaskViaApn = function(task, userUnDoneTaskCount, ApnRegistrationId){
             console.log(response.sent);
         }
     });
-}
+};
 
 var sendCommentViaApn = function(comment, task, ApnRegistrationId){
     
@@ -180,7 +180,7 @@ var sendCommentViaApn = function(comment, task, ApnRegistrationId){
             console.log(response.sent);
         }
     });
-}
+};
 
 //sendApnMessage({from:{name:'אבי שמואלי'},description: 'יש לך 2 דקות להגיע לפה'},1,"b83a1fe9f784c3a7a1706f8bc4e5c4146be72c74b52b858b85e8df27b54c04f9");
 
@@ -365,17 +365,32 @@ io.on('connection', function (socket) {
 app.post('/TaskManeger/newTask', function (req, res) {
 
     var task = req.body.task;
-    var to = '';
-    if (users[task.to._id] !== undefined) {
-        to = users[task.to._id].id;
+    var tasks;
+    // handel the old version
+    if(Array.isArray(task)){
+        tasks = task;
+    }
+    else {
+       tasks = [task]; 
     }
 
-    var toId = task.to._id;
+    /*var to = '';
+    if (users[task.to._id] !== undefined) {
+        to = users[task.to._id].id;
+    }*/
+    var recipientsIds = [];
+    for (var i = 0, len = tasks.length; i < len; i++) {
+        tasks[i].to._id = new ObjectID(tasks[i].to._id);
+        tasks[i].from._id = new ObjectID(tasks[i].from._id);
+        recipientsIds.push(tasks[i].to._id);
+    }
+
+    /*var toId = task.to._id;
     var fromId = task.from._id;
     task.to._id = ObjectID(toId);
-    task.from._id = ObjectID(fromId);
+    task.from._id = ObjectID(fromId);*/
 
-    //add task to Mongo
+    //add tasks to Mongo
     mongodb.connect(mongoUrl, function (err, db) {
 
         if (err) {
@@ -384,25 +399,27 @@ app.post('/TaskManeger/newTask', function (req, res) {
 
         var collection = db.collection('tasks');
 
-        collection.insert(task, function (err, results) {
+        collection.insert(tasks, function (err, results) {
 
             if (err) {
                 winston.log('Error', "error while trying to add new Task: ", err);
             }
 
             // if the employee is now online send the new task by Socket.io
-            console.log("to:", to);
+            /*console.log("to:", to);
             if (to !== '' && task.to._id !== task.from._id) {
                 io.to(to).emit('new-task', results.ops[0]);
-            }
-            console.log("trying to send new task", task);
+            }*/
+            var newTasks = results.ops;
+            console.log("trying to send new tasks", newTasks);
+            
             // if this task is not from me to me, send notification to the user
-            if (task.to._id !== task.from._id) {
-                pushTaskToUserDevice(task);
-            }
+            //if (task.to._id !== task.from._id) {
+                pushTaskToUsersDevice(newTasks, recipientsIds);
+            //}
 
             // return the new task to the sender
-            res.send(results.ops[0]);
+            res.send(results.ops);
 
             db.close();
         });
@@ -415,7 +432,7 @@ app.post('/TaskManeger/newComment', function (req, res) {
     var comment = req.body.comment;
 
     var fromId = comment.from._id;
-    comment.from._id = ObjectID(fromId);
+    comment.from._id = new ObjectID(fromId);
     comment._id = new ObjectID();
     //add task to Mongo
     mongodb.connect(mongoUrl, function (err, db) {
@@ -426,7 +443,7 @@ app.post('/TaskManeger/newComment', function (req, res) {
 
         var collection = db.collection('tasks');
 
-        collection.findAndModify({ _id: ObjectID(taskId) }, [['_id', 'asc']],
+        collection.findAndModify({ _id: new ObjectID(taskId) }, [['_id', 'asc']],
             { $push: { comments: comment } },{new: true},
             function (err, results) {
 
@@ -485,7 +502,7 @@ app.post('/TaskManeger/updateTaskStatus', function (req, res) {
 
         var collection = db.collection('tasks');
 
-        collection.findAndModify({ _id: ObjectID(task._id) }, [['_id', 'asc']], { $set: { 'status': task.status, 'doneTime': task.doneTime, 'seenTime': task.seenTime } }, {new: true},
+        collection.findAndModify({ _id: new ObjectID(task._id) }, [['_id', 'asc']], { $set: { 'status': task.status, 'doneTime': task.doneTime, 'seenTime': task.seenTime } }, {new: true},
             function (err, results) {
                 
                 // send the updated task to the maneger and return it to the employee
@@ -613,7 +630,7 @@ app.get('/TaskManeger/isUserExist', function (req, res) {
     });
 });
 
-var getUserByUserId = function (userId, callback) {
+var getUsersByUsersId = function (usersIds, callback) {
 
     mongodb.connect(mongoUrl, function (err, db) {
 
@@ -622,7 +639,7 @@ var getUserByUserId = function (userId, callback) {
         }
 
         var collection = db.collection('users');
-        collection.findOne({ '_id': ObjectID(userId) }, { '_id': true, 'name': true, 'GcmRegistrationId': true, 'ApnRegistrationId': true }, function (err, result) {
+        collection.find({ '_id': { $in: usersIds} }, { '_id': true, 'name': true, 'GcmRegistrationId': true, 'ApnRegistrationId': true }).toArray(function (err, result) {
             db.close();
             callback(err, result);
         });
@@ -638,7 +655,7 @@ var getUnDoneTasksCountByUserId = function (userId, callback) {
         }
 
         var collection = db.collection('tasks');
-        collection.count({ 'to._id': ObjectID(userId), 'status': 'inProgress' }, function (err, result) {
+        collection.count({ 'to._id': new ObjectID(userId), 'status': 'inProgress' }, function (err, result) {
 
             if (err) {
                 winston.log('Error', "error while trying to get UnDone Tasks Count: ", err);
@@ -650,26 +667,33 @@ var getUnDoneTasksCountByUserId = function (userId, callback) {
     });
 };
 
-var pushTaskToUserDevice = function (task) {
+var pushTaskToUsersDevice = function (tasks, recipientsIds) {
 
     // get user from DB and check if there GcmRegId or ApnRegId
-    getUserByUserId(task.to._id, function (error, user) {
-        // get the number that will be set to the app icon badge
-        getUnDoneTasksCountByUserId(task.to._id, function (error, userUnDoneTaskCount) {
-            if (user.GcmRegistrationId !== undefined) {
-                sendTaskViaGcm(task, userUnDoneTaskCount, user.GcmRegistrationId);
+    getUsersByUsersId(recipientsIds, function (error, users) {
+
+        for(var i = 0; i < tasks.length; i++){
+            var task = tasks[i];           
+            if (task.to._id !== task.from._id) {
+                var user = users.find(x => x._id.equals(task.to._id));
+                // get the number that will be set to the app icon badge
+                getUnDoneTasksCountByUserId(task.to._id, function (error, userUnDoneTaskCount) {
+                    if (user.GcmRegistrationId !== undefined) {
+                        sendTaskViaGcm(task, userUnDoneTaskCount, user.GcmRegistrationId);
+                    }
+                    if (user.ApnRegistrationId !== undefined) {
+                        sendTaskViaApn(task, userUnDoneTaskCount, user.ApnRegistrationId);
+                    }
+                });
             }
-            if (user.ApnRegistrationId !== undefined) {
-                sendTaskViaApn(task, userUnDoneTaskCount, user.ApnRegistrationId);
-            }
-        });
+        }
     });
 };
 
 var pushCommentToUserDevice = function (comment, task, userIdToNotify) {
 
     // get user from DB and check if there GcmRegId or ApnRegId
-    getUserByUserId(userIdToNotify, function (error, user) {
+    getUsersByUsersId(userIdToNotify, function (error, user) {
 
         if (user.GcmRegistrationId !== undefined) {
             sendCommentViaGcm(comment, task, user.GcmRegistrationId);
