@@ -708,15 +708,17 @@ var pushTaskToUsersDevice = function (tasks, recipientsIds) {
 var pushCommentToUserDevice = function (comment, task, userIdToNotify) {
 
     // get user from DB and check if there GcmRegId or ApnRegId
-    getUsersByUsersId(userIdToNotify, function (error, user) {
-
-        if (user.GcmRegistrationId !== undefined) {
-            sendCommentViaGcm(comment, task, user.GcmRegistrationId);
+    getUsersByUsersId([userIdToNotify], function (error, result) {
+        if(Array.isArray(result) && result.length === 1) {
+            var user = result[0];        
+        
+            if (user.GcmRegistrationId !== undefined) {
+                sendCommentViaGcm(comment, task, user.GcmRegistrationId);
+            }
+            if (user.ApnRegistrationId !== undefined) {
+                sendCommentViaApn(comment, task, user.ApnRegistrationId);
+            }
         }
-        if (user.ApnRegistrationId !== undefined) {
-            sendCommentViaApn(comment, task, user.ApnRegistrationId);
-        }
-
     });
 };
 
