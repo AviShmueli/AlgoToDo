@@ -21,6 +21,7 @@
         'logglyLogger',
         'infomofo.angularMdPullToRefresh',
         'ngRoute',
+        'cmanaha.angular-elasticsearch-logger',
 
         /*
          * Everybody has access to these.
