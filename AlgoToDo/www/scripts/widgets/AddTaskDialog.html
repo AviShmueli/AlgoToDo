@@ -13,17 +13,24 @@
     </md-toolbar>
     <md-dialog-content flex md-scroll-y class="md-padding" layout-margin>
         <form name="newTaskForm" novalidate>
-            <!--<div layout layout-sm="column">
-                <md-contact-chips ng-model="vm.selectedItem2"
+            <div layout layout-sm="column">
+                <md-contact-chips flex md-input-name="autocompleteField"
+                                  md-autofocus="true" ng-required="true"
+                                  ng-model="vm.selectedRecipients"
                                   md-contacts="vm.querySearch($query)"
                                   md-contact-name="name"
                                   md-contact-image="avatarUrl"
                                   md-require-match="true"
                                   md-highlight-flags="i"
-                                  placeholder="To">
+                                  placeholder="נמען"
+                                  secondary-placeholder="הוסף נמען">
                 </md-contact-chips>
-            </div>-->
-            <div layout layout-sm="column">
+                
+            </div>
+            <div ng-show="vm.showNoRecipientsSelectedError">
+                <div class="input-message-validate">נמען הוא שדה <b>חובה</b></div>
+            </div>
+            <!--<div layout layout-sm="column">
                 <md-autocomplete md-autofocus flex required md-require-match
                                  md-input-name="autocompleteField"
                                  placeholder="נמען"
@@ -52,7 +59,7 @@
                         <div ng-message="md-require-match">נא לבחור נמען מתוך הרשימה</div>
                     </div>
                 </md-autocomplete>
-            </div>
+            </div>-->
             <div layout layout-sm="column">
                 <md-input-container flex class="md-block">
                     <label>תיאור המשימה</label>

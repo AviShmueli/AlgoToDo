@@ -2,7 +2,27 @@
     'use strict';
 
     angular.module('app.core')
-        .config(function ($routeProvider, $mdThemingProvider, $compileProvider, $animateProvider, LogglyLoggerProvider, $mdGestureProvider) {
+        .config(function ($routeProvider, $mdThemingProvider, $compileProvider,
+                          $animateProvider, LogglyLoggerProvider, $mdGestureProvider,
+                          CMRESLoggerProvider) {
+
+            CMRESLoggerProvider.setElasticSearchConfig({
+                'host': 'https://xeyy2hb9:ulq4oyqfknu76lvm@aralia-7697095.eu-west-1.bonsaisearch.net',
+                'apiVersion': '1.7'
+            });
+
+            CMRESLoggerProvider.setLogConfig({
+                'index': 'algotodo2',
+                'type': 'jslog',
+                'bufferSize': 2500,
+                'flushIntervalInMS': 3000
+            });
+
+            CMRESLoggerProvider.setApplicationLogContext({
+                'appNameTag': 'algotodo',
+                'envTag': 'Development'
+            });
+
             LogglyLoggerProvider.inputToken('301ae60a-8898-4a29-8dd0-cfd69ba095f5').sendConsoleErrors(true);
             $compileProvider.debugInfoEnabled(false);
             $mdGestureProvider.skipClickHijack();
@@ -43,8 +63,8 @@
 
             return {
                 appDomain:
-                     'https://algotodo.herokuapp.com'
-              // 'http://localhost:5001'
+                 //    'https://algotodo.herokuapp.com'
+               'http://localhost:5001'
             };
         })
         .run(function (amMoment, datacontext) {

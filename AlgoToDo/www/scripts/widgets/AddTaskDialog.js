@@ -6,10 +6,10 @@
         .controller('AddTaskDialogController', AddTaskDialogController);
 
     AddTaskDialogController.$inject = [
-        '$scope', '$mdDialog', 'datacontext', '$mdMedia', '$q', 'logger', 'appConfig'
+        '$scope', '$mdDialog', 'datacontext', '$mdMedia', '$q', 'logger', 'appConfig', 'cordovaPlugins'
     ];
 
-    function AddTaskDialogController($scope, $mdDialog, datacontext, $mdMedia, $q, logger, appConfig) {
+    function AddTaskDialogController($scope, $mdDialog, datacontext, $mdMedia, $q, logger, appConfig, cordovaPlugins) {
 
         var vm = this;
         
@@ -20,8 +20,11 @@
         vm.selectedItem = null;
         vm.searchText = null;
         vm.querySearch = querySearch;
+        vm.selectedRecipients = [];
+        vm.showNoRecipientsSelectedError = false;
         
         function querySearch(query) {
+            vm.showNoRecipientsSelectedError = false;
             /*
             var matchesUsersFromCache = [];
 
@@ -72,10 +75,45 @@
             $mdDialog.cancel();
         };
         vm.save = function () {
-            vm.task.to = vm.selectedItem;
-            $mdDialog.hide(vm.task);
-            // clean the form
-            vm.task = {};
+            if (vm.selectedRecipients.length !== 0) {
+
+                var user = datacontext.getUserFromLocalStorage();
+                vm.task.from = { '_id': user._id, 'name': user.name, 'avatarUrl': user.avatarUrl};
+                vm.task.status = 'inProgress';
+                vm.task.createTime = new Date();
+                vm.task.comments = [];
+
+                var taskListToAdd = createTasksList(vm.task, vm.selectedRecipients);
+
+                datacontext.saveNewTasks(taskListToAdd).then(function (response) {
+                    logger.toast('המשימה נשלחה בהצלחה!', response.data, 2000);
+                    logger.info('task added sucsessfuly', response.data);
+                    datacontext.pushTasksToTasksList(response.data);
+                    var count = datacontext.setMyTaskCount();
+                    cordovaPlugins.setBadge(count);
+                    $mdDialog.hide();
+
+                    // clean the form
+                    vm.task = {};
+                }, function (error) {
+                    logger.error('Error while tring to add new task ', error);
+                });                  
+            }
+            else {
+                vm.showNoRecipientsSelectedError = true;
+            }          
+        };
+
+
+        var createTasksList = function (task, recipients) {
+            var listToReturn = [];
+            var tempTask;
+            angular.forEach(recipients, function (value, key) {
+                tempTask = angular.copy(task);
+                tempTask.to = value;
+                listToReturn.push(tempTask);
+            });
+            return listToReturn;
         };
         
     }

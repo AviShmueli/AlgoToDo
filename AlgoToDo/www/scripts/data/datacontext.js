@@ -5,11 +5,11 @@
         .module('app.data')
         .service('datacontext', datacontext);
 
-    datacontext.$inject = ['$http', 'logger', 'lodash', 'appConfig',
-                           '$localStorage', '$mdToast', 'socket'];
+    datacontext.$inject = ['$http', 'logger', 'lodash', 'appConfig', '$rootScope',
+                           '$localStorage', '$mdToast', 'socket', '$filter'];
 
-    function datacontext($http, logger, lodash, appConfig,
-                         $localStorage, $mdToast, socket) {
+    function datacontext($http, logger, lodash, appConfig, $rootScope,
+                         $localStorage, $mdToast, socket, $filter) {
 
         
         var self = this;
@@ -17,13 +17,13 @@
         //self.$storage.usersCache = {};//new Map();
         //self.socket = io.connect(appConfig.appDomain);
 
-        var saveNewTask = function(task) {
+        var saveNewTasks = function(tasks) {
 
             var req = {
                 method: 'POST',
                 url: appConfig.appDomain + '/TaskManeger/newTask',
                 data: {
-                    task: task
+                    task: tasks
                 }
             };
 
@@ -73,6 +73,10 @@
             if (count.length === 0) {
                 self.$storage.tasksList.push(task);
             }            
+        };
+
+        var pushTasksToTasksList = function (tasks) {
+            self.$storage.tasksList = self.$storage.tasksList.concat(tasks);
         };
         
         var replaceTask = function (task) {
@@ -205,13 +209,21 @@
                 });
             }           
         };
+
+        var setMyTaskCount = function () {
+            var userId = self.$storage.user._id;
+            var count = $filter('myTasks')(getTaskList(), userId).length;           
+            $rootScope.taskcount = count;
+
+            return count;
+        };
         
         var service = {
             user: self.user,
             getTaskList: getTaskList,
             setTaskList: setTaskList,
             addTaskToTaskList: addTaskToTaskList,
-            saveNewTask: saveNewTask,
+            saveNewTasks: saveNewTasks,
             updateTask: updateTask,
             replaceTask: replaceTask,
             saveUserToLocalStorage: saveUserToLocalStorage,
@@ -227,7 +239,9 @@
             newComment: newComment,
             addCommentToTask: addCommentToTask,
             reloadAllTasks: reloadAllTasks,
-            deleteTaskListFromLocalStorage: deleteTaskListFromLocalStorage
+            deleteTaskListFromLocalStorage: deleteTaskListFromLocalStorage,
+            setMyTaskCount: setMyTaskCount,
+            pushTasksToTasksList: pushTasksToTasksList
         };
 
         return service;

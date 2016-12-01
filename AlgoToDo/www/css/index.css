@@ -1,6 +1,18 @@
 * {
     -webkit-tap-highlight-color: rgba(0,0,0,0);
 }
+.input-message-validate{
+    padding-right: 0;
+    color: rgb(221,44,0);
+    line-height: 14px;
+    padding-top: 5px;
+}
+md-virtual-repeat-container{
+    direction: rtl;
+}
+md-chips .md-chip-input-container{
+    width: 100%;
+}
 .top-toast{
     left: 0;
     right: 0;

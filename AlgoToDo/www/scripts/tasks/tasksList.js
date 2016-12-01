@@ -9,13 +9,13 @@
         '$rootScope', '$scope', 'logger', '$location', 'cordovaPlugins',
         'appConfig', '$mdMedia', '$mdBottomSheet','$filter',
         '$mdSidenav', '$mdDialog', 'datacontext', 'lodash',
-        'socket', '$mdToast', 'moment', '$q'
+        'socket', '$mdToast', 'moment', '$q', 'CMRESLogger'
     ];
 
     function TasksListCtrl($rootScope, $scope, logger, $location, cordovaPlugins,
                             appConfig, $mdMedia, $mdBottomSheet,$filter,
                             $mdSidenav, $mdDialog, datacontext, lodash,
-                            socket, $mdToast, moment, $q) {
+                            socket, $mdToast, moment, $q, CMRESLogger) {
 
         var vm = this;
 
@@ -30,13 +30,9 @@
         $rootScope.taskcount = 0;
         vm.signUpInProggress = true;
 
-        vm.onGoingActivityies = function () { return datacontext.getTaskList(); };      
+        //CMRESLogger.info('hello world');
 
-        var setMyTaskCount = function () {
-            var count = $filter('myTasks')(datacontext.getTaskList(), vm.user._id).length;
-            cordovaPlugins.setBadge(count);
-            $rootScope.taskcount = count;
-        };
+        vm.onGoingActivityies = function () { return datacontext.getTaskList(); };      
 
         var activateProgress = function (toastText) {
             vm.progressActivated = true;
@@ -53,13 +49,15 @@
                 var loadingToast = activateProgress("טוען נתונים...");
                 datacontext.getAllTasks().then(function (response) {
                     datacontext.setTaskList(response.data);
-                    setMyTaskCount();
+                    var count = datacontext.setMyTaskCount();
+                    cordovaPlugins.setBadge(count);
                     vm.progressActivated = false;
                     deactivateProgress(loadingToast);
                 });
             }
             else {
-                setMyTaskCount();
+                var count = datacontext.setMyTaskCount();
+                cordovaPlugins.setBadge(count);
             }
         };
 
@@ -138,7 +136,8 @@
         socket.on('updated-task', function (data) {
             //logger.success('משימה עודכנה', data.value);
             datacontext.replaceTask(data.value);
-            setMyTaskCount();
+            var count = datacontext.setMyTaskCount();
+            cordovaPlugins.setBadge(count);
         });
 
         vm.toggleSidenav = function(menuId) {
@@ -164,22 +163,7 @@
                 templateUrl: 'scripts/widgets/AddTaskDialog.html',
                 targetEvent: ev,
                 fullscreen: true
-            }).then(function (task) {
-                var user = datacontext.getUserFromLocalStorage();
-                task.from = { '_id': user._id, 'name': user.name, 'avatarUrl': user.avatarUrl};
-                task.status = 'inProgress';
-                task.createTime = new Date();
-                task.comments = [];
-                datacontext.saveNewTask(task).then(function (response) {
-                        logger.toast('המשימה נשלחה בהצלחה!', response.data, 2000);
-                        logger.info('task added sucsessfuly', response.data);
-                        datacontext.addTaskToTaskList(response.data);
-                        setMyTaskCount();
-                }, function (error) {
-                    logger.error('Error while tring to add new task ', error);
-                });;
-                });
-        
+            });      
         };
 
         vm.setTaskStatus = function (task, newStatus) {
@@ -193,7 +177,8 @@
 
             datacontext.updateTask(task).then(function (response) {
                 logger.success('המשימה עודכנה בהצלחה!', response.data);
-                setMyTaskCount();
+                var count = datacontext.setMyTaskCount();
+                cordovaPlugins.setBadge(count);
             }, function (error) {
                 logger.error('Error while tring to update task ', error);
             });
@@ -203,7 +188,8 @@
             var deferred = $q.defer();
             datacontext.getAllTasks().then(function (response) {
                 datacontext.setTaskList(response.data);
-                setMyTaskCount();
+                var count = datacontext.setMyTaskCount();
+                cordovaPlugins.setBadge(count);
                 deferred.resolve();
             });
             return deferred.promise;
