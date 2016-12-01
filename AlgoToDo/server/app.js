@@ -673,16 +673,16 @@ var pushTaskToUsersDevice = function (tasks, recipientsIds) {
     getUsersByUsersId(recipientsIds, function (error, users) {
 
         for(var i = 0; i < tasks.length; i++){
-            var task = tasks[i];           
-            if (task.to._id !== task.from._id) {
-                var user = users.find(x => x._id.equals(task.to._id));
+            //var task = tasks[i];           
+            if (tasks[i].to._id !== tasks[i].from._id) {
+                var user = users.find(x => x._id.equals(tasks[i].to._id));
                 // get the number that will be set to the app icon badge
-                getUnDoneTasksCountByUserId(task.to._id, function (error, userUnDoneTaskCount) {
+                getUnDoneTasksCountByUserId(tasks[i].to._id, function (error, userUnDoneTaskCount) {
                     if (user.GcmRegistrationId !== undefined) {
-                        sendTaskViaGcm(task, userUnDoneTaskCount, user.GcmRegistrationId);
+                        sendTaskViaGcm(tasks[i], userUnDoneTaskCount, user.GcmRegistrationId);
                     }
                     if (user.ApnRegistrationId !== undefined) {
-                        sendTaskViaApn(task, userUnDoneTaskCount, user.ApnRegistrationId);
+                        sendTaskViaApn(tasks[i], userUnDoneTaskCount, user.ApnRegistrationId);
                     }
                 });
             }

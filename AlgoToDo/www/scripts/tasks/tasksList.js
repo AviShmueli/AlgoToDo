@@ -103,6 +103,7 @@
             vm.userConnected = false;
             vm.toggleSidenav('left');
             cordovaPlugins.clearAppBadge();
+            window.location = '#/signUp';
         };
 
         // the response to the all-usersr from the server
