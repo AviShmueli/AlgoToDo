@@ -98,8 +98,9 @@
 
         vm.logOff = function () {
             angular.element(document.querySelectorAll('html')).addClass("hight-auto");
+            datacontext.saveUsersNewRegistrationId('', vm.user);
             datacontext.deleteUserFromLocalStorage();
-            datacontext.deleteTaskListFromLocalStorage();
+            datacontext.deleteTaskListFromLocalStorage();           
             vm.userConnected = false;
             vm.toggleSidenav('left');
             cordovaPlugins.clearAppBadge();

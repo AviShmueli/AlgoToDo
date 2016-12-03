@@ -217,6 +217,33 @@
 
             return count;
         };
+
+        var updateUserDetails = function (userId, fieldToUpdate, valueToUpdate) {
+            var req = {
+                method: 'POST',
+                url: appConfig.appDomain + '/TaskManeger/updateUserDetails',
+                data: {
+                    userId: userId,
+                    fieldToUpdate: fieldToUpdate,
+                    valueToUpdate: valueToUpdate
+                }
+            };
+
+            return $http(req);
+        }
+
+        var saveUsersNewRegistrationId = function (registrationId, user) {
+            var filedToUpdate = '';
+            if (user.device.platform === 'iOS') {
+                user.ApnRegistrationId = registrationId;
+                filedToUpdate = 'ApnRegistrationId';
+            }
+            if (user.device.platform === 'Android') {
+                user.GcmRegistrationId = registrationId;
+                filedToUpdate = 'GcmRegistrationId';
+            }
+            updateUserDetails(user._id, filedToUpdate, registrationId);
+        }
         
         var service = {
             user: self.user,
@@ -241,7 +268,8 @@
             reloadAllTasks: reloadAllTasks,
             deleteTaskListFromLocalStorage: deleteTaskListFromLocalStorage,
             setMyTaskCount: setMyTaskCount,
-            pushTasksToTasksList: pushTasksToTasksList
+            pushTasksToTasksList: pushTasksToTasksList,
+            saveUsersNewRegistrationId: saveUsersNewRegistrationId
         };
 
         return service;

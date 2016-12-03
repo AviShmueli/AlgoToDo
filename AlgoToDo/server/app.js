@@ -516,6 +516,29 @@ app.post('/TaskManeger/updateTaskStatus', function (req, res) {
     });
 });
 
+app.post('/TaskManeger/updateUserDetails', function (req, res) {
+
+    var userId = req.body.userId;
+    var fieldToUpdate = req.body.fieldToUpdate;
+    var valueToUpdate = req.body.valueToUpdate;
+
+    //add task to Mongo
+    mongodb.connect(mongoUrl, function (err, db) {
+
+        if (err) {
+            winston.log('Error', "error while trying to connect MongoDB: ", err);
+        }
+
+        var collection = db.collection('users');
+
+        collection.findAndModify({ _id: new ObjectID(userId) }, [['_id', 'asc']], { $set: { fieldToUpdate: valueToUpdate } }, {new: true},
+            function (err, results) {
+                res.send(results);
+                db.close();
+            });
+    });
+});
+
 app.post('/TaskManeger/registerUser', function (req, res) {
 
     var user = req.body.user;

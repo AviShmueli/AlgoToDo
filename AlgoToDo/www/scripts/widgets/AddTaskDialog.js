@@ -53,7 +53,10 @@
             var deferred = $q.defer();
             datacontext.searchUsers(query).then(function (response) {
                 logger.success("search result: ", response.data);
-                datacontext.addUsersToUsersCache(response.data);
+                //datacontext.addUsersToUsersCache(response.data);
+                angular.forEach(response.data, function (user) {
+                    user.avatarUrl = appConfig.appDomain + user.avatarUrl;
+                });
                 deferred.resolve(response.data);
             });
             return deferred.promise;

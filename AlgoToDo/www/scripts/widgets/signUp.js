@@ -18,9 +18,9 @@
             }
         };
 */
-    signUpCtrl.$inject = ['$scope', 'datacontext', 'logger', 'cordovaPlugins'];
+    signUpCtrl.$inject = ['$scope', 'datacontext', 'logger', 'cordovaPlugins', '$q'];
 
-    function signUpCtrl($scope, datacontext, logger, cordovaPlugins) {
+    function signUpCtrl($scope, datacontext, logger, cordovaPlugins, $q) {
             var vm = this;
 
             vm.inProgress = false;
@@ -30,16 +30,35 @@
                 if (vm.inProgress === false) {
                     vm.inProgress = true;
                     signUp();
+                }
             }
+
+            var user = datacontext.getUserFromLocalStorage();
+            if (user !== undefined) {
+                window.location = '#/';
             }
 
             var signUp = function () {
                 datacontext.checkIfUserExist(vm.user).then(function (response) {
-                    logger.info("response from isuserexist: ", response);
                     if (response.data !== null && response.data !== '') {
+                        
                         var user = response.data;
-                        datacontext.saveUserToLocalStorage(user);
-                        window.location = '#/';
+                        
+                        // if this is mobile and the user not registerd to GCM or APN
+                        if((cordovaPlugins.isMobileDevice() && cordovaPlugins.getDeviceDetails().platform === 'Android' &&
+                         (user.GcmRegistrationId === '' || user.GcmRegistrationId === undefined)) ||
+                         (cordovaPlugins.isMobileDevice() && cordovaPlugins.getDeviceDetails().platform === 'iOS' &&
+                         (user.ApnRegistrationId === '' || user.ApnRegistrationId === undefined))) {
+                            registerUserForPushService().then(function (registrationId) {
+                                datacontext.saveUsersNewRegistrationId(registrationId, user);
+                                datacontext.saveUserToLocalStorage(user);
+                                window.location = '#/';
+                            });
+                        }
+                        else {
+                            datacontext.saveUserToLocalStorage(user);
+                            window.location = '#/';
+                        }
                     }
                     else {
                         registerUser();
@@ -97,8 +116,21 @@
                     });
                 }
             }
+
+            var registerUserForPushService = function () {
+                var deferred = $q.defer();
+
+                cordovaPlugins.initializePushV5().then(function () {
+                    cordovaPlugins.registerForPushNotifications().then(function (registrationId) {
+                        deferred.resolve(registrationId);                        
+                    });
+                }, function (error) {
+                    logger.error("error while trying to register user to app", error);
+                });
+
+                return deferred.promise;
+            }
+            
         }
-    /*
-        return directive;
-    }*/
+
 })();
