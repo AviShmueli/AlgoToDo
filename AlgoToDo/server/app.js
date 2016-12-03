@@ -535,7 +535,7 @@ app.post('/TaskManeger/updateUserDetails', function (req, res) {
         collection.findAndModify({ _id: new ObjectID(userId) }, [['_id', 'asc']], { $set: updateObj }, {new: true},
             function (err, results) {
                 res.send(results);
-                db.close();
+                db.close(); 
             });
     });
 });
