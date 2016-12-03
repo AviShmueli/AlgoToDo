@@ -55,7 +55,7 @@
                 logger.success("search result: ", response.data);
                 //datacontext.addUsersToUsersCache(response.data);
                 angular.forEach(response.data, function (user) {
-                    user.avatarUrl = appConfig.appDomain + user.avatarUrl;
+                    user['avatarFullUrl'] = appConfig.appDomain + user.avatarUrl;
                 });
                 deferred.resolve(response.data);
             });
@@ -113,7 +113,7 @@
             var tempTask;
             angular.forEach(recipients, function (value, key) {
                 tempTask = angular.copy(task);
-                tempTask.to = value;
+                tempTask.to = { 'name': value.name, '_id': value._id, 'avatarUrl': value.avatarUrl };
                 listToReturn.push(tempTask);
             });
             return listToReturn;
