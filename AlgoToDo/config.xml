@@ -5,6 +5,7 @@
   <author email="avis@algo.bz" href="http://algo.bz">Avi Shmueli</author>
   <content src="index.html" />
   <access origin="algotodo.herokuapp.com" />
+  <access origin="algotodo-test.herokuapp.com" />
   <vs:features />
   <preference name="SplashScreen" value="screen" />
   <preference name="windows-target-version" value="8.1" />
