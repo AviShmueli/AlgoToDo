@@ -205,11 +205,6 @@
             return moment.duration(totalInMillisconds).humanize();
         };
 
-        /*document.addEventListener("resume", function () {         
-            //vm.selectedIndex = 1;
-            //vm.login();
-        }, false);*/
-
         vm.searchKeypress = function (event) {
             if (event.keyCode === 13) {
                 vm.showSearch = !vm.showSearch;

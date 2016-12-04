@@ -189,31 +189,54 @@ var gcm = require('node-gcm');
 
 var GcmSender = new gcm.Sender('AIzaSyDPJtKwWeftuwuneEWs-WlLII6LE7lGeMk');
 
-var sendTaskViaGcm = function (task, userUnDoneTaskCount, regToken) {
+var sendTaskViaGcm = function (task, userUnDoneTaskCount, regToken, isUpdate) {
 
-    var message = new gcm.Message({
-        /*collapseKey: task.from._id,
-        priority: 'high',
-        delayWhileIdle: true,*/
-        data: {
-            additionalData: {
-                type: "task",
-                object: task,
-                taskId: task._id
-            },
-            title: "משימה חדשה מ" + task.from.name,
-            sound: 'default',
-            icon: 'www/images/icon.png',
-            body: task.description,
-            badge: userUnDoneTaskCount
-        }
-    });
+    var message;
+    if(isUpdate) {
+        message = new gcm.Message({
+            /*collapseKey: task.from._id,
+            priority: 'high',
+            delayWhileIdle: true,*/
+            data: {
+                additionalData: {
+                    type: "task-update",
+                    object: task,
+                    taskId: task._id
+                },
+                // title: "משימה חדשה מ" + task.from.name,
+                // sound: 'default',
+                // icon: 'www/images/icon.png',
+                // body: task.description,
+                // badge: userUnDoneTaskCount
+            }
+        });
+    }
+    else {
+        message = new gcm.Message({
+            /*collapseKey: task.from._id,
+            priority: 'high',
+            delayWhileIdle: true,*/
+            data: {
+                additionalData: {
+                    type: "task",
+                    object: task,
+                    taskId: task._id
+                },
+                title: "משימה חדשה מ" + task.from.name,
+                sound: 'default',
+                icon: 'www/images/icon.png',
+                body: task.description,
+                badge: userUnDoneTaskCount
+            }
+        });
+            
+        message.addData('notId', task.from._id);
+        message.addData('content-available', '1');
+        message.addData('image', 'www/images/algologo1.png');
+        message.addData('style', 'inbox');
+        message.addData('summaryText', ' יש לך %n% משימות חדשות');
+    }
 
-    message.addData('notId', task.from._id);
-    message.addData('content-available', '1');
-    message.addData('image', 'www/images/algologo1.png');
-    message.addData('style', 'inbox');
-    message.addData('summaryText', ' יש לך %n% משימות חדשות');
 
     console.log("sending message : ", message);
     console.log("with GcmRegistrationId: ", regToken);
@@ -471,7 +494,7 @@ app.post('/TaskManeger/newComment', function (req, res) {
                 }
 
                 // if this task is not from me to me, send notification to the user
-                if (task.to._id !== task.from._id) {
+                if (!task.to._id.equals(task.from._id)) {
                     pushCommentToUserDevice(comment, task, userIdToNotify);
                 }
 
@@ -510,6 +533,11 @@ app.post('/TaskManeger/updateTaskStatus', function (req, res) {
                     io.to(from).emit('updated-task', results);
                 }
 
+                // if this task is not from me to me, send notification to the user
+                if (!task.to._id.equals(task.from._id)) {
+                    pushUpdatetdTaskToUsersDevice(results, task.from._id);
+                }
+                
                 res.send(results);
                 db.close();
             });
@@ -702,7 +730,7 @@ var pushTaskToUsersDevice = function (tasks, recipientsIds) {
                 // get the number that will be set to the app icon badge
                 getUnDoneTasksCountByUserId(task.to._id, function (error, userUnDoneTaskCount) {
                     if (user.GcmRegistrationId !== undefined) {
-                        sendTaskViaGcm(task, userUnDoneTaskCount, user.GcmRegistrationId);
+                        sendTaskViaGcm(task, userUnDoneTaskCount, user.GcmRegistrationId, false);
                     }
                     if (user.ApnRegistrationId !== undefined) {
                         sendTaskViaApn(task, userUnDoneTaskCount, user.ApnRegistrationId);
@@ -710,22 +738,6 @@ var pushTaskToUsersDevice = function (tasks, recipientsIds) {
                 });
             }
         });
-
-        /*for(var i = 0; i < tasks.length; i++){
-            var task = tasks[i];           
-            if (tasks[i].to._id !== tasks[i].from._id) {
-                var user = users.find(x => x._id.equals(tasks[i].to._id));
-                // get the number that will be set to the app icon badge
-                getUnDoneTasksCountByUserId(tasks[i].to._id, function (error, userUnDoneTaskCount) {
-                    if (user.GcmRegistrationId !== undefined) {
-                        sendTaskViaGcm(tasks[i], userUnDoneTaskCount, user.GcmRegistrationId);
-                    }
-                    if (user.ApnRegistrationId !== undefined) {
-                        sendTaskViaApn(tasks[i], userUnDoneTaskCount, user.ApnRegistrationId);
-                    }
-                });
-            }
-        }*/
     });
 };
 
@@ -746,3 +758,16 @@ var pushCommentToUserDevice = function (comment, task, userIdToNotify) {
     });
 };
 
+var pushUpdatetdTaskToUsersDevice = function (task, recipientId) {
+
+    // get user from DB and check if there GcmRegId or ApnRegId
+    getUsersByUsersId([recipientId], function (error, user) {
+
+        if (user.GcmRegistrationId !== undefined) {
+            sendTaskViaGcm(task, '', user.GcmRegistrationId, true);
+        }
+        if (user.ApnRegistrationId !== undefined) {
+            sendTaskViaApn(task, '', user.ApnRegistrationId);
+        }
+    });
+};

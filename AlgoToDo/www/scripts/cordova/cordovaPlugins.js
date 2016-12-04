@@ -149,6 +149,10 @@
                 $rootScope.taskcount = data.count;
                 $rootScope.$apply();
             }
+            if (dataFromServer.type === "task-update") {
+                datacontext.replaceTask(dataFromServer.object);
+                $rootScope.$apply();
+            }
             if (dataFromServer.type === "comment") {
                 datacontext.addCommentToTask(dataFromServer.taskId, dataFromServer.object);
                 if (self.appState === 'background') {
