@@ -100,27 +100,37 @@ var createApnProvider = function () {
 
 createApnProvider();
 
-var sendTaskViaApn = function(task, userUnDoneTaskCount, ApnRegistrationId){
+var sendTaskViaApn = function(task, userUnDoneTaskCount, ApnRegistrationId, isUpdate){
 
     var deviceTokenInHex = Buffer.from(ApnRegistrationId, 'base64').toString('hex');
     
     var note = new apn.Notification();
     
-    note.expiry = Math.floor(Date.now() / 1000) + 3600; // Expires 1 hour from now.
-    note.badge = userUnDoneTaskCount;
     note.priority = 10;
-    note.sound = "ping.aiff";
-    //note.alert = "משימה חדשה מ" + task.from.name;//"\uD83D\uDCE7 \u2709 You have a new message";
-    note.payload = { 'additionalData': {
-    type: "task",
-    object: task,
-    taskId: task._id
-    } };
-    //note.payload = task ;
     note.topic = "com.algotodo.app";
-    note.body = task.description;
-    note.title = "משימה חדשה מ" + task.from.name;
-    note.contentAvailable = 1;
+    note.expiry = Math.floor(Date.now() / 1000) + 3600; // Expires 1 hour from now.
+
+    if(isUpdate){
+        note.payload = { 'additionalData': {
+            type: "task-update",
+            object: task,
+            taskId: task._id
+        } };
+    }
+    else {
+        note.badge = userUnDoneTaskCount;
+        note.sound = "ping.aiff";
+        //note.alert = "משימה חדשה מ" + task.from.name;//"\uD83D\uDCE7 \u2709 You have a new message";
+        note.payload = { 'additionalData': {
+            type: "task",
+            object: task,
+            taskId: task._id
+        } };
+        
+        note.body = task.description;
+        note.title = "משימה חדשה מ" + task.from.name;
+        note.contentAvailable = 1;
+    }
 
     console.log("sending message : ", note);
     console.log("with ApnRegistrationId: ", ApnRegistrationId);
@@ -733,7 +743,7 @@ var pushTaskToUsersDevice = function (tasks, recipientsIds) {
                         sendTaskViaGcm(task, userUnDoneTaskCount, user.GcmRegistrationId, false);
                     }
                     if (user.ApnRegistrationId !== undefined) {
-                        sendTaskViaApn(task, userUnDoneTaskCount, user.ApnRegistrationId);
+                        sendTaskViaApn(task, userUnDoneTaskCount, user.ApnRegistrationId, false);
                     }
                 });
             }
@@ -767,7 +777,7 @@ var pushUpdatetdTaskToUsersDevice = function (task, recipientId) {
             sendTaskViaGcm(task, '', user.GcmRegistrationId, true);
         }
         if (user.ApnRegistrationId !== undefined) {
-            sendTaskViaApn(task, '', user.ApnRegistrationId);
+            sendTaskViaApn(task, '', user.ApnRegistrationId, true);
         }
     });
 };
