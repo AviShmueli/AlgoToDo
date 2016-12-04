@@ -7,13 +7,13 @@
 
     TasksListCtrl.$inject = [ 
         '$rootScope', '$scope', 'logger', '$location', 'cordovaPlugins',
-        'appConfig', '$mdMedia', '$mdBottomSheet','$filter',
+        '$mdMedia', '$mdBottomSheet','$filter',
         '$mdSidenav', '$mdDialog', 'datacontext', 'lodash',
         'socket', '$mdToast', 'moment', '$q', 'CMRESLogger'
     ];
 
     function TasksListCtrl($rootScope, $scope, logger, $location, cordovaPlugins,
-                            appConfig, $mdMedia, $mdBottomSheet,$filter,
+                            $mdMedia, $mdBottomSheet,$filter,
                             $mdSidenav, $mdDialog, datacontext, lodash,
                             socket, $mdToast, moment, $q, CMRESLogger) {
 
@@ -25,7 +25,7 @@
         vm.isSmallScrean = $mdMedia('sm');
         vm.userConnected = false;
         vm.user = {};
-        vm.appDomain = appConfig.appDomain;
+        vm.imagesPath = cordovaPlugins.getImagesPath();
         vm.progressActivated = false;
         $rootScope.taskcount = 0;
         vm.signUpInProggress = true;
@@ -77,9 +77,9 @@
             angular.element(document.querySelectorAll('html')).removeClass("hight-auto");
 
             // login to socket.io
-            socket.emit('join', {
+            /*socket.emit('join', {
                 userId: vm.user._id
-            });
+            });*/
 
             loadTasks();
             vm.userConnected = true;           
@@ -88,7 +88,10 @@
             if (cordovaPlugins.isMobileDevice()) {
                 document.addEventListener("deviceready", function () {
                     cordovaPlugins.startListening();
-                    cordovaPlugins.onNotificationReceived(); 
+                    cordovaPlugins.onNotificationReceived();
+                    if (angular.equals({}, datacontext.getDeviceDetailes())) {
+                        datacontext.setDeviceDetailes(cordovaPlugins.getDeviceDetails());
+                    }
                 }, false);
             }
 
@@ -126,21 +129,21 @@
         });*/
 
         // when new task received from the server
-        socket.on('new-task', function(data) {           
+        /*socket.on('new-task', function(data) {           
             var newTask = data;
             if (newTask.from._id !== vm.user._id) {
                 //datacontext.addTaskToTaskList(newTask);
                 //setMyTaskCount();
             }
-        });
+        });*/
 
         // when the server response the users tasks
-        socket.on('updated-task', function (data) {
+        /*socket.on('updated-task', function (data) {
             //logger.success('משימה עודכנה', data.value);
             datacontext.replaceTask(data.value);
             var count = datacontext.setMyTaskCount();
             cordovaPlugins.setBadge(count);
-        });
+        });*/
 
         vm.toggleSidenav = function(menuId) {
             $mdSidenav(menuId).toggle();
@@ -226,7 +229,7 @@
             $mdToast.hide(toastElement);
         }
 
-        checkIfUserSignIn();
+        checkIfUserSignIn();        
     }
 
 })();

@@ -9,16 +9,17 @@
                               '$cordovaLocalNotification'*//*, '$cordovaSms'*/, '$window',
                               /*'$cordovaDialogs',*/ '$cordovaToast', '$cordovaPushV5',
                               '$cordovaBadge', '$cordovaDevice', '$log', '$mdToast',
-                              '$cordovaVibration'];
+                              '$cordovaVibration', '$cordovaNetwork', '$q'];
 
     function cordovaPlugins($rootScope, datacontext, appConfig, $mdDialog,
                             /*$cordovaLocalNotification, *//*$cordovaSms,*/ $window,
                             /*$cordovaDialogs,*/ $cordovaToast, $cordovaPushV5,
                             $cordovaBadge, $cordovaDevice, $log, $mdToast,
-                            $cordovaVibration) {
+                            $cordovaVibration, $cordovaNetwork, $q) {
 
         var self = this;
         self.appState = 'foreground';
+
         var PushOptions = {
             android: {
                 senderID: "874351794059",
@@ -115,7 +116,7 @@
         }
 
         var getDeviceDetails = function () {
-            return $cordovaDevice.getDevice();
+           return $cordovaDevice.getDevice();
         };
 
         var cancelEventListner_notificationReceived = null;
@@ -148,6 +149,11 @@
                 datacontext.addTaskToTaskList(dataFromServer.object);
                 $rootScope.taskcount = data.count;
                 $rootScope.$apply();
+
+                document.addEventListener("deviceready", function () {
+                    $cordovaVibration.vibrate(300);
+                }, false);
+                showNewTaskToast(dataFromServer.taskId, dataFromServer.object.from.name);
             }
             if (dataFromServer.type === "task-update") {
                 datacontext.replaceTask(dataFromServer.object);
@@ -176,8 +182,27 @@
                 template: '<md-toast class="md-capsule" id="message-toast" md-swipe-left="$root.hideToast(\'message-toast\')" md-swipe-right="$root.hideToast(\'message-toast\')">' +
                              '<div layout="row" class="md-toast-content message-toast" dir="rtl" ng-click="$root.redirectToTaskPage(\'' + taskId + '\')"> ' +
                                 '<span flex="66" layout-padding>' +
-                                    name + ' הגיב על משימה,' +
-                                    '<br/>הקש כדי לראות את התגובה' +
+                                    'תגובה חדשה מ' + name +
+                                    '<br/>הקש/י כדי לראות את התגובה' +
+                                '</span>' +
+                                '<span layout="row" flex="33" layout-align="center center">' +
+                                    '<ng-md-icon icon="new_releases" size="48" style="fill:rgb(3, 87, 95)"></ng-md-icon>' +
+                                '</span>' +
+                             '</div>' +
+                          '</md-toast>'
+            });
+            $mdToast.show(NewCommentToast);
+        };
+
+        var showNewTaskToast = function (taskId, name) {
+            var NewCommentToast = $mdToast.build({
+                hideDelay: 5000,
+                position: 'top',
+                template: '<md-toast class="md-capsule" id="message-toast" md-swipe-left="$root.hideToast(\'message-toast\')" md-swipe-right="$root.hideToast(\'message-toast\')">' +
+                             '<div layout="row" class="md-toast-content message-toast" dir="rtl" ng-click="$root.redirectToTaskPage(\'' + taskId + '\')"> ' +
+                                '<span flex="66" layout-padding>' +
+                                    'משימה חדשה מ' + name +
+                                    '<br/>הקש/י כדי לראות את המשימה' +
                                 '</span>' +
                                 '<span layout="row" flex="33" layout-align="center center">' +
                                     '<ng-md-icon icon="new_releases" size="48" style="fill:rgb(3, 87, 95)"></ng-md-icon>' +
@@ -216,9 +241,8 @@
 
         document.addEventListener("deviceready", function () {
             document.addEventListener( 'pause', onPause.bind( this ), false );
-            document.addEventListener( 'resume', onResume.bind( this ), false );
+            document.addEventListener('resume', onResume.bind(this), false);
         }, false);
-
 
         function onPause() {
             self.appState = 'background';
@@ -228,6 +252,44 @@
             self.appState = 'foreground';
         };
 
+        var networkStatus = function () {
+            
+            document.addEventListener("deviceready", function () {
+
+                //var type = $cordovaNetwork.getNetwork()
+
+                //self.isOnline = $cordovaNetwork.isOnline()
+
+                //self.isOffline = $cordovaNetwork.isOffline()
+
+
+                /*// listen for Online event
+                $rootScope.$on('$cordovaNetwork:online', function (event, networkState) {
+                    var onlineState = networkState;
+                })
+
+                // listen for Offline event
+                $rootScope.$on('$cordovaNetwork:offline', function (event, networkState) {
+                    var offlineState = networkState;
+                })*/
+
+            }, false);
+        }
+        
+        var getImagesPath = function () {
+
+            if (!isMobileDevice()) {
+                return '';
+            }
+
+            var device = datacontext.getDeviceDetailes();
+            if (device.platform === 'Android') {
+                return 'file:///android_asset/www';
+            }
+            if (device.platform === 'iOS') {
+                return 'algotodo.app';
+            }
+        }
 
         var service = {
             setLocalNotification: setLocalNotification,
@@ -240,7 +302,9 @@
             isMobileDevice: isMobileDevice,
             initializePushV5: initializePushV5,
             onNotificationReceived: onNotificationReceived,
-            startListening: startListening
+            startListening: startListening,
+            networkStatus: networkStatus,
+            getImagesPath: getImagesPath
         };
 
         return service;

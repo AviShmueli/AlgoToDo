@@ -6,17 +6,17 @@
         .controller('AddTaskDialogController', AddTaskDialogController);
 
     AddTaskDialogController.$inject = [
-        '$scope', '$mdDialog', 'datacontext', '$mdMedia', '$q', 'logger', 'appConfig', 'cordovaPlugins'
+        '$scope', '$mdDialog', 'datacontext', '$mdMedia', '$q', 'logger', 'cordovaPlugins'
     ];
 
-    function AddTaskDialogController($scope, $mdDialog, datacontext, $mdMedia, $q, logger, appConfig, cordovaPlugins) {
+    function AddTaskDialogController($scope, $mdDialog, datacontext, $mdMedia, $q, logger, cordovaPlugins) {
 
         var vm = this;
         
         vm.isSmallScrean = $mdMedia('sm');
         vm.task = {};
 
-        vm.appDomain = appConfig.appDomain;
+        vm.imagesPath = cordovaPlugins.getImagesPath();
         vm.selectedItem = null;
         vm.searchText = null;
         vm.querySearch = querySearch;
@@ -55,7 +55,7 @@
                 logger.success("search result: ", response.data);
                 //datacontext.addUsersToUsersCache(response.data);
                 angular.forEach(response.data, function (user) {
-                    user['avatarFullUrl'] = appConfig.appDomain + user.avatarUrl;
+                    user['avatarFullUrl'] = vm.imagesPath + user.avatarUrl;
                 });
                 deferred.resolve(response.data);
             });

@@ -18,20 +18,20 @@
                     <ng-md-icon icon="menu"></ng-md-icon>
                 </md-button>
             </div>
-            <md-tabs md-stretch-tabs="always" class="md-primary main-tabs" md-selected="$root.selectedIndex" md-swipe-content="true">
+            <md-tabs md-stretch-tabs="always" class="md-primary main-tabs" md-selected="$root.selectedIndex" md-swipe-content="true" md-no-ink-bar="true">
                 <md-tab id="tab1" aria-controls="tab1-content">
                     <ng-md-icon icon="assignment"></ng-md-icon>
-                    <br /><span style="font-size: 10px">בתהליך</span>
+                    <br /><span style="font-size: 12px">בתהליך</span>
                 </md-tab>
                 <md-tab id="tab2" aria-controls="tab2-content">
                     <ng-md-icon icon="assignment_ind"></ng-md-icon>
                     <br />
                     <md-badge ng-if="$root.taskcount > 0">{{$root.taskcount}}</md-badge>
-                    <span style="font-size: 10px">המשימות שלי</span>
+                    <span style="font-size: 12px">המשימות שלי</span>
                 </md-tab>
                 <md-tab id="tab3" aria-controls="tab3-content">
                     <ng-md-icon icon="done_all"></ng-md-icon>
-                    <br /><span style="font-size: 10px">בוצע</span>
+                    <br /><span style="font-size: 12px">בוצע</span>
                 </md-tab>
             </md-tabs>
         </md-toolbar>
@@ -72,7 +72,7 @@
                     <md-list flex flex-gt-sm="50" flex-md="66" dir="rtl" ng-show="(vm.onGoingActivityies() | tasksInProgress: vm.user._id).length > 0">
                         <md-list-item ng-repeat="item in vm.onGoingActivityies() | tasksInProgress: vm.user._id | filter:vm.search" class="noright task-item" style="margin-top: 7px">
                             <md-card-avatar>
-                                <img alt="{{item.to.name}}" ng-src="{{vm.appDomain + item.to.avatarUrl}}" class="md-avatar user-avatar" style="margin-right: 0;" />
+                                <img alt="{{item.to.name}}" ng-src="{{vm.imagesPath + item.to.avatarUrl}}" class="md-avatar user-avatar" style="margin-right: 0;" />
                             </md-card-avatar>
                             <div class="md-tile-content" flex="100" style="margin-bottom: 14px;" ng-click="vm.navigateToTaskPage(item._id)">
                                 <div layout="row">
@@ -108,7 +108,7 @@
                     <md-list flex-gt-sm="50" flex-md="66" flex dir="rtl" ng-show="$root.taskcount > 0">
                         <md-list-item ng-repeat="item in vm.onGoingActivityies() | myTasks: vm.user._id | filter:vm.search" class="noright task-item" style="margin-top: 7px" >
                             <md-card-avatar>
-                                <img alt="{{item.from.name}}" ng-src="{{vm.appDomain + item.from.avatarUrl}}" class="md-avatar user-avatar" style="margin-right: 0;" />
+                                <img alt="{{item.from.name}}" ng-src="{{vm.imagesPath + item.from.avatarUrl}}" class="md-avatar user-avatar" style="margin-right: 0;" />
                             </md-card-avatar>
                             <div class="md-tile-content" flex="100" style="margin-bottom: 14px;" ng-click="vm.navigateToTaskPage(item._id)">
                                 <div layout="row">
@@ -170,6 +170,6 @@
     </md-content>
 
     <!--<div tm-sign-up user="vm.user" sign-up="vm.signUp()" ng-if="!vm.userConnected"></div>-->
-    <div tm-sidenav user="vm.user" app-domain="vm.appDomain" log-off="vm.logOff()"></div>
+    <div tm-sidenav user="vm.user" images-path="vm.imagesPath" log-off="vm.logOff()"></div>
 </div>
 

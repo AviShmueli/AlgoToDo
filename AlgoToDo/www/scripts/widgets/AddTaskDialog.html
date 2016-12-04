@@ -1,4 +1,4 @@
-<md-dialog aria-label="Mango (Fruit)" dir="rtl" layout="column" ng-class="{'fullscreen-dialog': vm.isSmallScrean}">
+<md-dialog aria-label="Mango (Fruit)" dir="rtl" layout="column" ng-class="{'fullscreen-dialog': vm.isSmallScrean}" ng-cloak>
     <md-toolbar>
         <div class="md-toolbar-tools">                          
             <md-button class="md-icon-button" ng-click="vm.cancel()">
@@ -47,7 +47,7 @@
                         <span class="item-title" dir="rtl">
                             <span class="user-name-template" md-highlight-text="vm.searchText">{{user.name}}</span>
                             <md-card-avatar class="user-avatar-template">
-                                <img alt="{{item.name}}" ng-src="{{vm.appDomain + user.avatarUrl}}" class="md-avatar user-avatar-small" style="margin-right: 0;" />
+                                <img alt="{{item.name}}" ng-src="{{vm.imagesPath + user.avatarUrl}}" class="md-avatar user-avatar-small" style="margin-right: 0;" />
                             </md-card-avatar>
                         </span>                                                                 
                     </md-item-template>

@@ -15,7 +15,6 @@
         var self = this;
         self.$storage = $localStorage;
         //self.$storage.usersCache = {};//new Map();
-        //self.socket = io.connect(appConfig.appDomain);
 
         var saveNewTasks = function(tasks) {
 
@@ -195,12 +194,12 @@
         }
 
         // when new comment received from the server
-        socket.on('new-comment', function (data) {
+        /*socket.on('new-comment', function (data) {
 
             var newComment = data.newComment;
             var taskId = data.taskId;
             addCommentToTask(taskId, newComment);
-        });
+        });*/
 
         var reloadAllTasks = function () {
             if (self.$storage.user !== undefined) {
@@ -245,8 +244,15 @@
             updateUserDetails(user._id, filedToUpdate, registrationId);
         }
         
+        var setDeviceDetailes = function (device) {
+            self.$storage.deviceDetailes = device;
+        }
+
+        var getDeviceDetailes = function () {
+            return self.$storage.deviceDetailes !== undefined ? self.$storage.deviceDetailes : {};
+        }
+
         var service = {
-            user: self.user,
             getTaskList: getTaskList,
             setTaskList: setTaskList,
             addTaskToTaskList: addTaskToTaskList,
@@ -269,7 +275,9 @@
             deleteTaskListFromLocalStorage: deleteTaskListFromLocalStorage,
             setMyTaskCount: setMyTaskCount,
             pushTasksToTasksList: pushTasksToTasksList,
-            saveUsersNewRegistrationId: saveUsersNewRegistrationId
+            saveUsersNewRegistrationId: saveUsersNewRegistrationId,
+            setDeviceDetailes: setDeviceDetailes,
+            getDeviceDetailes: getDeviceDetailes
         };
 
         return service;

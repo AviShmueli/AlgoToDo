@@ -8,7 +8,7 @@
     socket.$inject = ['$rootScope', 'appConfig'];
 
     function socket($rootScope, appConfig) {
-        var socket = io.connect(appConfig.appDomain);
+        //var socket = io.connect(appConfig.appDomain);
 
         return {
             on: on,

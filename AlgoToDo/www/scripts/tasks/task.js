@@ -6,13 +6,14 @@
         .controller('taskCtrl', taskCtrl);
 
     taskCtrl.$inject = [
-        '$rootScope', '$scope', 'logger', 'appConfig',
+        '$rootScope', '$scope', 'logger',
          'datacontext', '$routeParams', '$window', 'moment',
-         'socket'
+         'socket', 'cordovaPlugins'
     ];
 
-    function taskCtrl($rootScope, $scope, logger, appConfig,
-         datacontext, $routeParams, $window, moment, socket) {
+    function taskCtrl($rootScope, $scope, logger,
+                      datacontext, $routeParams, $window, moment,
+                      socket, cordovaPlugins) {
 
         var vm = this;
 
@@ -20,7 +21,7 @@
         var a = window.location;
         vm.task = datacontext.getTaskByTaskId(vm.taskId);
         vm.user = datacontext.getUserFromLocalStorage();
-        vm.appDomain = appConfig.appDomain;
+        vm.imagesPath = cordovaPlugins.getImagesPath();
         vm.taskIsToMe = (vm.task.to._id === vm.user._id);
         vm.taskIsFromMe = (vm.task.from._id === vm.user._id);
         angular.element(document.querySelectorAll('html')).removeClass("hight-auto");
@@ -31,9 +32,9 @@
         }
 
         // login 
-        socket.emit('join', {
+        /*socket.emit('join', {
             userId: vm.user._id
-        });
+        });*/
 
         vm.goBack = function () {
             $window.history.back();

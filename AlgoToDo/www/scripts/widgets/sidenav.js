@@ -13,7 +13,7 @@
             restrict: 'A',
             scope: {
                 'user': '=',
-                'appDomain': '=',
+                'imagesPath': '=',
                 'logOff': '&'
             }
         };
@@ -21,7 +21,7 @@
         function sidenavController($scope) {
             var vm = this;
 
-            vm.appDomain = $scope.appDomain;
+            vm.imagesPath = $scope.imagesPath;
             vm.user = $scope.user;
             vm.logOff = $scope.logOff;
 

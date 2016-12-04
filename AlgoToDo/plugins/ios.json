@@ -25,6 +25,9 @@
         },
         "cordova-plugin-vibration": {
             "PACKAGE_NAME": "com.algotodo.app"
+        },
+        "cordova-plugin-network-information": {
+            "PACKAGE_NAME": "com.algotodo.app"
         }
     },
     "dependent_plugins": {
