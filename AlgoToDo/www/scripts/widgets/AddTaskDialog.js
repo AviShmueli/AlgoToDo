@@ -112,9 +112,20 @@
             var listToReturn = [];
             var tempTask;
             angular.forEach(recipients, function (value, key) {
-                tempTask = angular.copy(task);
-                tempTask.to = { 'name': value.name, '_id': value._id, 'avatarUrl': value.avatarUrl };
-                listToReturn.push(tempTask);
+                // if the user select group, 
+                // loop over the users in the group and create for each user his task
+                if (value.type === 'group') {
+                    angular.forEach(value.usersInGroup, function (userInGroup, key) {
+                        tempTask = angular.copy(task);
+                        tempTask.to = { 'name': userInGroup.name, '_id': userInGroup._id, 'avatarUrl': userInGroup.avatarUrl };
+                        listToReturn.push(tempTask);
+                    });
+                }
+                else {
+                    tempTask = angular.copy(task);
+                    tempTask.to = { 'name': value.name, '_id': value._id, 'avatarUrl': value.avatarUrl };
+                    listToReturn.push(tempTask);
+                }
             });
             return listToReturn;
         };

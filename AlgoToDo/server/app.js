@@ -613,7 +613,7 @@ app.get('/TaskManeger/searchUsers', function (req, res) {
         }
 
         var collection = db.collection('users');
-        collection.find(query, { '_id': true, 'name': true, 'avatarUrl': true }).toArray(function (err, result) {
+        collection.find(query, { '_id': true, 'name': true, 'avatarUrl': true, 'type': true, 'usersInGroup': true }).toArray(function (err, result) {
 
             if (err) {
                 winston.log('Error', "error while trying search user: ", err);
