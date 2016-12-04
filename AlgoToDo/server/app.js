@@ -532,12 +532,12 @@ app.post('/TaskManeger/updateTaskStatus', function (req, res) {
                 if (from !== '') {
                     io.to(from).emit('updated-task', results);
                 }
-
+                
                 // if this task is not from me to me, send notification to the user
-                if (!task.to._id.equals(task.from._id)) {
+                if (task.to._id !== task.from._id) {
                     pushUpdatetdTaskToUsersDevice(results, task.from._id);
                 }
-                
+
                 res.send(results);
                 db.close();
             });
