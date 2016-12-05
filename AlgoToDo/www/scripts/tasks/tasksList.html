@@ -58,10 +58,10 @@
         </md-button>
     </md-fab-trigger>
     <!--im-pull-to-refresh refresh-function="vm.reloadTasks()"-->
-    <md-content flex md-scroll-y ng-show="vm.userConnected">
+    <md-content flex md-scroll-y ng-show="vm.userConnected" style="height:100%">
         <ui-view layout="column" layout-fill>
             <!--<div class="inset" hide-sm></div>-->
-            <ng-switch on="$root.selectedIndex" class="tabpanel-container">
+            <ng-switch on="$root.selectedIndex" class="tabpanel-container" style="height:100%">
                 <!-- md-swipe-down="vm.reloadTasks()" -->
                 <div role="tabpanel"
                      id="tab1-content"
@@ -142,26 +142,46 @@
                      aria-labelledby="tab3"
                      ng-switch-when="2"
                      md-swipe-right="$root.selectedIndex = 1"
-                     layout="row" layout-align="center center">
-                    <md-list flex-gt-sm="50" flex-md="66" flex dir="rtl">
-                        <md-list-item ng-repeat="item in vm.onGoingActivityies() | doneTasks: vm.user._id | filter:vm.search | orderBy: 'doneTime':true" class="noright task-item" style="margin-top: 7px">
+                     layout="row" layout-align="center center" style="height:100%">
+                    <md-list flex-gt-sm="50" flex-md="66" flex dir="rtl" style="height:100%">
+
+                        <md-virtual-repeat-container id="vertical-container" style="height:100%">
+                            <div md-virtual-repeat="item in vm.doneTasks" class="noright task-item repeated-item" style="margin-top: 7px;padding: 0 16px;" flex>
+                                <div class="md-tile-content" flex="100" style="margin-bottom: 14px;" ng-click="vm.navigateToTaskPage(item._id)">
+                                    <div layout="row">
+                                        <span class="from">{{item.to.name}}</span>
+                                        <span flex></span>
+                                        <span class="time">{{vm.getTotalTaskTime(item)}}</span>
+                                        <ng-md-icon icon="timer" size="20"></ng-md-icon>
+                                    </div>
+                                    <div layout="row">
+                                        <span style="font-size: 14px;">{{item.description}}</span>
+                                        <!--<span flex></span>-->
+                                        <!--<span class="time">{{item.doneTime | date:'HH:mm'}}</span>-->
+                                        <!--<ng-md-icon icon="timer_off" size="20"></ng-md-icon>-->
+                                    </div>
+                                </div>
+                                <md-divider ng-if="!$last"></md-divider>
+                            </div>
+                        </md-virtual-repeat-container>
+
+                        <!--<md-list-item ng-repeat="item in vm.onGoingActivityies() | doneTasks: vm.user._id | filter:vm.search | orderBy: 'doneTime':true" class="noright task-item" style="margin-top: 7px">
                             <div class="md-tile-content" flex="100" style="margin-bottom: 14px;" ng-click="vm.navigateToTaskPage(item._id)">
                                 <div layout="row">
                                     <span class="from">{{item.to.name}}</span>
-                                    <!--<ng-md-icon class="head-icon" icon="send" style="fill: black" size="10"></ng-md-icon>-->
                                     <span flex></span>
                                     <span class="time">{{vm.getTotalTaskTime(item)}}</span>
                                     <ng-md-icon icon="timer" size="20"></ng-md-icon>
                                 </div>
                                 <div layout="row">
                                     <span style="font-size: 14px;">{{item.description}}</span>
-                                    <!--<span flex></span>
-                                    <span class="time">{{item.doneTime | date:'HH:mm'}}</span>
-                                    <ng-md-icon icon="timer_off" size="20"></ng-md-icon>-->
-                                </div>
+                                    <!--<span flex></span>-->
+                                    <!--<span class="time">{{item.doneTime | date:'HH:mm'}}</span>-->
+                                    <!--<ng-md-icon icon="timer_off" size="20"></ng-md-icon>-->
+                                <!--</div>
                             </div>
                             <md-divider ng-if="!$last"></md-divider>
-                        </md-list-item>
+                        </md-list-item>-->
                         <md-divider></md-divider>
                     </md-list>
                 </div>

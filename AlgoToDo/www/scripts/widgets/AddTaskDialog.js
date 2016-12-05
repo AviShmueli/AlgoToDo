@@ -22,6 +22,7 @@
         vm.querySearch = querySearch;
         vm.selectedRecipients = [];
         vm.showNoRecipientsSelectedError = false;
+        vm.submitInProcess = false;
         
         function querySearch(query) {
             vm.showNoRecipientsSelectedError = false;
@@ -78,33 +79,38 @@
             $mdDialog.cancel();
         };
         vm.save = function () {
-            if (vm.selectedRecipients.length !== 0) {
+            if (vm.submitInProcess === false) {
+                vm.submitInProcess = true;
+                if (vm.selectedRecipients.length !== 0) {
 
-                var user = datacontext.getUserFromLocalStorage();
-                vm.task.from = { '_id': user._id, 'name': user.name, 'avatarUrl': user.avatarUrl};
-                vm.task.status = 'inProgress';
-                vm.task.createTime = new Date();
-                vm.task.comments = [];
+                    var user = datacontext.getUserFromLocalStorage();
+                    vm.task.from = { '_id': user._id, 'name': user.name, 'avatarUrl': user.avatarUrl};
+                    vm.task.status = 'inProgress';
+                    vm.task.createTime = new Date();
+                    vm.task.comments = [];
 
-                var taskListToAdd = createTasksList(vm.task, vm.selectedRecipients);
+                    var taskListToAdd = createTasksList(vm.task, vm.selectedRecipients);
 
-                datacontext.saveNewTasks(taskListToAdd).then(function (response) {
-                    logger.toast('המשימה נשלחה בהצלחה!', response.data, 2000);
-                    logger.info('task added sucsessfuly', response.data);
-                    datacontext.pushTasksToTasksList(response.data);
-                    var count = datacontext.setMyTaskCount();
-                    cordovaPlugins.setBadge(count);
-                    $mdDialog.hide();
+                    datacontext.saveNewTasks(taskListToAdd).then(function (response) {
+                        logger.toast('המשימה נשלחה בהצלחה!', response.data, 2000);
+                        logger.info('task added sucsessfuly', response.data);
+                        datacontext.pushTasksToTasksList(response.data);
+                        var count = datacontext.setMyTaskCount();
+                        cordovaPlugins.setBadge(count);
+                        $mdDialog.hide();
 
-                    // clean the form
-                    vm.task = {};
-                }, function (error) {
-                    logger.error('Error while tring to add new task ', error);
-                });                  
+                        // clean the form
+                        vm.task = {};
+                        vm.submitInProcess = false;
+                    }, function (error) {
+                        logger.error('Error while tring to add new task ', error);
+                    });                  
+                }
+                else {
+                    vm.showNoRecipientsSelectedError = true;
+                    vm.submitInProcess = false;
+                } 
             }
-            else {
-                vm.showNoRecipientsSelectedError = true;
-            }          
         };
 
 

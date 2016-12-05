@@ -29,6 +29,8 @@
         vm.progressActivated = false;
         $rootScope.taskcount = 0;
         vm.signUpInProggress = true;
+        vm.topIndex = 'avi';
+        vm.doneTasks = [];
 
         //CMRESLogger.info('hello world');
 
@@ -229,7 +231,11 @@
             $mdToast.hide(toastElement);
         }
 
-        checkIfUserSignIn();        
+        checkIfUserSignIn();
+        
+        var setDoneTasks = function () {
+            vm.doneTasks = $filter('doneTasks')(datacontext.getTaskList(), vm.user._id);
+        }();
     }
 
 })();

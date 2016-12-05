@@ -735,7 +735,7 @@ var pushTaskToUsersDevice = function (tasks, recipientsIds) {
     getUsersByUsersId(recipientsIds, function (error, users) {
 
         tasks.forEach(function(task, index){
-            if (task.to._id !== task.from._id) {
+            if (!task.to._id.equals(task.from._id)) {
                 var user = users.find(x => x._id.equals(task.to._id));
                 // get the number that will be set to the app icon badge
                 getUnDoneTasksCountByUserId(task.to._id, function (error, userUnDoneTaskCount) {
