@@ -92,7 +92,7 @@
                     cordovaPlugins.startListening();
                     cordovaPlugins.onNotificationReceived();
                     if (angular.equals({}, datacontext.getDeviceDetailes())) {
-                        datacontext.setDeviceDetailes(cordovaPlugins.getDeviceDetails());
+                        datacontext.setDeviceDetailes(cordovaPlugins.getDeviceDetails(),cordova.file.applicationDirectory);
                     }
                 }, false);
             }

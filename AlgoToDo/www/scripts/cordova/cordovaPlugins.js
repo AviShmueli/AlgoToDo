@@ -287,7 +287,8 @@
                 return 'file:///android_asset/www';
             }
             if (device.platform === 'iOS') {
-                return 'algotodo.app';
+ 
+                return device.applicationDirectory + 'www';
             }
         }
 

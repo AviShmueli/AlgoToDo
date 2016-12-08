@@ -146,7 +146,7 @@
                     <md-list flex-gt-sm="50" flex-md="66" flex dir="rtl" style="height:100%">
 
                         <md-virtual-repeat-container id="vertical-container" style="height:100%">
-                            <div md-virtual-repeat="item in vm.doneTasks" class="noright task-item repeated-item" style="margin-top: 7px;padding: 0 16px;" flex>
+                            <div md-virtual-repeat="item in vm.doneTasks | orderBy: 'createTime':true" class="noright task-item repeated-item" style="margin-top: 7px;padding: 0 16px;" flex>
                                 <div class="md-tile-content" flex="100" style="margin-bottom: 14px;" ng-click="vm.navigateToTaskPage(item._id)">
                                     <div layout="row">
                                         <span class="from">{{item.to.name}}</span>

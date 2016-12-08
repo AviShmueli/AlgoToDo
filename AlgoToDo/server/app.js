@@ -101,7 +101,7 @@ var createApnProvider = function () {
 createApnProvider();
 
 var sendTaskViaApn = function(task, userUnDoneTaskCount, ApnRegistrationId, isUpdate){
-
+    console.log("i am in sendTaskViaApn", isUpdate);
     var deviceTokenInHex = Buffer.from(ApnRegistrationId, 'base64').toString('hex');
     
     var note = new apn.Notification();
@@ -769,7 +769,7 @@ var pushCommentToUserDevice = function (comment, task, userIdToNotify) {
 };
 
 var pushUpdatetdTaskToUsersDevice = function (task, recipientId) {
-
+    console.log("i am in pushUpdatetdTaskToUsersDevice", task);
     // get user from DB and check if there GcmRegId or ApnRegId
     getUsersByUsersId([recipientId], function (error, user) {
 

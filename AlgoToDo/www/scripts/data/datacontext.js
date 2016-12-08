@@ -253,12 +253,15 @@
             updateUserDetails(user._id, filedToUpdate, registrationId);
         }
         
-        var setDeviceDetailes = function (device) {
+        var setDeviceDetailes = function (device, applicationDirectory) {
             self.$storage.deviceDetailes = device;
+            self.$storage.deviceDetailes.applicationDirectory = applicationDirectory;
         }
 
         var getDeviceDetailes = function () {
-            return self.$storage.deviceDetailes !== undefined ? self.$storage.deviceDetailes : {};
+            return (self.$storage.deviceDetailes !== undefined &&
+                    self.$storage.deviceDetailes.applicationDirectory !== undefined) ?
+                    self.$storage.deviceDetailes : {};
         }
 
         var saveFileToCache = function (fileName, file) {
