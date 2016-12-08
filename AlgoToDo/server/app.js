@@ -771,7 +771,7 @@ var pushCommentToUserDevice = function (comment, task, userIdToNotify) {
 var pushUpdatetdTaskToUsersDevice = function (task, recipientId) {
     console.log("i am in pushUpdatetdTaskToUsersDevice", recipientId);
     // get user from DB and check if there GcmRegId or ApnRegId
-    getUsersByUsersId([recipientId], function (error, user) {
+    getUsersByUsersId([new ObjectID(recipientId)], function (error, user) {
 console.log("i am in getUsersByUsersId response", user);
         if (user.GcmRegistrationId !== undefined) {
             sendTaskViaGcm(task, '', user.GcmRegistrationId, true);
