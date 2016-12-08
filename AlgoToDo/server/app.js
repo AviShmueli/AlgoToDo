@@ -117,17 +117,21 @@ var sendTaskViaApn = function(task, userUnDoneTaskCount, ApnRegistrationId, isUp
             object: task,
             taskId: task._id
         } };
+        
+        note.badge = null;
+        note.sound = null;
+        note.body = null;
+        note.title = null;
     }
     else {
-        note.badge = userUnDoneTaskCount;
-        note.sound = "ping.aiff";
-        //note.alert = "משימה חדשה מ" + task.from.name;//"\uD83D\uDCE7 \u2709 You have a new message";
         note.payload = { 'additionalData': {
             type: "task",
             object: task,
             taskId: task._id
         } };
         
+        note.badge = userUnDoneTaskCount;
+        note.sound = "ping.aiff";
         note.body = task.description;
         note.title = "משימה חדשה מ" + task.from.name;
         
