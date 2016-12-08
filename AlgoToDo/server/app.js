@@ -101,7 +101,7 @@ var createApnProvider = function () {
 createApnProvider();
 
 var sendTaskViaApn = function(task, userUnDoneTaskCount, ApnRegistrationId, isUpdate){
-    console.log("i am in sendTaskViaApn", isUpdate);
+
     var deviceTokenInHex = Buffer.from(ApnRegistrationId, 'base64').toString('hex');
     
     var note = new apn.Notification();
@@ -109,7 +109,8 @@ var sendTaskViaApn = function(task, userUnDoneTaskCount, ApnRegistrationId, isUp
     note.priority = 10;
     note.topic = "com.algotodo.app";
     note.expiry = Math.floor(Date.now() / 1000) + 3600; // Expires 1 hour from now.
-
+    note.contentAvailable = 1;
+    
     if(isUpdate){
         note.payload = { 'additionalData': {
             type: "task-update",
@@ -129,7 +130,7 @@ var sendTaskViaApn = function(task, userUnDoneTaskCount, ApnRegistrationId, isUp
         
         note.body = task.description;
         note.title = "משימה חדשה מ" + task.from.name;
-        note.contentAvailable = 1;
+        
     }
 
     console.log("sending message : ", note);
@@ -769,10 +770,9 @@ var pushCommentToUserDevice = function (comment, task, userIdToNotify) {
 };
 
 var pushUpdatetdTaskToUsersDevice = function (task, recipientId) {
-    console.log("i am in pushUpdatetdTaskToUsersDevice", recipientId);
+
     // get user from DB and check if there GcmRegId or ApnRegId
     getUsersByUsersId([new ObjectID(recipientId)], function (error, users) {
-                      
         if(users.length > 0){
             var user = users[0];
                       
