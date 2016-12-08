@@ -55,58 +55,98 @@
     
         <md-content flex md-scroll-y style="background-color: transparent">
             <main flex>
-            <ui-view layout="column" layout-fill>
-                <md-card dir="rtl">
-                    <md-card-content>
-                        <div layout="row">
-                            <md-card-avatar>
-                                <img alt="user image" ng-src="{{vm.imagesPath + ((vm.taskIsFromMe) ? vm.task.to.avatarUrl : vm.task.from.avatarUrl)}}" class="md-avatar user-avatar-small" style="margin-left: 10px;" />
-                            </md-card-avatar>
-                            <span class="from">{{ ((vm.taskIsFromMe) ? 'ל' + vm.task.to.name : 'מ' + vm.task.from.name)}}</span>
-                            <span flex></span>
-                            נשלחה&ensp;
-                            <span ng-bind-html="(vm.task.createTime | amCalendar)"></span>
-                        </div>
-                        <div layout="row" style="font-size: 18px;margin-top: 10px;">
-                            {{vm.task.description}}
-                        </div>
-                    </md-card-content>
-                    <md-divider></md-divider>
-                    <md-card-actions layout="row" layout-align="end center">
-                        <md-button ng-if="vm.taskIsToMe" class="md-fab md-mini md-icon-button md-secondary" style="background-color: rgba(105, 178, 137, 0.95);" ng-click="vm.setTaskStatus(vm.task, 'done')" aria-label="done">
-                            <ng-md-icon icon="done"></ng-md-icon>
-                        </md-button>
-                        <span flex></span>
-                        <md-button ng-disabled="!vm.taskIsToMe" class="md-icon-button" aria-label="alert">
-                            <ng-md-icon icon="add_alert" class="icon-fill"></ng-md-icon>
-                        </md-button>
-                        <md-button ng-disabled="!vm.taskIsFromMe" class="md-icon-button" aria-label="redo">
-                            <ng-md-icon icon="settings_backup_restore" class="icon-fill"></ng-md-icon>
-                        </md-button>
-                        <md-button class="md-icon-button" aria-label="report">
-                            <ng-md-icon icon="add_a_photo" class="icon-fill"></ng-md-icon>
-                        </md-button>
-                    </md-card-actions>
-                </md-card>
-
-                <md-list flex>
-                    <md-card dir="rtl" class="response-card" ng-repeat="comment in vm.task.comments | orderBy: createTime:true">
+                <ui-view layout="column" layout-fill>
+                    <md-card dir="rtl">
                         <md-card-content>
                             <div layout="row">
                                 <md-card-avatar>
-                                    <img alt="{{comment.from.name}}" ng-src="{{vm.imagesPath + comment.from.avatarUrl}}" class="md-avatar user-avatar-small" style="margin-left: 10px;" />
+                                    <img alt="user image" ng-src="{{vm.imagesPath + ((vm.taskIsFromMe) ? vm.task.to.avatarUrl : vm.task.from.avatarUrl)}}" class="md-avatar user-avatar-small" style="margin-left: 10px;" />
                                 </md-card-avatar>
-                                <span class="from">{{comment.from.name}}</span>
+                                <span class="from">{{ ((vm.taskIsFromMe) ? 'ל' + vm.task.to.name : 'מ' + vm.task.from.name)}}</span>
                                 <span flex></span>
-                                <span ng-bind-html="(comment.createTime | amCalendar)"></span>
+                                נשלחה&ensp;
+                                <span ng-bind-html="(vm.task.createTime | amCalendar)"></span>
                             </div>
-                            <div layout="row" style="font-size: 14px">
-                                {{comment.text}}
+                            <div layout="row" style="font-size: 18px;margin-top: 10px;">
+                                {{vm.task.description}}
                             </div>
                         </md-card-content>
+                        <md-divider></md-divider>
+                        <md-card-actions layout="row" layout-align="end center">
+                            <md-button ng-if="vm.taskIsToMe" class="md-fab md-mini md-icon-button md-secondary" style="background-color: rgba(105, 178, 137, 0.95);" ng-click="vm.setTaskStatus(vm.task, 'done')" aria-label="done">
+                                <ng-md-icon icon="done"></ng-md-icon>
+                            </md-button>
+                            <span flex></span>
+                            <md-button ng-disabled="!vm.taskIsToMe" class="md-icon-button" aria-label="alert">
+                                <ng-md-icon icon="add_alert" class="icon-fill"></ng-md-icon>
+                            </md-button>
+                            <md-button ng-disabled="!vm.taskIsFromMe" class="md-icon-button" aria-label="redo">
+                                <ng-md-icon icon="settings_backup_restore" class="icon-fill"></ng-md-icon>
+                            </md-button>
+                            <md-button class="md-icon-button" aria-label="report" ng-click="vm.takePic()">
+                                <ng-md-icon icon="add_a_photo" class="icon-fill"></ng-md-icon>
+                            </md-button>
+                            <!--<input type="file" id="file-upload" />-->
+                            <!--<div id="results" style="margin-top: 30px"></div>-->
+                            <img id="results" />
+                        </md-card-actions>
                     </md-card>
-                </md-list>
-            </ui-view>
+                    <!--<div flex-xs flex-gt-xs="50" layout="column">-->
+                    <!--<div layout="row" dir="rtl" layout-align="start center">
+                        <md-card style="background-color: transparent">
+                            <div layout="row" style="position: relative;">
+                                <md-card-avatar class="image-avatar">
+                                    <img alt="dina" ng-src="/images/woman-2.svg" class="md-avatar user-avatar-small" style="margin-left: 10px;" />
+                                </md-card-avatar>
+                                <span flex></span>
+                                <span class="image-date" layout-align="end center">היום ב 14:54</span>
+                            </div>
+                            <div layout="row" class="image-card" >                      
+                                <img id="myImage" class="md-card-image" alt="Washed Out" src="file:///storage/emulated/0/Android/data/com.algotodo.app/cache/1480937580399.jpg">
+                                <img id="myImage" class="md-card-image" alt="Washed Out" src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/07/PikiWiki_Israel_37154_Nature_and_Colors.JPG/800px-PikiWiki_Israel_37154_Nature_and_Colors.JPG">
+                            </div>
+                        </md-card>
+                    </div>-->
+                     <!--</div>-->
+                    <!--<md-list flex>-->
+                        <md-card dir="rtl"  
+                                 class="response-card"
+                                 ng-repeat="comment in vm.task.comments | orderBy: createTime:true "><!--style="background-color: transparent"  ng-class="{'response-card': comment.imageUrl === undefined}"-->
+                            <md-card-content ><!--ng-if="comment.imageUrl === undefined"-->
+                                <!--<span >-->
+                                    <div layout="row">
+                                        <md-card-avatar>
+                                            <img alt="{{comment.from.name}}" ng-src="{{vm.imagesPath + comment.from.avatarUrl}}" class="md-avatar user-avatar-small" style="margin-left: 10px;" />
+                                        </md-card-avatar>
+                                        <span class="from">{{comment.from.name}}</span>
+                                        <span flex></span>
+                                        <span ng-bind-html="(comment.createTime | amCalendar)"></span>
+                                    </div>
+                                    <div layout="row" style="font-size: 14px" ng-if="comment.text !== ''">
+                                        {{comment.text}}
+                                    </div>
+                                    <img id="myImage" ng-if="comment.imageUrl !== undefined" 
+                                         class="md-card-image" alt="מוריד תמונה" 
+                                         ng-src="{{vm.getImageSrc(comment.imageUrl, comment)}}">
+
+                                <!--</span>-->
+                            </md-card-content>
+                                <!-- if this is image -->
+                            <!--<span >-->
+                                <!--<div layout="row" style="position: relative;" ng-if="comment.imageUrl !== undefined">
+                                    <md-card-avatar class="image-avatar">
+                                        <img alt="{{::comment.from.name}}" ng-src="{{::vm.imagesPath + comment.from.avatarUrl}}" class="md-avatar user-avatar-small" style="margin-left: 10px;" />
+                                    </md-card-avatar>
+                                    <span flex></span>
+                                    <span class="image-date" layout-align="end center" ng-bind-html="::(comment.createTime | amCalendar)"></span>
+                                </div>
+                                <div layout="row" class="image-card" ng-if="comment.imageUrl !== undefined">
+                                    <img id="myImage" class="md-card-image" alt="Washed Out" ng-src="{{vm.getImageSrc(comment.imageUrl, comment)}}" >
+                                </div>-->
+                            <!--</span>-->                          
+                        </md-card>
+                    <!--</md-list>-->
+                </ui-view>
             </main>
         </md-content>
     

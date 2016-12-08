@@ -6,6 +6,9 @@
   <content src="index.html" />
   <access origin="algotodo.herokuapp.com" />
   <access origin="algotodo-test.herokuapp.com" />
+  <access origin="dropbox.com" />
+  <access origin="content.dropboxapi.com" />
+  <access origin="api.dropboxapi.com" />
   <vs:features />
   <preference name="SplashScreen" value="screen" />
   <preference name="windows-target-version" value="8.1" />

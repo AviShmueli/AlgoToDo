@@ -9,13 +9,13 @@
                               '$cordovaLocalNotification'*//*, '$cordovaSms'*/, '$window',
                               /*'$cordovaDialogs',*/ '$cordovaToast', '$cordovaPushV5',
                               '$cordovaBadge', '$cordovaDevice', '$log', '$mdToast',
-                              '$cordovaVibration', '$cordovaNetwork', '$q'];
+                              '$cordovaVibration', '$cordovaNetwork', '$q', '$cordovaCamera'];
 
     function cordovaPlugins($rootScope, datacontext, appConfig, $mdDialog,
                             /*$cordovaLocalNotification, *//*$cordovaSms,*/ $window,
                             /*$cordovaDialogs,*/ $cordovaToast, $cordovaPushV5,
                             $cordovaBadge, $cordovaDevice, $log, $mdToast,
-                            $cordovaVibration, $cordovaNetwork, $q) {
+                            $cordovaVibration, $cordovaNetwork, $q, $cordovaCamera) {
 
         var self = this;
         self.appState = 'foreground';
@@ -291,6 +291,27 @@
             }
         }
 
+        var takePicture = function () {
+            
+
+            var options = {
+                quality: 100,
+                destinationType: Camera.DestinationType.DATA_URL,
+                sourceType: Camera.PictureSourceType.CAMERA,
+                allowEdit: false,
+                encodingType: Camera.EncodingType.JPEG,
+                targetWidth: 1500,
+                targetHeight: 1500,
+                popoverOptions: CameraPopoverOptions,
+                saveToPhotoAlbum: false,
+                correctOrientation: true
+            };
+
+            return $cordovaCamera.getPicture(options);
+
+            //$cordovaCamera.cleanup();
+        }
+
         var service = {
             setLocalNotification: setLocalNotification,
             showToast: showToast,
@@ -304,7 +325,8 @@
             onNotificationReceived: onNotificationReceived,
             startListening: startListening,
             networkStatus: networkStatus,
-            getImagesPath: getImagesPath
+            getImagesPath: getImagesPath,
+            takePicture: takePicture
         };
 
         return service;

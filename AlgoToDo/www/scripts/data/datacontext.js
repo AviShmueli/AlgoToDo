@@ -6,10 +6,10 @@
         .service('datacontext', datacontext);
 
     datacontext.$inject = ['$http', 'logger', 'lodash', 'appConfig', '$rootScope',
-                           '$localStorage', '$mdToast', 'socket', '$filter'];
+                           '$localStorage', '$mdToast', 'socket', '$filter', 'dropbox'];
 
     function datacontext($http, logger, lodash, appConfig, $rootScope,
-                         $localStorage, $mdToast, socket, $filter) {
+                         $localStorage, $mdToast, socket, $filter, dropbox) {
 
         
         var self = this;
@@ -184,6 +184,15 @@
                     taskComments.push(comment);
                 }
             }
+
+            /*if (comment.fileThumbnail) {
+                dropbox.getThumbnail(imageUrl, 'w128h128').then(function (response) {
+                    comment.fileThumbnail = URL.createObjectURL(response.fileBlob);
+                })
+                .catch(function (error) {
+                    logger.error("error while trying to get file Thumbnail", error);
+                });
+            }*/
         }
         
         function arrayObjectIndexOf(myArray, property, searchTerm) {
@@ -252,6 +261,24 @@
             return self.$storage.deviceDetailes !== undefined ? self.$storage.deviceDetailes : {};
         }
 
+        var saveFileToCache = function (fileName, file) {
+            if (!self.$storage.filesCache) {
+                self.$storage.filesCache = {};
+            }
+            self.$storage.filesCache[fileName] = file;
+        }
+
+        var getFileFromCache = function (fileName) {
+            if (self.$storage.filesCache) {
+                return self.$storage.filesCache[fileName];
+            }
+            return undefined;
+        }
+
+        var removeFileFromCache = function (fileName) {
+            delete self.$storage.filesCache[fileName];
+        }
+
         var service = {
             getTaskList: getTaskList,
             setTaskList: setTaskList,
@@ -277,7 +304,10 @@
             pushTasksToTasksList: pushTasksToTasksList,
             saveUsersNewRegistrationId: saveUsersNewRegistrationId,
             setDeviceDetailes: setDeviceDetailes,
-            getDeviceDetailes: getDeviceDetailes
+            getDeviceDetailes: getDeviceDetailes,
+            removeFileFromCache: removeFileFromCache,
+            getFileFromCache: getFileFromCache,
+            saveFileToCache: saveFileToCache
         };
 
         return service;
