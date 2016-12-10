@@ -60,15 +60,15 @@
                         <md-card-content>
                             <div layout="row">
                                 <md-card-avatar>
-                                    <img alt="user image" ng-src="{{vm.imagesPath + ((vm.taskIsFromMe) ? vm.task.to.avatarUrl : vm.task.from.avatarUrl)}}" class="md-avatar user-avatar-small" style="margin-left: 10px;" />
+                                    <img alt="user image" ng-src="{{::vm.imagesPath + ((vm.taskIsFromMe) ? vm.task.to.avatarUrl : vm.task.from.avatarUrl)}}" class="md-avatar user-avatar-small" style="margin-left: 10px;" />
                                 </md-card-avatar>
-                                <span class="from">{{ ((vm.taskIsFromMe) ? 'ל' + vm.task.to.name : 'מ' + vm.task.from.name)}}</span>
+                                <span class="from">{{:: ((vm.taskIsFromMe) ? 'ל' + vm.task.to.name : 'מ' + vm.task.from.name)}}</span>
                                 <span flex></span>
                                 נשלחה&ensp;
-                                <span ng-bind-html="(vm.task.createTime | amCalendar)"></span>
+                                <span ng-bind-html="::(vm.task.createTime | amCalendar)"></span>
                             </div>
                             <div layout="row" style="font-size: 18px;margin-top: 10px;">
-                                {{vm.task.description}}
+                                {{::vm.task.description}}
                             </div>
                         </md-card-content>
                         <md-divider></md-divider>
@@ -116,19 +116,19 @@
                                 <!--<span >-->
                                     <div layout="row">
                                         <md-card-avatar>
-                                            <img alt="{{comment.from.name}}" ng-src="{{vm.imagesPath + comment.from.avatarUrl}}" class="md-avatar user-avatar-small" style="margin-left: 10px;" />
+                                            <img alt="{{::comment.from.name}}" ng-src="{{::vm.imagesPath + comment.from.avatarUrl}}" class="md-avatar user-avatar-small" style="margin-left: 10px;" />
                                         </md-card-avatar>
-                                        <span class="from">{{comment.from.name}}</span>
+                                        <span class="from">{{::comment.from.name}}</span>
                                         <span flex></span>
-                                        <span ng-bind-html="(comment.createTime | amCalendar)"></span>
+                                        <span ng-bind-html="::(comment.createTime | amCalendar)"></span>
                                     </div>
                                     <div layout="row" style="font-size: 14px" ng-if="comment.text !== ''">
-                                        {{comment.text}}
+                                        {{::comment.text}}
                                     </div>
-                                    <img id="myImage" ng-if="comment.imageUrl !== undefined" 
-                                         class="md-card-image" alt="מוריד תמונה" 
-                                         ng-src="{{vm.getImageSrc(comment.imageUrl, comment)}}">
-
+                                    <div class="image-wraper" ng-if="comment.fileName !== undefined">                                
+                                        <img md-whiteframe="5" id="myImage" class="md-card-image padded" alt="מוריד תמונה"
+                                             ng-src="{{::vm.getImageSrc(comment)}}">
+                                    </div>
                                 <!--</span>-->
                             </md-card-content>
                                 <!-- if this is image -->

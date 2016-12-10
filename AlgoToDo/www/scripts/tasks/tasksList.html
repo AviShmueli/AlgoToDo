@@ -147,7 +147,7 @@
 
                         <md-virtual-repeat-container id="vertical-container" style="height:100%">
                             <div md-virtual-repeat="item in vm.onGoingActivityies() | doneTasks: vm.user._id | filter:vm.search | orderBy: 'createTime':true" class="noright task-item repeated-item" style="margin-top: 7px;padding: 0 16px;" flex>
-                                <a class="md-tile-content" flex="100" style="margin-bottom: 14px;" ng-click="vm.navigateToTaskPage(item._id)">
+                                <div class="md-tile-content" flex="100" style="margin-bottom: 14px;" ng-click="vm.navigateToTaskPage(item._id)">
                                     <div layout="row">
                                         <span class="from">{{item.to.name}}</span>
                                         <span flex></span>
@@ -160,7 +160,7 @@
                                         <!--<span class="time">{{item.doneTime | date:'HH:mm'}}</span>-->
                                         <!--<ng-md-icon icon="timer_off" size="20"></ng-md-icon>-->
                                     </div>
-                                </a>
+                                </div>
                                 <md-divider ng-if="!$last"></md-divider>
                             </div>
                         </md-virtual-repeat-container>

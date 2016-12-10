@@ -37,7 +37,7 @@
         });*/
 
         vm.goBack = function () {
-            $window.history.back();
+            window.location = '#/';
         }
 
         vm.openMenu = function ($mdOpenMenu, ev) {
@@ -52,7 +52,7 @@
 
                     var fileName = new Date().toISOString() + '.jpg';
 
-                    //datacontext.saveFileToCache(fileName, imageData);
+                    datacontext.saveFileToCache(fileName, imageData);
 
                     var comment = {
                         from: {
@@ -62,7 +62,7 @@
                         },
                         createTime: new Date(),
                         text: '',
-                        imageUrl: fileName
+                        fileName: fileName
                     };
                     vm.task.comments.push(comment);
 
@@ -79,14 +79,14 @@
                         dropbox.uploadFile(fileName, file).then(function (response) {
 
                             // get the image Thumbnail
-                            dropbox.getThumbnail(fileName, 'w128h128').then(function (response) {
-                                comment.fileThumbnail = URL.createObjectURL(response.fileBlob);
+                            //dropbox.getThumbnail(fileName, 'w128h128').then(function (response) {
+                                //comment.fileThumbnail = URL.createObjectURL(response.fileBlob);
                                 // after uploading the file send the new comment
                                 datacontext.newComment(vm.task._id, comment);                                
-                            })
-                            .catch(function (error) {
-                                logger.error("error while trying to get file Thumbnail", error);
-                            });                         
+                            //})
+                            //.catch(function (error) {
+                            //    logger.error("error while trying to get file Thumbnail", error);
+                            //});                         
                         })
                         .catch(function (error) {
                             logger.error("error while trying to upload file to dropbox", error);
@@ -145,6 +145,7 @@
             task.status = newStatus;
             if (task.status === 'done') {
                 task.doneTime = new Date();
+                datacontext.removeAllTaskImagesFromCache(task);
             }
             if (task.status === 'seen') {
                 task.seenTime = new Date();
@@ -158,15 +159,16 @@
             });
         };
 
-        vm.getImageSrc = function (imageUrl, comment) {
-            var src = datacontext.getFileFromCache(imageUrl);
+        vm.getImageSrc = function (comment) {
+            
+            var src = datacontext.getFileFromCache(comment.fileName);
             if (src !== undefined) {
                 return "data:image/jpeg;base64," + src;
             }
             else {
                 if (cordovaPlugins.isMobileDevice()) {
                     return comment.fileThumbnail;
-                }
+                }/*
                 else {
                     // get the image Thumbnail
                     dropbox.getThumbnail(imageUrl, 'w128h128').then(function (response) {
@@ -176,8 +178,9 @@
                         logger.error("error while trying to get file Thumbnail", error);
                     });
                     return comment.fileThumbnail;                 
-                }
+                }*/
             }
+            
         }
                        
     }

@@ -282,6 +282,14 @@
             delete self.$storage.filesCache[fileName];
         }
 
+        var removeAllTaskImagesFromCache = function (task) {
+            for (var i = 0; i < task.comments.length; i++) {
+                if (task.comments[i].fileName !== undefined) {
+                    removeFileFromCache(task.comments[i].fileName);
+                }
+            }
+        }
+
         var service = {
             getTaskList: getTaskList,
             setTaskList: setTaskList,
@@ -310,7 +318,8 @@
             getDeviceDetailes: getDeviceDetailes,
             removeFileFromCache: removeFileFromCache,
             getFileFromCache: getFileFromCache,
-            saveFileToCache: saveFileToCache
+            saveFileToCache: saveFileToCache,
+            removeAllTaskImagesFromCache: removeAllTaskImagesFromCache
         };
 
         return service;
