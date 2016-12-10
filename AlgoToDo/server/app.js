@@ -118,10 +118,10 @@ var sendTaskViaApn = function(task, userUnDoneTaskCount, ApnRegistrationId, isUp
             taskId: task._id
         } };
         
-        note.badge = null;
-        note.sound = null;
-        note.body = null;
-        note.title = null;
+        note.badge = userUnDoneTaskCount;
+        note.sound = "ping.aiff";
+        note.body = task.description;
+        note.title = "משימה חדשה מ" + task.from.name;
     }
     else {
         note.payload = { 'additionalData': {

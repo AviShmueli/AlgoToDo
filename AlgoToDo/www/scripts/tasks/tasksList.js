@@ -94,6 +94,11 @@
                     if (angular.equals({}, datacontext.getDeviceDetailes())) {
                         datacontext.setDeviceDetailes(cordovaPlugins.getDeviceDetails(),cordova.file.applicationDirectory);
                     }
+                                          var a = datacontext.getDeviceDetailes().applicationDirectory;
+                                          var b = cordova.file.applicationDirectory;
+                                          if(a !== b){
+                                            datacontext.setDeviceDetailes(cordovaPlugins.getDeviceDetails(),cordova.file.applicationDirectory);
+                                          }
                 }, false);
             }
 

@@ -287,7 +287,7 @@
                 return 'file:///android_asset/www';
             }
             if (device.platform === 'iOS') {
- alert(device.applicationDirectory);
+ 
                 return device.applicationDirectory + 'www';
             }
         }
