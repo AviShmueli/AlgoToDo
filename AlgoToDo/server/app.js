@@ -205,7 +205,7 @@ var gcm = require('node-gcm');
 var GcmSender = new gcm.Sender('AIzaSyDPJtKwWeftuwuneEWs-WlLII6LE7lGeMk');
 
 var sendTaskViaGcm = function (task, userUnDoneTaskCount, regToken, isUpdate) {
-
+    console.log("****", task);
     var message;
     if(isUpdate) {
         message = new gcm.Message({
