@@ -101,7 +101,7 @@ var createApnProvider = function () {
 createApnProvider();
 
 var sendTaskViaApn = function(task, userUnDoneTaskCount, ApnRegistrationId, isUpdate){
-
+    console.log("******", task);
     var deviceTokenInHex = Buffer.from(ApnRegistrationId, 'base64').toString('hex');
     
     var note = new apn.Notification();
