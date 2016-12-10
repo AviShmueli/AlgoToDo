@@ -127,7 +127,8 @@
                                     </div>
                                     <div class="image-wraper" ng-if="comment.fileName !== undefined">                                
                                         <img md-whiteframe="5" id="myImage" class="md-card-image padded" alt="מוריד תמונה"
-                                             ng-src="{{::vm.getImageSrc(comment)}}">
+                                             ng-src="{{::vm.getImageSrc(comment)}}"
+                                             ng-click="vm.openGallery()">
                                     </div>
                                 <!--</span>-->
                             </md-card-content>
@@ -149,6 +150,8 @@
                 </ui-view>
             </main>
         </md-content>
+    
+    <ng-image-gallery images="vm.images" methods="vm.methods" conf="vm.conf" inline="false"></ng-image-gallery>
     
     <footer class="add-comment-footer" ng-if="vm.task.status !== 'done'">
         <md-toolbar class="md-scroll-shrink ">
