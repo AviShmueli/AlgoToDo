@@ -545,15 +545,15 @@ app.post('/TaskManeger/updateTaskStatus', function (req, res) {
                 
                 // send the updated task to the maneger and return it to the employee
                 if (from !== '') {
-                    io.to(from).emit('updated-task', results);
+                    io.to(from).emit('updated-task', results.value);
                 }
                 
                 // if this task is not from me to me, send notification to the user
                 if (task.to._id !== task.from._id) {
-                    pushUpdatetdTaskToUsersDevice(results, task.from._id);
+                    pushUpdatetdTaskToUsersDevice(results.value, task.from._id);
                 }
 
-                res.send(results);
+                res.send(results.value);
                 db.close();
             });
     });
