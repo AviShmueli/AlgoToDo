@@ -9,13 +9,15 @@
                               '$cordovaLocalNotification'*//*, '$cordovaSms'*/, '$window',
                               /*'$cordovaDialogs',*/ '$cordovaToast', '$cordovaPushV5',
                               '$cordovaBadge', '$cordovaDevice', '$log', '$mdToast',
-                              '$cordovaVibration', '$cordovaNetwork', '$q', '$cordovaCamera'];
+                              '$cordovaVibration', '$cordovaNetwork', '$q', '$cordovaCamera',
+                              '$cordovaAppVersion'];
 
     function cordovaPlugins($rootScope, datacontext, appConfig, $mdDialog,
                             /*$cordovaLocalNotification, *//*$cordovaSms,*/ $window,
                             /*$cordovaDialogs,*/ $cordovaToast, $cordovaPushV5,
                             $cordovaBadge, $cordovaDevice, $log, $mdToast,
-                            $cordovaVibration, $cordovaNetwork, $q, $cordovaCamera) {
+                            $cordovaVibration, $cordovaNetwork, $q, $cordovaCamera,
+                            $cordovaAppVersion) {
 
         var self = this;
         self.appState = 'foreground';
@@ -283,13 +285,7 @@
             }
 
             var device = datacontext.getDeviceDetailes();
-            if (device.platform === 'Android') {
-                return 'file:///android_asset/www';
-            }
-            if (device.platform === 'iOS') {
- 
-                return device.applicationDirectory + 'www';
-            }
+            return device.applicationDirectory + 'www';
         }
 
         var takePicture = function () {
@@ -313,6 +309,10 @@
             //$cordovaCamera.cleanup();
         }
 
+        var getAppVersion = function () {
+            return $cordovaAppVersion.getVersionNumber();
+        }
+
         var service = {
             setLocalNotification: setLocalNotification,
             showToast: showToast,
@@ -327,7 +327,8 @@
             startListening: startListening,
             networkStatus: networkStatus,
             getImagesPath: getImagesPath,
-            takePicture: takePicture
+            takePicture: takePicture,
+            getAppVersion: getAppVersion
         };
 
         return service;

@@ -73,7 +73,7 @@
                         </md-card-content>
                         <md-divider></md-divider>
                         <md-card-actions layout="row" layout-align="end center">
-                            <md-button ng-if="vm.taskIsToMe" class="md-fab md-mini md-icon-button md-secondary" style="background-color: rgba(105, 178, 137, 0.95);" ng-click="vm.setTaskStatus(vm.task, 'done')" aria-label="done">
+                            <md-button ng-if="vm.taskIsToMe && vm.task.status !== 'done'" class="md-fab md-mini md-icon-button md-secondary" style="background-color: rgba(105, 178, 137, 0.95);" ng-click="vm.setTaskStatus(vm.task, 'done')" aria-label="done">
                                 <ng-md-icon icon="done"></ng-md-icon>
                             </md-button>
                             <span flex></span>

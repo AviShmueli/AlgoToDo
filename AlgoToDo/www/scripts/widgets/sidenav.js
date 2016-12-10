@@ -18,12 +18,19 @@
             }
         };
 
-        function sidenavController($scope) {
+        function sidenavController($scope, cordovaPlugins) {
             var vm = this;
 
             vm.imagesPath = $scope.imagesPath;
             vm.user = $scope.user;
             vm.logOff = $scope.logOff;
+            vm.appVersion = '';
+
+            document.addEventListener("deviceready", function () {
+                cordovaPlugins.getAppVersion().then(function (version) {
+                    vm.appVersion = version;
+                });
+            }, false);
 
             vm.menu = [{
                 link: '',

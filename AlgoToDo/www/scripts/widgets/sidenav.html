@@ -10,7 +10,7 @@
             <div>{{user.title}}</div>
         </div>
     </md-toolbar>
-    <md-list>
+    <md-list layout="column" layout-fill>
         <md-item ng-repeat="item in vm.menu">
             <a style="cursor: pointer">
                 <md-item-content md-ink-ripple layout="row" layout-align="start center">
@@ -55,6 +55,15 @@
                     </div>
                 </md-item-content>
             </a>
+        </md-item>
+        <span flex></span>
+        <md-item>
+                <md-item-content md-ink-ripple layout="row" layout-align="start center">
+                    <span flex></span>
+                    <div class="inset">
+                        {{vm.appVersion}}
+                    </div>
+                </md-item-content>
         </md-item>
     </md-list>
 </md-sidenav>
