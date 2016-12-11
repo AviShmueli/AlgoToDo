@@ -86,9 +86,6 @@
                             <md-button class="md-icon-button" aria-label="report" ng-click="vm.takePic()">
                                 <ng-md-icon icon="add_a_photo" class="icon-fill"></ng-md-icon>
                             </md-button>
-                            <!--<input type="file" id="file-upload" />-->
-                            <!--<div id="results" style="margin-top: 30px"></div>-->
-                            <img id="results" />
                         </md-card-actions>
                     </md-card>
                     <!--<div flex-xs flex-gt-xs="50" layout="column">-->
@@ -127,7 +124,7 @@
                                     </div>
                                     <div class="image-wraper" ng-if="comment.fileName !== undefined">                                
                                         <img md-whiteframe="5" id="myImage" class="md-card-image padded" alt="מוריד תמונה"
-                                             ng-src="{{::vm.getImageSrc(comment)}}">
+                                             ng-src="{{comment.fileLocalPath}}">
                                     </div>
                                 <!--</span>-->
                             </md-card-content>

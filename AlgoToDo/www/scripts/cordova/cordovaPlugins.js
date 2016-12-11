@@ -162,16 +162,32 @@
                 $rootScope.$apply();
             }
             if (dataFromServer.type === "comment") {
-                datacontext.addCommentToTask(dataFromServer.taskId, dataFromServer.object);
-                if (self.appState === 'background') {
-                    window.location = '#/task/' + dataFromServer.taskId;
+ 
+                if(dataFromServer.object.fileName !== undefined){
+
+                    dropbox.getThumbnail(dataFromServer.object.fileName, 'w128h128')
+                        .then(function (response) {
+                                var url = URL.createObjectURL(response.fileBlob);
+                                dataFromServer.object.fileLocalPath = url;
+                                datacontext.saveFileToCache(dataFromServer.object.fileName, url);
+                                datacontext.addCommentToTask(dataFromServer.taskId, dataFromServer.object);
+                        })
+                        .catch(function (error) {
+                                logger.error("error while trying to get file Thumbnail", error);
+                        });
                 }
-                else {
-                    if (window.location.hash.indexOf(dataFromServer.taskId) === -1) {
-                        document.addEventListener("deviceready", function () {
-                            $cordovaVibration.vibrate(300);
-                        }, false);
-                        showNewCommentToast(dataFromServer.taskId, dataFromServer.object.from.name);
+                else{
+                    datacontext.addCommentToTask(dataFromServer.taskId, dataFromServer.object);
+                    if (self.appState === 'background') {
+                        window.location = '#/task/' + dataFromServer.taskId;
+                    }
+                    else {
+                        if (window.location.hash.indexOf(dataFromServer.taskId) === -1) {
+                            document.addEventListener("deviceready", function () {
+                                    $cordovaVibration.vibrate(300);
+                            }, false);
+                            showNewCommentToast(dataFromServer.taskId, dataFromServer.object.from.name);
+                        }
                     }
                 }
             }

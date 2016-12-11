@@ -18,7 +18,6 @@
         var vm = this;
 
         vm.taskId = $routeParams.taskId;
-        var a = window.location;
         vm.task = datacontext.getTaskByTaskId(vm.taskId);
         vm.user = datacontext.getUserFromLocalStorage();
         vm.imagesPath = cordovaPlugins.getImagesPath();
@@ -64,8 +63,11 @@
                         text: '',
                         fileName: fileName
                     };
-                    vm.task.comments.push(comment);
-
+                    var tempComment = angular.copy(comment);
+                    setFileLocalPath(tempComment);
+                    vm.task.comments.push(tempComment);
+                    
+                                                  
                     // convert the base 64 image to blob
                     var blob = b64toBlob(imageData, 'image/jpg');
                     var blobUrl = URL.createObjectURL(blob);
@@ -160,29 +162,82 @@
         };
 
         vm.getImageSrc = function (comment) {
-            
+ 
+ 
+            // if this is file you uploaded - the file will be in the cache
             var src = datacontext.getFileFromCache(comment.fileName);
             if (src !== undefined) {
                 return "data:image/jpeg;base64," + src;
             }
             else {
-                if (cordovaPlugins.isMobileDevice()) {
-                    return comment.fileThumbnail;
-                }/*
-                else {
+                //if (cordovaPlugins.isMobileDevice()) {
+                //    return comment.fileThumbnail;
+                //}
+ 
                     // get the image Thumbnail
-                    dropbox.getThumbnail(imageUrl, 'w128h128').then(function (response) {
-                        comment.fileThumbnail = URL.createObjectURL(response.fileBlob);
+                    dropbox.getThumbnail(comment.fileName, 'w128h128').then(function (response) {
+                        datacontext.saveFileToCache(comment.fileName, URL.createObjectURL(response.fileBlob));
                     })
                     .catch(function (error) {
                         logger.error("error while trying to get file Thumbnail", error);
                     });
                     return comment.fileThumbnail;                 
-                }*/
+ 
             }
             
         }
-                       
+ 
+        var setFileLocalPath = function(comment){
+ 
+            // if this is file you uploaded - the file will be in the cache
+            var src = datacontext.getFileFromCache(comment.fileName);
+            if (src !== undefined) {
+                comment.fileLocalPath = "data:image/jpeg;base64," + src;
+            }
+            else {
+                dropbox.getThumbnail(comment.fileName, 'w128h128')
+                    .then(function (response) {
+                         var url = URL.createObjectURL(response.fileBlob);
+                         comment.fileLocalPath = url;
+                         datacontext.saveFileToCache(comment.fileName, url);
+                    })
+                    .catch(function (error) {
+                        logger.error("error while trying to get file Thumbnail", error);
+                    });
+                dropbox.downloadFile(comment.fileName).then(function (response) {
+                        console.log(response);
+                        dropbox.getSharedLinkFile(response.url)
+                             .then(function (response) {
+                                   console.log(response);
+                                   var downloadUrl = URL.createObjectURL(response.fileBlob);
+                                   comment.fileLocalPath = downloadUrl;
+                                   datacontext.saveFileToCache(comment.fileName, downloadUrl);
+                                   /*var downloadButton = document.createElement('a');
+                                   downloadButton.setAttribute('href', downloadUrl);
+                                   downloadButton.setAttribute('download', response.name);
+                                   downloadButton.setAttribute('class', 'button');
+                                   downloadButton.innerText = 'Download: ' + response.name;
+                                   document.getElementById('results').src = downloadButton;*/
+                                   })
+                             .catch(function (error) {
+                                    logger.error("error while trying to download file from dropbox", error);
+                                    });
+                             })
+ .catch(function (error) {
+        console.error(error);
+        });
+
+            }
+        }
+ 
+        var setImagesLocalPath = function(){
+            for(var i = 0; i < vm.task.comments.length; i++){
+                if(vm.task.comments[i].fileName != undefined){
+                    setFileLocalPath(vm.task.comments[i]);
+                }
+            }
+        }();
+ 
     }
 
 })();
