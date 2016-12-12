@@ -103,7 +103,9 @@
             }
 
             logger.info("user is now connected", vm.user);
-            //logger.toast("אתה עכשיו מחובר!", null, 1000);           
+            //logger.toast("אתה עכשיו מחובר!", null, 1000); 
+            document.getElementById('canvas_loadder').style.display = "none";
+            document.getElementById('Cube_loadder').style.display = "none";
         };
 
         vm.logOff = function () {

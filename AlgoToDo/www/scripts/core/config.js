@@ -69,6 +69,7 @@
             };
         })
         .run(function (amMoment, datacontext, cordovaPlugins) {
+            //init();
             datacontext.reloadAllTasks();
             amMoment.changeLocale('he');
         });

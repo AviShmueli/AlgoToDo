@@ -6,18 +6,18 @@
         .controller('taskCtrl', taskCtrl);
 
     taskCtrl.$inject = [
-        '$rootScope', '$scope', 'logger', '$q',
+        '$rootScope', '$scope', 'logger', '$q', 'storage',
          'datacontext', '$routeParams', '$window', 'moment',
          'socket', 'cordovaPlugins', 'dropbox', 'appConfig'
     ];
 
-    function taskCtrl($rootScope, $scope, logger, $q,
+    function taskCtrl($rootScope, $scope, logger, $q, storage,
                       datacontext, $routeParams, $window, moment,
                       socket, cordovaPlugins, dropbox, appConfig) {
 
         var vm = this;
 
-        vm.taskId = $routeParams.taskId;
+        vm.taskId = $routeParams.taskId.split('&')[0];
         vm.task = datacontext.getTaskByTaskId(vm.taskId);
         vm.user = datacontext.getUserFromLocalStorage();
         vm.imagesPath = cordovaPlugins.getImagesPath();
@@ -42,16 +42,15 @@
         vm.openMenu = function ($mdOpenMenu, ev) {
             $mdOpenMenu(ev);
         };
-        //dropbox.downloadFile();
 
         vm.takePic = function () {
 
             document.addEventListener("deviceready", function () {
-                cordovaPlugins.takePicture().then(function (imageData) {
+                cordovaPlugins.takePicture().then(function (fileUrl) {
 
                     var fileName = new Date().toISOString() + '.jpg';
 
-                    datacontext.saveFileToCache(fileName, imageData);
+                    datacontext.saveFileToCache(fileName, fileUrl);
 
                     var comment = {
                         from: {
@@ -67,34 +66,33 @@
                     setFileLocalPath(tempComment);
                     vm.task.comments.push(tempComment);
                     
-                                                  
-                    // convert the base 64 image to blob
-                    var blob = b64toBlob(imageData, 'image/jpg');
-                    var blobUrl = URL.createObjectURL(blob);
+                    storage.getFileFromStorage(
+                        cordova.file.externalCacheDirectory,
+                        fileUrl.substring(fileUrl.lastIndexOf('/') + 1))
+                        .then(function (success) {
+                            var imageData = success.replace(/^data:image\/\w+;base64,/, "");
+                            // convert the base 64 image to blob
+                            var blob = b64toBlob(imageData, 'image/jpg');
+                            var blobUrl = URL.createObjectURL(blob);
 
-                    var reader = new FileReader();
+                            var reader = new FileReader();
 
-                    // Closure to capture the file information.
-                    reader.onload = (function (file) {
+                            // Closure to capture the file information.
+                            reader.onload = (function (file_reader) {
 
-                        //upload file To Dropbox;
-                        dropbox.uploadFile(fileName, file).then(function (response) {
+                                //upload file To Dropbox;
+                                dropbox.uploadFile(fileName, file_reader).then(function (response) {
+                                    // send the new comment
+                                    datacontext.newComment(vm.task._id, comment);
+                                })
+                                .catch(function (error) {
+                                    logger.error("error while trying to upload file to dropbox", error);
+                                });
+                            })(blob);
 
-                            // get the image Thumbnail
-                            //dropbox.getThumbnail(fileName, 'w128h128').then(function (response) {
-                                //comment.fileThumbnail = URL.createObjectURL(response.fileBlob);
-                                // after uploading the file send the new comment
-                                datacontext.newComment(vm.task._id, comment);                                
-                            //})
-                            //.catch(function (error) {
-                            //    logger.error("error while trying to get file Thumbnail", error);
-                            //});                         
-                        })
-                        .catch(function (error) {
-                            logger.error("error while trying to upload file to dropbox", error);
-                        });
-                    })(blob);
-
+                    }, function (error) {
+                        console.log(error);
+                    });                    
                 }, function (err) {
                     logger.error("error while trying to take a picture", err);
                 });
@@ -161,41 +159,27 @@
             });
         };
 
-        vm.getImageSrc = function (comment) {
- 
- 
-            // if this is file you uploaded - the file will be in the cache
-            var src = datacontext.getFileFromCache(comment.fileName);
-            if (src !== undefined) {
-                return "data:image/jpeg;base64," + src;
-            }
-            else {
-                //if (cordovaPlugins.isMobileDevice()) {
-                //    return comment.fileThumbnail;
-                //}
- 
-                    // get the image Thumbnail
-                    dropbox.getThumbnail(comment.fileName, 'w128h128').then(function (response) {
-                        datacontext.saveFileToCache(comment.fileName, URL.createObjectURL(response.fileBlob));
-                    })
-                    .catch(function (error) {
-                        logger.error("error while trying to get file Thumbnail", error);
-                    });
-                    return comment.fileThumbnail;                 
- 
-            }
-            
-        }
- 
-        var setFileLocalPath = function(comment){
+        vm.galleryImages = [];
+        vm.galleryImagesLocations = {};
+        vm.galleryImagesCounter = 0;
+
+        var setFileLocalPath = function (comment) {
  
             // if this is file you uploaded - the file will be in the cache
             var src = datacontext.getFileFromCache(comment.fileName);
             if (src !== undefined) {
-                comment.fileLocalPath = "data:image/jpeg;base64," + src;
+                comment.fileLocalPath = src;
+                // todo: fix w & h to be from cordova-plugin-screensize 
+                //        or window.innerWidth & window.innerHeight
+                vm.galleryImages.push({
+                    src: src,
+                    w: 800,
+                    h: 400
+                });
+                vm.galleryImagesLocations[comment.fileName] = vm.galleryImagesCounter++;
             }
             else {
-                dropbox.getThumbnail(comment.fileName, 'w128h128')
+                /*dropbox.getThumbnail(comment.fileName, 'w128h128')
                     .then(function (response) {
                          var url = URL.createObjectURL(response.fileBlob);
                          comment.fileLocalPath = url;
@@ -211,33 +195,96 @@
                                    console.log(response);
                                    var downloadUrl = URL.createObjectURL(response.fileBlob);
                                    comment.fileLocalPath = downloadUrl;
-                                   datacontext.saveFileToCache(comment.fileName, downloadUrl);
-                                   /*var downloadButton = document.createElement('a');
-                                   downloadButton.setAttribute('href', downloadUrl);
-                                   downloadButton.setAttribute('download', response.name);
-                                   downloadButton.setAttribute('class', 'button');
-                                   downloadButton.innerText = 'Download: ' + response.name;
-                                   document.getElementById('results').src = downloadButton;*/
-                                   })
+                                   datacontext.saveFileToCache(comment.fileName, downloadUrl);                                   
+                              })
                              .catch(function (error) {
                                     logger.error("error while trying to download file from dropbox", error);
-                                    });
-                             })
- .catch(function (error) {
-        console.error(error);
-        });
-
+                              });
+                        })
+                    .catch(function (error) {
+                        console.error(error);
+                    });
+                    */
             }
         }
  
         var setImagesLocalPath = function(){
             for(var i = 0; i < vm.task.comments.length; i++){
-                if(vm.task.comments[i].fileName != undefined){
+                if(vm.task.comments[i].fileName !== undefined){
                     setFileLocalPath(vm.task.comments[i]);
                 }
             }
         }();
- 
+        
+        var gallery;
+
+        vm.showGalary = function (startFromFile) {
+            var pswpElement = document.querySelectorAll('.pswp')[0];
+
+            // build items array
+            /*vm.galleryImages = [
+                {
+                    src: 'https://photos-1.dropbox.com/t/2/AAC43kVSA1R6MAoqXYgWFmon8pQwLtBVmEYGvO5wUw571w/12/579965904/jpeg/32x32/1/_/1/2/2016-12-11T21%3A23%3A02.851Z.jpg/EJisz4wFGIQBIAcoBw/S3PGdSH1wBffOyyUAzWxN_YkkIgQo78iiZCDJycE6dk?size=1600x1200&size_mode=3',
+                    w: 600,
+                    h: 400
+                },
+                {
+                    src: 'https://photos-6.dropbox.com/t/2/AAA8rFSk8vNeHrinwCcR3Ol606AGV2uHCu1_KI15F4tsPw/12/579965904/jpeg/32x32/1/_/1/2/avi.jpg/EJisz4wFGEsgBygH/HbMSs18ptds-T-3U_RxSoO1V9hQiAgTbcpTVvPtuqvA?size=1600x1200&size_mode=3',
+                    w: 600,
+                    h: 400
+                }
+            ];*/
+
+            // define options (if needed)
+            var options = {
+                // optionName: 'option value'
+                // for example:
+                index: vm.galleryImagesLocations[startFromFile] || 0, // start at first slide // 
+                closeOnScroll: false,
+                closeOnVerticalDrag: false,
+                history: false
+            };
+
+            // Initializes and opens PhotoSwipe
+            gallery = new PhotoSwipe(pswpElement, PhotoSwipeUI_Default, /*items*/vm.galleryImages, options);
+            gallery.init();
+
+            document.addEventListener("backbutton", backbuttonClickCallback, false);
+
+            gallery.listen('close', function () {
+                document.removeEventListener("backbutton", backbuttonClickCallback, false);
+            });
+        }
+
+        var backbuttonClickCallback = function () {
+            gallery.close();
+            document.removeEventListener("backbutton", backbuttonClickCallback, false);
+        }
+
+        vm.shareImage = function () {
+            // e - original click event
+            // target - link that was clicked
+
+            // If `target` has `href` attribute and 
+            // does not have `download` attribute - 
+            // share modal window will popup
+            var a = 'target';
+        }
+
+        
+        /*dropbox.getThumbnail(, 'w128h128')
+                        .then(function (response) {
+                            var url = URL.createObjectURL(response.fileBlob);
+                            //dataFromServer.object.fileLocalPath = url;
+
+                            storage.saveFileToStorage('2016-12-11T21:23:02.851Z.jpg', response);
+                            //datacontext.saveFileToCache(dataFromServer.object.fileName, url);
+                            //datacontext.addCommentToTask(dataFromServer.taskId, dataFromServer.object);
+                        })
+                        .catch(function (error) {
+                            logger.error("error while trying to get file Thumbnail", error);
+                        });*/
+
     }
 
 })();

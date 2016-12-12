@@ -10,14 +10,14 @@
                               /*'$cordovaDialogs',*/ '$cordovaToast', '$cordovaPushV5',
                               '$cordovaBadge', '$cordovaDevice', '$log', '$mdToast',
                               '$cordovaVibration', '$cordovaNetwork', '$q', '$cordovaCamera',
-                              '$cordovaAppVersion'];
+                              '$cordovaAppVersion', 'dropbox', 'storage'];
 
     function cordovaPlugins($rootScope, datacontext, appConfig, $mdDialog,
                             /*$cordovaLocalNotification, *//*$cordovaSms,*/ $window,
                             /*$cordovaDialogs,*/ $cordovaToast, $cordovaPushV5,
                             $cordovaBadge, $cordovaDevice, $log, $mdToast,
                             $cordovaVibration, $cordovaNetwork, $q, $cordovaCamera,
-                            $cordovaAppVersion) {
+                            $cordovaAppVersion, dropbox, storage) {
 
         var self = this;
         self.appState = 'foreground';
@@ -165,33 +165,50 @@
  
                 if(dataFromServer.object.fileName !== undefined){
 
-                    dropbox.getThumbnail(dataFromServer.object.fileName, 'w128h128')
+                    /*dropbox.getThumbnail(dataFromServer.object.fileName, 'w128h128')
                         .then(function (response) {
-                                var url = URL.createObjectURL(response.fileBlob);
-                                dataFromServer.object.fileLocalPath = url;
-                                datacontext.saveFileToCache(dataFromServer.object.fileName, url);
-                                datacontext.addCommentToTask(dataFromServer.taskId, dataFromServer.object);
+                            //var url = URL.createObjectURL(response.fileBlob);
+                            //dataFromServer.object.fileLocalPath = url;
+
+                            storage.saveFileToStorage(dataFromServer.object.fileName, response.fileBlob);
+                            datacontext.saveFileToCache(dataFromServer.object.fileName, url);
+                            datacontext.addCommentToTask(dataFromServer.taskId, dataFromServer.object);
                         })
                         .catch(function (error) {
                                 logger.error("error while trying to get file Thumbnail", error);
+                        });*/
+
+                    dropbox.downloadFile(dataFromServer.object.fileName).then(function (response) {
+                        storage.saveFileToStorage(dataFromServer.object.fileName, response.url).then(function (storageFilePath) {
+                            datacontext.saveFileToCache(dataFromServer.object.fileName, storageFilePath);
+                            datacontext.addCommentToTask(dataFromServer.taskId, dataFromServer.object);
+                            navigateToTaskPage(dataFromServer.taskId, dataFromServer.object);
                         });
+                    })
+                    .catch(function (error) {
+                        logger.error(error);
+                    });
                 }
                 else{
                     datacontext.addCommentToTask(dataFromServer.taskId, dataFromServer.object);
-                    if (self.appState === 'background') {
-                        window.location = '#/task/' + dataFromServer.taskId;
-                    }
-                    else {
-                        if (window.location.hash.indexOf(dataFromServer.taskId) === -1) {
-                            document.addEventListener("deviceready", function () {
-                                    $cordovaVibration.vibrate(300);
-                            }, false);
-                            showNewCommentToast(dataFromServer.taskId, dataFromServer.object.from.name);
-                        }
-                    }
+                    navigateToTaskPage(dataFromServer.taskId, dataFromServer.object);
                 }
             }
         };
+
+        var navigateToTaskPage = function (taskId, task) {
+            if (self.appState === 'background') {
+                window.location = '#/task/' + taskId;
+            }
+            else {
+                if (window.location.hash.indexOf(taskId) === -1) {
+                    document.addEventListener("deviceready", function () {
+                        $cordovaVibration.vibrate(300);
+                    }, false);
+                    showNewCommentToast(taskId, task.from.name);
+                }
+            }
+        }
 
         var showNewCommentToast = function (taskId, name) {
             var NewCommentToast = $mdToast.build({
@@ -309,7 +326,7 @@
 
             var options = {
                 quality: 100,
-                destinationType: Camera.DestinationType.DATA_URL,
+                destinationType: Camera.DestinationType.FILE_URI,
                 sourceType: Camera.PictureSourceType.CAMERA,
                 allowEdit: false,
                 encodingType: Camera.EncodingType.JPEG,

@@ -13,17 +13,70 @@
 
     <link href="css/angular-material.min.css" rel="stylesheet" />
     <link rel="stylesheet" type="text/css" href="css/index.css">
+    
+    <link href="css/photoswipe.css" rel="stylesheet" />
+    <link href="css/default-skin/default-skin.css" rel="stylesheet" />
+    
     <title>AlgoToDo</title>
 
 </head>
-<body layout="row" ng-cloak>
+<body layout="row" >
+    <script type="text/javascript">
+            var c = document.createElement('canvas'),
+        $ = c.getContext('2d'),
+        w = c.width = window.innerWidth,
+        h = c.height = window.innerHeight,
+        d, l,
+        t = 0;
+            c.id = 'canvas_loadder';
+            document.body.appendChild(c);
 
-    <!--<div layout-fill>
-        <span ng-include="'scripts/layout/layout.html'"></span>
+            function init() {
+                reset();
+                loop();
+            }
+            function draw() {
+                var z = 15 - Math.sin(t) * 15 - Math.cos(t);
+                $.fillStyle = 'rgba(0, 0, 0, 0.025)';
+                $.fillRect(0, 0, w, h);
+                for (var i = 0; i < l; i++) {
+                    var r = ((i * d / 3) / l) * Math.sin((z * 100) + i),
+                        x = Math.sin(i) * r + (w / 2),
+                        y = Math.cos(i) * r + (h / 2);
+                    $.beginPath();
+                    $.fillStyle = 'rgba(0, 255, 255, 1)';
+                    $.fillRect(x, y, 1, 1);
+                }
+                t += 0.00001;
+            }
+
+            function reset() {
+                w = c.width = window.innerWidth;
+                h = c.height = window.innerHeight;
+                d = Math.min(w, h) - 50;
+                l = Math.round(d / 10);
+            }
+
+            function loop() {
+                requestAnimationFrame(loop);
+                draw();
+            }
+
+            window.addEventListener('resize', reset);
+
+            //init();
+    </script>
+
+    <div ng-view layout-fill ng-cloak></div>
+
+    <div class='Cube panelLoad' id="Cube_loadder">
+        <div class='cube-face cube-face-front'>ע</div>
+        <div class='cube-face cube-face-back'>✔</div>
+        <div class='cube-face cube-face-left'>ש</div>
+        <div class='cube-face cube-face-right'>ת</div>
+        <div class='cube-face cube-face-bottom'>י</div>
+        <div class='cube-face cube-face-top'>✔</div>
     </div>
-    <span layout="column " ng-include="'scripts/layout/sideNav.html'"></span>-->
-
-    <div ng-view layout-fill></div>
 
     <script src="scripts/lib/angular.min.js"></script>
     <script src="scripts/lib/angular-animate.min.js"></script>
@@ -37,6 +90,9 @@
     <script src="scripts/lib/angular-cookies.min.js"></script>
     <script src="scripts/lib/angular-messages.min.js"></script>
     <script src="scripts/lib/angular-md-pull-to-refresh.js"></script>
+
+    <script src="scripts/lib/photoswipe.min.js"></script>
+    <script src="scripts/lib/photoswipe-ui-default.min.js"></script>
 
     <script src="scripts/lib/hammer.min.js"></script>
 
@@ -83,7 +139,7 @@
     <script src="scripts/widgets/signUp.js"></script>
     <script src="scripts/tasks/tasksList.js"></script>
     <script src="scripts/tasks/task.js"></script>
-
+    <script src="scripts/data/storage.js"></script>
 
 </body>
 </html>

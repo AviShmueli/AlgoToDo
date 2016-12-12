@@ -23,7 +23,8 @@
     "angular-loggly-logger": "^0.2.4",
     "angular-md-pull-to-refresh": "infomofo/angular-md-pull-to-refresh",
     "angular-route": "^1.5.8",
-    "angular-elasticsearch-logger": "^0.0.2"
+    "angular-elasticsearch-logger": "^0.0.2",
+    "photoswipe": "^4.1.1"
   },
   "resolutions": {
     "angular": "1.3.6",

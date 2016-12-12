@@ -78,7 +78,7 @@
                             </md-button>
                             <span flex></span>
                             <md-button ng-disabled="!vm.taskIsToMe" class="md-icon-button" aria-label="alert">
-                                <ng-md-icon icon="add_alert" class="icon-fill"></ng-md-icon>
+                                <ng-md-icon icon="add_alert" class="icon-fill" ng-click="vm.showGalary()"></ng-md-icon>
                             </md-button>
                             <md-button ng-disabled="!vm.taskIsFromMe" class="md-icon-button" aria-label="redo">
                                 <ng-md-icon icon="settings_backup_restore" class="icon-fill"></ng-md-icon>
@@ -88,61 +88,27 @@
                             </md-button>
                         </md-card-actions>
                     </md-card>
-                    <!--<div flex-xs flex-gt-xs="50" layout="column">-->
-                    <!--<div layout="row" dir="rtl" layout-align="start center">
-                        <md-card style="background-color: transparent">
-                            <div layout="row" style="position: relative;">
-                                <md-card-avatar class="image-avatar">
-                                    <img alt="dina" ng-src="/images/woman-2.svg" class="md-avatar user-avatar-small" style="margin-left: 10px;" />
-                                </md-card-avatar>
-                                <span flex></span>
-                                <span class="image-date" layout-align="end center">היום ב 14:54</span>
-                            </div>
-                            <div layout="row" class="image-card" >                      
-                                <img id="myImage" class="md-card-image" alt="Washed Out" src="file:///storage/emulated/0/Android/data/com.algotodo.app/cache/1480937580399.jpg">
-                                <img id="myImage" class="md-card-image" alt="Washed Out" src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/07/PikiWiki_Israel_37154_Nature_and_Colors.JPG/800px-PikiWiki_Israel_37154_Nature_and_Colors.JPG">
-                            </div>
-                        </md-card>
-                    </div>-->
-                     <!--</div>-->
-                    <!--<md-list flex>-->
-                        <md-card dir="rtl"  
-                                 class="response-card"
-                                 ng-repeat="comment in vm.task.comments | orderBy: createTime:true "><!--style="background-color: transparent"  ng-class="{'response-card': comment.imageUrl === undefined}"-->
-                            <md-card-content ><!--ng-if="comment.imageUrl === undefined"-->
-                                <!--<span >-->
-                                    <div layout="row">
-                                        <md-card-avatar>
-                                            <img alt="{{::comment.from.name}}" ng-src="{{::vm.imagesPath + comment.from.avatarUrl}}" class="md-avatar user-avatar-small" style="margin-left: 10px;" />
-                                        </md-card-avatar>
-                                        <span class="from">{{::comment.from.name}}</span>
-                                        <span flex></span>
-                                        <span ng-bind-html="::(comment.createTime | amCalendar)"></span>
-                                    </div>
-                                    <div layout="row" style="font-size: 14px" ng-if="comment.text !== ''">
-                                        {{::comment.text}}
-                                    </div>
-                                    <div class="image-wraper" ng-if="comment.fileName !== undefined">                                
-                                        <img md-whiteframe="5" id="myImage" class="md-card-image padded" alt="מוריד תמונה"
-                                             ng-src="{{comment.fileLocalPath}}">
-                                    </div>
-                                <!--</span>-->
-                            </md-card-content>
-                                <!-- if this is image -->
-                            <!--<span >-->
-                                <!--<div layout="row" style="position: relative;" ng-if="comment.imageUrl !== undefined">
-                                    <md-card-avatar class="image-avatar">
+                    <md-card dir="rtl" class="response-card"
+                             ng-repeat="comment in vm.task.comments | orderBy: createTime:true ">
+                        <md-card-content >
+                                <div layout="row">
+                                    <md-card-avatar>
                                         <img alt="{{::comment.from.name}}" ng-src="{{::vm.imagesPath + comment.from.avatarUrl}}" class="md-avatar user-avatar-small" style="margin-left: 10px;" />
                                     </md-card-avatar>
+                                    <span class="from">{{::comment.from.name}}</span>
                                     <span flex></span>
-                                    <span class="image-date" layout-align="end center" ng-bind-html="::(comment.createTime | amCalendar)"></span>
+                                    <span ng-bind-html="::(comment.createTime | amCalendar)"></span>
                                 </div>
-                                <div layout="row" class="image-card" ng-if="comment.imageUrl !== undefined">
-                                    <img id="myImage" class="md-card-image" alt="Washed Out" ng-src="{{vm.getImageSrc(comment.imageUrl, comment)}}" >
-                                </div>-->
-                            <!--</span>-->                          
-                        </md-card>
-                    <!--</md-list>-->
+                                <div layout="row" style="font-size: 14px" ng-if="comment.text !== ''">
+                                    {{::comment.text}}
+                                </div>
+                                <div class="image-wraper" ng-if="comment.fileName !== undefined">                                
+                                    <img md-whiteframe="5" id="myImage" class="md-card-image padded" 
+                                            alt="מוריד תמונה" ng-src="{{comment.fileLocalPath}}"
+                                            ng-click="vm.showGalary(comment.fileName)">
+                                </div>
+                        </md-card-content>                        
+                    </md-card>
                 </ui-view>
             </main>
         </md-content>
@@ -153,7 +119,6 @@
                 <md-button class="md-fab md-icon-button md-med" aria-label="done" ng-click="vm.addComment()" ng-disabled="vm.newCommentText === ''">
                     <ng-md-icon class="rotate" icon="send" size="28"></ng-md-icon>
                 </md-button>
-                <!--<span flex="7"></span>-->
                 <md-input-container md-no-float class="md-block comment-input">
                     <textarea id="commentText"
                               dir="rtl" aria-label="comment" 
@@ -166,5 +131,75 @@
             </div>
         </md-toolbar>
     </footer>
+
+
+    <!-- Root element of PhotoSwipe. Must have class pswp. -->
+    <div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+        <!-- Background of PhotoSwipe.
+             It's a separate element as animating opacity is faster than rgba(). -->
+        <div class="pswp__bg"></div>
+
+        <!-- Slides wrapper with overflow:hidden. -->
+        <div class="pswp__scroll-wrap">
+
+            <!-- Container that holds slides.
+                PhotoSwipe keeps only 3 of them in the DOM to save memory.
+                Don't modify these 3 pswp__item elements, data is added later on. -->
+            <div class="pswp__container">
+                <div class="pswp__item"></div>
+                <div class="pswp__item"></div>
+                <div class="pswp__item"></div>
+            </div>
+
+            <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+            <div class="pswp__ui pswp__ui--hidden">
+
+                <div class="pswp__top-bar">
+
+                    <!--  Controls are self-explanatory. Order can be changed. -->
+
+                    <div class="pswp__counter"></div>
+
+                    <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                    <!--<button class="pswp__button pswp__button--share" title="Share" ng-click="vm.shareImage()"></button>-->
+
+                        <!--<md-button ng-click="vm.shareImage()" class="md-icon-button pswp__button--share2" style="float: right" aria-label="done">
+                            <ng-md-icon icon="share" style="fill:white"></ng-md-icon>
+                        </md-button>-->
+
+                    <!--<button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                    <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>-->
+
+                    <!-- Preloader demo http://codepen.io/dimsemenov/pen/yyBWoR -->
+                    <!-- element will get class pswp__preloader--active when preloader is running -->
+                    <div class="pswp__preloader">
+                        <div class="pswp__preloader__icn">
+                            <div class="pswp__preloader__cut">
+                                <div class="pswp__preloader__donut"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                    <div class="pswp__share-tooltip"></div>
+                </div>
+
+                <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)"></button>
+
+                <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)"></button>
+
+                <div class="pswp__caption">
+                    <div class="pswp__caption__center"></div>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
 
 </div>

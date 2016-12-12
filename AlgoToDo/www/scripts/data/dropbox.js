@@ -20,7 +20,7 @@
         }
 
         var downloadFile = function (fileName) {
-            return self.dbx.sharingCreateSharedLink({ path: fileName, short_url: false });
+            return self.dbx.sharingCreateSharedLink({ path: '/' + fileName, short_url: false });
         }
 
         var getThumbnail = function (fileName, ThumbnailSize) {
@@ -34,7 +34,8 @@
         return {
             uploadFile: uploadFile,
             downloadFile: downloadFile,
-            getThumbnail: getThumbnail
+            getThumbnail: getThumbnail,
+            getSharedLinkFile: getSharedLinkFile
         };
 
     }

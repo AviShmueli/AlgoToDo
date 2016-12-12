@@ -4,11 +4,6 @@
   <description>A blank project that uses Apache Cordova to help you build an app that targets multiple mobile platforms: Android, iOS, Windows, and Windows Phone.</description>
   <author email="avis@algo.bz" href="http://algo.bz">Avi Shmueli</author>
   <content src="index.html" />
-  <access origin="algotodo.herokuapp.com" />
-  <access origin="algotodo-test.herokuapp.com" />
-  <access origin="dropbox.com" />
-  <access origin="content.dropboxapi.com" />
-  <access origin="api.dropboxapi.com" />
   <vs:features />
   <preference name="SplashScreen" value="screen" />
   <preference name="windows-target-version" value="8.1" />
@@ -110,8 +105,7 @@
   <plugin name="cordova-plugin-x-toast" version="2.5.2" />
   <preference name="target-device" value="universal" />
   <preference name="deployment-target" value="10.1" />
-  <access origin="ds033996.mlab.com" />
-  <access origin="algotodo.loggly.com" />
+
   <engine name="ios" spec="~4.3.0" />
   <plugin name="cordova-plugin-badge" spec="~0.7.2" />
   <plugin name="phonegap-plugin-push" version="1.9.0" />
@@ -120,4 +114,18 @@
   <plugin name="cordova-plugin-compat" version="1.1.0" />
   <plugin name="cordova-plugin-network-information" version="1.3.0" />
  <preference name="AndroidPersistentFileLocation" value="Compatibility" />
+
+  <access origin="*" subdomains="true" />
+  <allow-navigation href="http://*/*" />
+  <allow-navigation href="https://*/*" />
+  <allow-intent href="http://*/*" />
+  <allow-intent href="https://*/*" />
+
+  <access origin="https://ds033996.mlab.com" />
+  <access origin="https://algotodo.loggly.com" />
+  <access origin="https://algotodo.herokuapp.com" />
+  <access origin="https://algotodo-test.herokuapp.com" />
+  <access origin="https://dropbox.com" />
+  <access origin="https://content.dropboxapi.com" />
+  <access origin="https://api.dropboxapi.com" />
 </widget>
