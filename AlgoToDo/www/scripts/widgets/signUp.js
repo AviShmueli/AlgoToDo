@@ -131,7 +131,10 @@
 
                 return deferred.promise;
             }
-            
+ 
+ document.getElementById('canvas_loadder').style.display = "none";
+ document.getElementById('Cube_loadder').style.display = "none";
+ 
         }
 
 })();

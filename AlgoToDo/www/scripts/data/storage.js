@@ -13,8 +13,9 @@
 
         var saveFileToStorage = function (fileName, downloadUrl) {
             var deferred = $q.defer();
+            var dirToSavedImage = (datacontext.getDeviceDetailes().platform === 'iOS')? cordova.file.tempDirectory: cordova.file.externalCacheDirectory;
 
-            var folderpath = cordova.file.externalCacheDirectory + fileName;
+            var folderpath = dirToSavedImage + fileName;
 
             var fileTransfer = new FileTransfer();
             var uri = encodeURI(downloadUrl.replace("?dl=0","?dl=1"));

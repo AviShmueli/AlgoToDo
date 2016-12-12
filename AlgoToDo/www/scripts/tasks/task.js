@@ -49,7 +49,7 @@
                 cordovaPlugins.takePicture().then(function (fileUrl) {
 
                     var fileName = new Date().toISOString() + '.jpg';
-
+                    var dirToSavedImage = (datacontext.getDeviceDetailes().platform === 'iOS')? cordova.file.tempDirectory: cordova.file.externalCacheDirectory;
                     datacontext.saveFileToCache(fileName, fileUrl);
 
                     var comment = {
@@ -67,7 +67,7 @@
                     vm.task.comments.push(tempComment);
                     
                     storage.getFileFromStorage(
-                        cordova.file.externalCacheDirectory,
+                        dirToSavedImage,
                         fileUrl.substring(fileUrl.lastIndexOf('/') + 1))
                         .then(function (success) {
                             var imageData = success.replace(/^data:image\/\w+;base64,/, "");
@@ -79,7 +79,7 @@
 
                             // Closure to capture the file information.
                             reader.onload = (function (file_reader) {
-
+                                alert("i am right before dropbox upload");
                                 //upload file To Dropbox;
                                 dropbox.uploadFile(fileName, file_reader).then(function (response) {
                                     // send the new comment
@@ -87,11 +87,12 @@
                                 })
                                 .catch(function (error) {
                                     logger.error("error while trying to upload file to dropbox", error);
+                                       alert(error);
                                 });
                             })(blob);
 
                     }, function (error) {
-                        console.log(error);
+                        logger.error("error while trying to get File From Storage", error);
                     });                    
                 }, function (err) {
                     logger.error("error while trying to take a picture", err);
