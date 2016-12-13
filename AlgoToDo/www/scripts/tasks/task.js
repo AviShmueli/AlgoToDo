@@ -48,58 +48,37 @@
             document.addEventListener("deviceready", function () {
                 cordovaPlugins.takePicture().then(function (fileUrl) {
 
-                    var fileName = new Date().toISOString() + '.jpg';
-                    var dirToSavedImage = (datacontext.getDeviceDetailes().platform === 'iOS')? cordova.file.tempDirectory: cordova.file.externalCacheDirectory;
-                    var newPath = 'pictures/';// + vm.taskId + '/';
-                    storage.moveFileToAppFolder(dirToSavedImage, fileUrl.substring(fileUrl.lastIndexOf('/') + 1), newPath, fileName).then(function (success) {
-                        var s = success;
-                    }, function (error) {
-                        var e = error;
-                    });
-                    datacontext.saveFileToCache(fileName, fileUrl);
+                    window.resolveLocalFileSystemURL(fileUrl, function success(fileEntry) {
 
-                    var comment = {
-                        from: {
-                            name: vm.user.name,
-                            _id: vm.user._id,
-                            avatarUrl: vm.user.avatarUrl
-                        },
-                        createTime: new Date(),
-                        text: '',
-                        fileName: fileName
-                    };
-                    var tempComment = angular.copy(comment);
-                    setFileLocalPath(tempComment);
-                    vm.task.comments.push(tempComment);
-                    
-                    storage.getFileFromStorage(
-                        /*dirToSavedImage,
-                        fileUrl.substring(fileUrl.lastIndexOf('/') + 1))*/
-                        newPath, fileName)
-                        .then(function (success) {
-                            var imageData = success.replace(/^data:image\/\w+;base64,/, "");
-                            // convert the base 64 image to blob
-                            var blob = b64toBlob(imageData, 'image/jpg');
-                            var blobUrl = URL.createObjectURL(blob);
+                        var fileName = new Date().toISOString() + '.jpg';
+                        var dataDirectory = (cordova.platformId.toLowerCase() === 'ios') ? cordova.file.dataDirectory : cordova.file.externalDataDirectory;
+                        var newPath = 'pictures/' + vm.taskId + '/';
 
-                            var reader = new FileReader();
+                        var comment = {
+                            from: {
+                                name: vm.user.name,
+                                _id: vm.user._id,
+                                avatarUrl: vm.user.avatarUrl
+                            },
+                            createTime: new Date(),
+                            text: '',
+                            fileName: fileName
+                        };
 
-                            // Closure to capture the file information.
-                            reader.onload = (function (file_reader) {
-                                //upload file To Dropbox;
-                                dropbox.uploadFile(fileName, file_reader).then(function (response) {
-                                    // send the new comment
-                                    datacontext.newComment(vm.task._id, comment);
-                                })
-                                .catch(function (error) {
-                                    logger.error("error while trying to upload file to dropbox", error);
-                                       alert(error);
-                                });
-                            })(blob);
+                        storage.saveFileToStorage(vm.taskId, fileName, fileEntry.nativeURL).then(function (newFileUrl) {
+                            var tempComment = angular.copy(comment);
 
-                    }, function (error) {
-                        logger.error("error while trying to get File From Storage", error);
-                    });                    
+                            comment.fileLocalPath = newFileUrl;
+                            vm.task.comments.push(comment);
+                            addImageToGallery(comment.fileName, comment.fileLocalPath);
+
+                            uploadNewImageToDropbox(fileEntry.filesystem.root.nativeURL, fileEntry.name).then(function () {
+                                datacontext.newComment(vm.task._id, tempComment);
+                            });
+                        }, function (error) {
+                            logger.error("error while trying to save File to Storage", error);
+                        });
+                    });                                      
                 }, function (err) {
                     logger.error("error while trying to take a picture", err);
                 });
@@ -128,6 +107,36 @@
 
             var blob = new Blob(byteArrays, { type: contentType });
             return blob;
+        }
+
+        var uploadNewImageToDropbox = function (newPath, fileName) {
+
+            var deferred = $q.defer();
+
+            storage.getFileFromStorage(newPath, fileName)
+                .then(function (base64File) {
+
+                    // convert the base 64 image to blob
+                    var imageData = base64File.replace(/^data:image\/\w+;base64,/, "");
+                    var blob = b64toBlob(imageData, 'image/jpg');
+                    //var blonewFileUrlbUrl = URL.createObjectURL(blob);
+
+                    var reader = new FileReader();
+                    reader.onload = (function (file_reader) {
+                        
+                        dropbox.uploadFile(fileName, file_reader).then(function (response) {
+                            deferred.resolve();                           
+                        })
+                        .catch(function (error) {
+                            logger.error("error while trying to upload file to dropbox", error);
+                            deferred.reject();
+                        });
+                    })(blob);
+                }, function (error) {
+                    logger.error("error while trying to get File From Storage", error);
+                    deferred.reject();
+                });
+            return deferred.promise;
         }
 
         vm.addComment = function () {
@@ -215,6 +224,15 @@
                     */
             }
         }
+
+        var addImageToGallery = function (fileName, fileLocalPath) {
+            vm.galleryImages.push({
+                src: fileLocalPath,
+                w: window.innerWidth,
+                h: window.innerHeight
+            });
+            vm.galleryImagesLocations[fileName] = vm.galleryImagesCounter++;
+        }
  
         var setImagesLocalPath = function(){
             for(var i = 0; i < vm.task.comments.length; i++){
@@ -228,7 +246,7 @@
 
         vm.showGalary = function (comment) {
             if (vm.galleryImagesLocations[comment.fileName] === undefined) {
-                setFileLocalPath(comment);
+                addImageToGallery(comment.fileName, comment.fileLocalPath);
             }
 
             var pswpElement = document.querySelectorAll('.pswp')[0];
