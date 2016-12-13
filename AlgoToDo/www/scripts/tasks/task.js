@@ -79,7 +79,6 @@
 
                             // Closure to capture the file information.
                             reader.onload = (function (file_reader) {
-                                alert("i am right before dropbox upload");
                                 //upload file To Dropbox;
                                 dropbox.uploadFile(fileName, file_reader).then(function (response) {
                                     // send the new comment
@@ -170,6 +169,7 @@
             var src = datacontext.getFileFromCache(comment.fileName);
             if (src !== undefined) {
                 comment.fileLocalPath = src;
+                console.log(src);
                 // todo: fix w & h to be from cordova-plugin-screensize 
                 //        or window.innerWidth & window.innerHeight
                 vm.galleryImages.push({
