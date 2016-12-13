@@ -5,9 +5,9 @@
         .module('app.data')
         .service('storage', storage);
 
-    storage.$inject = ['$cordovaFile', '$q'];
+    storage.$inject = ['$cordovaFile', '$q', 'datacontext'];
 
-    function storage($cordovaFile, $q) {
+    function storage($cordovaFile, $q, datacontext) {
 
         var self = this;
 

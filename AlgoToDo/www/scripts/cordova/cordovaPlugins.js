@@ -181,7 +181,7 @@
                     dropbox.downloadFile(dataFromServer.object.fileName).then(function (response) {
                         storage.saveFileToStorage(dataFromServer.object.fileName, response.url).then(function (storageFilePath) {
                             datacontext.saveFileToCache(dataFromServer.object.fileName, storageFilePath);
-                            setFileLocalPath(dataFromServer.object);
+                            dataFromServer.object.fileLocalPath = storageFilePath;
                             datacontext.addCommentToTask(dataFromServer.taskId, dataFromServer.object);
                             navigateToTaskPage(dataFromServer.taskId, dataFromServer.object);
                         });

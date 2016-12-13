@@ -174,8 +174,8 @@
                 //        or window.innerWidth & window.innerHeight
                 vm.galleryImages.push({
                     src: src,
-                    w: 800,
-                    h: 400
+                    w: window.innerWidth,
+                    h: window.innerHeight
                 });
                 vm.galleryImagesLocations[comment.fileName] = vm.galleryImagesCounter++;
             }
@@ -219,7 +219,11 @@
         
         var gallery;
 
-        vm.showGalary = function (startFromFile) {
+        vm.showGalary = function (comment) {
+            if (vm.galleryImagesLocations[comment.fileName] === undefined) {
+                setFileLocalPath(comment);
+            }
+
             var pswpElement = document.querySelectorAll('.pswp')[0];
 
             // build items array
@@ -236,11 +240,8 @@
                 }
             ];*/
 
-            // define options (if needed)
             var options = {
-                // optionName: 'option value'
-                // for example:
-                index: vm.galleryImagesLocations[startFromFile] || 0, // start at first slide // 
+                index: vm.galleryImagesLocations[comment.fileName] || 0, // start at first slide // 
                 closeOnScroll: false,
                 closeOnVerticalDrag: false,
                 history: false
