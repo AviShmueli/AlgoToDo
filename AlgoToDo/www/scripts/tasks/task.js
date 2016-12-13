@@ -50,6 +50,7 @@
 
                     var fileName = new Date().toISOString() + '.jpg';
                     var dirToSavedImage = (datacontext.getDeviceDetailes().platform === 'iOS')? cordova.file.tempDirectory: cordova.file.externalCacheDirectory;
+                    storage.moveFileToAppFolder(fileUrl, fileName);
                     datacontext.saveFileToCache(fileName, fileUrl);
 
                     var comment = {

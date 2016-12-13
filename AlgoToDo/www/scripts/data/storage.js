@@ -43,7 +43,7 @@
             return $cordovaFile.readAsDataURL(path, fileName);                             
         }
 
-        function savebase64AsImageFile(folderpath, filename, content, contentType) {
+        /*function savebase64AsImageFile(folderpath, filename, content, contentType) {
             // Convert the base64 string in a Blob
             var DataBlob = b64toBlob(content, contentType);
 
@@ -85,11 +85,16 @@
 
             var blob = new Blob(byteArrays, { type: contentType });
             return blob;
+        }*/
+
+        var moveFileToAppFolder = function(fileUrl, newFileName){
+            return $cordovaFile.moveFile(fileUrl, fileUrl.substring(fileUrl.lastIndexOf('/') + 1), cordova.file.dataDirectory, newFileName);
         }
 
         return {
             saveFileToStorage: saveFileToStorage,
-            getFileFromStorage: getFileFromStorage
+            getFileFromStorage: getFileFromStorage,
+            moveFileToAppFolder: moveFileToAppFolder
         };
 
     }
