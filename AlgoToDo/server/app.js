@@ -174,7 +174,7 @@ var sendCommentViaApn = function(comment, task, ApnRegistrationId){
                     };
     //note.payload = task ;
     note.topic = "com.algotodo.app";
-    note.body = comment.text;
+    note.body =  comment.text !== '' ? "💬" + comment.text : "📷" + " תמונה";
     note.title = "תגובה חדשה מ" + comment.from.name;
     note.contentAvailable = 1;
     
@@ -284,7 +284,7 @@ var sendCommentViaGcm = function (comment, task, regToken) {
             title: "תגובה חדשה מ" + comment.from.name,
             sound: 'default',
             icon: 'www/images/icon.png',
-            body: comment.text
+            body: comment.text !== '' ? "💬" + comment.text : "📷" + " תמונה"
         }
     });
 

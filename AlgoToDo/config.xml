@@ -98,29 +98,26 @@
   </platform>
   <plugin name="cordova-plugin-app-event" version="1.2.0" />
   <plugin name="cordova-plugin-device" version="1.1.3" />
-  <preference name="android-minSdkVersion" value="16" />
-  <preference name="android-maxSdkVersion" value="24" />
-  <preference name="android-targetSdkVersion" value="23" />
   <plugin name="cordova-plugin-whitelist" version="1.3.0" />
   <plugin name="cordova-plugin-x-toast" version="2.5.2" />
-  <preference name="target-device" value="universal" />
-  <preference name="deployment-target" value="10.1" />
-
-  <engine name="ios" spec="~4.3.0" />
   <plugin name="cordova-plugin-badge" spec="~0.7.2" />
   <plugin name="phonegap-plugin-push" version="1.9.0" />
   <plugin name="cordova-plugin-vibration" version="2.1.2" />
   <plugin name="cordova-plugin-camera" version="2.3.0" />
   <plugin name="cordova-plugin-compat" version="1.1.0" />
   <plugin name="cordova-plugin-network-information" version="1.3.0" />
- <preference name="AndroidPersistentFileLocation" value="Compatibility" />
-
+  <engine name="ios" spec="~4.3.0" />
+  <preference name="android-minSdkVersion" value="16" />
+  <preference name="android-maxSdkVersion" value="24" />
+  <preference name="android-targetSdkVersion" value="23" />
+  <preference name="target-device" value="universal" />
+  <preference name="deployment-target" value="10.1" />
+  <preference name="AndroidPersistentFileLocation" value="Compatibility" />
   <access origin="*" subdomains="true" />
   <allow-navigation href="http://*/*" />
   <allow-navigation href="https://*/*" />
   <allow-intent href="http://*/*" />
   <allow-intent href="https://*/*" />
-
   <access origin="https://ds033996.mlab.com" />
   <access origin="https://algotodo.loggly.com" />
   <access origin="https://algotodo.herokuapp.com" />
@@ -128,4 +125,7 @@
   <access origin="https://dropbox.com" />
   <access origin="https://content.dropboxapi.com" />
   <access origin="https://api.dropboxapi.com" />
+  <plugin name="cordova-plugin-app-version" version="0.1.9" />
+  <plugin name="cordova-plugin-file" version="4.3.0" />
+  <plugin name="cordova-plugin-file-transfer" version="1.6.0" />
 </widget>

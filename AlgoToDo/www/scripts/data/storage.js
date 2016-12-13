@@ -5,17 +5,17 @@
         .module('app.data')
         .service('storage', storage);
 
-    storage.$inject = ['$cordovaFile', '$q', 'datacontext'];
+    storage.$inject = ['$cordovaFile', '$q', 'datacontext', 'logger'];
 
-    function storage($cordovaFile, $q, datacontext) {
+    function storage($cordovaFile, $q, datacontext, logger) {
 
         var self = this;
 
         var saveFileToStorage = function (fileName, downloadUrl) {
             var deferred = $q.defer();
-            var dirToSavedImage = (datacontext.getDeviceDetailes().platform === 'iOS')? cordova.file.tempDirectory: cordova.file.externalCacheDirectory;
+            var dirToSavedImage = (datacontext.getDeviceDetailes().platform === 'iOS') ? cordova.file.dataDirectory : cordova.file.externalDataDirectory;
 
-            var folderpath = dirToSavedImage + fileName;
+            var folderpath = dirToSavedImage + 'pictures/' + fileName;
 
             var fileTransfer = new FileTransfer();
             var uri = encodeURI(downloadUrl.replace("?dl=0","?dl=1"));
@@ -28,7 +28,8 @@
                     //console.log("download complete: " + entry.toURL());
                 },
                 function (error) {
-                    console.log("download error source " + error.source);
+                    logger.error("download error source " , error);
+                    deferred.reject(error);
                 },
                 false,
                 {
@@ -87,9 +88,42 @@
             return blob;
         }*/
 
-        var moveFileToAppFolder = function(fileUrl, newFileName){
-            return $cordovaFile.moveFile(fileUrl, fileUrl.substring(fileUrl.lastIndexOf('/') + 1), cordova.file.dataDirectory, newFileName);
+        var moveFileToAppFolder = function (fileUrl, oldFileName, newPath, newFileName) {
+            var deferred = $q.defer();
+            $cordovaFile.checkDir(cordova.file.externalDataDirectory, newPath)
+              .then(function (success) {
+                  $cordovaFile.copyFile(fileUrl, oldFileName, cordova.file.externalDataDirectory + newPath, newFileName).then(function (success) {
+                      var s = success;
+                      deferred.resolve(s);
+                  }, function (error) {
+                      var e = error;
+                      deferred.reject(e);
+                  });
+              }, function (error) {
+                  $cordovaFile.createDir(cordova.file.externalDataDirectory, newPath, false)
+                    .then(function (success) {
+                        $cordovaFile.copyFile(fileUrl, oldFileName, cordova.file.externalDataDirectory + newPath, newFileName).then(function (success) {
+                            var s = success;
+                            deferred.resolve(s);
+                        }, function (error) {
+                            var e = error;
+                            deferred.reject(e);
+                        });
+                    }, function (error) {
+                        var e = error;
+                        deferred.reject(e);
+                    });
+              });
+            return deferred.promise;
         }
+
+
+                /*$cordovaFile.createDir(cordova.file.dataDirectory, 'pictures', false)
+                    .then(function (success) {
+                        var s = success;
+                    }, function (error) {
+                        var e = error;
+                    });*/
 
         return {
             saveFileToStorage: saveFileToStorage,

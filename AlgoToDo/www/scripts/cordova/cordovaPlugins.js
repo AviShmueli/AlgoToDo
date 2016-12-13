@@ -187,7 +187,7 @@
                         });
                     })
                     .catch(function (error) {
-                        logger.error(error);
+                        logger.error("error while trying to download file from dropbox", error);
                     });
                 }
                 else{
@@ -334,7 +334,7 @@
                 targetWidth: 1500,
                 targetHeight: 1500,
                 popoverOptions: CameraPopoverOptions,
-                saveToPhotoAlbum: false,
+                saveToPhotoAlbum: true,
                 correctOrientation: true
             };
 

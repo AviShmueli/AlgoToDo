@@ -50,7 +50,12 @@
 
                     var fileName = new Date().toISOString() + '.jpg';
                     var dirToSavedImage = (datacontext.getDeviceDetailes().platform === 'iOS')? cordova.file.tempDirectory: cordova.file.externalCacheDirectory;
-                    storage.moveFileToAppFolder(fileUrl, fileName);
+                    var newPath = 'pictures/';// + vm.taskId + '/';
+                    storage.moveFileToAppFolder(dirToSavedImage, fileUrl.substring(fileUrl.lastIndexOf('/') + 1), newPath, fileName).then(function (success) {
+                        var s = success;
+                    }, function (error) {
+                        var e = error;
+                    });
                     datacontext.saveFileToCache(fileName, fileUrl);
 
                     var comment = {
@@ -68,8 +73,9 @@
                     vm.task.comments.push(tempComment);
                     
                     storage.getFileFromStorage(
-                        dirToSavedImage,
-                        fileUrl.substring(fileUrl.lastIndexOf('/') + 1))
+                        /*dirToSavedImage,
+                        fileUrl.substring(fileUrl.lastIndexOf('/') + 1))*/
+                        newPath, fileName)
                         .then(function (success) {
                             var imageData = success.replace(/^data:image\/\w+;base64,/, "");
                             // convert the base 64 image to blob
