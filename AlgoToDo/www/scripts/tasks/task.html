@@ -78,12 +78,15 @@
                             </md-button>
                             <span flex></span>
                             <md-button ng-disabled="!vm.taskIsToMe" class="md-icon-button" aria-label="alert">
-                                <ng-md-icon icon="add_alert" class="icon-fill" ng-click="vm.showGalary()"></ng-md-icon>
+                                <ng-md-icon icon="add_alert" class="icon-fill"></ng-md-icon>
                             </md-button>
-                            <md-button ng-disabled="!vm.taskIsFromMe" class="md-icon-button" aria-label="redo">
+                            <!--<md-button ng-disabled="!vm.taskIsFromMe" class="md-icon-button" aria-label="redo">
                                 <ng-md-icon icon="settings_backup_restore" class="icon-fill"></ng-md-icon>
+                            </md-button>-->
+                            <md-button class="md-icon-button" aria-label="report" ng-click="vm.takePic('PHOTOLIBRARY')">
+                                <ng-md-icon icon="attach_file" class="icon-fill"></ng-md-icon>
                             </md-button>
-                            <md-button class="md-icon-button" aria-label="report" ng-click="vm.takePic()">
+                            <md-button class="md-icon-button" aria-label="report" ng-click="vm.takePic('camera')">
                                 <ng-md-icon icon="add_a_photo" class="icon-fill"></ng-md-icon>
                             </md-button>
                         </md-card-actions>

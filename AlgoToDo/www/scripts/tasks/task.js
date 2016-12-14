@@ -43,10 +43,10 @@
             $mdOpenMenu(ev);
         };
 
-        vm.takePic = function () {
+        vm.takePic = function (sourceType) {
 
             document.addEventListener("deviceready", function () {
-                cordovaPlugins.takePicture().then(function (fileUrl) {
+                cordovaPlugins.takePicture(sourceType).then(function (fileUrl) {
 
                     window.resolveLocalFileSystemURL(fileUrl, function success(fileEntry) {
 
@@ -184,17 +184,9 @@
             var dataDirectory = (cordova.platformId.toLowerCase() === 'ios') ? cordova.file.dataDirectory : cordova.file.externalDataDirectory;
             var newPath = 'pictures/' + vm.taskId + '/';
             var src = dataDirectory + newPath + comment.fileName;
-            //if (src !== undefined) {
-                comment.fileLocalPath = src;
-                // todo: fix w & h to be from cordova-plugin-screensize 
-                //        or window.innerWidth & window.innerHeight
-                vm.galleryImages.push({
-                    src: src,
-                    w: window.innerWidth,
-                    h: window.innerHeight
-                });
-                vm.galleryImagesLocations[comment.fileName] = vm.galleryImagesCounter++;
-            //}
+            comment.fileLocalPath = src;
+            addImageToGallery(comment.fileName, src);
+
             //else {
                 /*dropbox.getThumbnail(comment.fileName, 'w128h128')
                     .then(function (response) {
@@ -226,12 +218,16 @@
         }
 
         var addImageToGallery = function (fileName, fileLocalPath) {
-            vm.galleryImages.push({
-                src: fileLocalPath,
-                w: window.innerWidth,
-                h: window.innerHeight
-            });
-            vm.galleryImagesLocations[fileName] = vm.galleryImagesCounter++;
+            var img = new Image();
+            img.onload = function () { 
+                vm.galleryImages.push({
+                    src: fileLocalPath,
+                    w: this.width,
+                    h: this.height
+                });
+                vm.galleryImagesLocations[fileName] = vm.galleryImagesCounter++;
+            }
+            img.src = fileLocalPath;          
         }
  
         var setImagesLocalPath = function(){
@@ -280,6 +276,19 @@
 
             gallery.listen('close', function () {
                 document.removeEventListener("backbutton", backbuttonClickCallback, false);
+            });
+
+            gallery.listen('gettingData', function (index, item) {
+                if (item.w < 1 || item.h < 1) { // unknown size
+                    var img = new Image();
+                    img.onload = function () { // will get size after load
+                        item.w = this.width; // set image width
+                        item.h = this.height; // set image height
+                        gallery.invalidateCurrItems(); // reinit Items
+                        gallery.updateSize(true); // reinit Items
+                    }
+                    img.src = item.src; // let's download image
+                }
             });
         }
 

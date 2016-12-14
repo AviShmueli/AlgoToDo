@@ -326,17 +326,16 @@
             return device.applicationDirectory + 'www';
         }
 
-        var takePicture = function () {
-            
-
+        var takePicture = function (sourceType) {
+            var _sourceType = sourceType === 'camera' ? Camera.PictureSourceType.CAMERA : Camera.PictureSourceType.PHOTOLIBRARY;
             var options = {
                 quality: 100,
                 destinationType: Camera.DestinationType.FILE_URI,
-                sourceType: Camera.PictureSourceType.CAMERA,
+                sourceType: _sourceType,
                 allowEdit: false,
                 encodingType: Camera.EncodingType.JPEG,
-                targetWidth: 1500,
-                targetHeight: 1500,
+                targetWidth: window.innerWidth,
+                targetHeight: window.innerHeight,
                 popoverOptions: CameraPopoverOptions,
                 saveToPhotoAlbum: true,
                 correctOrientation: true
