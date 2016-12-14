@@ -67,12 +67,11 @@
 
                         storage.saveFileToStorage(vm.taskId, fileName, fileEntry.nativeURL).then(function (newFileUrl) {
                             var tempComment = angular.copy(comment);
-
                             comment.fileLocalPath = newFileUrl;
                             vm.task.comments.push(comment);
                             addImageToGallery(comment.fileName, comment.fileLocalPath);
 
-                            uploadNewImageToDropbox(fileEntry.filesystem.root.nativeURL, fileEntry.name).then(function () {
+                            uploadNewImageToDropbox(fileEntry.filesystem.root.nativeURL, fileEntry.name, fileName).then(function () {
                                 datacontext.newComment(vm.task._id, tempComment);
                             });
                         }, function (error) {
@@ -109,7 +108,7 @@
             return blob;
         }
 
-        var uploadNewImageToDropbox = function (newPath, fileName) {
+        var uploadNewImageToDropbox = function (newPath, fileName, newFileName) {
 
             var deferred = $q.defer();
 
@@ -124,7 +123,7 @@
                     var reader = new FileReader();
                     reader.onload = (function (file_reader) {
                         
-                        dropbox.uploadFile(fileName, file_reader).then(function (response) {
+                        dropbox.uploadFile(newFileName, file_reader).then(function (response) {
                             deferred.resolve();                           
                         })
                         .catch(function (error) {
@@ -182,10 +181,11 @@
         var setFileLocalPath = function (comment) {
  
             // if this is file you uploaded - the file will be in the cache
-            var src = datacontext.getFileFromCache(comment.fileName);
-            if (src !== undefined) {
+            var dataDirectory = (cordova.platformId.toLowerCase() === 'ios') ? cordova.file.dataDirectory : cordova.file.externalDataDirectory;
+            var newPath = 'pictures/' + vm.taskId + '/';
+            var src = dataDirectory + newPath + comment.fileName;
+            //if (src !== undefined) {
                 comment.fileLocalPath = src;
-                console.log(src);
                 // todo: fix w & h to be from cordova-plugin-screensize 
                 //        or window.innerWidth & window.innerHeight
                 vm.galleryImages.push({
@@ -194,8 +194,8 @@
                     h: window.innerHeight
                 });
                 vm.galleryImagesLocations[comment.fileName] = vm.galleryImagesCounter++;
-            }
-            else {
+            //}
+            //else {
                 /*dropbox.getThumbnail(comment.fileName, 'w128h128')
                     .then(function (response) {
                          var url = URL.createObjectURL(response.fileBlob);
@@ -222,7 +222,7 @@
                         console.error(error);
                     });
                     */
-            }
+            //}
         }
 
         var addImageToGallery = function (fileName, fileLocalPath) {

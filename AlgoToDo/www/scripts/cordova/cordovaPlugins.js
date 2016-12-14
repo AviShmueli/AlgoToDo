@@ -162,9 +162,10 @@
                 $rootScope.$apply();
             }
             if (dataFromServer.type === "comment") {
- 
+                console.log("got new comment : ", dataFromServer.object);
                 if(dataFromServer.object.fileName !== undefined){
-
+                    
+                    console.log("got new comment with file: ", dataFromServer.object.fileName);
                     /*dropbox.getThumbnail(dataFromServer.object.fileName, 'w128h128')
                         .then(function (response) {
                             //var url = URL.createObjectURL(response.fileBlob);
@@ -179,11 +180,14 @@
                         });*/
 
                     dropbox.downloadFile(dataFromServer.object.fileName).then(function (response) {
+                        console.log("in download from dropbox callback: ", response);
                         storage.saveFileToStorage(dataFromServer.taskId, dataFromServer.object.fileName, response.url).then(function (storageFilePath) {
+                            console.log("in save File To Storage callback: ", storageFilePath);
                             datacontext.saveFileToCache(dataFromServer.object.fileName, storageFilePath);
                             dataFromServer.object.fileLocalPath = storageFilePath;
                             datacontext.addCommentToTask(dataFromServer.taskId, dataFromServer.object);
                             navigateToTaskPage(dataFromServer.taskId, dataFromServer.object);
+                            console.log("eand process notification for comment: ");
                         });
                     })
                     .catch(function (error) {
