@@ -67,7 +67,6 @@
                      id="tab1-content"
                      aria-labelledby="tab1"
                      ng-switch-when="0"
-                     md-swipe-left="$root.selectedIndex = 1"
                      layout="row" layout-align="center center">
                     <md-list flex flex-gt-sm="50" flex-md="66" dir="rtl" ng-show="(vm.onGoingActivityies() | tasksInProgress: vm.user._id).length > 0">
                         <md-list-item ng-repeat="item in vm.onGoingActivityies() | tasksInProgress: vm.user._id | filter:vm.search" class="noright task-item" style="margin-top: 7px">
@@ -102,8 +101,6 @@
                      id="tab2-content"
                      aria-labelledby="tab2"
                      ng-switch-when="1"
-                     md-swipe-left="$root.selectedIndex = 2"
-                     md-swipe-right="$root.selectedIndex = 0"
                      layout="row" layout-align="center center">
                     <md-list flex-gt-sm="50" flex-md="66" flex dir="rtl" ng-show="$root.taskcount > 0">
                         <md-list-item ng-repeat="item in vm.onGoingActivityies() | myTasks: vm.user._id | filter:vm.search" class="noright task-item" style="margin-top: 7px" >
@@ -141,7 +138,6 @@
                      id="tab3-content"
                      aria-labelledby="tab3"
                      ng-switch-when="2"
-                     md-swipe-right="$root.selectedIndex = 1"
                      layout="row" layout-align="center center" style="height:100%">
                     <md-list flex-gt-sm="50" flex-md="66" flex dir="rtl" style="height:100%">
 
@@ -164,24 +160,6 @@
                                 <md-divider ng-if="!$last"></md-divider>
                             </div>
                         </md-virtual-repeat-container>
-
-                        <!--<md-list-item ng-repeat="item in vm.onGoingActivityies() | doneTasks: vm.user._id | filter:vm.search | orderBy: 'doneTime':true" class="noright task-item" style="margin-top: 7px">
-                            <div class="md-tile-content" flex="100" style="margin-bottom: 14px;" ng-click="vm.navigateToTaskPage(item._id)">
-                                <div layout="row">
-                                    <span class="from">{{item.to.name}}</span>
-                                    <span flex></span>
-                                    <span class="time">{{vm.getTotalTaskTime(item)}}</span>
-                                    <ng-md-icon icon="timer" size="20"></ng-md-icon>
-                                </div>
-                                <div layout="row">
-                                    <span style="font-size: 14px;">{{item.description}}</span>
-                                    <!--<span flex></span>-->
-                                    <!--<span class="time">{{item.doneTime | date:'HH:mm'}}</span>-->
-                                    <!--<ng-md-icon icon="timer_off" size="20"></ng-md-icon>-->
-                                <!--</div>
-                            </div>
-                            <md-divider ng-if="!$last"></md-divider>
-                        </md-list-item>-->
                         <md-divider></md-divider>
                     </md-list>
                 </div>

@@ -6,16 +6,19 @@
         .controller('AddTaskDialogController', AddTaskDialogController);
 
     AddTaskDialogController.$inject = [
-        '$scope', '$mdDialog', 'datacontext', '$mdMedia', '$q', 'logger', 'cordovaPlugins'
+        '$scope', '$mdDialog', 'datacontext', '$mdMedia', '$q', 'logger',
+        'cordovaPlugins', 'storage', 'dropbox'
     ];
 
-    function AddTaskDialogController($scope, $mdDialog, datacontext, $mdMedia, $q, logger, cordovaPlugins) {
+    function AddTaskDialogController($scope, $mdDialog, datacontext, $mdMedia, $q, logger,
+             cordovaPlugins, storage, dropbox) {
 
         var vm = this;
         
         vm.isSmallScrean = $mdMedia('sm');
         vm.task = {};
-
+        vm.task.comments = [];
+        vm.user = datacontext.getUserFromLocalStorage();
         vm.imagesPath = cordovaPlugins.getImagesPath();
         vm.selectedItem = null;
         vm.searchText = null;
@@ -23,6 +26,9 @@
         vm.selectedRecipients = [];
         vm.showNoRecipientsSelectedError = false;
         vm.submitInProcess = false;
+        vm.uploadingImage = false;
+        vm.taskHasImage = false;
+        vm.newImage = {};
         
         function querySearch(query) {
             vm.showNoRecipientsSelectedError = false;
@@ -83,28 +89,24 @@
                 vm.submitInProcess = true;
                 if (vm.selectedRecipients.length !== 0) {
 
-                    var user = datacontext.getUserFromLocalStorage();
-                    vm.task.from = { '_id': user._id, 'name': user.name, 'avatarUrl': user.avatarUrl};
+                    vm.task.from = { '_id': vm.user._id, 'name': vm.user.name, 'avatarUrl': vm.user.avatarUrl };
                     vm.task.status = 'inProgress';
-                    vm.task.createTime = new Date();
-                    vm.task.comments = [];
+                    vm.task.createTime = new Date();                    
+
+                    if (vm.task.comments.length > 0) {
+                        vm.task.comments[0].createTime = new Date();
+                    }
 
                     var taskListToAdd = createTasksList(vm.task, vm.selectedRecipients);
 
-                    datacontext.saveNewTasks(taskListToAdd).then(function (response) {
-                        logger.toast('המשימה נשלחה בהצלחה!', response.data, 2000);
-                        logger.info('task added sucsessfuly', response.data);
-                        datacontext.pushTasksToTasksList(response.data);
-                        var count = datacontext.setMyTaskCount();
-                        cordovaPlugins.setBadge(count);
-                        $mdDialog.hide();
-
-                        // clean the form
-                        vm.task = {};
-                        vm.submitInProcess = false;
-                    }, function (error) {
-                        logger.error('Error while tring to add new task ', error);
-                    });                  
+                    if (vm.taskHasImage === true) {
+                        dropbox.uploadNewImageToDropbox(vm.newImage.fileEntry.filesystem.root.nativeURL, vm.newImage.fileEntry.name, vm.newImage.fileName).then(function () {
+                            saveNewTask(taskListToAdd);
+                        });
+                    }
+                    else {
+                        saveNewTask(taskListToAdd);                       
+                    }
                 }
                 else {
                     vm.showNoRecipientsSelectedError = true;
@@ -113,6 +115,30 @@
             }
         };
 
+        var saveNewTask = function (taskListToAdd) {
+            datacontext.saveNewTasks(taskListToAdd).then(function (response) {
+                logger.toast('המשימה נשלחה בהצלחה!', response.data, 2000);
+                logger.info('task added sucsessfuly', response.data);
+                datacontext.pushTasksToTasksList(response.data);
+                var count = datacontext.setMyTaskCount();
+                cordovaPlugins.setBadge(count);
+                $mdDialog.hide();
+
+                if (vm.taskHasImage === true) {
+                    storage.saveFileToStorage(response.data[0]._id, vm.newImage.fileName, vm.newImage.fileEntry.nativeURL).
+                        then(function () { },
+                        function (error) {
+                        logger.error("error while trying to save File to Storage", error);
+                    });
+                }
+
+                // clean the form
+                vm.task = {};
+                vm.submitInProcess = false;
+            }, function (error) {
+                logger.error('Error while tring to add new task ', error);
+            });
+        };
 
         var createTasksList = function (task, recipients) {
             var listToReturn = [];
@@ -134,8 +160,43 @@
                 }
             });
             return listToReturn;
-        };
-        
+        };     
+
+        vm.takePic = function (sourceType) {
+
+            document.addEventListener("deviceready", function () {
+                cordovaPlugins.takePicture(sourceType).then(function (fileUrl) {
+
+                    var image = document.getElementById('new-task-image');
+                    image.src = fileUrl;
+
+                    window.resolveLocalFileSystemURL(fileUrl, function success(fileEntry) {
+                        vm.taskHasImage = true;
+
+                        var fileName = new Date().toISOString() + '.jpg';
+
+                        vm.newImage.fileEntry = fileEntry
+                        vm.newImage.fileName = fileName;
+
+                        var comment = {
+                            from: {
+                                name: vm.user.name,
+                                _id: vm.user._id,
+                                avatarUrl: vm.user.avatarUrl
+                            },
+                            text: '',
+                            fileName: fileName
+                        };
+
+                        vm.task.comments.push(comment);
+
+                        cordovaPlugins.cleanupAfterPictureTaken();
+                    });
+                }, function (err) {
+                    logger.error("error while trying to take a picture", err);
+                });
+            }, false);
+        }
     }
 
 })();

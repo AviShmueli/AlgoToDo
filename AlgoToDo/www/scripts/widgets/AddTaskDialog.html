@@ -6,8 +6,12 @@
             </md-button>           
             <h3 style="color:white">משימה חדשה</h3>
             <span flex></span>
+            <md-button class="md-icon-button" aria-label="report" ng-click="vm.takePic('camera')">
+                <ng-md-icon icon="add_a_photo"></ng-md-icon>
+            </md-button>
             <md-button class="md-icon-button" type="submit" ng-click="vm.save()" ng-disabled="newTaskForm.$invalid">
-                <ng-md-icon class="rotate" icon="send" aria-label="send"></ng-md-icon> 
+                <ng-md-icon class="rotate" icon="send" aria-label="send" ng-hide="vm.submitInProcess"></ng-md-icon> 
+                <md-progress-circular md-mode="indeterminate" ng-show="vm.submitInProcess" md-diameter="20px" class="md-accent md-hue-2"></md-progress-circular>
             </md-button>
         </div>
     </md-toolbar>
@@ -30,46 +34,22 @@
             <div ng-show="vm.showNoRecipientsSelectedError">
                 <div class="input-message-validate">נמען הוא שדה <b>חובה</b></div>
             </div>
-            <!--<div layout layout-sm="column">
-                <md-autocomplete md-autofocus flex required md-require-match
-                                 md-input-name="autocompleteField"
-                                 placeholder="נמען"
-                                 md-min-length="1"
-                                 md-no-cache="true"
-                                 md-selected-item="vm.selectedItem"
-                                 md-search-text="vm.searchText"
-                                 md-items="user in vm.querySearch(vm.searchText)"
-                                 md-item-text="user.name"
-                                 md-floating-label="נמען"
-                                 md-no-asterisk="true"
-                                 md-menu-class="autocomplete-custom-template">
-                    <md-item-template style="text-align: right">   
-                        <span class="item-title" dir="rtl">
-                            <span class="user-name-template" md-highlight-text="vm.searchText">{{user.name}}</span>
-                            <md-card-avatar class="user-avatar-template">
-                                <img alt="{{item.name}}" ng-src="{{vm.imagesPath + user.avatarUrl}}" class="md-avatar user-avatar-small" style="margin-right: 0;" />
-                            </md-card-avatar>
-                        </span>                                                                 
-                    </md-item-template>
-                    <md-not-found>
-                        הנמען שחיפשת לא קיים
-                    </md-not-found>
-                    <div ng-messages="newTaskForm.autocompleteField.$error" ng-if="newTaskForm.autocompleteField.$touched">
-                        <div ng-message="required">נמען הוא שדה <b>חובה</b></div>
-                        <div ng-message="md-require-match">נא לבחור נמען מתוך הרשימה</div>
-                    </div>
-                </md-autocomplete>
-            </div>-->
             <div layout layout-sm="column">
                 <md-input-container flex class="md-block">
                     <label>תיאור המשימה</label>
-                    <textarea class="texterea-font-size" name="description" ng-model="vm.task.description" md-maxlength="150" rows="1" max-rows="4" required md-no-asterisk="true"></textarea>
+                    <textarea  class="texterea-font-size" name="description" ng-model="vm.task.description" md-maxlength="150" rows="1" max-rows="4" required md-no-asterisk="true"></textarea>
                     <div ng-messages="newTaskForm.description.$error" ng-if="newTaskForm.description.$touched">
                         <div ng-message="required">נא להכניס תיאור למשימה</div>
                     </div>
                 </md-input-container>
             </div>
+
+            <div class="image-wraper" layout layout-sm="column" ng-show="vm.taskHasImage">
+                <img id="new-task-image" src=""/>
+            </div>
+
             <!-- https://github.com/logbon72/angular-material-datetimepicker -->      
         </form>
+
     </md-dialog-content>   
 </md-dialog>

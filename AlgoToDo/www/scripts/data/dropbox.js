@@ -5,9 +5,9 @@
         .module('app.data')
         .service('dropbox', dropbox);
 
-    dropbox.$inject = ['$rootScope', 'appConfig'];
+    dropbox.$inject = ['$rootScope', 'appConfig', 'storage', '$q'];
 
-    function dropbox($rootScope, appConfig) {
+    function dropbox($rootScope, appConfig, storage, $q) {
 
         var self = this;
 
@@ -31,11 +31,66 @@
             return self.dbx.sharingGetSharedLinkFile({ url: _url });
         }
 
+        var uploadNewImageToDropbox = function (newPath, fileName, newFileName) {
+
+            var deferred = $q.defer();
+
+            storage.getFileFromStorage(newPath, fileName)
+                .then(function (base64File) {
+
+                    // convert the base 64 image to blob
+                    var imageData = base64File.replace(/^data:image\/\w+;base64,/, "");
+                    var blob = b64toBlob(imageData, 'image/jpg');
+                    //var blonewFileUrlbUrl = URL.createObjectURL(blob);
+
+                    var reader = new FileReader();
+                    reader.onload = (function (file_reader) {
+
+                        uploadFile(newFileName, file_reader).then(function (response) {
+                            deferred.resolve();
+                        })
+                        .catch(function (error) {
+                            logger.error("error while trying to upload file to dropbox", error);
+                            deferred.reject();
+                        });
+                    })(blob);
+                }, function (error) {
+                    logger.error("error while trying to get File From Storage", error);
+                    deferred.reject();
+                });
+            return deferred.promise;
+        }
+
+        function b64toBlob(b64Data, contentType, sliceSize) {
+            contentType = contentType || '';
+            sliceSize = sliceSize || 512;
+
+            var byteCharacters = atob(b64Data);
+            var byteArrays = [];
+
+            for (var offset = 0; offset < byteCharacters.length; offset += sliceSize) {
+                var slice = byteCharacters.slice(offset, offset + sliceSize);
+
+                var byteNumbers = new Array(slice.length);
+                for (var i = 0; i < slice.length; i++) {
+                    byteNumbers[i] = slice.charCodeAt(i);
+                }
+
+                var byteArray = new Uint8Array(byteNumbers);
+
+                byteArrays.push(byteArray);
+            }
+
+            var blob = new Blob(byteArrays, { type: contentType });
+            return blob;
+        }
+
         return {
             uploadFile: uploadFile,
             downloadFile: downloadFile,
             getThumbnail: getThumbnail,
-            getSharedLinkFile: getSharedLinkFile
+            getSharedLinkFile: getSharedLinkFile,
+            uploadNewImageToDropbox: uploadNewImageToDropbox
         };
 
     }

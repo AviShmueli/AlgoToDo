@@ -85,7 +85,7 @@
                     document.addEventListener("deviceready", function () {
 
                         vm.user.device = cordovaPlugins.getDeviceDetails();
-                        datacontext.setDeviceDetailes(vm.user.device);
+                        datacontext.setDeviceDetailes(vm.user.device, cordova.file.applicationDirectory);
 
                         cordovaPlugins.initializePushV5().then(function () {
                             cordovaPlugins.registerForPushNotifications().then(function (registrationId) {

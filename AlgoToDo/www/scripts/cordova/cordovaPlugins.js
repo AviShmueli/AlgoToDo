@@ -147,75 +147,89 @@
         var handleNotificationRecive = function (event, data) {
             $log.info('notificationReceived: ' + event, data);
             var dataFromServer = data.additionalData.additionalData;
-            if (dataFromServer.type === "task") {
-                datacontext.addTaskToTaskList(dataFromServer.object);
-                $rootScope.taskcount = data.count;
-                $rootScope.$apply();
+            var taskId = dataFromServer.taskId;
 
-                document.addEventListener("deviceready", function () {
-                    $cordovaVibration.vibrate(300);
-                }, false);
-                showNewTaskToast(dataFromServer.taskId, dataFromServer.object.from.name);
+            if (dataFromServer.type === "task") {
+                handelNewTaskRecived(dataFromServer.object, data.count);
             }
             if (dataFromServer.type === "task-update") {
                 datacontext.replaceTask(dataFromServer.object);
                 $rootScope.$apply();
             }
             if (dataFromServer.type === "comment") {
-                console.log("got new comment : ", dataFromServer.object);
-                if(dataFromServer.object.fileName !== undefined){
-                    
-                    console.log("got new comment with file: ", dataFromServer.object.fileName);
-                    /*dropbox.getThumbnail(dataFromServer.object.fileName, 'w128h128')
-                        .then(function (response) {
-                            //var url = URL.createObjectURL(response.fileBlob);
-                            //dataFromServer.object.fileLocalPath = url;
-
-                            storage.saveFileToStorage(dataFromServer.object.fileName, response.fileBlob);
-                            datacontext.saveFileToCache(dataFromServer.object.fileName, url);
-                            datacontext.addCommentToTask(dataFromServer.taskId, dataFromServer.object);
-                        })
-                        .catch(function (error) {
-                                logger.error("error while trying to get file Thumbnail", error);
-                        });*/
-
-                    dropbox.downloadFile(dataFromServer.object.fileName).then(function (response) {
-                        console.log("in download from dropbox callback: ", response);
-                        storage.saveFileToStorage(dataFromServer.taskId, dataFromServer.object.fileName, response.url).then(function (storageFilePath) {
-                            console.log("in save File To Storage callback: ", storageFilePath);
-                            datacontext.saveFileToCache(dataFromServer.object.fileName, storageFilePath);
-                            dataFromServer.object.fileLocalPath = storageFilePath;
-                            datacontext.addCommentToTask(dataFromServer.taskId, dataFromServer.object);
-                            navigateToTaskPage(dataFromServer.taskId, dataFromServer.object);
-                            console.log("eand process notification for comment: ");
-                        });
-                    })
-                    .catch(function (error) {
-                        logger.error("error while trying to download file from dropbox", error);
-                    });
-                }
-                else{
-                    datacontext.addCommentToTask(dataFromServer.taskId, dataFromServer.object);
-                    navigateToTaskPage(dataFromServer.taskId, dataFromServer.object);
-                }
+                handelNewCommentRecived(taskId, dataFromServer.object);              
             }
         };
 
+        var handelNewTaskRecived = function (task, taskCount) {
+            if (task.comments.length > 0) {
+                var comment = task.comments[0];
+                dropbox.downloadFile(comment.fileName).then(function (response) {
+                    storage.saveFileToStorage(task._id, comment.fileName, response.url).then(function (storageFilePath) {
+                        comment.fileLocalPath = storageFilePath;
+
+                        datacontext.addTaskToTaskList(task);
+                        $rootScope.taskcount = taskCount;
+                        $rootScope.$apply();
+
+                        showNewTaskToast(task._id, task.from.name);
+                    });
+                })
+                .catch(function (error) {
+                    $log.error("error while trying to download file from dropbox", error);
+                });
+            }
+            else {
+                datacontext.addTaskToTaskList(task);
+                $rootScope.taskcount = taskCount;
+                $rootScope.$apply();
+
+                showNewTaskToast(task._id, task.from.name);
+            }    
+        }
+
+        var handelNewCommentRecived = function (taskId, comment) {
+            if (comment.fileName !== undefined) {
+                dropbox.downloadFile(comment.fileName).then(function (response) {
+                    storage.saveFileToStorage(taskId, comment.fileName, response.url).then(function (storageFilePath) {
+                        comment.fileLocalPath = storageFilePath;
+                        datacontext.addCommentToTask(taskId, comment);
+                        $log.info("before nevigate", comment);
+                        navigateToTaskPage(taskId, comment);
+                        $log.info("after nevigate", comment);
+                    });
+                })
+                .catch(function (error) {
+                    $log.error("error while trying to download file from dropbox", error);
+                });
+            }
+            else {
+                datacontext.addCommentToTask(taskId, comment);
+                navigateToTaskPage(taskId, comment);
+            }
+        }
+
         var navigateToTaskPage = function (taskId, task) {
+            $log.info("nevigate 1", self.appState);
             if (self.appState === 'background') {
+                $log.info("nevigate 2", window.location.hash);
                 window.location = '#/task/' + taskId;
             }
             else {
+                $log.info("nevigate 3", window.location.hash);
                 if (window.location.hash.indexOf(taskId) === -1) {
-                    document.addEventListener("deviceready", function () {
-                        $cordovaVibration.vibrate(300);
-                    }, false);
+                    $log.info("nevigate 4", task.from.name);
                     showNewCommentToast(taskId, task.from.name);
                 }
+                $log.info("nevigate 5");
+                document.addEventListener("deviceready", function () {
+                    $cordovaVibration.vibrate(300);
+                }, false);
             }
         }
 
         var showNewCommentToast = function (taskId, name) {
+
             var NewCommentToast = $mdToast.build({
                 hideDelay: 5000,
                 position: 'top',
@@ -235,6 +249,11 @@
         };
 
         var showNewTaskToast = function (taskId, name) {
+
+            document.addEventListener("deviceready", function () {
+                $cordovaVibration.vibrate(300);
+            }, false);
+
             var NewCommentToast = $mdToast.build({
                 hideDelay: 5000,
                 position: 'top',
@@ -255,7 +274,6 @@
 
         var handleErrorOcurred = function (event, e) {
             $log.error('errorOcurred: ' + event, e);
-            // e.message
         };
 
         var sendSmS = function (to) {
@@ -332,7 +350,7 @@
                 quality: 100,
                 destinationType: Camera.DestinationType.FILE_URI,
                 sourceType: _sourceType,
-                allowEdit: false,
+                allowEdit: true,
                 encodingType: Camera.EncodingType.JPEG,
                 targetWidth: window.innerWidth,
                 targetHeight: window.innerHeight,
@@ -341,9 +359,11 @@
                 correctOrientation: true
             };
 
-            return $cordovaCamera.getPicture(options);
+            return $cordovaCamera.getPicture(options);         
+        }
 
-            //$cordovaCamera.cleanup();
+        var cleanupAfterPictureTaken = function () {
+            $cordovaCamera.cleanup();
         }
 
         var getAppVersion = function () {
@@ -365,6 +385,7 @@
             networkStatus: networkStatus,
             getImagesPath: getImagesPath,
             takePicture: takePicture,
+            cleanupAfterPictureTaken: cleanupAfterPictureTaken,
             getAppVersion: getAppVersion
         };
 

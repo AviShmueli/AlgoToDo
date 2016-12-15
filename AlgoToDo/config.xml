@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <widget defaultlocale="he-IL" id="com.algotodo.app" version="0.2.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0" xmlns:vs="http://schemas.microsoft.com/appx/2014/htmlapps">
-  <name>AlgoToDo</name>
+  <name>עשיתי</name>
   <description>A blank project that uses Apache Cordova to help you build an app that targets multiple mobile platforms: Android, iOS, Windows, and Windows Phone.</description>
   <author email="avis@algo.bz" href="http://algo.bz">Avi Shmueli</author>
   <content src="index.html" />
@@ -23,11 +23,27 @@
   </platform>
   <platform name="android">
     <icon density="hdpi" src="res/icons/android/mipmap-hdpi/ic_launcher.png" />
-    <icon density="ldpi" src="res/icons/android/mipmap-hdpi/ic_launcher.png" />
+    <icon density="ldpi" src="res/icons/android/mipmap-ldpi/ic_launcher.png" />
     <icon density="mdpi" src="res/icons/android/mipmap-mdpi/ic_launcher.png" />
     <icon density="xhdpi" src="res/icons/android/mipmap-xhdpi/ic_launcher.png" />
     <icon density="xxhdpi" src="res/icons/android/mipmap-xxhdpi/ic_launcher.png" />
     <icon density="xxxhdpi" src="res/icons/android/mipmap-xxxhdpi/ic_launcher.png" />
+    <icon density="hdpi-v5" src="res/icons/android/mipmap-hdpi-v5/ic_launcher.png"/>
+    <icon density="hdpi-v9" src="res/icons/android/mipmap-hdpi-v9/ic_launcher.png"/>
+    <icon density="hdpi-v11" src="res/icons/android/mipmap-hdpi-v11/ic_launcher.png"/>
+    <icon density="ldpi-v5" src="res/icons/android/mipmap-ldpi-v5/ic_launcher.png"/>
+    <icon density="ldpi-v9" src="res/icons/android/mipmap-ldpi-v9/ic_launcher.png"/>
+    <icon density="ldpi-v11" src="res/icons/android/mipmap-ldpi-v11/ic_launcher.png"/>
+    
+    <icon density="mdpi-v5" src="res/icons/android/mipmap-mdpi-v5/ic_launcher.png"/>
+    <icon density="mdpi-v9" src="res/icons/android/mipmap-mdpi-v9/ic_launcher.png"/>
+    <icon density="mdpi-v11" src="res/icons/android/mipmap-mdpi-v11/ic_launcher.png"/>
+    
+    <icon density="xhdpi-v9" src="res/icons/android/mipmap-xhdpi-v9/ic_launcher.png"/>
+    <icon density="xhdpi-v11" src="res/icons/android/mipmap-xhdpi-v11/ic_launcher.png"/>
+    
+    <icon density="xhdpi-v9" src="res/icons/android/mipmap-xhdpi-v9/ic_launcher.png"/>
+    <icon density="xhdpi-v11" src="res/icons/android/mipmap-xhdpi-v11/ic_launcher.png"/>
   </platform>
   <platform name="ios">
     <icon height="180" src="res/icons/ios/Icon-App@3x.png" width="180" />

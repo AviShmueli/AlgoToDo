@@ -51,8 +51,8 @@
                     window.resolveLocalFileSystemURL(fileUrl, function success(fileEntry) {
 
                         var fileName = new Date().toISOString() + '.jpg';
-                        var dataDirectory = (cordova.platformId.toLowerCase() === 'ios') ? cordova.file.dataDirectory : cordova.file.externalDataDirectory;
-                        var newPath = 'pictures/' + vm.taskId + '/';
+                        //var dataDirectory = (cordova.platformId.toLowerCase() === 'ios') ? cordova.file.dataDirectory : cordova.file.externalDataDirectory;
+                        //var newPath = 'pictures/' + vm.taskId + '/';
 
                         var comment = {
                             from: {
@@ -71,9 +71,10 @@
                             vm.task.comments.push(comment);
                             addImageToGallery(comment.fileName, comment.fileLocalPath);
 
-                            uploadNewImageToDropbox(fileEntry.filesystem.root.nativeURL, fileEntry.name, fileName).then(function () {
+                            dropbox.uploadNewImageToDropbox(fileEntry.filesystem.root.nativeURL, fileEntry.name, fileName).then(function () {
                                 datacontext.newComment(vm.task._id, tempComment);
                             });
+                            cordovaPlugins.cleanupAfterPictureTaken();
                         }, function (error) {
                             logger.error("error while trying to save File to Storage", error);
                         });
@@ -82,60 +83,6 @@
                     logger.error("error while trying to take a picture", err);
                 });
             }, false);
-        }
-
-        function b64toBlob(b64Data, contentType, sliceSize) {
-            contentType = contentType || '';
-            sliceSize = sliceSize || 512;
-
-            var byteCharacters = atob(b64Data);
-            var byteArrays = [];
-
-            for (var offset = 0; offset < byteCharacters.length; offset += sliceSize) {
-                var slice = byteCharacters.slice(offset, offset + sliceSize);
-
-                var byteNumbers = new Array(slice.length);
-                for (var i = 0; i < slice.length; i++) {
-                    byteNumbers[i] = slice.charCodeAt(i);
-                }
-
-                var byteArray = new Uint8Array(byteNumbers);
-
-                byteArrays.push(byteArray);
-            }
-
-            var blob = new Blob(byteArrays, { type: contentType });
-            return blob;
-        }
-
-        var uploadNewImageToDropbox = function (newPath, fileName, newFileName) {
-
-            var deferred = $q.defer();
-
-            storage.getFileFromStorage(newPath, fileName)
-                .then(function (base64File) {
-
-                    // convert the base 64 image to blob
-                    var imageData = base64File.replace(/^data:image\/\w+;base64,/, "");
-                    var blob = b64toBlob(imageData, 'image/jpg');
-                    //var blonewFileUrlbUrl = URL.createObjectURL(blob);
-
-                    var reader = new FileReader();
-                    reader.onload = (function (file_reader) {
-                        
-                        dropbox.uploadFile(newFileName, file_reader).then(function (response) {
-                            deferred.resolve();                           
-                        })
-                        .catch(function (error) {
-                            logger.error("error while trying to upload file to dropbox", error);
-                            deferred.reject();
-                        });
-                    })(blob);
-                }, function (error) {
-                    logger.error("error while trying to get File From Storage", error);
-                    deferred.reject();
-                });
-            return deferred.promise;
         }
 
         vm.addComment = function () {
@@ -217,7 +164,7 @@
             //}
         }
 
-        var addImageToGallery = function (fileName, fileLocalPath) {
+        var addImageToGallery = function (fileName, fileLocalPath) {           
             var img = new Image();
             img.onload = function () { 
                 vm.galleryImages.push({
@@ -227,7 +174,24 @@
                 });
                 vm.galleryImagesLocations[fileName] = vm.galleryImagesCounter++;
             }
-            img.src = fileLocalPath;          
+            img.src = fileLocalPath;
+        }
+
+        var addImageToGallery_Sync = function (fileName, fileLocalPath) {
+            var deferred = $q.defer();
+
+            var img = new Image();
+            img.onload = function () {
+                vm.galleryImages.push({
+                    src: fileLocalPath,
+                    w: this.width,
+                    h: this.height
+                });
+                vm.galleryImagesLocations[fileName] = vm.galleryImagesCounter++;
+                deferred.resolve();
+            }
+            img.src = fileLocalPath;
+            return deferred.promise;
         }
  
         var setImagesLocalPath = function(){
@@ -241,13 +205,9 @@
         var gallery;
 
         vm.showGalary = function (comment) {
-            if (vm.galleryImagesLocations[comment.fileName] === undefined) {
-                addImageToGallery(comment.fileName, comment.fileLocalPath);
-            }
 
             var pswpElement = document.querySelectorAll('.pswp')[0];
 
-            // build items array
             /*vm.galleryImages = [
                 {
                     src: 'https://photos-1.dropbox.com/t/2/AAC43kVSA1R6MAoqXYgWFmon8pQwLtBVmEYGvO5wUw571w/12/579965904/jpeg/32x32/1/_/1/2/2016-12-11T21%3A23%3A02.851Z.jpg/EJisz4wFGIQBIAcoBw/S3PGdSH1wBffOyyUAzWxN_YkkIgQo78iiZCDJycE6dk?size=1600x1200&size_mode=3',
@@ -270,25 +230,21 @@
 
             // Initializes and opens PhotoSwipe
             gallery = new PhotoSwipe(pswpElement, PhotoSwipeUI_Default, /*items*/vm.galleryImages, options);
-            gallery.init();
+
+            if (vm.galleryImagesLocations[comment.fileName] === undefined) {
+                addImageToGallery_Sync(comment.fileName, comment.fileLocalPath).then(function () {
+                    gallery.options.index = vm.galleryImagesLocations[comment.fileName];
+                    gallery.init();
+                });
+            }
+            else {
+                gallery.init();
+            }
 
             document.addEventListener("backbutton", backbuttonClickCallback, false);
 
             gallery.listen('close', function () {
                 document.removeEventListener("backbutton", backbuttonClickCallback, false);
-            });
-
-            gallery.listen('gettingData', function (index, item) {
-                if (item.w < 1 || item.h < 1) { // unknown size
-                    var img = new Image();
-                    img.onload = function () { // will get size after load
-                        item.w = this.width; // set image width
-                        item.h = this.height; // set image height
-                        gallery.invalidateCurrItems(); // reinit Items
-                        gallery.updateSize(true); // reinit Items
-                    }
-                    img.src = item.src; // let's download image
-                }
             });
         }
 

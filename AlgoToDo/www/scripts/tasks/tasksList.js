@@ -177,8 +177,18 @@
                 templateUrl: 'scripts/widgets/AddTaskDialog.html',
                 targetEvent: ev,
                 fullscreen: true
-            });      
+            });
+
+            document.addEventListener("deviceready", function () {
+                document.addEventListener("backbutton", backbuttonClickCallback, false);
+            }, false);
         };
+
+        var backbuttonClickCallback = function () {
+            $mdDialog.cancel();
+            document.removeEventListener("backbutton", backbuttonClickCallback, false);
+
+        }
 
         vm.setTaskStatus = function (task, newStatus) {
             task.status = newStatus;
