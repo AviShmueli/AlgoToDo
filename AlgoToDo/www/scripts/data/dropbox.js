@@ -5,9 +5,9 @@
         .module('app.data')
         .service('dropbox', dropbox);
 
-    dropbox.$inject = ['$rootScope', 'appConfig', 'storage', '$q'];
+    dropbox.$inject = ['$rootScope', 'appConfig', 'storage', '$q', 'logger'];
 
-    function dropbox($rootScope, appConfig, storage, $q) {
+    function dropbox($rootScope, appConfig, storage, $q, logger) {
 
         var self = this;
 
