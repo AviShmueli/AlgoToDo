@@ -126,7 +126,9 @@
 
                 if (vm.taskHasImage === true) {
                     storage.saveFileToStorage(response.data[0]._id, vm.newImage.fileName, vm.newImage.fileEntry.nativeURL).
-                        then(function () { },
+                        then(function () { 
+                            cordovaPlugins.cleanupAfterPictureTaken();
+                        },
                         function (error) {
                         logger.error("error while trying to save File to Storage", error);
                     });
@@ -188,9 +190,7 @@
                             fileName: fileName
                         };
 
-                        vm.task.comments.push(comment);
-
-                        cordovaPlugins.cleanupAfterPictureTaken();
+                        vm.task.comments.push(comment);                   
                     });
                 }, function (err) {
                     logger.error("error while trying to take a picture", err);

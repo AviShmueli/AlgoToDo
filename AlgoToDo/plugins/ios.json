@@ -7,10 +7,36 @@
         "files": {}
     },
     "installed_plugins": {
+        "cordova-plugin-app-version": {
+            "PACKAGE_NAME": "com.algotodo.app"
+        },
         "cordova-plugin-badge": {
             "PACKAGE_NAME": "com.algotodo.app"
         },
+        "cordova-plugin-camera": {
+            "CAMERA_USAGE_DESCRIPTION": " ",
+            "PHOTOLIBRARY_USAGE_DESCRIPTION": " ",
+            "PACKAGE_NAME": "com.algotodo.app"
+        },
+        "cordova-plugin-compat": {
+            "PACKAGE_NAME": "com.algotodo.app"
+        },
         "cordova-plugin-device": {
+            "PACKAGE_NAME": "com.algotodo.app"
+        },
+        "cordova-plugin-file": {
+            "PACKAGE_NAME": "com.algotodo.app"
+        },
+        "cordova-plugin-file-transfer": {
+            "PACKAGE_NAME": "com.algotodo.app"
+        },
+        "cordova-plugin-network-information": {
+            "PACKAGE_NAME": "com.algotodo.app"
+        },
+        "cordova-plugin-screensize": {
+            "PACKAGE_NAME": "com.algotodo.app"
+        },
+        "cordova-plugin-vibration": {
             "PACKAGE_NAME": "com.algotodo.app"
         },
         "cordova-plugin-whitelist": {
@@ -21,32 +47,6 @@
         },
         "phonegap-plugin-push": {
             "SENDER_ID": "874351794059",
-            "PACKAGE_NAME": "com.algotodo.app"
-        },
-        "cordova-plugin-vibration": {
-            "PACKAGE_NAME": "com.algotodo.app"
-        },
-        "cordova-plugin-network-information": {
-            "PACKAGE_NAME": "com.algotodo.app"
-        },
-        "cordova-plugin-app-version": {
-            "PACKAGE_NAME": "com.algotodo.app"
-        },
-        "cordova-plugin-file-transfer": {
-            "PACKAGE_NAME": "com.algotodo.app"
-        },
-        "cordova-plugin-file": {
-            "PACKAGE_NAME": "com.algotodo.app"
-        },
-        "cordova-plugin-compat": {
-            "PACKAGE_NAME": "com.algotodo.app"
-        },
-        "cordova-plugin-camera": {
-            "CAMERA_USAGE_DESCRIPTION": " ",
-            "PHOTOLIBRARY_USAGE_DESCRIPTION": " ",
-            "PACKAGE_NAME": "com.algotodo.app"
-        },
-        "cordova-plugin-screensize": {
             "PACKAGE_NAME": "com.algotodo.app"
         }
     },
