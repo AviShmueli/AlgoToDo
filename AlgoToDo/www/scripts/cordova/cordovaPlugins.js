@@ -36,13 +36,13 @@
             return $cordovaAppVersion.getVersionNumber();
         }
 
-        var setStatusBarBackgroundColor = function () {
+        /*var setStatusBarBackgroundColor = function () {
             document.addEventListener("deviceready", function () {
                 if (cordova.platformId == 'ios') {
                     StatusBar.backgroundColorByHexString("#00BCD43");
                 }
             }, false);
-        }();
+        }();*/
 
         var showToast = function (info, duration) {
             document.addEventListener("deviceready", function () {

@@ -92,7 +92,6 @@
     <splash density="port-xhdpi" src="res/screens/android/screen-xhdpi-portrait.png" />
   </platform>
   <platform name="ios">
-    <preference name="StatusBarBackgroundColor" value="#00BCD4" />
     <splash height="480" src="res/screens/ios/screen-iphone-portrait.png" width="320" />
     <splash height="960" src="res/screens/ios/screen-iphone-portrait-2x.png" width="640" />
     <splash height="1024" src="res/screens/ios/screen-ipad-portrait.png" width="768" />
@@ -120,6 +119,7 @@
   <preference name="deployment-target" value="10.1" />
   <preference name="AndroidPersistentFileLocation" value="Compatibility" />
   <preference name="StatusBarOverlaysWebView" value="false" />
+ <preference name="StatusBarBackgroundColor" value="#00CED1" />
 
   
   <access origin="*" subdomains="true" />
