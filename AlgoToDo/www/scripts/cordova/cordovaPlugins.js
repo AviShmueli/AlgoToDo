@@ -22,23 +22,79 @@
         var self = this;
         self.appState = 'foreground';
 
-        var PushOptions = {
-            android: {
-                senderID: "874351794059",
-                sound: "true",
-                vibration: "true"
-            },
-            ios: {
-                alert: "true",
-                badge: "true",
-                sound: "true"
-            },
-            windows: {}
-        };
-
         var isMobileDevice = function () {
             return document.URL.indexOf( 'http://' ) === -1 && document.URL.indexOf( 'https://' ) === -1;
         };
+
+        var getDeviceDetails = function () {
+            return $cordovaDevice.getDevice();
+        };
+
+        var getAppVersion = function () {
+            return $cordovaAppVersion.getVersionNumber();
+        }
+
+        var showToast = function (info, duration) {
+            document.addEventListener("deviceready", function () {
+                $cordovaToast.show(info, duration ? duration : 'short', 'center')
+                .then(function (success) { });
+            }, false);
+
+        };
+
+        var showDatePicker = function () {
+            var deferred = $q.defer();
+            var options = {
+                date: new Date(),
+                minDate: new Date(),
+                mode: 'datetime',
+                allowOldDates: false,
+                allowFutureDates: true,
+                doneButtonLabel: 'אישור',
+                doneButtonColor: '#000000',
+                cancelButtonLabel: 'ביטול',
+                titleText: 'בחר תאריך ושעה',
+                cancelButtonColor: '#000000',
+                is24Hour: true
+            };
+
+            document.addEventListener("deviceready", function () {
+
+                $cordovaDatePicker.show(options).then(function (date) {
+                    deferred.resolve(date);
+                }, function (error) {
+                    //alert(error);
+                });
+
+            }, false);
+
+            return deferred.promise;
+        }
+
+        /* ----- Badge ------ */
+
+        var clearAppBadge = function () {
+            document.addEventListener("deviceready", function () {
+                $cordovaBadge.clear().then(function () {
+                    // You have permission, badge cleared.
+                }, function (err) {
+                    // You do not have permission.
+                });
+            }, false);
+
+        };
+
+        var setBadge = function (num) {
+            document.addEventListener("deviceready", function () {
+                $cordovaBadge.set(num).then(function () {
+                    //showToast(" You have permission, badge set.");
+                }, function (err) {
+                    //showToast(" You do not have permission");
+                });
+            }, false);
+        }
+
+        /* ----- Local Notifications ------*/
 
         var setLocalNotification = function (task, date) {
             if (!isMobileDevice()) return;
@@ -55,7 +111,8 @@
                     text: task.from.name + ': ' + task.description,
                     icon: 'res://icon',
                     smallIcon: 'res://ic_popup_reminder',
-                    data: task ,
+                    data: task,
+                    headsup: true,
                     actions: [
                         {
                             text: "קבע נודניק",
@@ -80,8 +137,12 @@
         var setSnoozeNotification = function (task, notificationId) {
             document.addEventListener("deviceready", function () {
 
+                var now = new Date().getTime();
+                var _10MinutsFromNow = new Date(now + 100 * 1000 * 10);
+
                 cordova.plugins.notification.local.update({
                     id: notificationId,
+                    firstAt: _10MinutsFromNow,
                     every: "10",
                     actions: [
                         {
@@ -121,8 +182,6 @@
                     
                 }*/
                 if (notification.actionClicked.val === 3) {
-                    //alert(task._id);
-
                     window.location = '#/task/' + task._id;
                 }
                 if (notification.actionClicked.val === 4) {
@@ -135,40 +194,20 @@
             });
         }, false);
 
-        var showDatePicker = function () {
-            var deferred = $q.defer();
-            var options = {
-                date: new Date(),
-                minDate: new Date(),
-                mode: 'datetime', // or 'time'
-                allowOldDates: false,
-                allowFutureDates: true,
-                doneButtonLabel: 'אישור',
-                doneButtonColor: '#F2F3F4',
-                cancelButtonLabel: 'ביטול',
-                titleText: 'בחר תאריך ושעה',
-                cancelButtonColor: '#000000'
-            };
+        /* ----- Push Notifications ----- */
 
-            document.addEventListener("deviceready", function () {
-
-                $cordovaDatePicker.show(options).then(function (date) {
-                    deferred.resolve(date);
-                }, function (error) {
-                    //alert(error);
-                });
-
-            }, false);
-
-            return deferred.promise;
-        }
-
-        var showToast = function (info, duration) {
-            document.addEventListener("deviceready", function () {
-                $cordovaToast.show(info, duration ? duration : 'short', 'center')
-                .then(function (success) { });
-            }, false);
-
+        var PushOptions = {
+            android: {
+                senderID: "874351794059",
+                sound: "true",
+                vibration: "true"
+            },
+            ios: {
+                alert: "true",
+                badge: "true",
+                sound: "true"
+            },
+            windows: {}
         };
 
         var initializePushV5 = function () {            
@@ -197,32 +236,8 @@
             });            
         }
 
-        var clearAppBadge = function () {
-            document.addEventListener("deviceready", function () {
-                $cordovaBadge.clear().then(function () {
-                    // You have permission, badge cleared.
-                }, function (err) {
-                    // You do not have permission.
-                });
-            }, false);
-
-        };
-
-        var setBadge = function (num) {
-            document.addEventListener("deviceready", function () {
-                $cordovaBadge.set(num).then(function () {
-                    //showToast(" You have permission, badge set.");
-                }, function (err) {
-                    //showToast(" You do not have permission");
-                });
-            }, false);
-        }
-
-        var getDeviceDetails = function () {
-           return $cordovaDevice.getDevice();
-        };
-
         var cancelEventListner_notificationReceived = null;
+
         var cancelEventListner_errorOcurred = null;
  
         var onNotificationReceived = function () {
@@ -377,26 +392,7 @@
             $log.error('errorOcurred: ' + event, e);
         };
 
-        var sendSmS = function (to) {
-            //CONFIGURATION
-            var options = {
-                replaceLineBreaks: false, // true to replace \n by a new line, false by default
-                android: {
-                    //intent: 'INTENT'  // send SMS with the native android SMS messaging
-                    intent: '' // send SMS without open any other app
-                }
-            };
-            /*
-            document.addEventListener("deviceready", function () {
-                $cordovaSms
-                  .send('+972542240608', 'אבי התותח', options)
-                  .then(function () {
-                      showToast("SMS was sent");
-                  }, function (error) {
-                      showToast("SMS wasent sent...");
-                  });
-            }, false);*/
-        };
+        /* ---- App State ----- */
 
         document.addEventListener("deviceready", function () {
             document.addEventListener( 'pause', onPause.bind( this ), false );
@@ -410,9 +406,47 @@
         function onResume() {
             self.appState = 'foreground';
         };
+        
+        /* ----- Camera -----*/
+
+        var getImagesPath = function () {
+
+            if (!isMobileDevice()) {
+                return '';
+            }
+
+            var device = datacontext.getDeviceDetailes();
+            return device.applicationDirectory + 'www';
+        }
+
+        var takePicture = function (sourceType) {
+            var _sourceType = sourceType === 'camera' ? Camera.PictureSourceType.CAMERA : Camera.PictureSourceType.PHOTOLIBRARY;
+            var isSamsungDevice = datacontext.getDeviceDetailes() !== undefined && datacontext.getDeviceDetailes().manufacturer === "samsung";
+
+            var options = {
+                quality: 100,
+                destinationType: Camera.DestinationType.FILE_URI,
+                sourceType: _sourceType,
+                allowEdit: isSamsungDevice,
+                encodingType: Camera.EncodingType.JPEG,
+                targetWidth: isSamsungDevice ? 1500 : window.innerWidth,
+                targetHeight: isSamsungDevice ? 1500 : window.innerHeight,
+                popoverOptions: CameraPopoverOptions,
+                saveToPhotoAlbum: true,
+                correctOrientation: true
+            };
+
+            return $cordovaCamera.getPicture(options);         
+        }
+
+        var cleanupAfterPictureTaken = function () {
+            $cordovaCamera.cleanup();
+        }
+
+        /* ---- Not In Use ----- */
 
         var networkStatus = function () {
-            
+
             document.addEventListener("deviceready", function () {
 
                 //var type = $cordovaNetwork.getNetwork()
@@ -434,44 +468,27 @@
 
             }, false);
         }
-        
-        var getImagesPath = function () {
 
-            if (!isMobileDevice()) {
-                return '';
-            }
-
-            var device = datacontext.getDeviceDetailes();
-            return device.applicationDirectory + 'www';
-        }
-
-        var takePicture = function (sourceType) {
-            var _sourceType = sourceType === 'camera' ? Camera.PictureSourceType.CAMERA : Camera.PictureSourceType.PHOTOLIBRARY;
-            var isSamsungDevice = datacontext.getDeviceDetailes() !== undefined && datacontext.getDeviceDetailes().manufacturer === "samsung";
-
+        var sendSmS = function (to) {
+            //CONFIGURATION
             var options = {
-                quality: 100,
-                destinationType: Camera.DestinationType.FILE_URI,
-                sourceType: _sourceType,
-                allowEdit: isSamsungDevice,
-                encodingType: Camera.EncodingType.JPEG,
-                targetWidth: window.innerWidth,
-                targetHeight: window.innerHeight,
-                popoverOptions: CameraPopoverOptions,
-                saveToPhotoAlbum: true,
-                correctOrientation: true
+                replaceLineBreaks: false, // true to replace \n by a new line, false by default
+                android: {
+                    //intent: 'INTENT'  // send SMS with the native android SMS messaging
+                    intent: '' // send SMS without open any other app
+                }
             };
-
-            return $cordovaCamera.getPicture(options);         
-        }
-
-        var cleanupAfterPictureTaken = function () {
-            $cordovaCamera.cleanup();
-        }
-
-        var getAppVersion = function () {
-            return $cordovaAppVersion.getVersionNumber();
-        }
+            /*
+            document.addEventListener("deviceready", function () {
+                $cordovaSms
+                  .send('+972542240608', 'אבי התותח', options)
+                  .then(function () {
+                      showToast("SMS was sent");
+                  }, function (error) {
+                      showToast("SMS wasent sent...");
+                  });
+            }, false);*/
+        };
 
         var service = {
             setLocalNotification: setLocalNotification,
