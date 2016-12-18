@@ -5,19 +5,19 @@
         .module('app.cordova')
         .service('cordovaPlugins', cordovaPlugins);
 
-    cordovaPlugins.$inject = ['$rootScope', 'datacontext', 'appConfig', '$mdDialog'/*,
-                              '$cordovaLocalNotification'*//*, '$cordovaSms'*/, '$window',
+    cordovaPlugins.$inject = ['$rootScope', 'datacontext', 'appConfig', '$mdDialog',
+                              '$cordovaLocalNotification'/*, '$cordovaSms'*/, '$window',
                               /*'$cordovaDialogs',*/ '$cordovaToast', '$cordovaPushV5',
                               '$cordovaBadge', '$cordovaDevice', '$log', '$mdToast',
                               '$cordovaVibration', '$cordovaNetwork', '$q', '$cordovaCamera',
-                              '$cordovaAppVersion', 'dropbox', 'storage'];
+                              '$cordovaAppVersion', 'dropbox', 'storage', '$cordovaDatePicker'];
 
     function cordovaPlugins($rootScope, datacontext, appConfig, $mdDialog,
-                            /*$cordovaLocalNotification, *//*$cordovaSms,*/ $window,
+                            $cordovaLocalNotification, /*$cordovaSms,*/ $window,
                             /*$cordovaDialogs,*/ $cordovaToast, $cordovaPushV5,
                             $cordovaBadge, $cordovaDevice, $log, $mdToast,
                             $cordovaVibration, $cordovaNetwork, $q, $cordovaCamera,
-                            $cordovaAppVersion, dropbox, storage) {
+                            $cordovaAppVersion, dropbox, storage, $cordovaDatePicker) {
 
         var self = this;
         self.appState = 'foreground';
@@ -40,27 +40,128 @@
             return document.URL.indexOf( 'http://' ) === -1 && document.URL.indexOf( 'https://' ) === -1;
         };
 
-        var setLocalNotification = function () {
-            /*if (!isMobileDevice()) return;
-            var alarmTime = new Date();
-            alarmTime.setMinutes(alarmTime.getSeconds() + 1);
+        var setLocalNotification = function (task, date) {
+            if (!isMobileDevice()) return;
+
+            /*var now = new Date().getTime();
+            var _10SecondsFromNow = new Date(now + 1 * 1000);*/
 
             document.addEventListener("deviceready", function () {
-                $cordovaLocalNotification.add({
-                    id: "1234",
-                    date: alarmTime,
-                    message: "יש לך משימה אחת חדשה",
-                    title: "משימה חדשה",
-                    autoCancel: true,
-                    sound: 'res://platform_default',
-                    icon: 'res://icon'
-                }).then(function () {
-                    //logger.info("The notification has been set");
+                
+                cordova.plugins.notification.local.schedule({
+                    id: Math.floor((Math.random() * 10000) + 1),
+                    title: "תזכורת לביצוע משימה",
+                    at: date,
+                    text: task.from.name + ': ' + task.description,
+                    icon: 'res://icon',
+                    smallIcon: 'res://ic_popup_reminder',
+                    data: task ,
+                    actions: [
+                        {
+                            text: "קבע נודניק",
+                            icon: "res://ic_popup_reminder",
+                            val: 1
+                        },
+                        /*{
+                            text: "סמן כבוצע",
+                            /*icon: "res://btn_check_on",*/
+                           /* val: 2
+                        },*/
+                        {
+                            text: "עבור למשימה",
+                            icon: "res://ic_menu_set_as",
+                            val: 3
+                        }
+                    ]
                 });
-            }, false);
-            */
-
+                });
         };
+
+        var setSnoozeNotification = function (task, notificationId) {
+            document.addEventListener("deviceready", function () {
+
+                cordova.plugins.notification.local.update({
+                    id: notificationId,
+                    every: "10",
+                    actions: [
+                        {
+                            text: "הפסק נודניק",
+                            icon: "res://ic_popup_reminder",
+                            val: 4
+                        },
+                        /*{
+                            text: "סמן כבוצע",
+                            /*icon: "res://btn_check_on",*/
+                            /*val: 2
+                        },*/
+                        {
+                            text: "עבור למשימה",
+                            icon: "res://ic_menu_set_as",
+                            val: 3
+                        }
+                    ]
+                });
+            });
+        }
+
+        var stopSnoozeNotification = function (notificationId) {
+            document.addEventListener("deviceready", function () {
+                cordova.plugins.notification.local.cancel(notificationId);
+            });
+        }
+
+        document.addEventListener("deviceready", function () {
+            cordova.plugins.notification.local.on("click", function (notification) {
+                var task = JSON.parse(notification.data);
+                if (notification.actionClicked.val === 1) {
+                    setSnoozeNotification(task, notification.id);
+                    return;
+                }
+                /*if (notification.actionClicked.val === 2) {
+                    
+                }*/
+                if (notification.actionClicked.val === 3) {
+                    //alert(task._id);
+
+                    window.location = '#/task/' + task._id;
+                }
+                if (notification.actionClicked.val === 4) {
+                    stopSnoozeNotification(notification.id);
+                    return;
+                }
+                if (task !== undefined && task._id !== undefined) {
+                    window.location = '#/task/' + task._id;
+                }
+            });
+        }, false);
+
+        var showDatePicker = function () {
+            var deferred = $q.defer();
+            var options = {
+                date: new Date(),
+                minDate: new Date(),
+                mode: 'datetime', // or 'time'
+                allowOldDates: false,
+                allowFutureDates: true,
+                doneButtonLabel: 'אישור',
+                doneButtonColor: '#F2F3F4',
+                cancelButtonLabel: 'ביטול',
+                titleText: 'בחר תאריך ושעה',
+                cancelButtonColor: '#000000'
+            };
+
+            document.addEventListener("deviceready", function () {
+
+                $cordovaDatePicker.show(options).then(function (date) {
+                    deferred.resolve(date);
+                }, function (error) {
+                    alert(error);
+                });
+
+            }, false);
+
+            return deferred.promise;
+        }
 
         var showToast = function (info, duration) {
             document.addEventListener("deviceready", function () {
@@ -388,7 +489,8 @@
             getImagesPath: getImagesPath,
             takePicture: takePicture,
             cleanupAfterPictureTaken: cleanupAfterPictureTaken,
-            getAppVersion: getAppVersion
+            getAppVersion: getAppVersion,
+            showDatePicker: showDatePicker
         };
 
         return service;

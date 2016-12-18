@@ -263,6 +263,14 @@
             var a = 'target';
         }
 
+        vm.addAlert = function () {
+
+            cordovaPlugins.showDatePicker().then(function (date) {
+                cordovaPlugins.setLocalNotification(vm.task, date);
+            });
+
+            
+        }
         
         /*dropbox.getThumbnail(, 'w128h128')
                         .then(function (response) {

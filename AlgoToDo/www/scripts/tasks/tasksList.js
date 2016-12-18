@@ -253,6 +253,7 @@
         var setDoneTasks = function () {
             vm.doneTasks = $filter('doneTasks')(datacontext.getTaskList(), vm.user._id);
         }();
+
     }
 
 })();

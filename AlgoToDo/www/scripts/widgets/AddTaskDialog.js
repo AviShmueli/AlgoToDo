@@ -100,6 +100,7 @@
                     var taskListToAdd = createTasksList(vm.task, vm.selectedRecipients);
 
                     if (vm.taskHasImage === true) {
+                        cordovaPlugins.showToast("שולח, מעלה תמונה...", 100000);
                         dropbox.uploadNewImageToDropbox(vm.newImage.fileEntry.filesystem.root.nativeURL, vm.newImage.fileEntry.name, vm.newImage.fileName).then(function () {
                             saveNewTask(taskListToAdd);
                         });
@@ -124,10 +125,11 @@
                 cordovaPlugins.setBadge(count);
                 $mdDialog.hide();
 
-                if (vm.taskHasImage === true) {
+                if (vm.taskHasImage === true) {                 
                     storage.saveFileToStorage(response.data[0]._id, vm.newImage.fileName, vm.newImage.fileEntry.nativeURL).
                         then(function () { 
                             cordovaPlugins.cleanupAfterPictureTaken();
+                            window.plugins.toast.hide();
                         },
                         function (error) {
                         logger.error("error while trying to save File to Storage", error);

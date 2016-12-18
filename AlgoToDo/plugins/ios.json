@@ -36,6 +36,9 @@
         "cordova-plugin-screensize": {
             "PACKAGE_NAME": "com.algotodo.app"
         },
+        "cordova-plugin-statusbar": {
+            "PACKAGE_NAME": "com.algotodo.app"
+        },
         "cordova-plugin-vibration": {
             "PACKAGE_NAME": "com.algotodo.app"
         },
@@ -45,8 +48,10 @@
         "cordova-plugin-x-toast": {
             "PACKAGE_NAME": "com.algotodo.app"
         },
-        "phonegap-plugin-push": {
-            "SENDER_ID": "874351794059",
+        "cordova-plugin-local-notifications-db": {
+            "PACKAGE_NAME": "com.algotodo.app"
+        },
+        "cordova-plugin-datepicker": {
             "PACKAGE_NAME": "com.algotodo.app"
         }
     },

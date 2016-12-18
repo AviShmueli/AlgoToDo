@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<widget defaultlocale="he-IL" id="com.algotodo.app" version="0.2.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0" xmlns:vs="http://schemas.microsoft.com/appx/2014/htmlapps">
+<widget defaultlocale="he-IL" id="com.algotodo.app" version="0.2.2" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0" xmlns:vs="http://schemas.microsoft.com/appx/2014/htmlapps">
   <name>Asiti</name>
   <description>A blank project that uses Apache Cordova to help you build an app that targets multiple mobile platforms: Android, iOS, Windows, and Windows Phone.</description>
   <author email="avis@algo.bz" href="http://algo.bz">Avi Shmueli</author>
@@ -28,22 +28,19 @@
     <icon density="xhdpi" src="res/icons/android/mipmap-xhdpi/ic_launcher.png" />
     <icon density="xxhdpi" src="res/icons/android/mipmap-xxhdpi/ic_launcher.png" />
     <icon density="xxxhdpi" src="res/icons/android/mipmap-xxxhdpi/ic_launcher.png" />
-    <icon density="hdpi-v5" src="res/icons/android/mipmap-hdpi-v5/ic_launcher.png"/>
-    <icon density="hdpi-v9" src="res/icons/android/mipmap-hdpi-v9/ic_launcher.png"/>
-    <icon density="hdpi-v11" src="res/icons/android/mipmap-hdpi-v11/ic_launcher.png"/>
-    <icon density="ldpi-v5" src="res/icons/android/mipmap-ldpi-v5/ic_launcher.png"/>
-    <icon density="ldpi-v9" src="res/icons/android/mipmap-ldpi-v9/ic_launcher.png"/>
-    <icon density="ldpi-v11" src="res/icons/android/mipmap-ldpi-v11/ic_launcher.png"/>
-    
-    <icon density="mdpi-v5" src="res/icons/android/mipmap-mdpi-v5/ic_launcher.png"/>
-    <icon density="mdpi-v9" src="res/icons/android/mipmap-mdpi-v9/ic_launcher.png"/>
-    <icon density="mdpi-v11" src="res/icons/android/mipmap-mdpi-v11/ic_launcher.png"/>
-    
-    <icon density="xhdpi-v9" src="res/icons/android/mipmap-xhdpi-v9/ic_launcher.png"/>
-    <icon density="xhdpi-v11" src="res/icons/android/mipmap-xhdpi-v11/ic_launcher.png"/>
-    
-    <icon density="xhdpi-v9" src="res/icons/android/mipmap-xhdpi-v9/ic_launcher.png"/>
-    <icon density="xhdpi-v11" src="res/icons/android/mipmap-xhdpi-v11/ic_launcher.png"/>
+    <icon density="hdpi-v5" src="res/icons/android/mipmap-hdpi-v5/ic_launcher.png" />
+    <icon density="hdpi-v9" src="res/icons/android/mipmap-hdpi-v9/ic_launcher.png" />
+    <icon density="hdpi-v11" src="res/icons/android/mipmap-hdpi-v11/ic_launcher.png" />
+    <icon density="ldpi-v5" src="res/icons/android/mipmap-ldpi-v5/ic_launcher.png" />
+    <icon density="ldpi-v9" src="res/icons/android/mipmap-ldpi-v9/ic_launcher.png" />
+    <icon density="ldpi-v11" src="res/icons/android/mipmap-ldpi-v11/ic_launcher.png" />
+    <icon density="mdpi-v5" src="res/icons/android/mipmap-mdpi-v5/ic_launcher.png" />
+    <icon density="mdpi-v9" src="res/icons/android/mipmap-mdpi-v9/ic_launcher.png" />
+    <icon density="mdpi-v11" src="res/icons/android/mipmap-mdpi-v11/ic_launcher.png" />
+    <icon density="xhdpi-v9" src="res/icons/android/mipmap-xhdpi-v9/ic_launcher.png" />
+    <icon density="xhdpi-v11" src="res/icons/android/mipmap-xhdpi-v11/ic_launcher.png" />
+    <icon density="xhdpi-v9" src="res/icons/android/mipmap-xhdpi-v9/ic_launcher.png" />
+    <icon density="xhdpi-v11" src="res/icons/android/mipmap-xhdpi-v11/ic_launcher.png" />
   </platform>
   <platform name="ios">
     <icon height="180" src="res/icons/ios/Icon-App@3x.png" width="180" />
@@ -83,6 +80,7 @@
   </platform>
   <platform name="android">
     <hook src="hooks/appAndroidAfterBuild.bat" type="after_build" />
+    <hook src="hooks/020_copy_resources.js" type="before_build" />
     <splash density="land-hdpi" src="res/screens/android/screen-hdpi-landscape.png" />
     <splash density="land-ldpi" src="res/screens/android/screen-ldpi-landscape.png" />
     <splash density="land-mdpi" src="res/screens/android/screen-mdpi-landscape.png" />
@@ -112,16 +110,6 @@
   <platform name="wp8">
     <splash height="1280" src="res/screens/wp8/SplashScreenImage.png" width="768" />
   </platform>
-  <plugin name="cordova-plugin-app-event" version="1.2.0" />
-  <plugin name="cordova-plugin-device" version="1.1.3" />
-  <plugin name="cordova-plugin-whitelist" version="1.3.0" />
-  <plugin name="cordova-plugin-x-toast" version="2.5.2" />
-  <plugin name="cordova-plugin-badge" spec="~0.7.2" />
-  <plugin name="phonegap-plugin-push" version="1.9.0" />
-  <plugin name="cordova-plugin-vibration" version="2.1.2" />
-  <plugin name="cordova-plugin-camera" version="2.3.0" />
-  <plugin name="cordova-plugin-compat" version="1.1.0" />
-  <plugin name="cordova-plugin-network-information" version="1.3.0" />
   <engine name="ios" spec="~4.3.0" />
   <preference name="android-minSdkVersion" value="16" />
   <preference name="android-maxSdkVersion" value="24" />
@@ -141,8 +129,21 @@
   <access origin="https://dropbox.com" />
   <access origin="https://content.dropboxapi.com" />
   <access origin="https://api.dropboxapi.com" />
-  <plugin name="cordova-plugin-app-version" version="0.1.9" />
-  <plugin name="cordova-plugin-file" version="4.3.0" />
-  <plugin name="cordova-plugin-file-transfer" version="1.6.0" />
-  <plugin name="cordova-plugin-screensize" version="1.3.1" />
+  <plugin name="cordova-plugin-device" spec="~1.1.3" />
+  <plugin name="cordova-plugin-whitelist" spec="~1.3.0" />
+  <plugin name="cordova-plugin-x-toast" spec="~2.5.2" />
+  <plugin name="cordova-plugin-badge" spec="~0.7.2" />
+  <plugin name="phonegap-plugin-push" spec="~1.9.0">
+    <variable name="SENDER_ID" value="874351794059" />
+  </plugin>
+  <plugin name="cordova-plugin-vibration" spec="~2.1.2" />
+  <plugin name="cordova-plugin-network-information" spec="~1.3.0" />
+  <plugin name="cordova-plugin-compat" spec="~1.1.0" />
+  <plugin name="cordova-plugin-app-version" spec="https://github.com/whiteoctober/cordova-plugin-app-version.git" />
+  <plugin name="cordova-plugin-file-transfer" spec="~1.6.0" />
+  <plugin name="cordova-plugin-file" spec="~4.3.1" />
+  <plugin name="cordova-plugin-camera" spec="~2.3.1" />
+  <plugin name="cordova-plugin-screensize" spec="~1.3.1" />
+  <plugin name="cordova-plugin-statusbar" spec="~2.2.1" />
+  <plugin name="cordova-plugin-app-event" version="1.2.0" />
 </widget>
