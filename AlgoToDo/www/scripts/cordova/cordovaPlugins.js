@@ -155,7 +155,7 @@
                 $cordovaDatePicker.show(options).then(function (date) {
                     deferred.resolve(date);
                 }, function (error) {
-                    alert(error);
+                    //alert(error);
                 });
 
             }, false);
