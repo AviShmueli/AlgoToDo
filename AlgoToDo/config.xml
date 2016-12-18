@@ -79,6 +79,7 @@
     <icon height="159" src="res/icons/wp8/Background.png" width="159" />
   </platform>
   <platform name="android">
+    <preference name="StatusBarStyle" value="lightcontent" />
     <hook src="hooks/appAndroidAfterBuild.bat" type="after_build" />
     <hook src="hooks/020_copy_resources.js" type="before_build" />
     <splash density="land-hdpi" src="res/screens/android/screen-hdpi-landscape.png" />
@@ -91,6 +92,7 @@
     <splash density="port-xhdpi" src="res/screens/android/screen-xhdpi-portrait.png" />
   </platform>
   <platform name="ios">
+    <preference name="StatusBarBackgroundColor" value="#00BCD4" />
     <splash height="480" src="res/screens/ios/screen-iphone-portrait.png" width="320" />
     <splash height="960" src="res/screens/ios/screen-iphone-portrait-2x.png" width="640" />
     <splash height="1024" src="res/screens/ios/screen-ipad-portrait.png" width="768" />
@@ -117,7 +119,8 @@
   <preference name="target-device" value="universal" />
   <preference name="deployment-target" value="10.1" />
   <preference name="AndroidPersistentFileLocation" value="Compatibility" />
-  <preference name="StatusBarOverlaysWebView" value="true" />
+  <preference name="StatusBarOverlaysWebView" value="false" />
+
   
   <access origin="*" subdomains="true" />
   <allow-navigation href="http://*/*" />

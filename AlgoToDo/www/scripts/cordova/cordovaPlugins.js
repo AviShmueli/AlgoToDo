@@ -10,14 +10,16 @@
                               /*'$cordovaDialogs',*/ '$cordovaToast', '$cordovaPushV5',
                               '$cordovaBadge', '$cordovaDevice', '$log', '$mdToast',
                               '$cordovaVibration', '$cordovaNetwork', '$q', '$cordovaCamera',
-                              '$cordovaAppVersion', 'dropbox', 'storage', '$cordovaDatePicker'];
+                              '$cordovaAppVersion', 'dropbox', 'storage', '$cordovaDatePicker',
+                              '$cordovaStatusbar'];
 
     function cordovaPlugins($rootScope, datacontext, appConfig, $mdDialog,
                             $cordovaLocalNotification, /*$cordovaSms,*/ $window,
                             /*$cordovaDialogs,*/ $cordovaToast, $cordovaPushV5,
                             $cordovaBadge, $cordovaDevice, $log, $mdToast,
                             $cordovaVibration, $cordovaNetwork, $q, $cordovaCamera,
-                            $cordovaAppVersion, dropbox, storage, $cordovaDatePicker) {
+                            $cordovaAppVersion, dropbox, storage, $cordovaDatePicker,
+                            $cordovaStatusbar) {
 
         var self = this;
         self.appState = 'foreground';
@@ -33,6 +35,14 @@
         var getAppVersion = function () {
             return $cordovaAppVersion.getVersionNumber();
         }
+
+        var setStatusBarBackgroundColor = function () {
+            document.addEventListener("deviceready", function () {
+                if (cordova.platformId == 'ios') {
+                    StatusBar.backgroundColorByHexString("#00BCD43");
+                }
+            }, false);
+        }();
 
         var showToast = function (info, duration) {
             document.addEventListener("deviceready", function () {
