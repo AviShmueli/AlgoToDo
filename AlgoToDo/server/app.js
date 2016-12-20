@@ -121,7 +121,7 @@ var sendTaskViaApn = function(task, userUnDoneTaskCount, ApnRegistrationId, isUp
         note.badge = null;
         note.sound = null;
         note.body = null;
-        note.title = null;
+        note.title = undefined;
     }
     else {
         note.payload = { 'additionalData': {
