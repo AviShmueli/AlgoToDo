@@ -36,6 +36,11 @@
             return $cordovaAppVersion.getVersionNumber();
         }
 
+        var setStatusbarOverlays = function(){
+            $cordovaStatusbar.overlaysWebView(false);
+            window.plugin.statusbarOverlay.hide();
+        }
+
         var showToast = function (info, duration) {
             document.addEventListener("deviceready", function () {
                 $cordovaToast.show(info, duration ? duration : 'short', 'center')
@@ -543,7 +548,8 @@
             cleanupAfterPictureTaken: cleanupAfterPictureTaken,
             getAppVersion: getAppVersion,
             showDatePicker: showDatePicker,
-            cancelAllNotifications: cancelAllNotifications
+            cancelAllNotifications: cancelAllNotifications,
+            setStatusbarOverlays: setStatusbarOverlays
         };
 
         return service;

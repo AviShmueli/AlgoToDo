@@ -82,6 +82,8 @@
                 }, function (err) {
                     logger.error("error while trying to take a picture", err);
                 });
+
+                cordovaPlugins.setStatusbarOverlays();
             }, false);
         }
 

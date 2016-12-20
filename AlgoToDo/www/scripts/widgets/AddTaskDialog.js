@@ -172,7 +172,7 @@
             vm.taskHasImage = true;
             vm.takeingPic = true;
             document.addEventListener("deviceready", function () {
-                cordovaPlugins.takePicture(sourceType).then(function (fileUrl) {
+                cordovaPlugins.takePicture(sourceType).then(function (fileUrl) {                   
 
                     var image = document.getElementById('new-task-image');
                     image.src = fileUrl;
@@ -201,6 +201,7 @@
                 }, function (err) {
                     logger.error("error while trying to take a picture", err);
                 });
+                cordovaPlugins.setStatusbarOverlays();
             }, false);
         }
     }
