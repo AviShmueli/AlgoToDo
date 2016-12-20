@@ -118,10 +118,10 @@ var sendTaskViaApn = function(task, userUnDoneTaskCount, ApnRegistrationId, isUp
             taskId: task._id
         } };
         
-        note.badge = null;
+        /*note.badge = null;
         note.sound = null;
         note.body = null;
-        note.title = undefined;
+        note.title = undefined;*/
     }
     else {
         note.payload = { 'additionalData': {
