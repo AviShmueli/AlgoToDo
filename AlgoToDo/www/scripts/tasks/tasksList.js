@@ -285,8 +285,6 @@
             }
         }();
 
-
-
         vm.cancelAllNotifications = function (ev) {
             var confirm = $mdDialog.confirm()
                 .title('למחוק את כל ההתראות הקיימות?')
