@@ -29,6 +29,7 @@
         vm.uploadingImage = false;
         vm.taskHasImage = false;
         vm.newImage = {};
+        vm.emptyFileUrl = vm.imagesPath + '/images/upload-empty.png';
         
         function querySearch(query) {
             vm.showNoRecipientsSelectedError = false;
@@ -168,7 +169,8 @@
         };     
 
         vm.takePic = function (sourceType) {
-
+            vm.taskHasImage = true;
+            vm.takeingPic = true;
             document.addEventListener("deviceready", function () {
                 cordovaPlugins.takePicture(sourceType).then(function (fileUrl) {
 
@@ -176,7 +178,7 @@
                     image.src = fileUrl;
 
                     window.resolveLocalFileSystemURL(fileUrl, function success(fileEntry) {
-                        vm.taskHasImage = true;
+                        
 
                         var fileName = new Date().toISOString() + '.jpg';
 
@@ -193,7 +195,8 @@
                             fileName: fileName
                         };
 
-                        vm.task.comments.push(comment);                   
+                        vm.task.comments.push(comment);
+                        vm.takeingPic = false;
                     });
                 }, function (err) {
                     logger.error("error while trying to take a picture", err);

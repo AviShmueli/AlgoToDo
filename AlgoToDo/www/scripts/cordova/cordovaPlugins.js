@@ -193,7 +193,8 @@
                 if (notification.actionClicked !== undefined && notification.actionClicked.val !== undefined) {               
                     if (notification.actionClicked.val === 1) {
                         setSnoozeNotification(task, notification.id);
-                        showToast("נודניק נקבע לעוד 10 דקות", 2000)
+                        showToast("נודניק נקבע בהצלחה!", 2000);
+                        window.location = '#/task/' + task._id;
                         return;
                     }
                     if (notification.actionClicked.val === 3) {
@@ -201,6 +202,8 @@
                     }
                     if (notification.actionClicked.val === 4) {
                         cancelNotification(notification.id);
+                        showToast("הנודניק בוטל!", 2000);
+                        window.location = '#/task/' + task._id;
                         return;
                     }
                 }
@@ -316,6 +319,8 @@
 
                         datacontext.replaceTask(task);
                         //$rootScope.$apply();
+
+                        dropbox.deleteFile(comment.fileName);
                     });
                 })
                 .catch(function (error) {
@@ -340,6 +345,8 @@
                         $log.info("before nevigate", comment);
                         navigateToTaskPage(taskId, comment);
                         $log.info("after nevigate", comment);
+
+                        dropbox.deleteFile(comment.fileName);
                     });
                 })
                 .catch(function (error) {

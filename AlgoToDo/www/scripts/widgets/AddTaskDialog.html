@@ -45,7 +45,8 @@
             </div>
 
             <div class="image-wraper" layout layout-sm="column" ng-show="vm.taskHasImage">
-                <img id="new-task-image" src=""/>
+                <img id="new-task-image" ng-src="{{vm.emptyFileUrl}}"/>
+                <md-progress-circular md-mode="indeterminate" ng-show="vm.takeingPic" md-diameter="40px" class="md-accent md-hue-2"></md-progress-circular>
             </div>
 
             <!-- https://github.com/logbon72/angular-material-datetimepicker -->      

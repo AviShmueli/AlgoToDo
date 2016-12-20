@@ -133,7 +133,7 @@
                 comment.fileLocalPath = cordovaPlugins.getImagesPath() + "/images/upload-empty.png";
                 return;
             }
-            if (comment.fileLocalPath.indexOf("upload-empty") === -1) {
+            if (comment.fileLocalPath === undefined) { // && comment.fileLocalPath.indexOf("upload-empty") === -1
                 // if this is file you uploaded - the file will be in the cache
                 var dataDirectory = (cordova.platformId.toLowerCase() === 'ios') ? cordova.file.dataDirectory : cordova.file.externalDataDirectory;
                 var newPath = 'pictures/' + vm.taskId + '/';

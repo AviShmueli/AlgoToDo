@@ -85,8 +85,15 @@
             return blob;
         }
 
+        var deleteFile = function (fileName) {
+            self.dbx.filesDelete({ path: '/' + fileName }).then(function (s) {
+                var a = s;
+            });
+        }
+
         return {
             uploadFile: uploadFile,
+            deleteFile: deleteFile,
             downloadFile: downloadFile,
             getThumbnail: getThumbnail,
             getSharedLinkFile: getSharedLinkFile,
