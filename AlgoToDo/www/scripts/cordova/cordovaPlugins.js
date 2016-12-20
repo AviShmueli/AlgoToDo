@@ -10,16 +10,14 @@
                               /*'$cordovaDialogs',*/ '$cordovaToast', '$cordovaPushV5',
                               '$cordovaBadge', '$cordovaDevice', '$log', '$mdToast',
                               '$cordovaVibration', '$cordovaNetwork', '$q', '$cordovaCamera',
-                              '$cordovaAppVersion', 'dropbox', 'storage', '$cordovaDatePicker',
-                              '$cordovaStatusbar'];
+                              '$cordovaAppVersion', 'dropbox', 'storage', '$cordovaDatePicker'];
 
     function cordovaPlugins($rootScope, datacontext, appConfig, $mdDialog,
                             $cordovaLocalNotification, /*$cordovaSms,*/ $window,
                             /*$cordovaDialogs,*/ $cordovaToast, $cordovaPushV5,
                             $cordovaBadge, $cordovaDevice, $log, $mdToast,
                             $cordovaVibration, $cordovaNetwork, $q, $cordovaCamera,
-                            $cordovaAppVersion, dropbox, storage, $cordovaDatePicker,
-                            $cordovaStatusbar) {
+                            $cordovaAppVersion, dropbox, storage, $cordovaDatePicker) {
 
         var self = this;
         self.appState = 'foreground';
@@ -37,8 +35,7 @@
         }
 
         var setStatusbarOverlays = function(){
-            $cordovaStatusbar.overlaysWebView(false);
-            window.plugin.statusbarOverlay.hide();
+            //$cordovaStatusbar.overlaysWebView(false);
         }
 
         var showToast = function (info, duration) {

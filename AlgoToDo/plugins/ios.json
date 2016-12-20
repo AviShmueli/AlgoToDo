@@ -36,9 +36,6 @@
         "cordova-plugin-screensize": {
             "PACKAGE_NAME": "com.algotodo.app"
         },
-        "cordova-plugin-statusbar": {
-            "PACKAGE_NAME": "com.algotodo.app"
-        },
         "cordova-plugin-vibration": {
             "PACKAGE_NAME": "com.algotodo.app"
         },
