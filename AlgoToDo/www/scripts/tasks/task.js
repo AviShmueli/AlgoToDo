@@ -131,6 +131,7 @@
         var setFileLocalPath = function (comment) {
             if (!cordovaPlugins.isMobileDevice()) {
                 comment.fileLocalPath = cordovaPlugins.getImagesPath() + "/images/upload-empty.png";
+                return;
             }
             if (comment.fileLocalPath.indexOf("upload-empty") === -1) {
                 // if this is file you uploaded - the file will be in the cache
