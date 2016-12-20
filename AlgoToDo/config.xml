@@ -119,9 +119,7 @@
   <preference name="deployment-target" value="10.1" />
   <preference name="AndroidPersistentFileLocation" value="Compatibility" />
   <preference name="StatusBarOverlaysWebView" value="false" />
- <preference name="StatusBarBackgroundColor" value="#00CED1" />
-
-  
+  <preference name="StatusBarBackgroundColor" value="#5F9EA0" />
   <access origin="*" subdomains="true" />
   <allow-navigation href="http://*/*" />
   <allow-navigation href="https://*/*" />
@@ -153,4 +151,5 @@
   <plugin name="cordova-plugin-app-event" version="1.2.0" />
   <plugin name="cordova-plugin-datepicker" version="0.9.2" />
   <plugin name="cordova-plugin-local-notifications-db" version="0.8.4" />
+  <plugin name="cordova-plugin-local-notifications-db" version="0.8.4" src="https://github.com/DavidBriglio/cordova-plugin-local-notifications" />
 </widget>

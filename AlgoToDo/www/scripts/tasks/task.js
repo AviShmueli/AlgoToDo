@@ -108,6 +108,7 @@
             if (task.status === 'done') {
                 task.doneTime = new Date();
                 datacontext.removeAllTaskImagesFromCache(task);
+                cordovaPlugins.cancelNotification(task._id);
             }
             if (task.status === 'seen') {
                 task.seenTime = new Date();
@@ -115,10 +116,12 @@
 
             datacontext.updateTask(task).then(function (response) {
                 logger.success('המשימה עודכנה בהצלחה!', response.data);
-                vm.goBack();
+                
             }, function (error) {
                 logger.error('Error while tring to update task ', error);
             });
+
+            vm.goBack();
         };
 
         vm.galleryImages = [];
@@ -126,14 +129,17 @@
         vm.galleryImagesCounter = 0;
 
         var setFileLocalPath = function (comment) {
- 
-            // if this is file you uploaded - the file will be in the cache
-            var dataDirectory = (cordova.platformId.toLowerCase() === 'ios') ? cordova.file.dataDirectory : cordova.file.externalDataDirectory;
-            var newPath = 'pictures/' + vm.taskId + '/';
-            var src = dataDirectory + newPath + comment.fileName;
-            comment.fileLocalPath = src;
-            addImageToGallery(comment.fileName, src);
-
+            if (!cordovaPlugins.isMobileDevice()) {
+                comment.fileLocalPath = cordovaPlugins.getImagesPath() + "/images/upload-empty.png";
+            }
+            if (comment.fileLocalPath.indexOf("upload-empty") === -1) {
+                // if this is file you uploaded - the file will be in the cache
+                var dataDirectory = (cordova.platformId.toLowerCase() === 'ios') ? cordova.file.dataDirectory : cordova.file.externalDataDirectory;
+                var newPath = 'pictures/' + vm.taskId + '/';
+                var src = dataDirectory + newPath + comment.fileName;
+                comment.fileLocalPath = src;
+                addImageToGallery(comment.fileName, src);
+            }
             //else {
                 /*dropbox.getThumbnail(comment.fileName, 'w128h128')
                     .then(function (response) {
@@ -264,12 +270,10 @@
         }
 
         vm.addAlert = function () {
-
             cordovaPlugins.showDatePicker().then(function (date) {
+                vm.task.notificationId = Math.floor((Math.random() * 10000) + 1);
                 cordovaPlugins.setLocalNotification(vm.task, date);
-            });
-
-            
+            });         
         }
         
         /*dropbox.getThumbnail(, 'w128h128')

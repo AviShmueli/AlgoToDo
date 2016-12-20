@@ -32,11 +32,11 @@
         
         function querySearch(query) {
             vm.showNoRecipientsSelectedError = false;
-            /*
+            
             var matchesUsersFromCache = [];
 
             // get all users stored in the cache
-            var cachedUsers = datacontext.getAllCachedUsers().values();
+            var cachedUsers = datacontext.getAllCachedUsers();
             
             // search for match user
             //for (var user of cachedUsers) {
@@ -45,7 +45,7 @@
                 //}
             //}
 
-            for (i = 0; i < cachedUsers.length; i++) {
+            for (var i = 0; i < cachedUsers.length; i++) {
                 if (cachedUsers[i].name.includes(query)) {
                     matchesUsersFromCache.push(cachedUsers[i]);
                 }
@@ -55,16 +55,17 @@
             if (matchesUsersFromCache.length > 0) {
                 return matchesUsersFromCache;
             }
-            */
+            
             // if no users found in the cache, search in DB
             var deferred = $q.defer();
             datacontext.searchUsers(query).then(function (response) {
                 logger.success("search result: ", response.data);
-                //datacontext.addUsersToUsersCache(response.data);
-                angular.forEach(response.data, function (user) {
-                    user['avatarFullUrl'] = vm.imagesPath + user.avatarUrl;
-                });
-                deferred.resolve(response.data);
+                var usersList = response.data;
+                for (var i = 0; i < usersList.length; i++) {
+                    usersList[i]['avatarFullUrl'] = vm.imagesPath + usersList[i].avatarUrl;
+                }
+                datacontext.addUsersToUsersCache(usersList);
+                deferred.resolve(usersList);
             });
             return deferred.promise;
         }

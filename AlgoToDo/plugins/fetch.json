@@ -122,19 +122,19 @@
         "is_top_level": true,
         "variables": {}
     },
-    "cordova-plugin-local-notifications-db": {
+    "cordova-plugin-datepicker": {
         "source": {
             "type": "git",
-            "url": "https://github.com/DavidBriglio/cordova-plugin-local-notifications",
+            "url": "https://github.com/VitaliiBlagodir/cordova-plugin-datepicker.git",
             "subdir": "."
         },
         "is_top_level": true,
         "variables": {}
     },
-    "cordova-plugin-datepicker": {
+    "cordova-plugin-local-notifications-db": {
         "source": {
             "type": "git",
-            "url": "https://github.com/VitaliiBlagodir/cordova-plugin-datepicker.git",
+            "url": "https://github.com/DavidBriglio/cordova-plugin-local-notifications",
             "subdir": "."
         },
         "is_top_level": true,

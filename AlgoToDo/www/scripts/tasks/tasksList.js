@@ -7,13 +7,13 @@
 
     TasksListCtrl.$inject = [ 
         '$rootScope', '$scope', 'logger', '$location', 'cordovaPlugins',
-        '$mdMedia', '$mdBottomSheet','$filter',
+        '$mdMedia', '$mdBottomSheet','$filter', '$timeout',
         '$mdSidenav', '$mdDialog', 'datacontext', 'lodash',
         'socket', '$mdToast', 'moment', '$q', 'CMRESLogger'
     ];
 
     function TasksListCtrl($rootScope, $scope, logger, $location, cordovaPlugins,
-                            $mdMedia, $mdBottomSheet,$filter,
+                            $mdMedia, $mdBottomSheet,$filter, $timeout,
                             $mdSidenav, $mdDialog, datacontext, lodash,
                             socket, $mdToast, moment, $q, CMRESLogger) {
 
@@ -29,7 +29,6 @@
         vm.progressActivated = false;
         $rootScope.taskcount = 0;
         vm.signUpInProggress = true;
-        vm.topIndex = 'avi';
         vm.doneTasks = [];
 
         //CMRESLogger.info('hello world');
@@ -61,18 +60,7 @@
                 var count = datacontext.setMyTaskCount();
                 cordovaPlugins.setBadge(count);
             }
-        };
-
-        var checkIfUserSignIn = function () {
-            var user = datacontext.getUserFromLocalStorage();
-            if (user !== undefined) {
-                vm.user = user;
-                vm.login();
-            }
-            else {
-                window.location = '#/signUp';
-            }
-        };
+        };       
 
         vm.login = function () {
             // a css fix
@@ -170,30 +158,64 @@
             });
         };
 
+        vm.isDialogOpen = false;
+
         vm.showAdd = function (ev) {           
+            vm.isDialogOpen = true;
             $mdDialog.show({
                 controller: 'AddTaskDialogController',
                 controllerAs: 'vm',
                 templateUrl: 'scripts/widgets/AddTaskDialog.html',
                 targetEvent: ev,
                 fullscreen: true
+            }).then(function () {
+                vm.isDialogOpen = false;
             });
 
             document.addEventListener("deviceready", function () {
-                document.addEventListener("backbutton", backbuttonClickCallback, false);
+                document.addEventListener("backbutton", backbuttonClick_FromAddTask_Callback, false);
             }, false);
         };
 
-        var backbuttonClickCallback = function () {
+        var backbuttonClick_FromAddTask_Callback = function (e) {
+            e.preventDefault();
             $mdDialog.cancel();
-            document.removeEventListener("backbutton", backbuttonClickCallback, false);
-
+            vm.isDialogOpen = false;
+            document.removeEventListener("backbutton", backbuttonClick_FromAddTask_Callback, false);
         }
+
+        vm.exitApp = false;
+
+        var backbuttonClick_allways_Callback = function (e) {
+            if (vm.isDialogOpen) {
+                e.preventDefault();
+                return;
+                // do nothing - dialog will be closed
+            }
+            if (window.location.hash === '#/') {
+                e.preventDefault();
+                if (!vm.exitApp) {
+                    vm.exitApp = true;
+                    cordovaPlugins.showToast("הקש שוב ליציאה", 1000);
+                    $timeout(function () { vm.exitApp = false }, 1000);
+                } else {
+                    navigator.app.exitApp();
+                }
+            }
+            else {
+                window.history.back();
+            }
+        }
+
+        document.addEventListener("deviceready", function () {
+            document.addEventListener("backbutton", backbuttonClick_allways_Callback, false);
+        }, false);
 
         vm.setTaskStatus = function (task, newStatus) {
             task.status = newStatus;
             if (task.status === 'done') {
                 task.doneTime = new Date();
+                cordovaPlugins.cancelNotification(task._id);
             }
             if (task.status === 'seen') {
                 task.seenTime = new Date();
@@ -247,12 +269,38 @@
             var toastElement = angular.element(document.querySelectorAll('#' + toastId));
             $mdToast.hide(toastElement);
         }
-
-        checkIfUserSignIn();
         
         var setDoneTasks = function () {
             vm.doneTasks = $filter('doneTasks')(datacontext.getTaskList(), vm.user._id);
         }();
+
+        var checkIfUserSignIn = function () {
+            var user = datacontext.getUserFromLocalStorage();
+            if (user !== undefined) {
+                vm.user = user;
+                vm.login();
+            }
+            else {
+                window.location = '#/signUp';
+            }
+        }();
+
+        vm.cancelAllNotifications = function (ev) {
+            var confirm = $mdDialog.confirm()
+                .title('למחוק את כל ההתראות הקיימות?')
+                .textContent('פעולה זו תגרום למחיקת כל ההתראות הקיימות, ולא יהיה ניתן לשחזר אותן.')
+                .ariaLabel('Lucky day')
+                .targetEvent(ev)
+                .ok('מחק')
+                .cancel('בטל');
+
+            $mdDialog.show(confirm).then(function () {
+                cordovaPlugins.cancelAllNotifications();
+            }, function () {
+                
+            });
+            
+        }
 
     }
 

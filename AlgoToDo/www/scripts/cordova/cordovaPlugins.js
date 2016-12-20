@@ -36,14 +36,6 @@
             return $cordovaAppVersion.getVersionNumber();
         }
 
-        /*var setStatusBarBackgroundColor = function () {
-            document.addEventListener("deviceready", function () {
-                if (cordova.platformId == 'ios') {
-                    StatusBar.backgroundColorByHexString("#00BCD43");
-                }
-            }, false);
-        }();*/
-
         var showToast = function (info, duration) {
             document.addEventListener("deviceready", function () {
                 $cordovaToast.show(info, duration ? duration : 'short', 'center')
@@ -109,13 +101,15 @@
         var setLocalNotification = function (task, date) {
             if (!isMobileDevice()) return;
 
+            var notificationId = new Date(task.createTime).getTime();
+
             /*var now = new Date().getTime();
             var _10SecondsFromNow = new Date(now + 1 * 1000);*/
 
             document.addEventListener("deviceready", function () {
-                
-                cordova.plugins.notification.local.schedule({
-                    id: Math.floor((Math.random() * 10000) + 1),
+
+                $cordovaLocalNotification.schedule({
+                    id: notificationId,
                     title: "תזכורת לביצוע משימה",
                     at: date,
                     text: task.from.name + ': ' + task.description,
@@ -127,7 +121,9 @@
                         {
                             text: "קבע נודניק",
                             icon: "res://ic_popup_reminder",
-                            val: 1
+                            val: 1/*,
+                            foreground: false*/
+                            //activationMode: 'background'
                         },
                         /*{
                             text: "סמן כבוצע",
@@ -137,11 +133,13 @@
                         {
                             text: "עבור למשימה",
                             icon: "res://ic_menu_set_as",
-                            val: 3
+                            val: 3/*,
+                            foreground: true*/
                         }
                     ]
-                });
-                });
+                });                
+
+            });
         };
 
         var setSnoozeNotification = function (task, notificationId) {
@@ -150,15 +148,16 @@
                 var now = new Date().getTime();
                 var _10MinutsFromNow = new Date(now + 100 * 1000 * 10);
 
-                cordova.plugins.notification.local.update({
+                $cordovaLocalNotification.update({
                     id: notificationId,
-                    firstAt: _10MinutsFromNow,
-                    every: "10",
+                    /*firstAt: _10MinutsFromNow,*/
+                    every: 10,
                     actions: [
                         {
                             text: "הפסק נודניק",
                             icon: "res://ic_popup_reminder",
-                            val: 4
+                            val: 4/*,
+                            foreground: false*/
                         },
                         /*{
                             text: "סמן כבוצע",
@@ -168,41 +167,56 @@
                         {
                             text: "עבור למשימה",
                             icon: "res://ic_menu_set_as",
-                            val: 3
+                            val: 3/*,
+                            foreground: true*/
                         }
                     ]
                 });
             });
         }
 
-        var stopSnoozeNotification = function (notificationId) {
+        var cancelNotification = function (notificationId) {
             document.addEventListener("deviceready", function () {
-                cordova.plugins.notification.local.cancel(notificationId);
+                $cordovaLocalNotification.cancel(notificationId).
+                    then(function (s) {
+                        var a = s;
+
+                    }).catch(function (e) {
+                        var _e = e;
+                    });
             });
         }
 
-        document.addEventListener("deviceready", function () {
-            cordova.plugins.notification.local.on("click", function (notification) {
+        document.addEventListener("deviceready", function (e) {
+            cordova.plugins.notification.local.on('click', function (notification) {
                 var task = JSON.parse(notification.data);
-                if (notification.actionClicked.val === 1) {
-                    setSnoozeNotification(task, notification.id);
-                    return;
-                }
-                /*if (notification.actionClicked.val === 2) {
-                    
-                }*/
-                if (notification.actionClicked.val === 3) {
-                    window.location = '#/task/' + task._id;
-                }
-                if (notification.actionClicked.val === 4) {
-                    stopSnoozeNotification(notification.id);
-                    return;
+                if (notification.actionClicked !== undefined && notification.actionClicked.val !== undefined) {               
+                    if (notification.actionClicked.val === 1) {
+                        setSnoozeNotification(task, notification.id);
+                        showToast("נודניק נקבע לעוד 10 דקות", 2000)
+                        return;
+                    }
+                    if (notification.actionClicked.val === 3) {
+                        window.location = '#/task/' + task._id;
+                    }
+                    if (notification.actionClicked.val === 4) {
+                        cancelNotification(notification.id);
+                        return;
+                    }
                 }
                 if (task !== undefined && task._id !== undefined) {
                     window.location = '#/task/' + task._id;
                 }
             });
         }, false);
+
+        var cancelAllNotifications = function () {
+            document.addEventListener("deviceready", function (e) {
+                $cordovaLocalNotification.cancelAll().then(function (result) {
+                    var a = result;
+                });
+            }, false);
+        }
 
         /* ----- Push Notifications ----- */
 
@@ -290,15 +304,18 @@
         var handelNewTaskRecived = function (task, taskCount) {
             if (task.comments.length > 0) {
                 var comment = task.comments[0];
+
+                comment.fileLocalPath = getImagesPath() + "/images/upload-empty.png";
+                datacontext.addTaskToTaskList(task);
+                $rootScope.taskcount = taskCount;
+                showNewTaskToast(task._id, task.from.name);
+
                 dropbox.downloadFile(comment.fileName).then(function (response) {
                     storage.saveFileToStorage(task._id, comment.fileName, response.url).then(function (storageFilePath) {
                         comment.fileLocalPath = storageFilePath;
 
-                        datacontext.addTaskToTaskList(task);
-                        $rootScope.taskcount = taskCount;
-                        $rootScope.$apply();
-
-                        showNewTaskToast(task._id, task.from.name);
+                        datacontext.replaceTask(task);
+                        //$rootScope.$apply();
                     });
                 })
                 .catch(function (error) {
@@ -308,7 +325,7 @@
             else {
                 datacontext.addTaskToTaskList(task);
                 $rootScope.taskcount = taskCount;
-                $rootScope.$apply();
+                //$rootScope.$apply();
 
                 showNewTaskToast(task._id, task.from.name);
             }    
@@ -502,6 +519,7 @@
 
         var service = {
             setLocalNotification: setLocalNotification,
+            cancelNotification: cancelNotification,
             showToast: showToast,
             registerForPushNotifications: registerForPushNotifications,
             sendSmS: sendSmS,
@@ -517,7 +535,8 @@
             takePicture: takePicture,
             cleanupAfterPictureTaken: cleanupAfterPictureTaken,
             getAppVersion: getAppVersion,
-            showDatePicker: showDatePicker
+            showDatePicker: showDatePicker,
+            cancelAllNotifications: cancelAllNotifications
         };
 
         return service;

@@ -1,6 +1,9 @@
 * {
     -webkit-tap-highlight-color: rgba(0,0,0,0);
 }
+.md-dialog-container{
+    direction: rtl;
+}
 .input-message-validate{
     padding-right: 0;
     color: rgb(221,44,0);

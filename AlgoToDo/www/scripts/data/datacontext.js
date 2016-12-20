@@ -14,7 +14,7 @@
         
         var self = this;
         self.$storage = $localStorage;
-        //self.$storage.usersCache = {};//new Map();
+        self.$storage.usersCache = [];//new Map();
 
         var saveNewTasks = function(tasks) {
 
@@ -83,8 +83,6 @@
             if (index !== -1) {
                 self.$storage.tasksList[index] = task;
             }
-            //var foundIndex = self.$storage.tasksList.findIndex(x => x._id === task._id);
-            //self.$storage.tasksList[foundIndex] = task;
         };
         
         var saveUserToLocalStorage = function (user) {
@@ -124,6 +122,16 @@
         };
 
         var addUsersToUsersCache = function (usersList) {
+
+            //self.$storage.usersCache = self.$storage.usersCache.concat(usersList);
+            
+            var usersCache = self.$storage.usersCache;
+            for (var i = 0; i < usersList.length; i++) {
+                if (arrayObjectIndexOf(usersCache, '_id', usersList[i]._id) === -1) {
+                    usersCache.push(usersList[i]);
+                }
+            }
+            
            /* _.each(usersList, function (user) {
                 if (!self.$storage.usersCache.has(user._id)) {
                     self.$storage.usersCache.set(user._id, user);
@@ -132,7 +140,7 @@
         }
         
         var getAllCachedUsers = function () {
-            //return self.$storage.usersCache;
+            return self.$storage.usersCache;
         }
 
         var checkIfUserExist = function (user) {

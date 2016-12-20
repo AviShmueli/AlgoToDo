@@ -14,7 +14,8 @@
             scope: {
                 'user': '=',
                 'imagesPath': '=',
-                'logOff': '&'
+                'logOff': '&',
+                'cancelAllNotifications': '&'
             }
         };
 
@@ -24,6 +25,7 @@
             vm.imagesPath = $scope.imagesPath;
             vm.user = $scope.user;
             vm.logOff = $scope.logOff;
+            vm.cancelAllNotifications = $scope.cancelAllNotifications;
             vm.appVersion = '';
 
             document.addEventListener("deviceready", function () {
@@ -31,20 +33,6 @@
                     vm.appVersion = version;
                 });
             }, false);
-
-            vm.menu = [{
-                link: '',
-                title: 'דוחות',
-                icon: 'dashboard'
-            }, {
-                link: '',
-                title: 'עובדים',
-                icon: 'group'
-            }, {
-                link: '',
-                title: 'הודעות',
-                icon: 'message'
-            }];
 
             vm.admin = [{
                 link: '',
