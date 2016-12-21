@@ -47,7 +47,7 @@
             //}
 
             for (var i = 0; i < cachedUsers.length; i++) {
-                if (cachedUsers[i].name.includes(query)) {
+                if (cachedUsers[i].name.indexOf(query) !== -1) {
                     matchesUsersFromCache.push(cachedUsers[i]);
                 }
             }
