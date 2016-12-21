@@ -239,7 +239,7 @@ var sendTaskViaGcm = function (task, userUnDoneTaskCount, regToken, isUpdate) {
                 },
                 title: "משימה חדשה מ" + task.from.name,
                 sound: 'default',
-                icon: 'www/images/icon.png',
+                icon: 'www/images/asiti-logo.png',
                 body: task.description,
                 badge: userUnDoneTaskCount
             }
