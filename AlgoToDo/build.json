@@ -1,9 +1,9 @@
 {
   "android": {
     "release": {
-      "keystore": "c:\\my-release-key.keystore",
+      "keystore": "c:/dev/algotodo/asiti-release-key.keystore",
       "storePassword": "avi3011algo",
-      "alias": "avis",
+      "alias": "asiti-key",
       "password": "avi3011algo",
       "keystoreType": ""
     }

@@ -1,7 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <widget defaultlocale="he-IL" id="com.algotodo.app" version="0.2.2" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0" xmlns:vs="http://schemas.microsoft.com/appx/2014/htmlapps">
   <name>Asiti</name>
-  <description>A blank project that uses Apache Cordova to help you build an app that targets multiple mobile platforms: Android, iOS, Windows, and Windows Phone.</description>
+  <description>מערכת לסיוע בביצוע משימות
+
+** האפליקציה נמצאת בגרסת אלפא. לא מיועדת עדיין לשימוש</description>
   <author email="avis@algo.bz" href="http://algo.bz">Avi Shmueli</author>
   <content src="index.html" />
   <vs:features />
@@ -43,21 +45,21 @@
     <icon density="xhdpi-v11" src="res/icons/android/mipmap-xhdpi-v11/ic_launcher.png" />
   </platform>
   <platform name="ios">
-    <icon height="180" src="res/icons/ios/Icon-App@3x.png" width="180" />
-    <icon height="60" src="res/icons/ios/Icon-App.png" width="60" />
-    <icon height="120" src="res/icons/ios/Icon-App@2x.png" width="120" />
-    <icon height="76" src="res/icons/ios/Icon-App-iPad.png" width="76" />
-    <icon height="152" src="res/icons/ios/Icon-App-iPad@2x.png" width="152" />
-    <icon height="40" src="res/icons/ios/Icon-Spotlight.png" width="40" />
-    <icon height="80" src="res/icons/ios/Icon-Spotlight@2x.png" width="80" />
-    <icon height="57" src="res/icons/ios/Icon-App.png" width="57" />
-    <icon height="114" src="res/icons/ios/Icon-App@2x.png" width="114" />
-    <icon height="72" src="res/icons/ios/Icon-App.png" width="72" />
-    <icon height="144" src="res/icons/ios/Icon-App@2x.png" width="144" />
-    <icon height="29" src="res/icons/ios/Icon-Spotlight-iPhone-6.png" width="29" />
-    <icon height="58" src="res/icons/ios/Icon-Settings.png" width="58" />
-    <icon height="50" src="res/icons/ios/Icon-App.png" width="50" />
-    <icon height="100" src="res/icons/ios/Icon-App@2x.png" width="100" />
+    <icon height="180" src="res/icons/ios/Icon-App-60x60@3x.png" width="180" />
+    <icon height="60" src="res/icons/ios/Icon-App-60x60@1x.png" width="60" />
+    <icon height="120" src="res/icons/ios/Icon-App-40x40@3x.png" width="120" />
+    <icon height="76" src="res/icons/ios/Icon-App-76x76@1x.png" width="76" />
+    <icon height="152" src="res/icons/ios/Icon-App-76x76@2x.png" width="152" />
+    <icon height="40" src="res/icons/ios/Icon-App-40x40@1x.png" width="40" />
+    <icon height="80" src="res/icons/ios/Icon-App-40x40@2x.png" width="80" />
+    <icon height="57" src="res/icons/ios/Icon-App-57x57@1x.png" width="57" />
+    <icon height="114" src="res/icons/ios/Icon-App-57x57@2x.png" width="114" />
+    <icon height="72" src="res/icons/ios/Icon-App-72x72@1x.png" width="72" />
+    <icon height="144" src="res/icons/ios/Icon-App-72x72@2x.png" width="144" />
+    <icon height="29" src="res/icons/ios/Icon-App-29x29@1x.png" width="29" />
+    <icon height="58" src="res/icons/ios/Icon-App-29x29@2x.png" width="58" />
+    <icon height="50" src="res/icons/ios/Icon-Small-50x50@1x.png" width="50" />
+    <icon height="100" src="res/icons/ios/Icon-Small-50x50@2x.png" width="100" />
   </platform>
   <platform name="windows">
     <icon height="150" src="res/icons/windows/Square150x150Logo.scale-100.png" width="150" />
