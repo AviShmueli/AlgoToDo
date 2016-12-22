@@ -9,13 +9,15 @@
         '$rootScope', '$scope', 'logger', '$location', 'cordovaPlugins',
         '$mdMedia', '$mdBottomSheet','$filter', '$timeout',
         '$mdSidenav', '$mdDialog', 'datacontext', 'lodash',
-        'socket', '$mdToast', 'moment', '$q', 'CMRESLogger'
+        'socket', '$mdToast', 'moment', '$q', 'CMRESLogger',
+        'pushNotifications', 'localNotifications'
     ];
 
     function TasksListCtrl($rootScope, $scope, logger, $location, cordovaPlugins,
                             $mdMedia, $mdBottomSheet,$filter, $timeout,
                             $mdSidenav, $mdDialog, datacontext, lodash,
-                            socket, $mdToast, moment, $q, CMRESLogger) {
+                            socket, $mdToast, moment, $q, CMRESLogger,
+                            pushNotifications, localNotifications) {
 
         var vm = this;
 
@@ -77,8 +79,8 @@
             // register for push notifications
             if (cordovaPlugins.isMobileDevice()) {
                 document.addEventListener("deviceready", function () {
-                    cordovaPlugins.startListening();
-                    cordovaPlugins.onNotificationReceived();
+                    pushNotifications.startListening();
+                    pushNotifications.onNotificationReceived();
                     if (angular.equals({}, datacontext.getDeviceDetailes())) {
                         datacontext.setDeviceDetailes(cordovaPlugins.getDeviceDetails(),cordova.file.applicationDirectory);
                     }
@@ -215,7 +217,7 @@
             task.status = newStatus;
             if (task.status === 'done') {
                 task.doneTime = new Date();
-                cordovaPlugins.cancelNotification(task._id);
+                localNotifications.cancelNotification(task._id);
             }
             if (task.status === 'seen') {
                 task.seenTime = new Date();

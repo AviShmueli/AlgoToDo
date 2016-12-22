@@ -49,6 +49,7 @@ app.use(express.static('../www'));
 app.use(express.static('../bower_components'));
 app.use(express.static('../node_modules'));
 
+
 /* ----- Loggly ------*/
 
 
@@ -174,7 +175,7 @@ var sendCommentViaApn = function(comment, task, ApnRegistrationId){
                     };
     //note.payload = task ;
     note.topic = "com.algotodo.app";
-    note.body =  comment.text !== '' ? "💬" + comment.text : "📷" + " תמונה";
+    note.body =  comment.text !== '' ? "💬" + comment.text : "  " + " תמונה";
     note.title = "תגובה חדשה מ" + comment.from.name;
     note.contentAvailable = 1;
     
@@ -239,7 +240,7 @@ var sendTaskViaGcm = function (task, userUnDoneTaskCount, regToken, isUpdate) {
                 },
                 title: "משימה חדשה מ" + task.from.name,
                 sound: 'default',
-                icon: 'www/images/asiti-logo.png',
+                icon: 'www/images/asiti-small-icon.png',
                 body: task.description,
                 badge: userUnDoneTaskCount
             }
@@ -247,7 +248,7 @@ var sendTaskViaGcm = function (task, userUnDoneTaskCount, regToken, isUpdate) {
             
         message.addData('notId', task.from._id);
         message.addData('content-available', '1');
-        message.addData('image', 'www/images/algologo1.png');
+        message.addData('image', 'www/images/asiti-logo.png');
         message.addData('style', 'inbox');
         message.addData('summaryText', ' יש לך %n% משימות חדשות');
     }

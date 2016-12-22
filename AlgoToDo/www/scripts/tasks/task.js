@@ -5,15 +5,16 @@
         .module('app.tasks')
         .controller('taskCtrl', taskCtrl);
 
-    taskCtrl.$inject = [
-        '$rootScope', '$scope', 'logger', '$q', 'storage',
+    taskCtrl.$inject = ['$rootScope', '$scope', 'logger', '$q', 'storage',
          'datacontext', '$routeParams', '$window', 'moment',
-         'socket', 'cordovaPlugins', 'dropbox', 'appConfig'
+         'socket', 'cordovaPlugins', 'dropbox', 'appConfig',
+         'localNotifications'
     ];
 
     function taskCtrl($rootScope, $scope, logger, $q, storage,
                       datacontext, $routeParams, $window, moment,
-                      socket, cordovaPlugins, dropbox, appConfig) {
+                      socket, cordovaPlugins, dropbox, appConfig,
+                      localNotifications) {
 
         var vm = this;
 
@@ -110,7 +111,7 @@
             if (task.status === 'done') {
                 task.doneTime = new Date();
                 datacontext.removeAllTaskImagesFromCache(task);
-                cordovaPlugins.cancelNotification(task._id);
+                localNotifications.cancelNotification(task._id);
             }
             if (task.status === 'seen') {
                 task.seenTime = new Date();
@@ -275,7 +276,7 @@
         vm.addAlert = function () {
             cordovaPlugins.showDatePicker().then(function (date) {
                 vm.task.notificationId = Math.floor((Math.random() * 10000) + 1);
-                cordovaPlugins.setLocalNotification(vm.task, date);
+                localNotifications.setLocalNotification(vm.task, date);
             });         
         }
         

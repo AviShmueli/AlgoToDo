@@ -37,7 +37,7 @@ md-chips .md-chip-input-container{
 }
 .add-comment-footer md-toolbar,
 .task-toolbar{
-    background-color: transparent !important;
+    /*background-color: transparent !important;*/
 }
 .add-comment-footer .md-errors-spacer {
     min-height: 0;

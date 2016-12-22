@@ -18,9 +18,9 @@
             }
         };
 */
-    signUpCtrl.$inject = ['$scope', 'datacontext', 'logger', 'cordovaPlugins', '$q'];
+    signUpCtrl.$inject = ['$scope', 'datacontext', 'logger', 'cordovaPlugins', '$q', 'pushNotifications'];
 
-    function signUpCtrl($scope, datacontext, logger, cordovaPlugins, $q) {
+    function signUpCtrl($scope, datacontext, logger, cordovaPlugins, $q, pushNotifications) {
             var vm = this;
 
             vm.inProgress = false;
@@ -87,8 +87,8 @@
                         vm.user.device = cordovaPlugins.getDeviceDetails();
                         datacontext.setDeviceDetailes(vm.user.device, cordova.file.applicationDirectory);
 
-                        cordovaPlugins.initializePushV5().then(function () {
-                            cordovaPlugins.registerForPushNotifications().then(function (registrationId) {
+                        pushNotifications.initializePushV5().then(function () {
+                            pushNotifications.registerForPushNotifications().then(function (registrationId) {
 
                                 if (vm.user.device.platform === 'iOS') {
                                     vm.user.ApnRegistrationId = registrationId;
@@ -121,8 +121,8 @@
             var registerUserForPushService = function () {
                 var deferred = $q.defer();
 
-                cordovaPlugins.initializePushV5().then(function () {
-                    cordovaPlugins.registerForPushNotifications().then(function (registrationId) {
+                pushNotifications.initializePushV5().then(function () {
+                    pushNotifications.registerForPushNotifications().then(function (registrationId) {
                         deferred.resolve(registrationId);                        
                     });
                 }, function (error) {

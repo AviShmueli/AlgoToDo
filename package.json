@@ -8,6 +8,7 @@
   "dependencies": {
     "apn": "^2.1.2",
     "body-parser": "^1.15.2",
+    "child_process": "^1.0.2",
     "cookie-parser": "^1.4.3",
     "ejs": "^2.5.1",
     "express": "^4.14.0",
