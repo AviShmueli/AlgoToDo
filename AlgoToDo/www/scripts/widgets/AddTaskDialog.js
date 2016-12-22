@@ -100,8 +100,8 @@
                     }
 
                     var taskListToAdd = createTasksList(vm.task, vm.selectedRecipients);
-
-                    if (vm.taskHasImage === true) {
+                    var isTaskFromMeToMe = (taskListToAdd.length === 1 && taskListToAdd[0].from._id === taskListToAdd[0].to._id)
+                    if (vm.taskHasImage === true && !isTaskFromMeToMe) {
                         cordovaPlugins.showToast("שולח, מעלה תמונה...", 100000);
                         dropbox.uploadNewImageToDropbox(vm.newImage.fileEntry.filesystem.root.nativeURL, vm.newImage.fileEntry.name, vm.newImage.fileName).then(function () {
                             saveNewTask(taskListToAdd);
@@ -179,8 +179,7 @@
 
                     window.resolveLocalFileSystemURL(fileUrl, function success(fileEntry) {
                         
-
-                        var fileName = new Date().toISOString() + '.jpg';
+                        var fileName = new Date().toISOString().replace(/:/g, "_") + '.jpg';
 
                         vm.newImage.fileEntry = fileEntry
                         vm.newImage.fileName = fileName;

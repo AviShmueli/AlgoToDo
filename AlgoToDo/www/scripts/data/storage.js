@@ -66,10 +66,15 @@
             return deferred.promise;
         }
 
+        var checkIfFileExists = function (folder, file) {
+            return $cordovaFile.checkFile(encodeURI(folder), encodeURI(file));
+        }
+
         return {
             saveFileToStorage: saveFileToStorage,
             getFileFromStorage: getFileFromStorage,
-            moveFileToAppFolder: moveFileToAppFolder
+            moveFileToAppFolder: moveFileToAppFolder,
+            checkIfFileExists: checkIfFileExists
         };
 
     }

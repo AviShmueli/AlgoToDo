@@ -119,10 +119,17 @@
                 };
             }
             else {
-                params = {
-                    queryString: string,
-                    userCliqaId: self.$storage.user.cliqa._id
-                };
+                if (self.$storage.user.cliqot !== undefined && self.$storage.user.cliqot[0] !== undefined) {
+                    params = {
+                        queryString: string,
+                        userCliqaId: self.$storage.user.cliqot[0]._id
+                    };
+                }
+                else {
+                    params = {
+                        queryString: string
+                    };
+                }
             }
             var req = {
                 method: 'GET',

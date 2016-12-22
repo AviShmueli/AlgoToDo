@@ -279,8 +279,23 @@
         var checkIfUserSignIn = function () {
             var user = datacontext.getUserFromLocalStorage();
             if (user !== undefined) {
-                vm.user = user;
-                vm.login();
+
+                // todo: remove this if in the next releas
+                if (user.cliqot === undefined) {
+                    datacontext.checkIfUserExist(user).then(function (response) {
+                        var newUser = response.data;
+
+                        datacontext.saveUserToLocalStorage(newUser);
+                        vm.user = newUser;
+                        vm.login();
+                    }, function (error) {
+                        logger.error("error while trying to check If User Exist", error);
+                    });
+                }
+                else {
+                    vm.user = user;
+                    vm.login();
+                }
             }
             else {
                 window.location = '#/signUp';

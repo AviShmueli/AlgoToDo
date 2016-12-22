@@ -104,20 +104,6 @@
                 datacontext.addTaskToTaskList(task);
                 $rootScope.taskcount = taskCount;
                 showNewTaskToast(task._id, task.from.name);
-
-                dropbox.downloadFile(comment.fileName).then(function (response) {
-                    storage.saveFileToStorage(task._id, comment.fileName, response.url).then(function (storageFilePath) {
-                        comment.fileLocalPath = storageFilePath;
-
-                        datacontext.replaceTask(task);
-                        //$rootScope.$apply();
-
-                        dropbox.deleteFile(comment.fileName);
-                    });
-                })
-                .catch(function (error) {
-                    $log.error("error while trying to download file from dropbox", error);
-                });
             }
             else {
                 datacontext.addTaskToTaskList(task);
@@ -130,20 +116,9 @@
 
         var handelNewCommentRecived = function (taskId, comment) {
             if (comment.fileName !== undefined) {
-                dropbox.downloadFile(comment.fileName).then(function (response) {
-                    storage.saveFileToStorage(taskId, comment.fileName, response.url).then(function (storageFilePath) {
-                        comment.fileLocalPath = storageFilePath;
-                        datacontext.addCommentToTask(taskId, comment);
-                        $log.info("before nevigate", comment);
-                        navigateToTaskPage(taskId, comment);
-                        $log.info("after nevigate", comment);
-
-                        dropbox.deleteFile(comment.fileName);
-                    });
-                })
-                .catch(function (error) {
-                    $log.error("error while trying to download file from dropbox", error);
-                });
+                comment.fileLocalPath = device.getImagesPath() + "/images/upload-empty.png";
+                datacontext.addCommentToTask(taskId, comment);
+                navigateToTaskPage(taskId, comment);                
             }
             else {
                 datacontext.addCommentToTask(taskId, comment);

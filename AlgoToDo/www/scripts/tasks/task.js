@@ -51,7 +51,7 @@
 
                     window.resolveLocalFileSystemURL(fileUrl, function success(fileEntry) {
 
-                        var fileName = new Date().toISOString() + '.jpg';
+                        var fileName = new Date().toISOString().replace(/:/g, "_") + '.jpg';
                         //var dataDirectory = (cordova.platformId.toLowerCase() === 'ios') ? cordova.file.dataDirectory : cordova.file.externalDataDirectory;
                         //var newPath = 'pictures/' + vm.taskId + '/';
 
@@ -72,9 +72,14 @@
                             vm.task.comments.push(comment);
                             addImageToGallery(comment.fileName, comment.fileLocalPath);
 
-                            dropbox.uploadNewImageToDropbox(fileEntry.filesystem.root.nativeURL, fileEntry.name, fileName).then(function () {
+                            if (vm.task.from._id !== vm.task.to._id) {                          
+                                dropbox.uploadNewImageToDropbox(fileEntry.filesystem.root.nativeURL, fileEntry.name, fileName).then(function () {
+                                    datacontext.newComment(vm.task._id, tempComment);
+                                });
+                            }
+                            else {
                                 datacontext.newComment(vm.task._id, tempComment);
-                            });
+                            }
                             camera.cleanupAfterPictureTaken();
                         }, function (error) {
                             logger.error("error while trying to save File to Storage", error);
@@ -136,13 +141,46 @@
                 comment.fileLocalPath = device.getImagesPath() + "/images/upload-empty.png";
                 return;
             }
-            if (comment.fileLocalPath === undefined) { // && comment.fileLocalPath.indexOf("upload-empty") === -1
+
+            if (comment.fileLocalPath !== undefined && comment.fileLocalPath.indexOf("upload-empty") !== -1) {
+                dropbox.downloadFile(comment.fileName).then(function (response) {
+                    storage.saveFileToStorage(vm.task._id, comment.fileName, response.url).then(function (storageFilePath) {
+                        comment.fileLocalPath = storageFilePath;
+                        addImageToGallery(comment.fileName, storageFilePath);
+
+                        dropbox.deleteFile(comment.fileName);
+                    });
+                })
+                .catch(function (error) {
+                    $log.error("error while trying to download file from dropbox", error);
+                });
+            }
+
+            if (comment.fileLocalPath === undefined) { // && 
                 // if this is file you uploaded - the file will be in the cache
                 var dataDirectory = (cordova.platformId.toLowerCase() === 'ios') ? cordova.file.dataDirectory : cordova.file.externalDataDirectory;
                 var newPath = 'pictures/' + vm.taskId + '/';
                 var src = dataDirectory + newPath + comment.fileName;
-                comment.fileLocalPath = src;
-                addImageToGallery(comment.fileName, src);
+
+                storage.checkIfFileExists(dataDirectory + newPath, comment.fileName).then(function (success) {
+                    comment.fileLocalPath = src;
+                    addImageToGallery(comment.fileName, src);
+                }, function (error) {
+                    comment.fileLocalPath = device.getImagesPath() + "/images/upload-empty.png";
+                    dropbox.downloadFile(comment.fileName).then(function (response) {
+                        storage.saveFileToStorage(vm.task._id, comment.fileName, response.url).then(function (storageFilePath) {
+                            comment.fileLocalPath = storageFilePath;
+                            addImageToGallery(comment.fileName, storageFilePath);
+
+                            dropbox.deleteFile(comment.fileName);
+                        });
+                    })
+                    .catch(function (error) {
+                        $log.error("error while trying to download file from dropbox", error);
+                    });
+                });
+
+                
             }
             //else {
                 /*dropbox.getThumbnail(comment.fileName, 'w128h128')
