@@ -240,7 +240,7 @@ var sendTaskViaGcm = function (task, userUnDoneTaskCount, regToken, isUpdate) {
                 },
                 title: "משימה חדשה מ" + task.from.name,
                 sound: 'default',
-                icon: 'res:///ic_menu_paste_holo_light',
+                icon: 'res://ic_menu_paste_holo_light',
                 body: task.description,
                 badge: userUnDoneTaskCount
             }
@@ -284,8 +284,8 @@ var sendCommentViaGcm = function (comment, task, regToken) {
             },
             title: "תגובה חדשה מ" + comment.from.name,
             sound: 'default',
-            icon: 'res:///ic_menu_start_conversation',
-            body: comment.text !== '' ?  comment.text : "📷" + " תמונה"
+            icon: 'res://ic_menu_start_conversation',
+            body: comment.text !== '' ?  comment.text : "📷 " + " תמונה"
         }
     });
 
