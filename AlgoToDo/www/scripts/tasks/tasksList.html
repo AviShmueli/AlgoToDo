@@ -83,6 +83,9 @@
                                 <div layout="row" style="font-size: 14px">
                                     {{item.description}}
                                 </div>
+                                <div layout="row" layout-align="end end" ng-if="vm.taskHasAttachment(item)">
+                                    <ng-md-icon icon="attachment" class="icon-fill" size="20"></ng-md-icon>
+                                </div>
                             </a>
                             <md-divider md-inset ng-if="!$last"></md-divider>
                         </md-list-item>
@@ -116,6 +119,10 @@
                                 </div>
                                 <div layout="row" style="font-size: 14px;">
                                     {{item.description}}
+                                </div>
+
+                                <div layout="row" layout-align="end end" ng-if="vm.taskHasAttachment(item)">
+                                    <ng-md-icon icon="attachment" class="icon-fill" size="20"></ng-md-icon>
                                 </div>
                             </a>
                             <md-button class="md-fab md-mini md-icon-button md-secondary" style="background-color: rgba(105, 178, 137, 0.95);" ng-click="vm.setTaskStatus(item, 'done')" aria-label="done">

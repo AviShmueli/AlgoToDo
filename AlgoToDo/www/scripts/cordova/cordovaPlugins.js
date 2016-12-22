@@ -150,30 +150,41 @@
                 var now = new Date().getTime();
                 var _10MinutsFromNow = new Date(now + 100 * 1000 * 10);
 
-                $cordovaLocalNotification.update({
-                    id: notificationId,
-                    /*firstAt: _10MinutsFromNow,*/
-                    every: 10,
-                    actions: [
-                        {
-                            text: "הפסק נודניק",
-                            icon: "res://ic_popup_reminder",
-                            val: 4/*,
+                $cordovaLocalNotification.cancel(notificationId).
+                    then(function (s) {
+                        $cordovaLocalNotification.schedule({
+                            id: notificationId,
+                            title: "תזכורת לביצוע משימה",
+                            text: task.from.name + ': ' + task.description,
+                            icon: 'res://icon',
+                            smallIcon: 'res://ic_popup_reminder',
+                            data: task,
+                            headsup: true,
+                            at: _10MinutsFromNow,
+                            every: 10,
+                            actions: [
+                                {
+                                    text: "הפסק נודניק",
+                                    icon: "res://ic_popup_reminder",
+                                    val: 4/*,
                             foreground: false*/
-                        },
-                        /*{
-                            text: "סמן כבוצע",
-                            /*icon: "res://btn_check_on",*/
-                            /*val: 2
-                        },*/
-                        {
-                            text: "עבור למשימה",
-                            icon: "res://ic_menu_set_as",
-                            val: 3/*,
+                                },
+                                /*{
+                                    text: "סמן כבוצע",
+                                    /*icon: "res://btn_check_on",*/
+                                    /*val: 2
+                                },*/
+                                {
+                                    text: "עבור למשימה",
+                                    icon: "res://ic_menu_set_as",
+                                    val: 3/*,
                             foreground: true*/
-                        }
-                    ]
-                });
+                                }
+                            ]
+                        });
+                    }).catch(function (e) {
+                        var _e = e;
+                    });                
             });
         }
 

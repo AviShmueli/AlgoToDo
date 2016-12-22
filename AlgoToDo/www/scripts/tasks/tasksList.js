@@ -302,6 +302,17 @@
             
         }
 
+        vm.taskHasAttachment = function (task) {
+            if(task.comments === undefined || task.comments.length === 0){
+                return false;
+            }
+            for (var i = 0; i < task.comments.length; i++) {
+                if (task.comments[i].fileName !== undefined && task.comments[i].fileName !== '') {
+                    return true;
+                }
+            }
+            return false;
+        }
     }
 
 })();
