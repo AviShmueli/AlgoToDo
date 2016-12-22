@@ -175,7 +175,7 @@ var sendCommentViaApn = function(comment, task, ApnRegistrationId){
                     };
     //note.payload = task ;
     note.topic = "com.algotodo.app";
-    note.body =  comment.text !== '' ? "💬" + comment.text : "  " + " תמונה";
+    note.body =  comment.text !== '' ? "💬 " + comment.text : "  " + " תמונה";
     note.title = "תגובה חדשה מ" + comment.from.name;
     note.contentAvailable = 1;
     
@@ -240,7 +240,7 @@ var sendTaskViaGcm = function (task, userUnDoneTaskCount, regToken, isUpdate) {
                 },
                 title: "משימה חדשה מ" + task.from.name,
                 sound: 'default',
-                icon: 'www/images/asiti-small-icon.png',
+                icon: 'res:///ic_menu_paste_holo_light',
                 body: task.description,
                 badge: userUnDoneTaskCount
             }
@@ -284,14 +284,14 @@ var sendCommentViaGcm = function (comment, task, regToken) {
             },
             title: "תגובה חדשה מ" + comment.from.name,
             sound: 'default',
-            icon: 'www/images/icon.png',
-            body: comment.text !== '' ? "💬" + comment.text : "📷" + " תמונה"
+            icon: 'res:///ic_menu_start_conversation',
+            body: comment.text !== '' ?  comment.text : "📷" + " תמונה"
         }
     });
 
     message.addData('notId', task.from._id);
     message.addData('content-available', '1');
-    message.addData('image', 'www/images/algologo1.png');
+    message.addData('image', 'www/images/asiti-logo.png');
     message.addData('style', 'inbox');
     message.addData('summaryText', ' יש לך %n% תגובות חדשות');
 
