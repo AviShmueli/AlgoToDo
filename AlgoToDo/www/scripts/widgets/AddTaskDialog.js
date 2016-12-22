@@ -7,11 +7,11 @@
 
     AddTaskDialogController.$inject = [
         '$scope', '$mdDialog', 'datacontext', '$mdMedia', '$q', 'logger',
-        'cordovaPlugins', 'storage', 'dropbox'
+        'cordovaPlugins', 'storage', 'dropbox', 'camera', 'device'
     ];
 
     function AddTaskDialogController($scope, $mdDialog, datacontext, $mdMedia, $q, logger,
-             cordovaPlugins, storage, dropbox) {
+                                     cordovaPlugins, storage, dropbox, camera, device) {
 
         var vm = this;
         
@@ -19,7 +19,7 @@
         vm.task = {};
         vm.task.comments = [];
         vm.user = datacontext.getUserFromLocalStorage();
-        vm.imagesPath = cordovaPlugins.getImagesPath();
+        vm.imagesPath = device.getImagesPath();
         vm.selectedItem = null;
         vm.searchText = null;
         vm.querySearch = querySearch;
@@ -130,7 +130,7 @@
                 if (vm.taskHasImage === true) {                 
                     storage.saveFileToStorage(response.data[0]._id, vm.newImage.fileName, vm.newImage.fileEntry.nativeURL).
                         then(function () { 
-                            cordovaPlugins.cleanupAfterPictureTaken();
+                            camera.cleanupAfterPictureTaken();
                             window.plugins.toast.hide();
                         },
                         function (error) {
@@ -172,7 +172,7 @@
             vm.taskHasImage = true;
             vm.takeingPic = true;
             document.addEventListener("deviceready", function () {
-                cordovaPlugins.takePicture(sourceType).then(function (fileUrl) {                   
+                camera.takePicture(sourceType).then(function (fileUrl) {
 
                     var image = document.getElementById('new-task-image');
                     image.src = fileUrl;
@@ -201,7 +201,7 @@
                 }, function (err) {
                     logger.error("error while trying to take a picture", err);
                 });
-                cordovaPlugins.setStatusbarOverlays();
+                device.setStatusbarOverlays();
             }, false);
         }
     }

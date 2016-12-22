@@ -10,14 +10,14 @@
         '$mdMedia', '$mdBottomSheet','$filter', '$timeout',
         '$mdSidenav', '$mdDialog', 'datacontext', 'lodash',
         'socket', '$mdToast', 'moment', '$q', 'CMRESLogger',
-        'pushNotifications', 'localNotifications'
+        'pushNotifications', 'localNotifications', 'device'
     ];
 
     function TasksListCtrl($rootScope, $scope, logger, $location, cordovaPlugins,
                             $mdMedia, $mdBottomSheet,$filter, $timeout,
                             $mdSidenav, $mdDialog, datacontext, lodash,
                             socket, $mdToast, moment, $q, CMRESLogger,
-                            pushNotifications, localNotifications) {
+                            pushNotifications, localNotifications, device) {
 
         var vm = this;
 
@@ -27,7 +27,7 @@
         vm.isSmallScrean = $mdMedia('sm');
         vm.userConnected = false;
         vm.user = {};
-        vm.imagesPath = cordovaPlugins.getImagesPath();
+        vm.imagesPath = device.getImagesPath();
         vm.progressActivated = false;
         $rootScope.taskcount = 0;
         vm.signUpInProggress = true;
@@ -77,17 +77,17 @@
             vm.userConnected = true;           
             
             // register for push notifications
-            if (cordovaPlugins.isMobileDevice()) {
+            if (device.isMobileDevice()) {
                 document.addEventListener("deviceready", function () {
                     pushNotifications.startListening();
                     pushNotifications.onNotificationReceived();
                     if (angular.equals({}, datacontext.getDeviceDetailes())) {
-                        datacontext.setDeviceDetailes(cordovaPlugins.getDeviceDetails(),cordova.file.applicationDirectory);
+                        datacontext.setDeviceDetailes(device.getDeviceDetails(), cordova.file.applicationDirectory);
                     }
                     var a = datacontext.getDeviceDetailes().applicationDirectory;
                     var b = cordova.file.applicationDirectory;
                     if(a !== b){
-                        datacontext.setDeviceDetailes(cordovaPlugins.getDeviceDetails(),cordova.file.applicationDirectory);
+                        datacontext.setDeviceDetailes(device.getDeviceDetails(), cordova.file.applicationDirectory);
                     }                  
                 }, false);
             }

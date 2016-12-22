@@ -119,7 +119,7 @@
         </md-content>
       
     <footer class="add-comment-footer" ng-if="vm.task.status !== 'done'">
-        <md-toolbar class="md-scroll-shrink ">
+        <md-toolbar class="md-scroll-shrink" style="background-color: transparent;">
             <div layout="row" layout-align="center center" flex style="padding-bottom: 8px;padding-top: 8px;">
                 <md-button class="md-fab md-icon-button md-med" aria-label="done" ng-click="vm.addComment()" ng-disabled="vm.newCommentText === ''">
                     <ng-md-icon class="rotate" icon="send" size="28"></ng-md-icon>

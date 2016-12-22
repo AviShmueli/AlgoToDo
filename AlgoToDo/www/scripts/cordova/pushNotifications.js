@@ -7,11 +7,11 @@
 
     pushNotifications.$inject = ['$rootScope', 'datacontext', '$cordovaPushV5',
                               '$log', '$mdToast', '$cordovaVibration', '$q',
-                              'dropbox', 'storage'];
+                              'dropbox', 'storage', 'device'];
 
     function pushNotifications($rootScope, datacontext, $cordovaPushV5,
                              $log, $mdToast, $cordovaVibration, $q,
-                             dropbox, storage) {
+                             dropbox, storage, device) {
 
         var self = this;
 
@@ -100,7 +100,7 @@
             if (task.comments.length > 0) {
                 var comment = task.comments[0];
 
-                comment.fileLocalPath = getImagesPath() + "/images/upload-empty.png";
+                comment.fileLocalPath = device.getImagesPath() + "/images/upload-empty.png";
                 datacontext.addTaskToTaskList(task);
                 $rootScope.taskcount = taskCount;
                 showNewTaskToast(task._id, task.from.name);

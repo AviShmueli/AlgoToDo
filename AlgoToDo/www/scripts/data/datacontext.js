@@ -6,10 +6,12 @@
         .service('datacontext', datacontext);
 
     datacontext.$inject = ['$http', 'logger', 'lodash', 'appConfig', '$rootScope',
-                           '$localStorage', '$mdToast', 'socket', '$filter', 'dropbox'];
+                           '$localStorage', '$mdToast', 'socket', '$filter', 'dropbox',
+                           '$q'];
 
     function datacontext($http, logger, lodash, appConfig, $rootScope,
-                         $localStorage, $mdToast, socket, $filter, dropbox) {
+                         $localStorage, $mdToast, socket, $filter, dropbox,
+                         $q) {
 
         
         var self = this;
@@ -110,12 +112,22 @@
         };
 
         var searchUsers = function (string) {
+            var params = {};
+            if (self.$storage.user.type !== undefined && self.$storage.user.type === 'admin') {
+                params = {
+                    queryString: string
+                };
+            }
+            else {
+                params = {
+                    queryString: string,
+                    userCliqaId: self.$storage.user.cliqa._id
+                };
+            }
             var req = {
                 method: 'GET',
                 url: appConfig.appDomain + '/TaskManeger/searchUsers',
-                params: {
-                    queryString: string
-                }
+                params: params
             };
 
             return $http(req);
@@ -297,6 +309,24 @@
                 }
             }
         }
+        
+        var getAllCliqot = function () {
+            var deferred = $q.defer();
+
+            var req = {
+                method: 'GET',
+                url: appConfig.appDomain + '/TaskManeger/getAllCliqot',
+                params: {
+                    
+                }
+            };
+
+            $http(req).then(function (response) {
+                deferred.resolve(response.data);
+            });
+
+            return deferred.promise;
+        }
 
         var service = {
             getTaskList: getTaskList,
@@ -327,7 +357,8 @@
             removeFileFromCache: removeFileFromCache,
             getFileFromCache: getFileFromCache,
             saveFileToCache: saveFileToCache,
-            removeAllTaskImagesFromCache: removeAllTaskImagesFromCache
+            removeAllTaskImagesFromCache: removeAllTaskImagesFromCache,
+            getAllCliqot: getAllCliqot
         };
 
         return service;

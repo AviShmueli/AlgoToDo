@@ -35,9 +35,21 @@
                 </div>
             </md-input-container>
 
-            <md-input-container class="md-block" style="margin-bottom: 0">
-                <md-icon ng-md-icon icon="place"></md-icon>
-                <input ng-model="vm.user.address" type="text" placeholder="כתובת (לא חובה)">
+            <md-input-container class="md-icon-float md-icon-right md-block" style="margin-bottom: 0" dir="rtl">
+                
+                <md-icon ng-md-icon icon="group"></md-icon>               
+                <label>קליקה</label>
+                <md-select md-no-asterisk ng-model="vn.user.cliqa" ng-required="true" name="cliqa">
+                    <md-option ng-repeat="cliqa in vm.AllCliqot" value="{{cliqa}}">
+                        {{cliqa.name}}
+                    </md-option>
+                </md-select>
+                <div ng-messages="signUpForm.cliqa.$error">
+                    <div ng-message="required">אנא בחר קליקה אליה אתה שייך </div>
+                </div>
+                <!--<md-button class="md-icon-button" aria-label="help" ng-click="vm.showAlert($event)">-->
+                    <md-icon ng-md-icon icon="info_outline" size="20" ng-click="vm.showAlert($event)"></md-icon>
+                <!--</md-button>-->
             </md-input-container>
 
              <md-input-container style="margin: 0">

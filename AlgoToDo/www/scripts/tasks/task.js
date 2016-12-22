@@ -8,20 +8,20 @@
     taskCtrl.$inject = ['$rootScope', '$scope', 'logger', '$q', 'storage',
          'datacontext', '$routeParams', '$window', 'moment',
          'socket', 'cordovaPlugins', 'dropbox', 'appConfig',
-         'localNotifications'
+         'localNotifications', 'camera', 'device'
     ];
 
     function taskCtrl($rootScope, $scope, logger, $q, storage,
                       datacontext, $routeParams, $window, moment,
                       socket, cordovaPlugins, dropbox, appConfig,
-                      localNotifications) {
+                      localNotifications, camera, device) {
 
         var vm = this;
 
         vm.taskId = $routeParams.taskId.split('&')[0];
         vm.task = datacontext.getTaskByTaskId(vm.taskId);
         vm.user = datacontext.getUserFromLocalStorage();
-        vm.imagesPath = cordovaPlugins.getImagesPath();
+        vm.imagesPath = device.getImagesPath();
         vm.taskIsToMe = (vm.task.to._id === vm.user._id);
         vm.taskIsFromMe = (vm.task.from._id === vm.user._id);
         angular.element(document.querySelectorAll('html')).removeClass("hight-auto");
@@ -47,7 +47,7 @@
         vm.takePic = function (sourceType) {
 
             document.addEventListener("deviceready", function () {
-                cordovaPlugins.takePicture(sourceType).then(function (fileUrl) {
+                camera.takePicture(sourceType).then(function (fileUrl) {
 
                     window.resolveLocalFileSystemURL(fileUrl, function success(fileEntry) {
 
@@ -75,7 +75,7 @@
                             dropbox.uploadNewImageToDropbox(fileEntry.filesystem.root.nativeURL, fileEntry.name, fileName).then(function () {
                                 datacontext.newComment(vm.task._id, tempComment);
                             });
-                            cordovaPlugins.cleanupAfterPictureTaken();
+                            camera.cleanupAfterPictureTaken();
                         }, function (error) {
                             logger.error("error while trying to save File to Storage", error);
                         });
@@ -84,7 +84,7 @@
                     logger.error("error while trying to take a picture", err);
                 });
 
-                cordovaPlugins.setStatusbarOverlays();
+                device.setStatusbarOverlays();
             }, false);
         }
 
@@ -132,8 +132,8 @@
         vm.galleryImagesCounter = 0;
 
         var setFileLocalPath = function (comment) {
-            if (!cordovaPlugins.isMobileDevice()) {
-                comment.fileLocalPath = cordovaPlugins.getImagesPath() + "/images/upload-empty.png";
+            if (!device.isMobileDevice()) {
+                comment.fileLocalPath = device.getImagesPath() + "/images/upload-empty.png";
                 return;
             }
             if (comment.fileLocalPath === undefined) { // && comment.fileLocalPath.indexOf("upload-empty") === -1

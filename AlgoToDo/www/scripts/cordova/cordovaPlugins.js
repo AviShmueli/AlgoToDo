@@ -5,36 +5,14 @@
         .module('app.cordova')
         .service('cordovaPlugins', cordovaPlugins);
 
-    cordovaPlugins.$inject = ['$rootScope', 'datacontext', 'appConfig', '$mdDialog',
-                              '$window','$cordovaToast',
-                              '$cordovaBadge', '$cordovaDevice', '$log', '$mdToast',
-                              '$cordovaVibration', '$cordovaNetwork', '$q', '$cordovaCamera',
-                              '$cordovaAppVersion', 'dropbox', 'storage', '$cordovaDatePicker'];
+    cordovaPlugins.$inject = ['$rootScope', '$cordovaToast', '$cordovaBadge', '$log',
+                              '$q', '$cordovaDatePicker'];
 
-    function cordovaPlugins($rootScope, datacontext, appConfig, $mdDialog,
-                            $window, $cordovaToast,
-                            $cordovaBadge, $cordovaDevice, $log, $mdToast,
-                            $cordovaVibration, $cordovaNetwork, $q, $cordovaCamera,
-                            $cordovaAppVersion, dropbox, storage, $cordovaDatePicker) {
+    function cordovaPlugins($rootScope, $cordovaToast, $cordovaBadge, $log,
+                            $q, $cordovaDatePicker) {
 
         var self = this;
         self.appState = 'foreground';
-
-        var isMobileDevice = function () {
-            return document.URL.indexOf( 'http://' ) === -1 && document.URL.indexOf( 'https://' ) === -1;
-        };
-
-        var getDeviceDetails = function () {
-            return $cordovaDevice.getDevice();
-        };
-
-        var getAppVersion = function () {
-            return $cordovaAppVersion.getVersionNumber();
-        }
-
-        var setStatusbarOverlays = function(){
-            //$cordovaStatusbar.overlaysWebView(false);
-        }
 
         var showToast = function (info, duration) {
             document.addEventListener("deviceready", function () {
@@ -110,68 +88,6 @@
         function onResume() {
             self.appState = 'foreground';
         };
-        
-        /* ----- Camera -----*/
-
-        var getImagesPath = function () {
-
-            if (!isMobileDevice()) {
-                return '';
-            }
-
-            var device = datacontext.getDeviceDetailes();
-            return device.applicationDirectory + 'www';
-        }
-
-        var takePicture = function (sourceType) {
-            var _sourceType = sourceType === 'camera' ? Camera.PictureSourceType.CAMERA : Camera.PictureSourceType.PHOTOLIBRARY;
-            var isSamsungDevice = datacontext.getDeviceDetailes() !== undefined && datacontext.getDeviceDetailes().manufacturer === "samsung";
-
-            var options = {
-                quality: 100,
-                destinationType: Camera.DestinationType.FILE_URI,
-                sourceType: _sourceType,
-                allowEdit: isSamsungDevice,
-                encodingType: Camera.EncodingType.JPEG,
-                targetWidth: isSamsungDevice ? 1500 : window.innerWidth,
-                targetHeight: isSamsungDevice ? 1500 : window.innerHeight,
-                popoverOptions: CameraPopoverOptions,
-                saveToPhotoAlbum: true,
-                correctOrientation: true
-            };
-
-            return $cordovaCamera.getPicture(options);         
-        }
-
-        var cleanupAfterPictureTaken = function () {
-            $cordovaCamera.cleanup();
-        }
-
-        /* ---- Not In Use ----- */
-
-        var networkStatus = function () {
-
-            document.addEventListener("deviceready", function () {
-
-                //var type = $cordovaNetwork.getNetwork()
-
-                //self.isOnline = $cordovaNetwork.isOnline()
-
-                //self.isOffline = $cordovaNetwork.isOffline()
-
-
-                /*// listen for Online event
-                $rootScope.$on('$cordovaNetwork:online', function (event, networkState) {
-                    var onlineState = networkState;
-                })
-
-                // listen for Offline event
-                $rootScope.$on('$cordovaNetwork:offline', function (event, networkState) {
-                    var offlineState = networkState;
-                })*/
-
-            }, false);
-        }
 
         var sendSmS = function (to) {
             //CONFIGURATION
@@ -198,16 +114,8 @@
             showToast: showToast,
             sendSmS: sendSmS,
             clearAppBadge: clearAppBadge,
-            getDeviceDetails: getDeviceDetails,
             setBadge: setBadge,
-            isMobileDevice: isMobileDevice,
-            networkStatus: networkStatus,
-            getImagesPath: getImagesPath,
-            takePicture: takePicture,
-            cleanupAfterPictureTaken: cleanupAfterPictureTaken,
-            getAppVersion: getAppVersion,
             showDatePicker: showDatePicker,
-            setStatusbarOverlays: setStatusbarOverlays
         };
 
         return service;

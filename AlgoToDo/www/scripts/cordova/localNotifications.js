@@ -6,15 +6,15 @@
         .service('localNotifications', localNotifications);
 
     localNotifications.$inject = ['$rootScope', 'datacontext', '$cordovaLocalNotification',
-                                  '$log', '$q', 'cordovaPlugins'];
+                                  '$log', '$q', 'cordovaPlugins', 'device'];
 
     function localNotifications($rootScope, datacontext, $cordovaLocalNotification,
-                                $log, $q, cordovaPlugins) {
+                                $log, $q, cordovaPlugins, device) {
 
         var self = this;
 
         var setLocalNotification = function (task, date) {
-            if (!cordovaPlugins.isMobileDevice()) return;
+            if (!device.isMobileDevice()) return;
 
             var notificationId = new Date(task.createTime).getTime();
 

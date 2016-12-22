@@ -648,7 +648,19 @@ app.get('/TaskManeger/getTasks', function (req, res) {
 app.get('/TaskManeger/searchUsers', function (req, res) {
 
     var string = req.query.queryString;
-    var query = { 'name': { "$regex": string, "$options": "i" } };
+    var cliqaId = req.query.userCliqaId;
+    var query = {};
+
+    if(cliqaId !== undefined){
+        query = {$and: [
+                        { 'name': { "$regex": string, "$options": "i" } },
+                        { 'cliqot._id': new ObjectID(cliqaId)}
+                       ]
+                };
+    }
+    else{
+        query = { 'name': { "$regex": string, "$options": "i" } };
+    }
 
     mongodb.connect(mongoUrl, function (err, db) {
 
@@ -790,3 +802,24 @@ var pushUpdatetdTaskToUsersDevice = function (task, recipientId) {
                       }
     });
 };
+
+app.get('/TaskManeger/getAllCliqot', function (req, res) {
+
+    mongodb.connect(mongoUrl, function (err, db) {
+
+        if (err) {
+            winston.log('Error', "error while trying to connect MongoDB: ", err);
+        }
+
+        var collection = db.collection('Cliqot');
+        collection.find({name: {'$ne': 'מנהלים'}}).toArray(function (err, result) {
+
+            if (err) {
+                winston.log('Error', "error while trying to get All Cliqot: ", err);
+            }
+
+            db.close();
+            res.send(result);
+        });
+    });
+});

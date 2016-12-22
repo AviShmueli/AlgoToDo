@@ -19,7 +19,7 @@
             }
         };
 
-        function sidenavController($scope, cordovaPlugins) {
+        function sidenavController($scope, device) {
             var vm = this;
 
             vm.imagesPath = $scope.imagesPath;
@@ -29,7 +29,7 @@
             vm.appVersion = '';
 
             document.addEventListener("deviceready", function () {
-                cordovaPlugins.getAppVersion().then(function (version) {
+                device.getAppVersion().then(function (version) {
                     vm.appVersion = version;
                 });
             }, false);
