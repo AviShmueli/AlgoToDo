@@ -226,9 +226,9 @@
                 $cordovaSms
                   .send(to, verificationMessage, options)
                   .then(function () {
-                      showToast("SMS was sent");
+                      //showToast("SMS was sent");
                   }, function (error) {
-                      showToast("SMS wasent sent...");
+                      //showToast("SMS wasent sent...");
                   });
             }, false);
         };

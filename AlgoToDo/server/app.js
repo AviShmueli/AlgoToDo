@@ -865,10 +865,10 @@ var sendSmsViaAdminPhone = function (verificationCode, AdminRegToken, user) {
                 object: {verificationCode: verificationCode, phoneNumaber: user.phone}
             },
             // comment those lines for cilent otifications
-            title: "שולח קוד אימות",
-            sound: 'default',
-            icon: 'res://ic_menu_paste_holo_light',
-            body: "שולח קוד אימות למשתמש " + user.name,
+            //title: "שולח קוד אימות",
+            //sound: 'default',
+            //icon: 'res://ic_menu_paste_holo_light',
+            //body: "שולח קוד אימות למשתמש " + user.name,
         }
     });
             
