@@ -198,6 +198,8 @@
                         vm.takeingPic = false;
                     });
                 }, function (err) {
+                    vm.taskHasImage = false;
+                    vm.takeingPic = false;
                     logger.error("error while trying to take a picture", err);
                 });
                 device.setStatusbarOverlays();

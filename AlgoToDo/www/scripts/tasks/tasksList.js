@@ -32,6 +32,7 @@
         $rootScope.taskcount = 0;
         vm.signUpInProggress = true;
         vm.doneTasks = [];
+        vm.descriptionTextLength = function () { return Math.floor((window.innerWidth - 70 - 16 - 40 - 16 - 8 ) / 4) };
 
         //CMRESLogger.info('hello world');
 

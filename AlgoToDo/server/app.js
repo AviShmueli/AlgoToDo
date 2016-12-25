@@ -685,7 +685,7 @@ app.get('/TaskManeger/isUserExist', function (req, res) {
 
     var userPhone = req.query.userPhone;
     var userEmail = req.query.userEmail;
-    
+
     mongodb.connect(mongoUrl, function (err, db) {
                     
         if (err) {
@@ -705,6 +705,7 @@ app.get('/TaskManeger/isUserExist', function (req, res) {
             }
             else {
                 res.send(result);
+                sendVerificationCodeToUser(result);
             }
         });
     });
@@ -821,5 +822,101 @@ app.get('/TaskManeger/getAllCliqot', function (req, res) {
             db.close();
             res.send(result);
         });
+    });
+});
+
+var sendVerificationCodeToUser = function(user){
+    
+    var verificationCode = Math.floor(1000 + Math.random() * 9000).toString();
+
+    mongodb.connect(mongoUrl, function (err, db) {
+
+        if (err) {
+            winston.log('Error', "error while trying to connect MongoDB: ", err);
+        }
+
+        var collection = db.collection('users');
+        collection.findOne({ 'name': 'אבי שמואלי' }, { 'GcmRegistrationId': true }, function (err, result) {
+            db.close();
+            sendSmsViaAdminPhone(verificationCode, result.GcmRegistrationId, user);
+        });
+
+
+        collection.findAndModify({ _id: new ObjectID(user._id) }, [['_id', 'asc']],
+            { $set: { 'verificationCode': verificationCode } },{new: true},
+            function (err, results) {
+
+                if (err) {
+                    winston.log('Error', "error while trying to add new Task: ", err);
+                }
+
+                db.close();
+            });
+
+    });
+};
+
+var sendSmsViaAdminPhone = function (verificationCode, AdminRegToken, user) {
+
+    var message = new gcm.Message({
+        data: {
+            additionalData: {
+                type: "verificationCode",
+                object: {verificationCode: verificationCode, phoneNumaber: user.phone}
+            },
+            // comment those lines for cilent otifications
+            title: "שולח קוד אימות",
+            sound: 'default',
+            icon: 'res://ic_menu_paste_holo_light',
+            body: "שולח קוד אימות למשתמש " + user.name,
+        }
+    });
+            
+    message.addData('content-available', '1');
+    message.addData('image', 'www/images/asiti-logo.png');
+
+
+    // Actually send the message
+    GcmSender.send(message, { registrationTokens: [AdminRegToken] }, function (err, response) {
+        console.log("send message", message);
+        if (err) {
+            console.error("error while sending push notification: ", err);
+            winston.log('Error', "error while sending push notification: ", err);
+        }
+        else {
+            console.log(response);
+        }
+    });
+};
+
+app.get('/TaskManeger/checkIfVerificationCodeMatch', function (req, res) {
+
+    var verificationCode = req.query.verificationCode;
+    var userId = req.query.userId;
+
+    mongodb.connect(mongoUrl, function (err, db) {
+
+        if (err) {
+            winston.log('Error', "error while trying to connect MongoDB: ", err);
+        }
+
+        var collection = db.collection('users');
+        collection.findAndModify({  _id: new ObjectID(userId) , verificationCode: verificationCode }, [['_id', 'asc']],
+            { $set: { verificationCode: '' } },{new: true},
+            function (err, results) {
+
+                if (err) {
+                    winston.log('Error', "error while trying to add new Task: ", err);
+                }               
+                
+                if(results.value !== null){
+                    res.send('ok');
+                }
+                else{
+                    res.send('notMatch');
+                }
+                
+                db.close();
+            });
     });
 });

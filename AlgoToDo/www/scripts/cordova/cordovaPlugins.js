@@ -89,30 +89,10 @@
             self.appState = 'foreground';
         };
 
-        var sendSmS = function (to) {
-            //CONFIGURATION
-            var options = {
-                replaceLineBreaks: false, // true to replace \n by a new line, false by default
-                android: {
-                    //intent: 'INTENT'  // send SMS with the native android SMS messaging
-                    intent: '' // send SMS without open any other app
-                }
-            };
-            /*
-            document.addEventListener("deviceready", function () {
-                $cordovaSms
-                  .send('+972542240608', 'אבי התותח', options)
-                  .then(function () {
-                      showToast("SMS was sent");
-                  }, function (error) {
-                      showToast("SMS wasent sent...");
-                  });
-            }, false);*/
-        };
+        
 
         var service = {
             showToast: showToast,
-            sendSmS: sendSmS,
             clearAppBadge: clearAppBadge,
             setBadge: setBadge,
             showDatePicker: showDatePicker,

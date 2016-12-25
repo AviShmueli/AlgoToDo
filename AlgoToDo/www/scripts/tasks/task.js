@@ -52,8 +52,6 @@
                     window.resolveLocalFileSystemURL(fileUrl, function success(fileEntry) {
 
                         var fileName = new Date().toISOString().replace(/:/g, "_") + '.jpg';
-                        //var dataDirectory = (cordova.platformId.toLowerCase() === 'ios') ? cordova.file.dataDirectory : cordova.file.externalDataDirectory;
-                        //var newPath = 'pictures/' + vm.taskId + '/';
 
                         var comment = {
                             from: {

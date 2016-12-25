@@ -175,6 +175,19 @@
             return $http(req);
         }
 
+        var checkIfVerificationCodeMatch = function (user, verificationCode) {
+            var req = {
+                method: 'GET',
+                url: appConfig.appDomain + '/TaskManeger/checkIfVerificationCodeMatch',
+                params: {
+                    userId: user._id,
+                    verificationCode: verificationCode
+                }
+            };
+
+            return $http(req);
+        }
+
         var getTaskByTaskId = function (taskId) {
             var result = getTaskList().filter(function (t) { return t._id === taskId });
             if (result.length === 1) {
@@ -365,7 +378,8 @@
             getFileFromCache: getFileFromCache,
             saveFileToCache: saveFileToCache,
             removeAllTaskImagesFromCache: removeAllTaskImagesFromCache,
-            getAllCliqot: getAllCliqot
+            getAllCliqot: getAllCliqot,
+            checkIfVerificationCodeMatch: checkIfVerificationCodeMatch
         };
 
         return service;

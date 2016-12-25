@@ -50,6 +50,9 @@
         },
         "cordova-plugin-local-notifications-db": {
             "PACKAGE_NAME": "com.algotodo.app"
+        },
+        "cordova-sms-plugin": {
+            "PACKAGE_NAME": "com.algotodo.app"
         }
     },
     "dependent_plugins": {

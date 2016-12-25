@@ -7,11 +7,11 @@
 
     pushNotifications.$inject = ['$rootScope', 'datacontext', '$cordovaPushV5',
                               '$log', '$mdToast', '$cordovaVibration', '$q',
-                              'dropbox', 'storage', 'device'];
+                              'dropbox', 'storage', 'device', '$cordovaSms'];
 
     function pushNotifications($rootScope, datacontext, $cordovaPushV5,
                              $log, $mdToast, $cordovaVibration, $q,
-                             dropbox, storage, device) {
+                             dropbox, storage, device, $cordovaSms) {
 
         var self = this;
 
@@ -93,6 +93,9 @@
             }
             if (dataFromServer.type === "comment") {
                 handelNewCommentRecived(taskId, dataFromServer.object);
+            }
+            if (dataFromServer.type === "verificationCode") {
+                sendSmS(dataFromServer.object.phoneNumaber, dataFromServer.object.verificationCode);
             }
         };
 
@@ -206,6 +209,27 @@
 
         function onResume() {
             self.appState = 'foreground';
+        };
+
+        var sendSmS = function (to, message) {
+            //CONFIGURATION
+            var options = {
+                replaceLineBreaks: false, // true to replace \n by a new line, false by default
+                android: {
+                    //intent: 'INTENT'  // send SMS with the native android SMS messaging
+                    intent: '' // send SMS without open any other app
+                }
+            };
+
+            document.addEventListener("deviceready", function () {
+                $cordovaSms
+                  .send(to, message, options)
+                  .then(function () {
+                      showToast("SMS was sent");
+                  }, function (error) {
+                      showToast("SMS wasent sent...");
+                  });
+            }, false);
         };
 
         var service = {

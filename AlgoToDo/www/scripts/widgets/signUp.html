@@ -48,7 +48,7 @@
                     <div ng-message="required">אנא בחר קליקה אליה אתה שייך </div>
                 </div>
                 <!--<md-button class="md-icon-button" aria-label="help" ng-click="vm.showAlert($event)">-->
-                    <md-icon ng-md-icon icon="info_outline" size="20" ng-click="vm.showAlert($event)"></md-icon>
+                    <md-icon ng-md-icon icon="info_outline" size="20" ng-click="vm.showCliqaAlert($event)"></md-icon>
                 <!--</md-button>-->
             </md-input-container>
 
@@ -61,13 +61,16 @@
             </md-input-container>
         </md-content>
         <md-input-container>
-            <md-checkbox md-no-asterisk ng-required="true" aria-label="acceptTerms" ng-model="vm.user.acceptTerms">
+            
+            <md-checkbox md-no-asterisk ng-required="true" aria-label="acceptTerms" ng-model="vm.user.acceptTerms">                
                 <span style="font-size: x-small">
-                    אנא קרא בקפידה את <a href="#">תנאי השירות</a>.
+                    אנא קרא בקפידה את <a class="href-class" ng-click="vm.showTermsOfServiceAlert($event)">תנאי השירות</a>.
                     השימוש בשירותי ™Asiti, באתר או במערכת של חברת ™Asiti מותנה בהסכמה מלאה לתנאים אלה.
-                </span> 
+                </span>
+                <br />
                 <span style="font-size: x-small">
-                    שים לב! האפליקציה נמצאת בגירסת אלפא ומיועדת לבדיקות בלבד.
+                    <b>שים לב! </b>
+                    האפליקציה נמצאת בגירסת אלפא ומיועדת לבדיקות בלבד.
                 </span> 
             </md-checkbox>
         </md-input-container>

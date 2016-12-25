@@ -53,6 +53,17 @@ md-chips .md-chip-input-container{
 .icon-fill{
     fill: rgb(0,131,143);
 }
+.href-class{
+        color: blue;
+    font-weight: 600;
+    text-decoration: underline;
+}
+.attachment-icon{
+    position: absolute;
+    top: 0;
+    left: 0;
+    padding-left: 7px;
+}
 .md-icon-button:disabled .icon-fill{
     fill:rgb(193, 210, 211);
 }
@@ -266,8 +277,6 @@ h1 {
     animation:fade 3000ms infinite;
     -webkit-animation:fade 3000ms infinite;
 }
-
-
 
 
 md-content.md-default-theme {
