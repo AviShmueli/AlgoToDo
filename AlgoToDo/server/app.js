@@ -684,7 +684,7 @@ app.get('/TaskManeger/searchUsers', function (req, res) {
 app.get('/TaskManeger/isUserExist', function (req, res) {
 
     var userPhone = req.query.userPhone;
-    var userEmail = req.query.userEmail;
+    var userName = req.query.userName;
 
     mongodb.connect(mongoUrl, function (err, db) {
                     
@@ -693,7 +693,7 @@ app.get('/TaskManeger/isUserExist', function (req, res) {
         }
 
         var collection = db.collection('users');
-        collection.findOne({ 'email': userEmail, 'phone': userPhone }, function (err, result) {
+        collection.findOne({ 'name': userName, 'phone': userPhone }, function (err, result) {
 
             if (err) {
                 winston.log('Error', "error while trying to check if user Exist: ", err);

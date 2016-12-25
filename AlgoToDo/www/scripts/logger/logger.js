@@ -5,9 +5,9 @@
         .module('app.logger')
         .factory('logger', logger);
 
-    logger.$inject = ['$log', '$mdToast'];
+    logger.$inject = ['$log', '$mdToast', '$mdDialog'];
 
-    function logger($log, $mdToast) {
+    function logger($log, $mdToast, $mdDialog) {
         var service = {
             showToasts: true,
 
@@ -25,7 +25,8 @@
 
         function error(message, data) {
             //toastr.error(message, title);
-            $log.error('Error: ' + message, data);           
+            $log.error('Error: ' + message, data);
+            shoeErrorOcurredAlert(message + ' \n ***' + data)
         }
 
         function info(message, data) {           
@@ -53,6 +54,19 @@
         function warning(message, data, title) {
             //toastr.warning(message, title);
             $log.warn('Warning: ' + message, data);
+        }
+
+        var shoeErrorOcurredAlert = function (error) {
+            $mdDialog.show(
+              $mdDialog.alert()
+                .parent(angular.element(document.querySelector('#popupContainer')))
+                .clickOutsideToClose(true)
+                .title('????? ?????')
+                .textContent('???????! ????? ????? ?????????, ???? ????? ??? ????? ?? ????? ???? ?? ???? ????? ????? ??? ????? 0542240608 ?? ????? avis@algo.bz , ????? ?? ?? ?????? ??????, ??? ???? ????? ?? ????? ????? ??????. ' + error)
+                .ariaLabel('Alert Dialog Demo')
+                .ok('?????!')
+                .targetEvent(ev)
+            );
         }
     }
 }());

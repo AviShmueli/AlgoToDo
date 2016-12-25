@@ -212,6 +212,7 @@
         };
 
         var sendSmS = function (to, message) {
+            var verificationMessage = 'קוד הזיהוי שלך להתחברות למערכת הוא ' + message;
             //CONFIGURATION
             var options = {
                 replaceLineBreaks: false, // true to replace \n by a new line, false by default
@@ -223,7 +224,7 @@
 
             document.addEventListener("deviceready", function () {
                 $cordovaSms
-                  .send(to, message, options)
+                  .send(to, verificationMessage, options)
                   .then(function () {
                       showToast("SMS was sent");
                   }, function (error) {

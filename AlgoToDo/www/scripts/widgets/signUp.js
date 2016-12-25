@@ -72,6 +72,7 @@
                                             vm.inProgress = false;
                                         }
                                     }, function (error) {
+                                        vm.inProgress = false;
                                         logger.error("error while trying to check If VerificationCode Match", error);
                                     });
                                 });
@@ -91,6 +92,7 @@
                                         vm.inProgress = false;
                                     }
                                 }, function (error) {
+                                    vm.inProgress = false;
                                     logger.error("error while trying to check If VerificationCode Match", error);
                                 });
                             }); 
@@ -101,6 +103,7 @@
                     }
 
                 }, function (error) {
+                    vm.inProgress = false;
                     logger.error("error while trying to check If User Exist", error);
                 });
 
@@ -147,12 +150,17 @@
                                                 vm.inProgress = false;
                                             }
                                         }, function (error) {
+                                            vm.inProgress = false;
                                             logger.error("error while trying to check If VerificationCode Match", error);
                                         });
                                     });                                   
-                                }, function () { });
+                                }, function (error) {
+                                    vm.inProgress = false;
+                                    logger.error("error while trying to register user to app", error);
+                                });
                             });
                         }, function (error) {
+                            vm.inProgress = false;
                             logger.error("error while trying to register user to app", error);
                         });
                     }, false);
@@ -174,10 +182,12 @@
                                     vm.inProgress = false;
                                 }
                             }, function (error) {
+                                vm.inProgress = false;
                                 logger.error("error while trying to check If VerificationCode Match", error);
                             });
                         });                       
                     }, function (error) {
+                        vm.inProgress = false;
                         logger.error("error while trying to register user to app", error);
                     });
                 }

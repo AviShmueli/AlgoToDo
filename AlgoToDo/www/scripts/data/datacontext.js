@@ -167,7 +167,7 @@
                 method: 'GET',
                 url: appConfig.appDomain + '/TaskManeger/isUserExist',
                 params: {
-                    userEmail: user.email,
+                    userName: user.name,
                     userPhone: user.phone
                 }
             };
