@@ -685,7 +685,7 @@ app.get('/TaskManeger/isUserExist', function (req, res) {
 
     var userPhone = req.query.userPhone;
     var userName = req.query.userName;
-
+    console.log("***start*** ");
     mongodb.connect(mongoUrl, function (err, db) {
                     
         if (err) {
