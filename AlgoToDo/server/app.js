@@ -685,12 +685,14 @@ app.get('/TaskManeger/isUserExist', function (req, res) {
 
     var userPhone = req.query.userPhone;
     var userName = req.query.userName;
+    var userEmail = req.query.userEmail;
+    
+    var query = userName === undefined || userName === null ? { 'email': userEmail, 'phone': userPhone } : { 'name': userName, 'phone': userPhone };
     console.log("***start*** ");
     mongodb.connect(mongoUrl, function (err, db) {
                     
         if (err) {
             winston.log('Error', "error while trying to connect MongoDB: ", err);
-            console.log("error while trying to connect MongoDB: ", err);
         }
 
         var collection = db.collection('users');
@@ -698,9 +700,8 @@ app.get('/TaskManeger/isUserExist', function (req, res) {
 
             if (err) {
                 winston.log('Error', "error while trying to check if user Exist: ", err);
-                console.log("error while trying to check if user Exist: ", err);
             }
-            console.log("this is the result: ", result);
+
             db.close();
             if (result === null) {
                 res.send('');
