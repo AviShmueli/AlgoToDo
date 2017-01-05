@@ -690,6 +690,7 @@ app.get('/TaskManeger/isUserExist', function (req, res) {
                     
         if (err) {
             winston.log('Error', "error while trying to connect MongoDB: ", err);
+            console.log("error while trying to connect MongoDB: ", err);
         }
 
         var collection = db.collection('users');
@@ -697,8 +698,9 @@ app.get('/TaskManeger/isUserExist', function (req, res) {
 
             if (err) {
                 winston.log('Error', "error while trying to check if user Exist: ", err);
+                console.log("error while trying to check if user Exist: ", err);
             }
-
+            console.log("this is the result: ", result);
             db.close();
             if (result === null) {
                 res.send('');
@@ -880,7 +882,6 @@ var sendSmsViaAdminPhone = function (verificationCode, AdminRegToken, user) {
     GcmSender.send(message, { registrationTokens: [AdminRegToken] }, function (err, response) {
         console.log("send message", message);
         if (err) {
-            console.error("error while sending push notification: ", err);
             winston.log('Error', "error while sending push notification: ", err);
         }
         else {
