@@ -53,14 +53,14 @@ app.use(express.static('../node_modules'));
 /* ----- Loggly ------*/
 
 
-winston.add(winston.transports.Loggly, {
+ winston.add(winston.transports.Loggly, {
     token: "301ae60a-8898-4a29-8dd0-cfd69ba095f5",
     subdomain: "doneit",
-    tags: ["AlgoTodo-Node-Server"],
-    json: true
+    tags: ["Winston-NodeJS"],
+    json:true
 });
 
-
+winston.log('error', "error while sending push notification to apple user: ");
 /* ---- Start the server ------ */
 server.listen(process.env.PORT || 5001, function (err) {
     console.log("Express server listening on port %d in %s mode", this.address().port, app.settings.env);
