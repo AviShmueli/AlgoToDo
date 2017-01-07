@@ -60,7 +60,6 @@ app.use(express.static('../node_modules'));
     json:true
 });
 
-winston.log('error', "error while sending push notification to apple user: ");
 /* ---- Start the server ------ */
 server.listen(process.env.PORT || 5001, function (err) {
     console.log("Express server listening on port %d in %s mode", this.address().port, app.settings.env);
@@ -148,7 +147,7 @@ var sendTaskViaApn = function(task, userUnDoneTaskCount, ApnRegistrationId, isUp
                                                  
         if (response.failed.length > 0) {
             console.error("error while sending push notification to apple user: ", response.failed);
-            winston.log('Error', "error while sending push notification to apple user: ", response.failed);
+            winston.log('error', "error while sending push notification to apple user: ", response.failed);
         }
         else {
             console.log(response.sent);
@@ -189,7 +188,7 @@ var sendCommentViaApn = function(comment, task, ApnRegistrationId){
                                                    
         if (response.failed.length > 0) {
             console.error("error while sending push notification to apple user: ", response.failed);
-            winston.log('Error', "error while sending push notification to apple user: ", response.failed);
+            winston.log('error', "error while sending push notification to apple user: ", response.failed);
             createApnProvider();
         }
         else {
@@ -262,7 +261,7 @@ var sendTaskViaGcm = function (task, userUnDoneTaskCount, regToken, isUpdate) {
         console.log("send message", message);
         if (err) {
             console.error("error while sending push notification: ", err);
-            winston.log('Error', "error while sending push notification: ", err);
+            winston.log('error', "error while sending push notification: ", err);
         }
         else {
             console.log(response);
@@ -303,7 +302,7 @@ var sendCommentViaGcm = function (comment, task, regToken) {
         console.log("send message", message);
         if (err) {
             console.error("error while sending push notification: ", err);
-            winston.log('Error', "error while sending push notification: ", err);
+            winston.log('error', "error while sending push notification: ", err);
         }
         else {
             console.log(response);
@@ -433,7 +432,7 @@ app.post('/TaskManeger/newTask', function (req, res) {
     mongodb.connect(mongoUrl, function (err, db) {
 
         if (err) {
-            winston.log('Error', "error while trying to connect MongoDB: ", err);
+            winston.log('error', "error while trying to connect MongoDB: ", err);
         }
 
         var collection = db.collection('tasks');
@@ -441,7 +440,7 @@ app.post('/TaskManeger/newTask', function (req, res) {
         collection.insert(tasks, function (err, results) {
 
             if (err) {
-                winston.log('Error', "error while trying to add new Task: ", err);
+                winston.log('error', "error while trying to add new Task: ", err);
             }
 
             // if the employee is now online send the new task by Socket.io
@@ -477,7 +476,7 @@ app.post('/TaskManeger/newComment', function (req, res) {
     mongodb.connect(mongoUrl, function (err, db) {
 
         if (err) {
-            winston.log('Error', "error while trying to connect MongoDB: ", err);
+            winston.log('error', "error while trying to connect MongoDB: ", err);
         }
 
         var collection = db.collection('tasks');
@@ -487,7 +486,7 @@ app.post('/TaskManeger/newComment', function (req, res) {
             function (err, results) {
 
                 if (err) {
-                    winston.log('Error', "error while trying to add new Task: ", err);
+                    winston.log('error', "error while trying to add new Task: ", err);
                 }
                 var task = results.value;
                 
@@ -536,7 +535,7 @@ app.post('/TaskManeger/updateTaskStatus', function (req, res) {
     mongodb.connect(mongoUrl, function (err, db) {
 
         if (err) {
-            winston.log('Error', "error while trying to connect MongoDB: ", err);
+            winston.log('error', "error while trying to connect MongoDB: ", err);
         }
 
         var collection = db.collection('tasks');
@@ -570,7 +569,7 @@ app.post('/TaskManeger/updateUserDetails', function (req, res) {
     mongodb.connect(mongoUrl, function (err, db) {
 
         if (err) {
-            winston.log('Error', "error while trying to connect MongoDB: ", err);
+            winston.log('error', "error while trying to connect MongoDB: ", err);
         }
 
         var collection = db.collection('users');
@@ -597,7 +596,7 @@ app.post('/TaskManeger/registerUser', function (req, res) {
     mongodb.connect(mongoUrl, function (err, db) {
 
         if (err) {
-            winston.log('Error', "error while trying to connect MongoDB: ", err);
+            winston.log('error', "error while trying to connect MongoDB: ", err);
         }
 
         var collection = db.collection('users');
@@ -605,7 +604,7 @@ app.post('/TaskManeger/registerUser', function (req, res) {
         collection.insert(user, function (err, results) {
 
             if (err) {
-                winston.log('Error', "error while trying register new user: ", err);
+                winston.log('error', "error while trying register new user: ", err);
             }
 
             var newUser = results.ops[0];
@@ -624,7 +623,7 @@ app.get('/TaskManeger/getTasks', function (req, res) {
     mongodb.connect(mongoUrl, function (err, db) {
 
         if (err) {
-            winston.log('Error', "error while trying to connect MongoDB: ", err);
+            winston.log('error', "error while trying to connect MongoDB: ", err);
         }
 
         var collection = db.collection('tasks');
@@ -636,7 +635,7 @@ app.get('/TaskManeger/getTasks', function (req, res) {
             }, { "sort": ['createTime', 'asc'] }).toArray(function (err, result) {
 
             if (err) {
-                winston.log('Error', "error while trying to get all Tasks: ", err);
+                winston.log('error', "error while trying to get all Tasks: ", err);
             }
 
             res.send(result); 
@@ -665,14 +664,14 @@ app.get('/TaskManeger/searchUsers', function (req, res) {
     mongodb.connect(mongoUrl, function (err, db) {
 
         if (err) {
-            winston.log('Error', "error while trying to connect MongoDB: ", err);
+            winston.log('error', "error while trying to connect MongoDB: ", err);
         }
 
         var collection = db.collection('users');
         collection.find(query, { '_id': true, 'name': true, 'avatarUrl': true, 'type': true, 'usersInGroup': true }).toArray(function (err, result) {
 
             if (err) {
-                winston.log('Error', "error while trying search user: ", err);
+                winston.log('error', "error while trying search user: ", err);
             }
 
             db.close();
@@ -692,14 +691,14 @@ app.get('/TaskManeger/isUserExist', function (req, res) {
     mongodb.connect(mongoUrl, function (err, db) {
                     
         if (err) {
-            winston.log('Error', "error while trying to connect MongoDB: ", err);
+            winston.log('error', "error while trying to connect MongoDB: ", err);
         }
 
         var collection = db.collection('users');
         collection.findOne(query , function (err, result) {
 
             if (err) {
-                winston.log('Error', "error while trying to check if user Exist: ", err);
+                winston.log('error', "error while trying to check if user Exist: ", err);
             }
 
             db.close();
@@ -719,7 +718,7 @@ var getUsersByUsersId = function (usersIds, callback) {
     mongodb.connect(mongoUrl, function (err, db) {
 
         if (err) {
-            winston.log('Error', "error while trying to connect MongoDB: ", err);
+            winston.log('error', "error while trying to connect MongoDB: ", err);
         }
 
         var collection = db.collection('users');
@@ -735,14 +734,14 @@ var getUnDoneTasksCountByUserId = function (userId, callback) {
     mongodb.connect(mongoUrl, function (err, db) {
 
         if (err) {
-            winston.log('Error', "error while trying to connect MongoDB: ", err);
+            winston.log('error', "error while trying to connect MongoDB: ", err);
         }
 
         var collection = db.collection('tasks');
         collection.count({ 'to._id': new ObjectID(userId), 'status': 'inProgress' }, function (err, result) {
 
             if (err) {
-                winston.log('Error', "error while trying to get UnDone Tasks Count: ", err);
+                winston.log('error', "error while trying to get UnDone Tasks Count: ", err);
             }
 
             db.close();
@@ -812,14 +811,14 @@ app.get('/TaskManeger/getAllCliqot', function (req, res) {
     mongodb.connect(mongoUrl, function (err, db) {
 
         if (err) {
-            winston.log('Error', "error while trying to connect MongoDB: ", err);
+            winston.log('error', "error while trying to connect MongoDB: ", err);
         }
 
         var collection = db.collection('Cliqot');
         collection.find({name: {'$ne': 'מנהלים'}}).toArray(function (err, result) {
 
             if (err) {
-                winston.log('Error', "error while trying to get All Cliqot: ", err);
+                winston.log('error', "error while trying to get All Cliqot: ", err);
             }
 
             db.close();
@@ -835,7 +834,7 @@ var sendVerificationCodeToUser = function(user){
     mongodb.connect(mongoUrl, function (err, db) {
 
         if (err) {
-            winston.log('Error', "error while trying to connect MongoDB: ", err);
+            winston.log('error', "error while trying to connect MongoDB: ", err);
         }
 
         var collection = db.collection('users');
@@ -850,7 +849,7 @@ var sendVerificationCodeToUser = function(user){
             function (err, results) {
 
                 if (err) {
-                    winston.log('Error', "error while trying to add new Task: ", err);
+                    winston.log('error', "error while trying to add new Task: ", err);
                 }
 
                 db.close();
@@ -883,7 +882,7 @@ var sendSmsViaAdminPhone = function (verificationCode, AdminRegToken, user) {
     GcmSender.send(message, { registrationTokens: [AdminRegToken] }, function (err, response) {
         console.log("send message", message);
         if (err) {
-            winston.log('Error', "error while sending push notification: ", err);
+            winston.log('error', "error while sending push notification: ", err);
         }
         else {
             console.log(response);
@@ -899,7 +898,7 @@ app.get('/TaskManeger/checkIfVerificationCodeMatch', function (req, res) {
     mongodb.connect(mongoUrl, function (err, db) {
 
         if (err) {
-            winston.log('Error', "error while trying to connect MongoDB: ", err);
+            winston.log('error', "error while trying to connect MongoDB: ", err);
         }
 
         var collection = db.collection('users');
@@ -908,7 +907,7 @@ app.get('/TaskManeger/checkIfVerificationCodeMatch', function (req, res) {
             function (err, results) {
 
                 if (err) {
-                    winston.log('Error', "error while trying to add new Task: ", err);
+                    winston.log('error', "error while trying to add new Task: ", err);
                 }               
                 
                 if(results.value !== null){
