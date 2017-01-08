@@ -91,6 +91,17 @@ md-chips .md-chip-input-container{
     background-color: #e8fafc !important;
     border-radius: 25px;
 }
+.new-responses-badge{
+    background-color: rgb(255,138,101);
+    color: rgb(250,250,250);
+    position: absolute;
+    top: 29px;
+    left: 54px;
+}
+.new-responses-badge-inProcess{
+    background-color: rgb(255,138,101);
+    color: rgb(250,250,250);
+}
 .image-wraper > img{
     max-width: 100%;
     max-height: 100%;

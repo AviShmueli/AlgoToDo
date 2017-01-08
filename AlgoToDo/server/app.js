@@ -611,6 +611,7 @@ app.post('/TaskManeger/registerUser', function (req, res) {
             /*if (newUser.GcmRegistrationId !== undefined) {
                 GcmRegistrationIdsCache[newUser._id] = { 'userId': user._id, 'userName': newUser.name, GcmRegistrationId: newUser.GcmRegistrationId };
             }*/
+            sendVerificationCodeToUser(newUser);
             res.send(newUser);
             db.close();
         });
@@ -849,7 +850,7 @@ var sendVerificationCodeToUser = function(user){
             function (err, results) {
 
                 if (err) {
-                    winston.log('error', "error while trying to add new Task: ", err);
+                    winston.log('error', "error while trying to save verification Code to user: ", err);
                 }
 
                 db.close();

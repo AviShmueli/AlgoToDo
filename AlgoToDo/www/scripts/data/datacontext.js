@@ -211,17 +211,20 @@
         
         var addCommentToTask = function (taskId, comment) {
             var foundIndex = arrayObjectIndexOf(self.$storage.tasksList, '_id', taskId);
-            var taskComments;
+            var task;
             if (foundIndex !== -1) {
-                taskComments = self.$storage.tasksList[foundIndex].comments;
-            }           
-            if (taskComments === undefined) {
-                self.$storage.tasksList[foundIndex].comments = [comment];
+                task = self.$storage.tasksList[foundIndex];
+            }
+
+            if (task.comments === undefined) {
+                task.comments = [comment];
+                task.unSeenResponses = task.unSeenResponses === undefined || task.unSeenResponses === '' ? 1 : task.unSeenResponses + 1;
             }
             else {
-                var newCommentIndex_IfExist = arrayObjectIndexOf(taskComments, '_id', comment._id);
+                var newCommentIndex_IfExist = arrayObjectIndexOf(task.comments, '_id', comment._id);
                 if (newCommentIndex_IfExist === -1) {
-                    taskComments.push(comment);
+                    task.comments.push(comment);
+                    task.unSeenResponses = task.unSeenResponses === undefined || task.unSeenResponses === '' ? 1 : task.unSeenResponses + 1;
                 }
             }
 
@@ -379,7 +382,8 @@
             saveFileToCache: saveFileToCache,
             removeAllTaskImagesFromCache: removeAllTaskImagesFromCache,
             getAllCliqot: getAllCliqot,
-            checkIfVerificationCodeMatch: checkIfVerificationCodeMatch
+            checkIfVerificationCodeMatch: checkIfVerificationCodeMatch,
+            updateUserDetails: updateUserDetails
         };
 
         return service;

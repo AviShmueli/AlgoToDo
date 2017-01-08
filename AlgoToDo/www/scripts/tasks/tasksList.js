@@ -85,11 +85,21 @@
                     if (angular.equals({}, datacontext.getDeviceDetailes())) {
                         datacontext.setDeviceDetailes(device.getDeviceDetails(), cordova.file.applicationDirectory);
                     }
+
+                    // set applicationDirectory
                     var a = datacontext.getDeviceDetailes().applicationDirectory;
                     var b = cordova.file.applicationDirectory;
                     if(a !== b){
                         datacontext.setDeviceDetailes(device.getDeviceDetails(), cordova.file.applicationDirectory);
-                    }                  
+                    }
+
+                    device.getAppVersion().then(function (version) {
+                        if (version !== vm.user.versionInstalled) {
+                            datacontext.updateUserDetails(vm.user._id, 'versionInstalled', version);
+                            vm.user.versionInstalled = version;
+                            datacontext.saveUserToLocalStorage(vm.user);
+                        } 
+                    });
                 }, false);
             }
 

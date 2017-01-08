@@ -27,6 +27,8 @@
         angular.element(document.querySelectorAll('html')).removeClass("hight-auto");
         vm.newCommentText = '';
 
+        vm.task.unSeenResponses = 0;
+
         if (vm.task.comments === undefined) {
             vm.task.comments = [];
         }

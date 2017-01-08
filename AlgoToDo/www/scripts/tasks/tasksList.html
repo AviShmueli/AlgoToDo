@@ -80,12 +80,16 @@
                                     <span flex></span>
                                     <span ng-bind-html="(item.createTime | amCalendar)"></span>
                                 </div>
-                                <div layout="row" style="font-size: 14px;">
-                                    <span ng-if="item.description.length > vm.descriptionTextLength()">{{item.description.substring(0, vm.descriptionTextLength()) + '...'}}</span>
-                                    <span ng-if="item.description.length <= vm.descriptionTextLength()">{{item.description}}</span>
-                                </div>
-                                <div layout="row" layout-align="end end" ng-if="vm.taskHasAttachment(item)">
-                                    <ng-md-icon icon="attachment" class="icon-fill" size="20"></ng-md-icon>
+                                
+                                <div layout="row" >
+                                    <div layout="row" flex="90" style="font-size: 14px;">
+                                        <span ng-if="item.description.length > vm.descriptionTextLength()">{{item.description.substring(0, vm.descriptionTextLength()) + '...'}}</span>
+                                        <span ng-if="item.description.length <= vm.descriptionTextLength()">{{item.description}}</span>
+                                    </div>
+                                    <div layout="column" flex="10" layout-align="center end">
+                                        <md-badge class="new-responses-badge-inProcess" ng-if="item.unSeenResponses > 0">{{item.unSeenResponses}}</md-badge>
+                                        <ng-md-icon ng-if="vm.taskHasAttachment(item)" icon="attachment" class="icon-fill" size="20"></ng-md-icon>                        
+                                    </div>
                                 </div>
                             </a>
                             <md-divider md-inset ng-if="!$last"></md-divider>
@@ -128,6 +132,7 @@
                                 <div ng-if="vm.taskHasAttachment(item)">
                                     <ng-md-icon icon="attachment" class="icon-fill attachment-icon" size="20"></ng-md-icon>
                                 </div>
+                                <md-badge class="new-responses-badge" ng-if="item.unSeenResponses > 0">{{item.unSeenResponses}}</md-badge>
                                 <md-button class="md-fab md-mini md-icon-button" style="background-color: rgba(105, 178, 137, 0.95);" ng-click="vm.setTaskStatus(item, 'done')" aria-label="done">
                                     <ng-md-icon icon="done"></ng-md-icon>
                                 </md-button>
