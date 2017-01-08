@@ -174,7 +174,7 @@
                             datacontext.checkIfVerificationCodeMatch(user, verificationCode).then(function (result) {
                                 if (result.data === 'ok') {
                                     datacontext.saveUserToLocalStorage(response.data);
-                                    logger.success('user signUp successfuly', response.data);
+                                        logger.success('user signUp successfuly', response.data);
                                     window.location = '#/';
                                 }
                                 else {
