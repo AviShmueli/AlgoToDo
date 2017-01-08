@@ -60,7 +60,6 @@
             // if no users found in the cache, search in DB
             var deferred = $q.defer();
             datacontext.searchUsers(query).then(function (response) {
-                logger.success("search result: ", response.data);
                 var usersList = response.data;
                 for (var i = 0; i < usersList.length; i++) {
                     usersList[i]['avatarFullUrl'] = vm.imagesPath + usersList[i].avatarUrl;

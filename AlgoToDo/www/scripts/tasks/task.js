@@ -121,7 +121,6 @@
             }
 
             datacontext.updateTask(task).then(function (response) {
-                logger.success('המשימה עודכנה בהצלחה!', response.data);
                 
             }, function (error) {
                 logger.error('Error while tring to update task ', error);

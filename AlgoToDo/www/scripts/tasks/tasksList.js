@@ -225,7 +225,6 @@
             }
 
             datacontext.updateTask(task).then(function (response) {
-                logger.success('המשימה עודכנה בהצלחה!', response.data);
                 var count = datacontext.setMyTaskCount();
                 cordovaPlugins.setBadge(count);
             }, function (error) {
