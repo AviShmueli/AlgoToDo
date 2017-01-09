@@ -101,7 +101,9 @@ var createApnProvider = function () {
 createApnProvider();
 
 var sendTaskViaApn = function(task, userUnDoneTaskCount, ApnRegistrationId, isUpdate){
-    console.log("******", task);
+
+    createApnProvider();
+
     var deviceTokenInHex = Buffer.from(ApnRegistrationId, 'base64').toString('hex');
     
     var note = new apn.Notification();
@@ -136,10 +138,6 @@ var sendTaskViaApn = function(task, userUnDoneTaskCount, ApnRegistrationId, isUp
         note.title = "משימה חדשה מ" + task.from.name;
         
     }
-
-    console.log("sending message : ", note);
-    console.log("with ApnRegistrationId: ", ApnRegistrationId);
-    //console.log("with ApnRegistrationId: ", deviceTokenInHex);
                       
     // Actually send the message
     apnProvider.send(note, ApnRegistrationId).then(function (response) {
@@ -157,6 +155,8 @@ var sendTaskViaApn = function(task, userUnDoneTaskCount, ApnRegistrationId, isUp
 
 var sendCommentViaApn = function(comment, task, ApnRegistrationId){
     
+    createApnProvider();
+
     var deviceTokenInHex = Buffer.from(ApnRegistrationId, 'base64').toString('hex');
     
     var note = new apn.Notification();
@@ -178,18 +178,12 @@ var sendCommentViaApn = function(comment, task, ApnRegistrationId){
     note.title = "תגובה חדשה מ" + comment.from.name;
     note.contentAvailable = 1;
     
-    console.log("sending message : ", note);
-    console.log("with ApnRegistrationId: ", ApnRegistrationId);
-    //console.log("with ApnRegistrationId: ", deviceTokenInHex);
-    
     // Actually send the message
     apnProvider.send(note, ApnRegistrationId).then(function (response) {
-        console.log("send message", note);
                                                    
         if (response.failed.length > 0) {
             console.error("error while sending push notification to apple user: ", response.failed);
             winston.log('error', "error while sending push notification to apple user: ", response.failed);
-            createApnProvider();
         }
         else {
             console.log(response.sent);
