@@ -28,6 +28,7 @@
             vm.inProgress = false;
             vm.user = {};
             vm.AllCliqot = [];
+            vm.selectedCliqa;
 
             datacontext.getAllCliqot().then(function (allCliqot){
                 vm.AllCliqot = allCliqot;
@@ -37,6 +38,9 @@
             vm.signMeUp = function () {
                 if (vm.inProgress === false) {
                     vm.inProgress = true;
+
+                    vm.user.cliqot = [vm.selectedCliqa];
+
                     signUp();
                 }
             }

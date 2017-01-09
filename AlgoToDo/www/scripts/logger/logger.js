@@ -26,7 +26,7 @@
         function error(message, data) {
             //toastr.error(message, title);
             $log.error('Error: ' + message, data);
-            shoeErrorOcurredAlert(message + ' \n ***' + data)
+            //showErrorOcurredAlert(message + ' \n ***' + data)
         }
 
         function info(message, data) {           
@@ -56,7 +56,7 @@
             $log.warn('Warning: ' + message, data);
         }
 
-        var shoeErrorOcurredAlert = function (error) {
+        showErrorOcurredAlert = function showErrorOcurredAlert(error) {
             $mdDialog.show(
               $mdDialog.alert()
                 .parent(angular.element(document.querySelector('#popupContainer')))

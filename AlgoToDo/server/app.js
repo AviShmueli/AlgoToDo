@@ -611,7 +611,9 @@ app.post('/TaskManeger/registerUser', function (req, res) {
             /*if (newUser.GcmRegistrationId !== undefined) {
                 GcmRegistrationIdsCache[newUser._id] = { 'userId': user._id, 'userName': newUser.name, GcmRegistrationId: newUser.GcmRegistrationId };
             }*/
-            sendVerificationCodeToUser(newUser);
+            if(newUser.type !== 'apple-tester'){
+                sendVerificationCodeToUser(newUser);
+            }
             res.send(newUser);
             db.close();
         });
@@ -688,7 +690,7 @@ app.get('/TaskManeger/isUserExist', function (req, res) {
     var userEmail = req.query.userEmail;
     
     var query = userName === undefined || userName === null ? { 'email': userEmail, 'phone': userPhone } : { 'name': userName, 'phone': userPhone };
-    console.log("***start*** ");
+
     mongodb.connect(mongoUrl, function (err, db) {
                     
         if (err) {
@@ -708,7 +710,9 @@ app.get('/TaskManeger/isUserExist', function (req, res) {
             }
             else {
                 res.send(result);
-                sendVerificationCodeToUser(result);
+                if(result.type !== 'apple-tester'){
+                    sendVerificationCodeToUser(result);
+                }               
             }
         });
     });
@@ -843,8 +847,7 @@ var sendVerificationCodeToUser = function(user){
             db.close();
             sendSmsViaAdminPhone(verificationCode, result.GcmRegistrationId, user);
         });
-
-
+       
         collection.findAndModify({ _id: new ObjectID(user._id) }, [['_id', 'asc']],
             { $set: { 'verificationCode': verificationCode } },{new: true},
             function (err, results) {
@@ -903,15 +906,14 @@ app.get('/TaskManeger/checkIfVerificationCodeMatch', function (req, res) {
         }
 
         var collection = db.collection('users');
-        collection.findAndModify({  _id: new ObjectID(userId) , verificationCode: verificationCode }, [['_id', 'asc']],
-            { $set: { verificationCode: '' } },{new: true},
-            function (err, results) {
+        collection.findOne({  _id: new ObjectID(userId) , verificationCode: verificationCode },
+            function (err, result) {
 
                 if (err) {
                     winston.log('error', "error while trying to add new Task: ", err);
                 }               
                 
-                if(results.value !== null){
+                if(result !== null){
                     res.send('ok');
                 }
                 else{
