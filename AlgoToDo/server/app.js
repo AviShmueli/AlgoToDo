@@ -101,7 +101,9 @@ var createApnProvider = function () {
 createApnProvider();
 
 var sendTaskViaApn = function(task, userUnDoneTaskCount, ApnRegistrationId, isUpdate){
-    console.log("******", task);
+
+    createApnProvider();
+
     var deviceTokenInHex = Buffer.from(ApnRegistrationId, 'base64').toString('hex');
     
     var note = new apn.Notification();
@@ -136,10 +138,6 @@ var sendTaskViaApn = function(task, userUnDoneTaskCount, ApnRegistrationId, isUp
         note.title = "משימה חדשה מ" + task.from.name;
         
     }
-
-    console.log("sending message : ", note);
-    console.log("with ApnRegistrationId: ", ApnRegistrationId);
-    //console.log("with ApnRegistrationId: ", deviceTokenInHex);
                       
     // Actually send the message
     apnProvider.send(note, ApnRegistrationId).then(function (response) {
@@ -157,6 +155,8 @@ var sendTaskViaApn = function(task, userUnDoneTaskCount, ApnRegistrationId, isUp
 
 var sendCommentViaApn = function(comment, task, ApnRegistrationId){
     
+    createApnProvider();
+
     var deviceTokenInHex = Buffer.from(ApnRegistrationId, 'base64').toString('hex');
     
     var note = new apn.Notification();
@@ -178,18 +178,12 @@ var sendCommentViaApn = function(comment, task, ApnRegistrationId){
     note.title = "תגובה חדשה מ" + comment.from.name;
     note.contentAvailable = 1;
     
-    console.log("sending message : ", note);
-    console.log("with ApnRegistrationId: ", ApnRegistrationId);
-    //console.log("with ApnRegistrationId: ", deviceTokenInHex);
-    
     // Actually send the message
     apnProvider.send(note, ApnRegistrationId).then(function (response) {
-        console.log("send message", note);
                                                    
         if (response.failed.length > 0) {
             console.error("error while sending push notification to apple user: ", response.failed);
             winston.log('error', "error while sending push notification to apple user: ", response.failed);
-            createApnProvider();
         }
         else {
             console.log(response.sent);
@@ -455,11 +449,9 @@ app.post('/TaskManeger/newTask', function (req, res) {
             //if (task.to._id !== task.from._id) {
                 pushTaskToUsersDevice(newTasks, recipientsIds);
             //}
-
-            // return the new task to the sender
-            res.send(results.ops);
-
             db.close();
+            // return the new task to the sender
+            res.send(results.ops);       
         });
     });
 });
@@ -505,7 +497,7 @@ app.post('/TaskManeger/newComment', function (req, res) {
                 
                 // if the employee is now online send the new task by Socket.io
                 if (userIdToNotify !== '' && !task.to._id.equals(task.from._id)) {
-                    io.to(ioIdToNotify).emit('new-comment', { taskId: task._id, newComment: comment });
+                    //io.to(ioIdToNotify).emit('new-comment', { taskId: task._id, newComment: comment });
                 }
 
                 // if this task is not from me to me, send notification to the user
@@ -515,21 +507,19 @@ app.post('/TaskManeger/newComment', function (req, res) {
 
                 // return the new task to the sender
                 //res.send(results.ops[0]);
-                
-                res.send('ok');
-
                 db.close();
+                res.send('ok');
             });
         });
 });
 
 app.post('/TaskManeger/updateTaskStatus', function (req, res) {
-
+    console.log("****1****");
     var task = req.body.task;
-    var from = '';
+    /*var from = '';
     if (users[task.from._id] !== undefined) {
         from = users[task.from._id].id;
-    }
+    }*/
 
     //add task to Mongo
     mongodb.connect(mongoUrl, function (err, db) {
@@ -540,21 +530,24 @@ app.post('/TaskManeger/updateTaskStatus', function (req, res) {
 
         var collection = db.collection('tasks');
 
-        collection.findAndModify({ _id: new ObjectID(task._id) }, [['_id', 'asc']], { $set: { 'status': task.status, 'doneTime': task.doneTime, 'seenTime': task.seenTime } }, {new: true},
+        collection.findAndModify({ _id: new ObjectID(task._id) }, [['_id', 'asc']], 
+        { $set: { 'status': task.status, 'doneTime': task.doneTime, 'seenTime': task.seenTime } }, {new: true},
             function (err, results) {
-                
-                // send the updated task to the maneger and return it to the employee
+                console.log("****2****");
+                /*// send the updated task to the maneger and return it to the employee
                 if (from !== '') {
                     io.to(from).emit('updated-task', results.value);
-                }
+                }*/
                 
                 // if this task is not from me to me, send notification to the user
                 if (task.to._id !== task.from._id) {
                     pushUpdatetdTaskToUsersDevice(results.value, task.from._id);
                 }
-
-                res.send(results.value);
+                console.log("****3****", results.value);
                 db.close();
+                console.log("****4****");
+                res.send(results.value);
+
             });
     });
 });
@@ -577,8 +570,8 @@ app.post('/TaskManeger/updateUserDetails', function (req, res) {
         updateObj[fieldToUpdate] = valueToUpdate;
         collection.findAndModify({ _id: new ObjectID(userId) }, [['_id', 'asc']], { $set: updateObj }, {new: true},
             function (err, results) {
-                res.send(results);
-                db.close(); 
+                db.close();
+                res.send(results);                 
             });
     });
 });
@@ -614,8 +607,8 @@ app.post('/TaskManeger/registerUser', function (req, res) {
             if(newUser.type !== 'apple-tester'){
                 sendVerificationCodeToUser(newUser);
             }
-            res.send(newUser);
             db.close();
+            res.send(newUser);
         });
     });
 });
@@ -641,8 +634,8 @@ app.get('/TaskManeger/getTasks', function (req, res) {
                 winston.log('error', "error while trying to get all Tasks: ", err);
             }
 
-            res.send(result); 
             db.close();
+            res.send(result); 
         });
     });
 });
@@ -912,15 +905,13 @@ app.get('/TaskManeger/checkIfVerificationCodeMatch', function (req, res) {
                 if (err) {
                     winston.log('error', "error while trying to add new Task: ", err);
                 }               
-                
+                db.close();
                 if(result !== null){
                     res.send('ok');
                 }
                 else{
                     res.send('notMatch');
                 }
-                
-                db.close();
             });
     });
 });
