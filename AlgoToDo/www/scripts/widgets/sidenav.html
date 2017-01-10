@@ -29,21 +29,21 @@
             <span flex></span>
             <span>ניהול</span>
         </md-subheader>
-        <md-item ng-repeat="item in vm.admin">
-            <a style="cursor: pointer">
+        <md-item >
+            <a style="cursor: pointer" ng-click="vm.showLogoffButton = true">
                 <md-item-content md-ink-ripple layout="row" layout-align="start center">
                     <div class="inset">
-                        <ng-md-icon icon="{{item.icon}}"></ng-md-icon>
+                        <ng-md-icon icon="settings"></ng-md-icon>
                     </div>
                     <span flex></span>
                     <div class="inset">
-                        {{item.title}}
+                        הגדרות
                     </div>
                 </md-item-content>
             </a>
         </md-item>
         <md-divider></md-divider>
-        <md-item>
+        <md-item ng-if="vm.showLogoffButton === true">
             <a ng-click="vm.logOff()" style="cursor: pointer">
                 <md-item-content md-ink-ripple layout="row" layout-align="start center">
                     <div class="inset">
@@ -61,7 +61,7 @@
                 <md-item-content md-ink-ripple layout="row" layout-align="start center">
                     <span flex></span>
                     <div class="inset">
-                        {{vm.appVersion}}
+                       Asiti {{vm.appVersion}}
                     </div>
                 </md-item-content>
         </md-item>
