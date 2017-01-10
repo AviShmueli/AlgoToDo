@@ -130,18 +130,13 @@
         }
 
         var navigateToTaskPage = function (taskId, task) {
-            $log.info("nevigate 1", self.appState);
             if (self.appState === 'background') {
-                $log.info("nevigate 2", window.location.hash);
                 window.location = '#/task/' + taskId;
             }
             else {
-                $log.info("nevigate 3", window.location.hash);
                 if (window.location.hash.indexOf(taskId) === -1) {
-                    $log.info("nevigate 4", task.from.name);
                     showNewCommentToast(taskId, task.from.name);
                 }
-                $log.info("nevigate 5");
                 document.addEventListener("deviceready", function () {
                     $cordovaVibration.vibrate(300);
                 }, false);
