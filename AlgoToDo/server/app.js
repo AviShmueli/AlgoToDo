@@ -518,12 +518,12 @@ app.post('/TaskManeger/newComment', function (req, res) {
 });
 
 app.post('/TaskManeger/updateTaskStatus', function (req, res) {
-
+    console.log("****1****");
     var task = req.body.task;
-    var from = '';
+    /*var from = '';
     if (users[task.from._id] !== undefined) {
         from = users[task.from._id].id;
-    }
+    }*/
 
     //add task to Mongo
     mongodb.connect(mongoUrl, function (err, db) {
@@ -534,19 +534,20 @@ app.post('/TaskManeger/updateTaskStatus', function (req, res) {
 
         var collection = db.collection('tasks');
 
-        collection.findAndModify({ _id: new ObjectID(task._id) }, [['_id', 'asc']], { $set: { 'status': task.status, 'doneTime': task.doneTime, 'seenTime': task.seenTime } }, {new: true},
+        collection.findAndModify({ _id: new ObjectID(task._id) }, [['_id', 'asc']], 
+        { $set: { 'status': task.status, 'doneTime': task.doneTime, 'seenTime': task.seenTime } }, {new: true},
             function (err, results) {
-                
-                // send the updated task to the maneger and return it to the employee
+                console.log("****2****");
+                /*// send the updated task to the maneger and return it to the employee
                 if (from !== '') {
                     io.to(from).emit('updated-task', results.value);
-                }
+                }*/
                 
                 // if this task is not from me to me, send notification to the user
                 if (task.to._id !== task.from._id) {
                     pushUpdatetdTaskToUsersDevice(results.value, task.from._id);
                 }
-
+                console.log("****3****");
                 res.send(results.value);
                 db.close();
             });
