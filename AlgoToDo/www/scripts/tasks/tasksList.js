@@ -228,17 +228,16 @@
             task.status = newStatus;
             if (task.status === 'done') {
                 task.doneTime = new Date();
-                localNotifications.cancelNotification(task._id);
+                //localNotifications.cancelNotification(task._id);
             }
             if (task.status === 'seen') {
                 task.seenTime = new Date();
             }
-
             datacontext.updateTask(task).then(function (response) {
                 var count = datacontext.setMyTaskCount();
                 cordovaPlugins.setBadge(count);
             }, function (error) {
-                logger.error('Error while tring to update task ', error);
+                logger.error('Error while trying to update task ', error);
             });
         };
 

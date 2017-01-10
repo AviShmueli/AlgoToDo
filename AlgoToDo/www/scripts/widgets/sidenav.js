@@ -27,7 +27,8 @@
             vm.logOff = $scope.logOff;
             vm.cancelAllNotifications = $scope.cancelAllNotifications;
             vm.appVersion = '';
-
+            vm.showLogoffButton = false;
+            
             document.addEventListener("deviceready", function () {
                 device.getAppVersion().then(function (version) {
                     vm.appVersion = version;

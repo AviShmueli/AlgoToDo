@@ -93,6 +93,7 @@
                     vm.task.from = { '_id': vm.user._id, 'name': vm.user.name, 'avatarUrl': vm.user.avatarUrl };
                     vm.task.status = 'inProgress';
                     vm.task.createTime = new Date();                    
+                    vm.task.cliqaId = vm.user.cliqot[0]._id;
 
                     if (vm.task.comments.length > 0) {
                         vm.task.comments[0].createTime = new Date();
@@ -119,7 +120,7 @@
 
         var saveNewTask = function (taskListToAdd) {
             datacontext.saveNewTasks(taskListToAdd).then(function (response) {
-                logger.toast('המשימה נשלחה בהצלחה!', response.data, 2000);
+                logger.toast('המשימה נשלחה בהצלחה!', response.data, 1000);
                 logger.info('task added sucsessfuly', response.data);
                 datacontext.pushTasksToTasksList(response.data);
                 var count = datacontext.setMyTaskCount();
