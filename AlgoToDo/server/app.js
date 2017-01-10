@@ -449,11 +449,9 @@ app.post('/TaskManeger/newTask', function (req, res) {
             //if (task.to._id !== task.from._id) {
                 pushTaskToUsersDevice(newTasks, recipientsIds);
             //}
-
-            // return the new task to the sender
-            res.send(results.ops);
-
             db.close();
+            // return the new task to the sender
+            res.send(results.ops);       
         });
     });
 });
@@ -509,10 +507,8 @@ app.post('/TaskManeger/newComment', function (req, res) {
 
                 // return the new task to the sender
                 //res.send(results.ops[0]);
-                
-                res.send('ok');
-
                 db.close();
+                res.send('ok');
             });
         });
 });
@@ -548,8 +544,10 @@ app.post('/TaskManeger/updateTaskStatus', function (req, res) {
                     pushUpdatetdTaskToUsersDevice(results.value, task.from._id);
                 }
                 console.log("****3****", results.value);
-                res.send(results.value);
                 db.close();
+                console.log("****4****");
+                res.send(results.value);
+
             });
     });
 });
@@ -572,8 +570,8 @@ app.post('/TaskManeger/updateUserDetails', function (req, res) {
         updateObj[fieldToUpdate] = valueToUpdate;
         collection.findAndModify({ _id: new ObjectID(userId) }, [['_id', 'asc']], { $set: updateObj }, {new: true},
             function (err, results) {
-                res.send(results);
-                db.close(); 
+                db.close();
+                res.send(results);                 
             });
     });
 });
@@ -609,8 +607,8 @@ app.post('/TaskManeger/registerUser', function (req, res) {
             if(newUser.type !== 'apple-tester'){
                 sendVerificationCodeToUser(newUser);
             }
-            res.send(newUser);
             db.close();
+            res.send(newUser);
         });
     });
 });
@@ -636,8 +634,8 @@ app.get('/TaskManeger/getTasks', function (req, res) {
                 winston.log('error', "error while trying to get all Tasks: ", err);
             }
 
-            res.send(result); 
             db.close();
+            res.send(result); 
         });
     });
 });
@@ -907,15 +905,13 @@ app.get('/TaskManeger/checkIfVerificationCodeMatch', function (req, res) {
                 if (err) {
                     winston.log('error', "error while trying to add new Task: ", err);
                 }               
-                
+                db.close();
                 if(result !== null){
                     res.send('ok');
                 }
                 else{
                     res.send('notMatch');
                 }
-                
-                db.close();
             });
     });
 });
