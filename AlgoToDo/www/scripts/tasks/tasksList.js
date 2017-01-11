@@ -321,7 +321,7 @@
                 .cancel('בטל');
 
             $mdDialog.show(confirm).then(function () {
-                cordovaPlugins.cancelAllNotifications();
+                localNotifications.cancelAllNotifications();
             }, function () {
                 
             });
