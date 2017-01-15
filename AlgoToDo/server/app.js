@@ -678,8 +678,9 @@ app.get('/TaskManeger/isUserExist', function (req, res) {
     var userName = req.query.userName;
     var userEmail = req.query.userEmail;
     
-    var query = userName === undefined || userName === null ? { 'email': userEmail, 'phone': userPhone } : { 'name': userName, 'phone': userPhone };
-
+    //var query = userName === undefined || userName === null ? { 'email': userEmail, 'phone': userPhone } : { 'name': userName, 'phone': userPhone };
+    var query = {'phone': userPhone };
+    
     mongodb.connect(mongoUrl, function (err, db) {
                     
         if (err) {
@@ -810,6 +811,31 @@ app.get('/TaskManeger/getAllCliqot', function (req, res) {
 
         var collection = db.collection('Cliqot');
         collection.find({name: {'$ne': 'מנהלים'}}).toArray(function (err, result) {
+
+            if (err) {
+                winston.log('error', "error while trying to get All Cliqot: ", err);
+            }
+
+            db.close();
+            res.send(result);
+        });
+    });
+});
+
+app.get('/TaskManeger/getAllTasks', function (req, res) {
+
+    var order = req.query.order,
+        limit = parseInt(req.query.limit),
+        page = req.query.page;
+
+    mongodb.connect(mongoUrl, function (err, db) {
+
+        if (err) {
+            winston.log('error', "error while trying to connect MongoDB: ", err);
+        }
+
+        var collection = db.collection('tasks');
+        collection.find({}).limit( limit ).sort({createTime : -1}).toArray(function (err, result) {
 
             if (err) {
                 winston.log('error', "error while trying to get All Cliqot: ", err);
