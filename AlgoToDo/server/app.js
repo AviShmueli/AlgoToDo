@@ -88,7 +88,7 @@ var apnProviderOptions = {
     cert: cert,
     key: key,
     pfx: pfx,
-    roduction: true,
+    roduction: false,
     passphrase: 'avi3011algo',
     heartBeat: 30000
 };
@@ -576,6 +576,9 @@ app.post('/TaskManeger/updateUserDetails', function (req, res) {
 app.post('/TaskManeger/registerUser', function (req, res) {
 
     var user = req.body.user;
+    var cliqa = JSON.parse(user.cliqot[0]);
+    user.cliqot = [cliqa];
+
     if (user.hasOwnProperty('_id')) {
         delete user._id;
     }
@@ -679,8 +682,9 @@ app.get('/TaskManeger/isUserExist', function (req, res) {
     var userName = req.query.userName;
     var userEmail = req.query.userEmail;
     
-    var query = userName === undefined || userName === null ? { 'email': userEmail, 'phone': userPhone } : { 'name': userName, 'phone': userPhone };
-
+    //var query = userName === undefined || userName === null ? { 'email': userEmail, 'phone': userPhone } : { 'name': userName, 'phone': userPhone };
+    var query = {'phone': userPhone };
+    
     mongodb.connect(mongoUrl, function (err, db) {
                     
         if (err) {
@@ -818,6 +822,57 @@ app.get('/TaskManeger/getAllCliqot', function (req, res) {
 
             db.close();
             res.send(result);
+        });
+    });
+});
+
+app.get('/TaskManeger/getAllTasks', function (req, res) {
+
+    var order = req.query.order,
+        limit = parseInt(req.query.limit),
+        page = req.query.page;
+
+    var options = {
+        "limit": limit,
+        "skip": (page - 1) * 10
+    };
+
+    mongodb.connect(mongoUrl, function (err, db) {
+
+        if (err) {
+            winston.log('error', "error while trying to connect MongoDB: ", err);
+        }
+
+        var collection = db.collection('tasks');
+        collection.find({}, options).sort({createTime : -1}).toArray(function (err, result) {
+
+            if (err) {
+                winston.log('error', "error while trying to get All Cliqot: ", err);
+            }
+
+            db.close();
+            res.send(result);
+        });
+    });
+});
+
+app.get('/TaskManeger/getAllTasksCount', function (req, res) {
+
+    mongodb.connect(mongoUrl, function (err, db) {
+
+        if (err) {
+            winston.log('error', "error while trying to connect MongoDB: ", err);
+        }
+
+        var collection = db.collection('tasks');
+        collection.count(function (err, result) {
+
+            if (err) {
+                winston.log('error', "error while trying to get All tasks count: ", err);
+            }
+
+            db.close();
+            res.send(result.toString());
         });
     });
 });
