@@ -87,7 +87,7 @@ var apnProviderOptions = {
     cert: cert,
     key: key,
     pfx: pfx,
-    roduction: true,
+    roduction: false,
     passphrase: 'avi3011algo',
     heartBeat: 30000
 };
@@ -102,7 +102,7 @@ createApnProvider();
 
 var sendTaskViaApn = function(task, userUnDoneTaskCount, ApnRegistrationId, isUpdate){
 
-    //createApnProvider();
+    createApnProvider();
 
     var deviceTokenInHex = Buffer.from(ApnRegistrationId, 'base64').toString('hex');
     
