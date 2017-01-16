@@ -73,7 +73,8 @@ server.listen(process.env.PORT || 5001, function (err) {
 
 
 var apn = require('apn');
-var APNsAuthKey = path.join(__dirname, './ApnCertificates/APNsAuthKey_JXZ3MBK8YA.p8');
+var APNsAuthKey = path.join(__dirname, './ApnCertificates/APNsAuthKey_DY2XKZ998J.p8');
+//var APNsAuthKey = path.join(__dirname, './ApnCertificates/APNsAuthKey_JXZ3MBK8YA.p8');
 var pfx = path.join(__dirname, './ApnCertificates/production/prod_Certificates.p12');
 var cert = path.join(__dirname, './ApnCertificates/production/aps_prod_cert.pem');
 var key = path.join(__dirname, './ApnCertificates/production/aps_prod_key.pem');
@@ -81,7 +82,7 @@ var key = path.join(__dirname, './ApnCertificates/production/aps_prod_key.pem');
 var apnProviderOptions = {
     token: {
         key: APNsAuthKey,
-        keyId: "JXZ3MBK8YA",
+        keyId: "DY2XKZ998J",
         teamId: "TYMZRJ5DHP",
     },   
     cert: cert,
