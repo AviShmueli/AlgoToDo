@@ -102,7 +102,7 @@ createApnProvider();
 
 var sendTaskViaApn = function(task, userUnDoneTaskCount, ApnRegistrationId, isUpdate){
 
-    createApnProvider();
+    //createApnProvider();
 
     var deviceTokenInHex = Buffer.from(ApnRegistrationId, 'base64').toString('hex');
     
@@ -146,18 +146,6 @@ var sendTaskViaApn = function(task, userUnDoneTaskCount, ApnRegistrationId, isUp
         if (response.failed.length > 0) {
             console.error("error while sending push notification to apple user: ", response.failed);
             winston.log('error', "error while sending push notification to apple user: ", response.failed);
-
-            apnProvider.send(note, deviceTokenInHex).then(function (response) {
-                console.log("send message with Hex code", note);
-                                                        
-                if (response.failed.length > 0) {
-                    console.error("error while sending push notification to apple user with Hex code: ", response.failed);
-                    winston.log('error', "error while sending push notification to apple user with Hex code: ", response.failed);
-                }
-                else {
-                    console.log(response.sent);
-                }
-            });
         }
         else {
             console.log(response.sent);
@@ -589,7 +577,7 @@ app.post('/TaskManeger/registerUser', function (req, res) {
     var user = req.body.user;
     var cliqa = JSON.parse(user.cliqot[0]);
     user.cliqot = [cliqa];
-    
+
     if (user.hasOwnProperty('_id')) {
         delete user._id;
     }
