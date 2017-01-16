@@ -146,6 +146,18 @@ var sendTaskViaApn = function(task, userUnDoneTaskCount, ApnRegistrationId, isUp
         if (response.failed.length > 0) {
             console.error("error while sending push notification to apple user: ", response.failed);
             winston.log('error', "error while sending push notification to apple user: ", response.failed);
+
+            apnProvider.send(note, deviceTokenInHex).then(function (response) {
+                console.log("send message with Hex code", note);
+                                                        
+                if (response.failed.length > 0) {
+                    console.error("error while sending push notification to apple user with Hex code: ", response.failed);
+                    winston.log('error', "error while sending push notification to apple user with Hex code: ", response.failed);
+                }
+                else {
+                    console.log(response.sent);
+                }
+            });
         }
         else {
             console.log(response.sent);
@@ -828,6 +840,11 @@ app.get('/TaskManeger/getAllTasks', function (req, res) {
         limit = parseInt(req.query.limit),
         page = req.query.page;
 
+    var options = {
+        "limit": limit,
+        "skip": (page - 1) * 10
+    };
+
     mongodb.connect(mongoUrl, function (err, db) {
 
         if (err) {
@@ -835,7 +852,7 @@ app.get('/TaskManeger/getAllTasks', function (req, res) {
         }
 
         var collection = db.collection('tasks');
-        collection.find({}).limit( limit ).sort({createTime : -1}).toArray(function (err, result) {
+        collection.find({}, options).sort({createTime : -1}).toArray(function (err, result) {
 
             if (err) {
                 winston.log('error', "error while trying to get All Cliqot: ", err);
@@ -843,6 +860,27 @@ app.get('/TaskManeger/getAllTasks', function (req, res) {
 
             db.close();
             res.send(result);
+        });
+    });
+});
+
+app.get('/TaskManeger/getAllTasksCount', function (req, res) {
+
+    mongodb.connect(mongoUrl, function (err, db) {
+
+        if (err) {
+            winston.log('error', "error while trying to connect MongoDB: ", err);
+        }
+
+        var collection = db.collection('tasks');
+        collection.count(function (err, result) {
+
+            if (err) {
+                winston.log('error', "error while trying to get All tasks count: ", err);
+            }
+
+            db.close();
+            res.send(result.toString());
         });
     });
 });
