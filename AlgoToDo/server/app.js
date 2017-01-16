@@ -85,10 +85,10 @@ var apnProviderOptions = {
         keyId: "DY2XKZ998J",
         teamId: "TYMZRJ5DHP",
     },   
-    cert: cert,
+    /*cert: cert,
     key: key,
-    pfx: pfx,
-    roduction: false,
+    pfx: pfx,*/
+    production: true,
     passphrase: 'avi3011algo',
     heartBeat: 30000
 };
