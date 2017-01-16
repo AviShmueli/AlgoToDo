@@ -587,6 +587,9 @@ app.post('/TaskManeger/updateUserDetails', function (req, res) {
 app.post('/TaskManeger/registerUser', function (req, res) {
 
     var user = req.body.user;
+    var cliqa = JSON.parse(user.cliqot[0]);
+    user.cliqot = [cliqa];
+    
     if (user.hasOwnProperty('_id')) {
         delete user._id;
     }
