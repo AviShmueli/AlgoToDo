@@ -35,6 +35,10 @@
                 });
             }, false);
 
+            vm.goToManagementPage = function () {
+                window.location = '#/management'
+            }
+
             vm.admin = [{
                 link: '',
                 title: 'רוקן משימות',

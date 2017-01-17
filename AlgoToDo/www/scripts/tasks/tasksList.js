@@ -51,7 +51,7 @@
             
             if (datacontext.getTaskList().length === 0) {
                 var loadingToast = activateProgress("טוען נתונים...");
-                datacontext.getAllTasks().then(function (response) {
+                datacontext.getTasks().then(function (response) {
                     datacontext.setTaskList(response.data);
                     var count = datacontext.setMyTaskCount();
                     cordovaPlugins.setBadge(count);
@@ -243,7 +243,7 @@
 
         vm.reloadTasks = function () {
             var deferred = $q.defer();
-            datacontext.getAllTasks().then(function (response) {
+            datacontext.getTasks().then(function (response) {
                 datacontext.setTaskList(response.data);
                 var count = datacontext.setMyTaskCount();
                 cordovaPlugins.setBadge(count);

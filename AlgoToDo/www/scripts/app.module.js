@@ -22,6 +22,7 @@
         'infomofo.angularMdPullToRefresh',
         'ngRoute',
         'cmanaha.angular-elasticsearch-logger',
+        'md.data.table',
 
         /*
          * Everybody has access to these.
@@ -33,7 +34,8 @@
         'app.data',
         'app.logger',
         'app.cordova',
-        'app.tasks'
+        'app.tasks',
+        'app.management'
         /*
          * Feature areas
          */

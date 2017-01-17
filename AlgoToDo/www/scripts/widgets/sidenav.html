@@ -42,6 +42,19 @@
                 </md-item-content>
             </a>
         </md-item>
+        <md-item ng-if="vm.user.type === 'admin'">
+            <a style="cursor: pointer" ng-click="vm.goToManagementPage()">
+                <md-item-content md-ink-ripple layout="row" layout-align="start center">
+                    <div class="inset">
+                        <ng-md-icon icon="dashboard"></ng-md-icon>
+                    </div>
+                    <span flex></span>
+                    <div class="inset">
+                        ממשק ניהול
+                    </div>
+                </md-item-content>
+            </a>
+        </md-item>
         <md-divider></md-divider>
         <md-item ng-if="vm.showLogoffButton === true">
             <a ng-click="vm.logOff()" style="cursor: pointer">

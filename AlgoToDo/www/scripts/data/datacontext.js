@@ -31,7 +31,7 @@
             return $http(req);
         };
 
-        var getAllTasks = function () {
+        var getTasks = function () {
             var req = {
                 method: 'GET',
                 url: appConfig.appDomain + '/TaskManeger/getTasks',
@@ -218,16 +218,17 @@
 
             if (task.comments === undefined) {
                 task.comments = [comment];
-                task.unSeenResponses = task.unSeenResponses === undefined || task.unSeenResponses === '' ? 1 : task.unSeenResponses + 1;
+                updateUnSeenResponse(task)
             }
             else {
                 var newCommentIndex_IfExist = arrayObjectIndexOf(task.comments, '_id', comment._id);
                 if (newCommentIndex_IfExist === -1) {
                     task.comments.push(comment);
-                    task.unSeenResponses = task.unSeenResponses === undefined || task.unSeenResponses === '' ? 1 : task.unSeenResponses + 1;
+                    updateUnSeenResponse(task)
                 }
             }
 
+                
             /*if (comment.fileThumbnail) {
                 dropbox.getThumbnail(imageUrl, 'w128h128').then(function (response) {
                     comment.fileThumbnail = URL.createObjectURL(response.fileBlob);
@@ -236,6 +237,12 @@
                     logger.error("error while trying to get file Thumbnail", error);
                 });
             }*/
+        }
+
+        function updateUnSeenResponse(task) {
+            if (window.location.hash.indexOf(task._id) === -1) {
+                task.unSeenResponses = task.unSeenResponses === undefined || task.unSeenResponses === '' ? 1 : task.unSeenResponses + 1;
+            }
         }
         
         function arrayObjectIndexOf(myArray, property, searchTerm) {
@@ -255,7 +262,7 @@
 
         var reloadAllTasks = function () {
             if (self.$storage.user !== undefined) {
-                getAllTasks().then(function (response) {
+                getTasks().then(function (response) {
                     setTaskList(response.data);
                 });
             }           
@@ -351,6 +358,36 @@
             return deferred.promise;
         }
 
+        var getAllTasks = function (query, filter) {
+            if (self.$storage.user.type === 'admin') {
+
+                var req = {
+                    method: 'GET',
+                    url: appConfig.appDomain + '/TaskManeger/getAllTasks',
+                    params: {
+                        order: query.order,
+                        limit: query.limit,
+                        page: query.page,
+                        filter: filter
+                    }
+                };
+
+                return $http(req);
+            }
+        }
+
+        var getAllTasksCount = function (filter) {
+            var req = {
+                method: 'GET',
+                url: appConfig.appDomain + '/TaskManeger/getAllTasksCount',
+                params: {
+                    filter: filter
+                }
+            };
+
+            return $http(req);
+        }
+
         var service = {
             getTaskList: getTaskList,
             setTaskList: setTaskList,
@@ -362,7 +399,7 @@
             getUserFromLocalStorage: getUserFromLocalStorage,
             deleteUserFromLocalStorage: deleteUserFromLocalStorage,
             registerUser: registerUser,
-            getAllTasks: getAllTasks,
+            getTasks: getTasks,
             searchUsers: searchUsers,
             addUsersToUsersCache: addUsersToUsersCache,
             getAllCachedUsers: getAllCachedUsers,
@@ -383,7 +420,9 @@
             removeAllTaskImagesFromCache: removeAllTaskImagesFromCache,
             getAllCliqot: getAllCliqot,
             checkIfVerificationCodeMatch: checkIfVerificationCodeMatch,
-            updateUserDetails: updateUserDetails
+            updateUserDetails: updateUserDetails,
+            getAllTasks: getAllTasks,
+            getAllTasksCount: getAllTasksCount
         };
 
         return service;

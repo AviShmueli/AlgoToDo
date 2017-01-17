@@ -830,11 +830,12 @@ app.get('/TaskManeger/getAllTasks', function (req, res) {
 
     var order = req.query.order,
         limit = parseInt(req.query.limit),
-        page = req.query.page;
+        page = req.query.page,
+        filter = JSON.parse(req.query.filter);   
 
     var options = {
         "limit": limit,
-        "skip": (page - 1) * 10
+        "skip": (page - 1) * limit
     };
 
     mongodb.connect(mongoUrl, function (err, db) {
@@ -844,7 +845,7 @@ app.get('/TaskManeger/getAllTasks', function (req, res) {
         }
 
         var collection = db.collection('tasks');
-        collection.find({}, options).sort({createTime : -1}).toArray(function (err, result) {
+        collection.find(filter, options).sort({createTime : -1}).toArray(function (err, result) {
 
             if (err) {
                 winston.log('error', "error while trying to get All Cliqot: ", err);
@@ -858,6 +859,7 @@ app.get('/TaskManeger/getAllTasks', function (req, res) {
 
 app.get('/TaskManeger/getAllTasksCount', function (req, res) {
 
+    var filter = JSON.parse(req.query.filter);
     mongodb.connect(mongoUrl, function (err, db) {
 
         if (err) {
@@ -865,7 +867,7 @@ app.get('/TaskManeger/getAllTasksCount', function (req, res) {
         }
 
         var collection = db.collection('tasks');
-        collection.count(function (err, result) {
+        collection.count(filter, function (err, result) {
 
             if (err) {
                 winston.log('error', "error while trying to get All tasks count: ", err);

@@ -54,6 +54,9 @@
               .when('/task/:taskId', {
                   templateUrl: 'scripts/tasks/task.html'
               })
+              .when('/management', {
+                  templateUrl: 'scripts/management/management.html'
+              })
               .when('/signUp', {
                   templateUrl: 'scripts/widgets/signUp.html'
               });;
@@ -64,7 +67,7 @@
             return {
                 appDomain:
                    'https://algotodo.herokuapp.com'
-                   //'https://algotodo-test.herokuapp.com'
+                  //'https://algotodo-test.herokuapp.com'
                    // 'http://localhost:5001'
             };
         })
