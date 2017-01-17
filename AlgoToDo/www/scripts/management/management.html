@@ -1,5 +1,5 @@
 ﻿<div id="management-div" ng-controller="managementCtrl as vm" layout="column" class="relative" layout-fill role="main" dir="rtl">
-    
+
     <md-toolbar class="md-table-toolbar">
         <div class="md-toolbar-tools">
             <h2>
@@ -10,98 +10,103 @@
         <!--<img src="/images/asiti-logo.png" />-->
     </md-toolbar>
 
-    <!--<md-content laout="column" flex>-->
+    <md-content flex md-scroll-y style="background-color: transparent">
+        <main flex>
+            <ui-view layout="column" layout-fill>
 
-        <md-card layout="row">
+                <md-card layout-gt-xs="row" layout="column">
 
-            <div layout="column" flex="80" layout-padding style="margin-top: 15px;">
-                <div layout="row">
-                    <md-input-container layout-fill layout-margin>
-                        <label>קליקה</label>
-                        <md-select md-no-asterisk ng-model="vm.filter.cliqaId" name="cliqa">
-                            <md-option ng-repeat="(key, value) in vm.allCliqot" value="{{value._id}}" dir="rtl">
-                                {{value.name}}
-                            </md-option>
-                        </md-select>
-                    </md-input-container>
+                    <div layout-gt-xs="column" flex-sm flex-gt-xs="80" layout-padding style="margin-top: 15px;">
+                        <div layout-gt-xs="row" layout="column">
 
-                    <!--<md-input-container layout-fill layout-margin>
-                        <label>שולח</label>
-                        <md-select md-no-asterisk ng-model="vm.filter.cliqaId" name="cliqa">
-                            <md-option ng-repeat="(key, value) in vm.allCliqot" value="{{value._id}}" dir="rtl">
-                                {{value.name}}
-                            </md-option>
-                        </md-select>
-                    </md-input-container>
+                            <md-input-container layout-fill layout-margin>
+                                <label>קליקה</label>
+                                <md-select md-no-asterisk ng-model="vm.filter.cliqaId" name="cliqa">
+                                    <md-option ng-repeat="(key, value) in vm.allCliqot" value="{{value._id}}" dir="rtl">
+                                        {{value.name}}
+                                    </md-option>
+                                </md-select>
+                            </md-input-container>
 
-                    <md-input-container layout-fill layout-margin>
-                        <label>נמען</label>
-                        <md-select md-no-asterisk ng-model="vm.filter.cliqaId" name="cliqa">
-                            <md-option ng-repeat="(key, value) in vm.allCliqot" value="{{value._id}}" dir="rtl">
-                                {{value.name}}
-                            </md-option>
-                        </md-select>
-                    </md-input-container>-->
+                            <!--<md-input-container layout-fill layout-margin>
+                                <label>שולח</label>
+                                <md-select md-no-asterisk ng-model="vm.filter.cliqaId" name="cliqa">
+                                    <md-option ng-repeat="(key, value) in vm.allCliqot" value="{{value._id}}" dir="rtl">
+                                        {{value.name}}
+                                    </md-option>
+                                </md-select>
+                            </md-input-container>
 
-                    <md-input-container layout-fill layout-margin>
-                        <label>סטטוס</label>
-                        <md-select md-no-asterisk ng-model="vm.filter.status" name="status">
-                            <md-option ng-repeat="(key, value) in { 'הכל' : '', 'בתהליך' : 'inProgress', 'בוצע' : 'done'}" value="{{value}}" dir="rtl">
-                                {{key}}
-                            </md-option>
-                        </md-select>
-                    </md-input-container>
-                </div>
-            </div>     
+                            <md-input-container layout-fill layout-margin>
+                                <label>נמען</label>
+                                <md-select md-no-asterisk ng-model="vm.filter.cliqaId" name="cliqa">
+                                    <md-option ng-repeat="(key, value) in vm.allCliqot" value="{{value._id}}" dir="rtl">
+                                        {{value.name}}
+                                    </md-option>
+                                </md-select>
+                            </md-input-container>-->
 
-            <div class="md-secondary" layout="column" flex="20" layout-align="center center">
-                <md-button ng-click="vm.getTasks()" class="md-warn md-raised md-hue-1">סנן</md-button>
-            </div>
+                            <md-input-container layout-fill layout-margin>
+                                <label>סטטוס</label>
+                                <md-select md-no-asterisk ng-model="vm.filter.status" name="status">
+                                    <md-option ng-repeat="(key, value) in { 'הכל' : '', 'בתהליך' : 'inProgress', 'בוצע' : 'done'}" value="{{value}}" dir="rtl">
+                                        {{key}}
+                                    </md-option>
+                                </md-select>
+                            </md-input-container>
+                        </div>
+                    </div>
 
-        </md-card>
+                    <div class="md-secondary" layout-gt-xsm="column" flex-xs flex-gt-xs="20" layout-align="center center">
+                        <md-button ng-click="vm.getTasks()" class="md-warn md-raised md-hue-1">סנן</md-button>
+                    </div>
 
-        <md-card layout-margin>
-            <md-table-container>
-                <table md-table md-row-select multiple ng-model="selected" md-progress="vm.promise">
-                    <thead md-head md-order="vm.query.order" md-on-reorder="vm.getTasks">
-                        <tr md-row>
-                            <th md-column><span>שולח</span></th>
-                            <th md-column>נמען</th>
-                            <th md-column>קליקה</th>
-                            <th md-column><span>נשלחה ב</span></th>
-                            <th md-column>תיאור</th>
-                            <th md-column>סטטוס</th>
-                            <th md-column>זמן ביצוע</th>
-                            <th md-column md-numeric>תגובות</th>
-                        </tr>
-                    </thead>
-                    <tbody md-body>
-                        <tr md-row md-select="task" md-select-id="name" md-auto-select ng-repeat="task in vm.tasks">
-                            <td md-cell>{{task.from.name}}</td>
-                            <td md-cell>{{task.to.name}}</td>
-                            <td md-cell>{{vm.getCliqaName(task.cliqaId)}}</td>
-                            <td md-cell><span ng-bind-html="(task.createTime | amCalendar)"></span></td>
-                            <td md-cell>
-                                {{task.description.substring(0, 10) + '...'}}
-                                <md-tooltip>
-                                    {{task.description}}
-                                </md-tooltip>
-                            </td>
-                            <td md-cell>
-                                {{
+                </md-card>
+
+                <md-card layout-margin>
+                    <md-table-container>
+                        <table md-table md-row-select multiple ng-model="selected" md-progress="vm.promise">
+                            <thead md-head md-order="vm.query.order" md-on-reorder="vm.getTasks">
+                                <tr md-row>
+                                    <th md-column><span>שולח</span></th>
+                                    <th md-column>נמען</th>
+                                    <th md-column>קליקה</th>
+                                    <th md-column><span>נשלחה ב</span></th>
+                                    <th md-column>תיאור</th>
+                                    <th md-column>סטטוס</th>
+                                    <th md-column>זמן ביצוע</th>
+                                    <th md-column md-numeric>תגובות</th>
+                                </tr>
+                            </thead>
+                            <tbody md-body>
+                                <tr md-row md-select="task" md-select-id="name" md-auto-select ng-repeat="task in vm.tasks">
+                                    <td md-cell>{{task.from.name}}</td>
+                                    <td md-cell>{{task.to.name}}</td>
+                                    <td md-cell>{{vm.getCliqaName(task.cliqaId)}}</td>
+                                    <td md-cell><span ng-bind-html="(task.createTime | amCalendar)"></span></td>
+                                    <td md-cell>
+                                        {{task.description.substring(0, 10) + '...'}}
+                                        <md-tooltip>
+                                            {{task.description}}
+                                        </md-tooltip>
+                                    </td>
+                                    <td md-cell>
+                                        {{
 task.status === 'done' ? 'בוצע' : 'בתהליך'
-                                }}
-                            </td>
-                            <td md-cell>{{vm.getTotalTaskTime(task)}}</td>
-                            <td md-cell>{{task.comments.length}}</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </md-table-container>
-            <!--</md-card>
-            <md-card>-->
-            <md-table-pagination md-label="{'of': ' מתוך ', 'page': 'עמוד מספר', 'rowsPerPage': 'מספר שורות בעמוד' }" md-limit="vm.query.limit" md-limit-options="[5, 10, 15, 20]" md-page="vm.query.page" md-total="{{vm.totalTaskCount}}" md-on-paginate="vm.getTasks" md-page-select></md-table-pagination>
-        </md-card>
+                                        }}
+                                    </td>
+                                    <td md-cell>{{vm.getTotalTaskTime(task)}}</td>
+                                    <td md-cell>{{task.comments.length}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </md-table-container>
+                    <!--</md-card>
+                    <md-card>-->
+                    <md-table-pagination md-label="{'of': ' מתוך ', 'page': 'עמוד מספר', 'rowsPerPage': 'מספר שורות בעמוד' }" md-limit="vm.query.limit" md-limit-options="[5, 10, 15, 20]" md-page="vm.query.page" md-total="{{vm.totalTaskCount}}" md-on-paginate="vm.getTasks" md-page-select></md-table-pagination>
+                </md-card>
 
-    <!--</md-content>-->
+            </ui-view>
+         </main>
+     </md-content>
 </div>

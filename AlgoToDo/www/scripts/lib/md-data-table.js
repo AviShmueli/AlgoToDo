@@ -11,7 +11,7 @@
 
     angular.module('md-table-pagination.html', []).run(['$templateCache', function ($templateCache) {
         $templateCache.put('md-table-pagination.html',
-          '<div class="page-select" ng-if="$pagination.showPageSelect()">\n' +
+          '<div hide-xs class="page-select" ng-if="$pagination.showPageSelect()">\n' +
           '  <div class="label">{{$pagination.label.page}}</div>\n' +
           '\n' +
           '  <md-select virtual-page-select total="{{$pagination.pages()}}" class="md-table-select" ng-model="$pagination.page" md-container-class="md-pagination-select" ng-change="$pagination.onPaginationChange()" ng-disabled="$pagination.disabled" aria-label="Page">\n' +
@@ -21,7 +21,7 @@
           '  </md-select>\n' +
           '</div>\n' +
           '\n' +
-          '<div class="limit-select" ng-if="$pagination.limitOptions">\n' +
+          '<div hide-xs class="limit-select" ng-if="$pagination.limitOptions">\n' +
           '  <div class="label">{{$pagination.label.rowsPerPage}}</div>\n' +
           '\n' +
           '  <md-select class="md-table-select" ng-model="$pagination.limit" md-container-class="md-pagination-select" ng-disabled="$pagination.disabled" aria-label="Rows" placeholder="{{ $pagination.limitOptions[0] }}">\n' +
