@@ -66,7 +66,7 @@
 
             return {
                 appDomain:
-                   'https://app.asiti.net'
+                   'http://app.asiti.net'
                   //'https://algotodo-test.herokuapp.com'
                    // 'http://localhost:5001'
             };
