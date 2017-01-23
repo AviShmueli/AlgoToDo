@@ -849,7 +849,7 @@ app.get('/TaskManeger/getAllTasks', function (req, res) {
         collection.find(filter, options).sort({createTime : -1}).toArray(function (err, result) {
 
             if (err) {
-                winston.log('error', "error while trying to get All Cliqot: ", err);
+                winston.log('error', "error while trying to get All tasks: ", err);
             }
 
             db.close();
@@ -872,6 +872,72 @@ app.get('/TaskManeger/getAllTasksCount', function (req, res) {
 
             if (err) {
                 winston.log('error', "error while trying to get All tasks count: ", err);
+            }
+
+            db.close();
+            res.send(result.toString());
+        });
+    });
+});
+
+app.get('/TaskManeger/getAllUsers', function (req, res) {
+
+    var order = req.query.order,
+        limit = parseInt(req.query.limit),
+        page = req.query.page,
+        filter = JSON.parse(req.query.filter);   
+
+    var options = {
+        "limit": limit,
+        "skip": (page - 1) * limit
+    };
+
+    if(filter.cliqa !== undefined) {
+        filter['cliqot._id'] = new ObjectID(filter.cliqa);
+        delete filter['cliqa'];
+    }
+
+    mongodb.connect(mongoUrl, function (err, db) {
+
+        if (err) {
+            winston.log('error', "error while trying to connect MongoDB: ", err);
+        }
+
+        var collection = db.collection('users');
+        collection.find(filter, options).sort({createTime : -1}).toArray(function (err, result) {
+
+            if (err) {
+                winston.log('error', "error while trying to get All users: ", err);
+            }
+
+            db.close();
+            res.send(result);
+        });
+    });
+});
+
+app.get('/TaskManeger/getAllUsersCount', function (req, res) {
+
+    var filter = JSON.parse(req.query.filter);
+    
+    if(filter.cliqa !== undefined) {
+        filter['cliqot._id'] = new ObjectID(filter.cliqa);
+        delete filter['cliqa'];
+    }
+    //var a = { '_id': { $in: usersIds} };
+    //var b = { 'cliqot._id': new ObjectID(cliqaId)};
+    
+    mongodb.connect(mongoUrl, function (err, db) {
+
+        if (err) {
+            winston.log('error', "error while trying to connect MongoDB: ", err);
+        }
+
+        var collection = db.collection('users');
+        collection.count(filter, function (err, result) {
+
+            if (err) {
+                winston.log('error', "error while trying to get All users count: ", err);
             }
 
             db.close();
