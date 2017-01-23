@@ -418,6 +418,15 @@
             return $http(req);
         }
 
+        var getAllVersionInstalled = function () {
+            var req = {
+                method: 'GET',
+                url: appConfig.appDomain + '/TaskManeger/getAllVersionInstalled'
+            };
+
+            return $http(req);
+        }
+
         var service = {
             getTaskList: getTaskList,
             setTaskList: setTaskList,
@@ -454,7 +463,8 @@
             getAllTasks: getAllTasks,
             getAllTasksCount: getAllTasksCount,
             getAllUsersCount: getAllUsersCount,
-            getAllUsers: getAllUsers
+            getAllUsers: getAllUsers,
+            getAllVersionInstalled: getAllVersionInstalled
         };
 
         return service;

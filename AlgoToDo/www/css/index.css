@@ -51,7 +51,7 @@ md-chips .md-chip-input-container{
         background-color: rgb(255,112,67) !important;
 }
 .icon-fill{
-    fill: rgb(0,131,143);
+    fill: rgb(0,131,143) !important;
 }
 .href-class{
         color: blue;
@@ -65,7 +65,7 @@ md-chips .md-chip-input-container{
     padding-left: 7px;
 }
 .md-icon-button:disabled .icon-fill{
-    fill:rgb(193, 210, 211);
+    fill:rgb(193, 210, 211) !important;
 }
 .comment-input{
     margin: 4px 0 4px 0;

@@ -541,7 +541,12 @@ app.post('/TaskManeger/updateTaskStatus', function (req, res) {
                 
                 // if this task is not from me to me, send notification to the user
                 if (task.to._id !== task.from._id) {
-                    pushUpdatetdTaskToUsersDevice(results.value, task.from._id);
+                    if(task.status === 'done'){
+                        pushUpdatetdTaskToUsersDevice(results.value, task.from._id);
+                    }
+                    if(task.status === 'inProgress'){
+                        pushTaskToUsersDevice([results.value], [results.value.to._id]);
+                    }
                 }
                 db.close();
                 res.send(results.value);
@@ -942,6 +947,27 @@ app.get('/TaskManeger/getAllUsersCount', function (req, res) {
 
             db.close();
             res.send(result.toString());
+        });
+    });
+});
+
+app.get('/TaskManeger/getAllVersionInstalled', function (req, res) {
+    
+    mongodb.connect(mongoUrl, function (err, db) {
+
+        if (err) {
+            winston.log('error', "error while trying to connect MongoDB: ", err);
+        }
+
+        var collection = db.collection('users');
+        collection.distinct( "versionInstalled" ,function (err, result) {
+
+            if (err) {
+                winston.log('error', "error while trying to get All users count: ", err);
+            }
+
+            db.close();
+            res.send(result.sort().reverse());
         });
     });
 });

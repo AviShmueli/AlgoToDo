@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<widget defaultlocale="he-IL" id="com.algotodo.app" version="0.2.8" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0" xmlns:vs="http://schemas.microsoft.com/appx/2014/htmlapps">
+<widget defaultlocale="he-IL" id="com.algotodo.app" version="0.2.9" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0" xmlns:vs="http://schemas.microsoft.com/appx/2014/htmlapps">
   <name>Asiti</name>
   <description>מערכת לסיוע בביצוע משימות
   </description>
@@ -126,7 +126,6 @@
   <allow-navigation href="https://*/*" />
   <allow-intent href="http://*/*" />
   <allow-intent href="https://*/*" />
-  <access origin="https://ds033996.mlab.com" />
   <access origin="https://algotodo.loggly.com" />
   <access origin="https://algotodo.herokuapp.com" />
   <access origin="https://algotodo-test.herokuapp.com" />

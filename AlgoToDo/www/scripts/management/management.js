@@ -32,6 +32,11 @@
 
         vm.user = datacontext.getUserFromLocalStorage();
 
+        vm.allVersionInstalled = [];
+        datacontext.getAllVersionInstalled().then(function (allVersions) {
+            vm.allVersionInstalled = allVersions.data;
+        });
+
         var userCliqotIds = [];
         vm.allCliqot['all'] = { name: 'כל הקליקות', '_id': { $in: userCliqotIds } };
         for (var i = 0; i < vm.user.cliqot.length; i++) {

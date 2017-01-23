@@ -8,26 +8,26 @@
                 </md-button>
                 <md-menu-content width="4">
                     <md-menu-item>
-                        <md-button class="no-line-height" ng-click="ctrl.redial($event)">
+                        <md-button class="no-line-height" ng-disabled="!vm.taskIsFromMe" ng-click="ctrl.redial($event)">
                             <div layout="row" flex>
-                                <ng-md-icon class="rotate icon-fill" md-menu-align-target icon="forward"></ng-md-icon>
+                                <ng-md-icon class="rotate" style="fill: rgb(196, 207, 208)" ng-class="{'icon-fill': vm.taskIsFromMe}" md-menu-align-target icon="forward"></ng-md-icon>
                                 <p flex style="text-align:right">העבר משימה</p>
                             </div>
                         </md-button>
                     </md-menu-item>
                     <md-menu-item>
-                        <md-button ng-disabled="!vm.taskIsFromMe" class="no-line-height" ng-click="ctrl.redial($event)">
+                        <md-button ng-disabled="!vm.taskIsFromMe" class="no-line-height">
                             <div layout="row" flex>
-                                <ng-md-icon md-menu-align-target icon="settings_backup_restore" class="icon-fill"></ng-md-icon>
+                                <ng-md-icon md-menu-align-target icon="settings_backup_restore" style="fill: rgb(196, 207, 208)" ng-class="{'icon-fill': vm.taskIsFromMe}"></ng-md-icon>
                                 <p flex style="text-align:right">שלח מחדש</p>
                             </div>
                         </md-button>
                     </md-menu-item>
                     <!--<md-menu-divider></md-menu-divider>-->
                     <md-menu-item>
-                        <md-button ng-disabled="!vm.taskIsToMe" class="no-line-height" ng-click="ctrl.redial($event)">
+                        <md-button ng-disabled="!vm.taskIsToMe" class="no-line-height" ng-click="vm.addAlert()">
                             <div layout="row" flex>
-                                <ng-md-icon md-menu-align-target icon="add_alert" class="icon-fill"></ng-md-icon>
+                                <ng-md-icon md-menu-align-target icon="add_alert" style="fill: rgb(196, 207, 208)" ng-class="{'icon-fill': vm.taskIsToMe}"></ng-md-icon>
                                 <p flex style="text-align:right">קבע תזכורת</p>
                             </div>
                         </md-button>

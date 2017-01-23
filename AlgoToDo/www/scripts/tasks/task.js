@@ -317,6 +317,7 @@
             });         
         }
         
+
         /*dropbox.getThumbnail(, 'w128h128')
                         .then(function (response) {
                             var url = URL.createObjectURL(response.fileBlob);
