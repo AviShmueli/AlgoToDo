@@ -1,18 +1,222 @@
-﻿<div id="management-div" ng-controller="managementCtrl as vm" layout="column" class="relative" layout-fill role="main" dir="rtl">
+﻿<div id="management-div" ng-controller="managementCtrl as vm" layout="column" class="relative" layout-fill role="main" dir="rtl" ng-cloak>
 
-    <md-toolbar class="md-table-toolbar">
-        <div class="md-toolbar-tools">
-            <h2>
-                <span style="color:white">ממשק ניהול מערכת</span>
+    <md-toolbar class="md-table-toolbar" md-scroll-shrink ng-if="true">
+        <div class="md-toolbar-tools" style="padding:16px!important">   
+            <md-button class="md-icon-button" ng-click="vm.goBack()" aria-label="back">
+                <ng-md-icon icon="arrow_forward"></ng-md-icon>
+            </md-button>        
+            <h2 hide-xs style="margin-right: 15px;">
+                <span style="color:white">ממשק ניהול</span>
             </h2>
+            <span flex></span>
+            <md-button class="button-unactive" aria-label="reports"
+                       style="margin:0" ng-class="{'button-active': vm.activeTab === 'reports'}"
+                       ng-click="vm.siwtchTab('reports')">
+                דוחות
+            </md-button>
+            <md-button class="button-unactive" aria-label="users"
+                       style="margin:0" ng-class="{'button-active': vm.activeTab === 'users'}"
+                       ng-click="vm.siwtchTab('users')">
+                משתמשים
+            </md-button>
+            <md-button class="button-unactive" aria-label="tasks"
+                       style="margin:0" ng-class="{'button-active': vm.activeTab === 'tasks'}"
+                       ng-click="vm.siwtchTab('tasks')">
+                משימות
+            </md-button>
         </div>
-        <!--<md-icon src="/images/asiti-logo.png"></md-icon>-->
-        <!--<img src="/images/asiti-logo.png" />-->
     </md-toolbar>
 
     <md-content flex md-scroll-y style="background-color: transparent">
         <main flex>
-            <ui-view layout="column" layout-fill>
+            <ui-view layout="column" layout-fill ng-if="vm.activeTab === 'tasks'">
+
+                <md-card layout="column">
+                    <md-card-title style="padding: 0px 18px 0px 0px;" hide-gt-md>
+                        <md-card-title-text>
+                            <h3>סינון</h3>
+                        </md-card-title-text>
+                        <md-button class="md-icon-button" ng-click="vm.toggleFilterSection()" aria-label="toggle">
+                            <ng-md-icon id="expand_more_icon" icon="{{vm.expand_icon}}" options='{"rotation": "counterclock"}'></ng-md-icon>
+                        </md-button>
+                    </md-card-title>
+                    <div layout-gt-xs="column" flex 
+                         layout-padding
+                         ng-show="vm.showTasksFilter">
+                        <div layout-gt-xs="row" layout="column">
+
+                            <md-input-container class="md-block" flex>
+                                <label>קליקה</label>
+                                <md-select md-no-asterisk ng-model="vm.tasksFilter.cliqaId" name="cliqa">
+                                    <md-option ng-repeat="(key, value) in vm.allCliqot" value="{{value._id}}" dir="rtl">
+                                        {{value.name}}
+                                    </md-option>
+                                </md-select>
+                            </md-input-container>
+
+                            <md-input-container class="md-block" flex>
+                                <label>סטטוס</label>
+                                <md-select md-no-asterisk ng-model="vm.tasksFilter.status" name="status">
+                                    <md-option ng-repeat="(key, value) in { 'הכל' : '', 'בתהליך' : 'inProgress', 'בוצע' : 'done'}" value="{{value}}" dir="rtl">
+                                        {{key}}
+                                    </md-option>
+                                </md-select>
+                            </md-input-container>
+
+                            <md-input-container class="md-block" flex>
+                                <label>חיפוש</label>
+                                <input ng-model="vm.tasksFilterFreeText" name="name">
+                            </md-input-container>
+
+                            <div class="md-secondary md-block" flex layout="row" layout-align="end center" >
+                                <md-button ng-click="vm.getTasks()" class="md-warn md-raised md-hue-1">סנן</md-button>
+                            </div>
+                        </div>
+                    </div>
+                </md-card>
+
+                <md-card layout-margin>
+                    <md-table-container>
+                        <table md-table md-row-select multiple ng-model="selected" md-progress="vm.promise">
+                            <thead md-head md-order="vm.query.order" md-on-reorder="vm.getTasks">
+                                <tr md-row>
+                                    <th md-column><span>שולח</span></th>
+                                    <th md-column>נמען</th>
+                                    <th md-column>קליקה</th>
+                                    <th md-column><span>נשלחה ב</span></th>
+                                    <th md-column>תיאור</th>
+                                    <th md-column>סטטוס</th>
+                                    <th md-column>זמן ביצוע</th>
+                                    <th md-column md-numeric>תגובות</th>
+                                </tr>
+                            </thead>
+                            <tbody md-body>
+                                <tr md-row md-select="task" md-select-id="name" md-auto-select ng-repeat="task in vm.tasks">
+                                    <td md-cell>{{task.from.name}}</td>
+                                    <td md-cell>{{task.to.name}}</td>
+                                    <td md-cell>{{vm.getCliqaName(task.cliqaId)}}</td>
+                                    <td md-cell><span ng-bind-html="(task.createTime | amCalendar)"></span></td>
+                                    <td md-cell>
+                                        {{task.description.substring(0, 10) + '...'}}
+                                        <md-tooltip dir="rtl">
+                                            {{task.description}}
+                                        </md-tooltip>
+                                    </td>
+                                    <td md-cell>
+                                        {{
+task.status === 'done' ? 'בוצע' : 'בתהליך'
+                                        }}
+                                    </td>
+                                    <td md-cell>{{vm.getTotalTaskTime(task)}}</td>
+                                    <td md-cell>{{task.comments.length}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </md-table-container>
+                    <!--</md-card>
+                    <md-card>-->
+                    <md-table-pagination md-label="{'of': ' מתוך ', 'page': 'עמוד מספר', 'rowsPerPage': 'מספר שורות בעמוד' }" md-limit="vm.query.limit" md-limit-options="[5, 10, 15, 20]" md-page="vm.query.page" md-total="{{vm.totalTaskCount}}" md-on-paginate="vm.getTasks" md-page-select></md-table-pagination>
+                </md-card>
+
+            </ui-view>
+
+            <ui-view layout="column" layout-fill ng-if="vm.activeTab === 'users'">
+
+                <md-card layout="column">
+                    
+                    <md-card-title style="padding: 0px 18px 0px 0px;" hide-gt-md>
+                        <md-card-title-text>
+                            <h3>סינון</h3>
+                        </md-card-title-text>
+                        <md-button class="md-icon-button" ng-click="vm.toggleFilterSection()" aria-label="toggle">
+                            <ng-md-icon id="expand_more_icon" icon="{{vm.expand_icon}}" options='{"rotation": "counterclock"}'></ng-md-icon>
+                        </md-button>
+                    </md-card-title>
+                    
+                    <div layout-gt-xs="column" 
+                         layout-padding flex
+                         ng-show="vm.showTasksFilter">
+                        <div layout-gt-xs="row" layout="column">
+
+                            <md-input-container class="md-block" flex>
+                                <label>קליקה</label>
+                                <md-select md-no-asterisk ng-model="vm.usersFilter.cliqa" name="cliqa">
+                                    <md-option ng-repeat="(key, value) in vm.allCliqot" value="{{value._id}}" dir="rtl">
+                                        {{value.name}}
+                                    </md-option>
+                                </md-select>
+                            </md-input-container>
+
+                            <md-input-container class="md-block" flex>
+                                <label>מערכת הפעלה</label>
+                                <md-select md-no-asterisk ng-model="vm.usersFilterPlatform" name="status">
+                                    <md-option ng-repeat="(key, value) in { 'הכל' : '', 'אנדואיד' : 'Android', 'אפל' : 'iOS'}" value="{{value}}" dir="rtl">
+                                        <ng-md-icon ng-if="value === 'Android'" icon="android" style="fill: #6ab344"></ng-md-icon>
+                                        <ng-md-icon ng-if="value === 'iOS'" icon="apple"></ng-md-icon>
+                                        <span ng-if="key === 'הכל'">הכל</span>
+                                    </md-option>
+                                </md-select>
+                            </md-input-container>
+
+                            <md-input-container class="md-block" flex>
+                                <label>גירסה מותקנת</label>
+                                <md-select md-no-asterisk ng-model="vm.usersFilter.versionInstalled" name="status">
+                                    <md-option ng-repeat="(key, value) in { 'הכל' : '', '0.2.8' : '0.2.8', 'ישן יותר' : '0.2.1'}" value="{{value}}" dir="rtl">
+                                        {{key}}
+                                    </md-option>
+                                </md-select>
+                            </md-input-container>
+
+                            <md-input-container class="md-block" flex>
+                                <label>שם</label>
+                                <input ng-model="vm.usersFilterName" name="name">
+                            </md-input-container>
+                        
+                            <div class="md-secondary md-block" flex layout="row" layout-align="end center">
+                                <md-button ng-click="vm.getUsers()" class="md-warn md-raised md-hue-1">סנן</md-button>
+                            </div>
+
+                        </div>
+                    </div>
+                </md-card>
+
+                <md-card layout-margin>
+                    <md-table-container>
+                        <table md-table md-row-select multiple ng-model="selected" md-progress="vm.promise">
+                            <thead md-head md-order="vm.query.order" md-on-reorder="vm.getUsers">
+                                <tr md-row>
+                                    <th md-column><span>שם</span></th>
+                                    <th md-column>טלפון</th>
+                                    <th md-column>מערכת הפעלה</th>
+                                    <th md-column><span>מכשיר</span></th>
+                                    <th md-column>קליקות</th>
+                                    <th md-column>גירסה מותקנת</th>
+                                    <th md-column>קוד רישום</th>
+                                </tr>
+                            </thead>
+                            <tbody md-body>
+                                <tr md-row md-select="task" md-select-id="name" md-auto-select ng-repeat="user in vm.users">
+                                    <td md-cell>{{user.name}}</td>
+                                    <td md-cell>{{user.phone}}</td>
+                                    <td md-cell>
+                                        <ng-md-icon ng-if="user.device.platform === 'Android'" icon="android" style="fill: #6ab344"></ng-md-icon>
+                                        <ng-md-icon ng-if="user.device.platform === 'iOS'" icon="apple"></ng-md-icon>
+                                    </td>
+                                    <td md-cell>{{user.device.manufacturer + ' ' + user.device.model}}</td>
+                                    <td md-cell>{{vm.getCliqotNamesAsString(user.cliqot)}}</td>
+                                    <td md-cell>{{user.versionInstalled}}</td>
+                                    <td md-cell>{{user.verificationCode}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </md-table-container>
+
+                    <md-table-pagination md-label="{'of': ' מתוך ', 'page': 'עמוד מספר', 'rowsPerPage': 'מספר שורות בעמוד' }" md-limit="vm.query.limit" md-limit-options="[5, 10, 15, 20]" md-page="vm.query.page" md-total="{{vm.totalUsersCount}}" md-on-paginate="vm.getUsers" md-page-select></md-table-pagination>
+                </md-card>
+
+            </ui-view>
+
+            <ui-view layout="column" layout-fill ng-if="vm.activeTab === 'reports'">
 
                 <md-card layout-gt-xs="row" layout="column">
 
@@ -21,7 +225,7 @@
 
                             <md-input-container layout-fill layout-margin>
                                 <label>קליקה</label>
-                                <md-select md-no-asterisk ng-model="vm.filter.cliqaId" name="cliqa">
+                                <md-select md-no-asterisk ng-model="vm.tasksFilter.cliqaId" name="cliqa">
                                     <md-option ng-repeat="(key, value) in vm.allCliqot" value="{{value._id}}" dir="rtl">
                                         {{value.name}}
                                     </md-option>
@@ -29,26 +233,26 @@
                             </md-input-container>
 
                             <!--<md-input-container layout-fill layout-margin>
-                                <label>שולח</label>
-                                <md-select md-no-asterisk ng-model="vm.filter.cliqaId" name="cliqa">
-                                    <md-option ng-repeat="(key, value) in vm.allCliqot" value="{{value._id}}" dir="rtl">
-                                        {{value.name}}
-                                    </md-option>
-                                </md-select>
-                            </md-input-container>
+                        <label>שולח</label>
+                        <md-select md-no-asterisk ng-model="vm.tasksFilter.cliqaId" name="cliqa">
+                            <md-option ng-repeat="(key, value) in vm.allCliqot" value="{{value._id}}" dir="rtl">
+                                {{value.name}}
+                            </md-option>
+                        </md-select>
+                    </md-input-container>
 
-                            <md-input-container layout-fill layout-margin>
-                                <label>נמען</label>
-                                <md-select md-no-asterisk ng-model="vm.filter.cliqaId" name="cliqa">
-                                    <md-option ng-repeat="(key, value) in vm.allCliqot" value="{{value._id}}" dir="rtl">
-                                        {{value.name}}
-                                    </md-option>
-                                </md-select>
-                            </md-input-container>-->
+                    <md-input-container layout-fill layout-margin>
+                        <label>נמען</label>
+                        <md-select md-no-asterisk ng-model="vm.tasksFilter.cliqaId" name="cliqa">
+                            <md-option ng-repeat="(key, value) in vm.allCliqot" value="{{value._id}}" dir="rtl">
+                                {{value.name}}
+                            </md-option>
+                        </md-select>
+                    </md-input-container>-->
 
                             <md-input-container layout-fill layout-margin>
                                 <label>סטטוס</label>
-                                <md-select md-no-asterisk ng-model="vm.filter.status" name="status">
+                                <md-select md-no-asterisk ng-model="vm.tasksFilter.status" name="status">
                                     <md-option ng-repeat="(key, value) in { 'הכל' : '', 'בתהליך' : 'inProgress', 'בוצע' : 'done'}" value="{{value}}" dir="rtl">
                                         {{key}}
                                     </md-option>
@@ -91,9 +295,7 @@
                                         </md-tooltip>
                                     </td>
                                     <td md-cell>
-                                        {{
-task.status === 'done' ? 'בוצע' : 'בתהליך'
-                                        }}
+                                        {{task.status === 'done' ? 'בוצע' : 'בתהליך'                                        }}
                                     </td>
                                     <td md-cell>{{vm.getTotalTaskTime(task)}}</td>
                                     <td md-cell>{{task.comments.length}}</td>
@@ -102,7 +304,7 @@ task.status === 'done' ? 'בוצע' : 'בתהליך'
                         </table>
                     </md-table-container>
                     <!--</md-card>
-                    <md-card>-->
+            <md-card>-->
                     <md-table-pagination md-label="{'of': ' מתוך ', 'page': 'עמוד מספר', 'rowsPerPage': 'מספר שורות בעמוד' }" md-limit="vm.query.limit" md-limit-options="[5, 10, 15, 20]" md-page="vm.query.page" md-total="{{vm.totalTaskCount}}" md-on-paginate="vm.getTasks" md-page-select></md-table-pagination>
                 </md-card>
 

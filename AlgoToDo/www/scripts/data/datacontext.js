@@ -388,6 +388,36 @@
             return $http(req);
         }
 
+        var getAllUsers = function (query, filter) {
+            if (self.$storage.user.type === 'admin') {
+
+                var req = {
+                    method: 'GET',
+                    url: appConfig.appDomain + '/TaskManeger/getAllUsers',
+                    params: {
+                        order: query.order,
+                        limit: query.limit,
+                        page: query.page,
+                        filter: filter
+                    }
+                };
+
+                return $http(req);
+            }
+        }
+
+        var getAllUsersCount = function (filter) {
+            var req = {
+                method: 'GET',
+                url: appConfig.appDomain + '/TaskManeger/getAllUsersCount',
+                params: {
+                    filter: filter
+                }
+            };
+
+            return $http(req);
+        }
+
         var service = {
             getTaskList: getTaskList,
             setTaskList: setTaskList,
@@ -422,7 +452,9 @@
             checkIfVerificationCodeMatch: checkIfVerificationCodeMatch,
             updateUserDetails: updateUserDetails,
             getAllTasks: getAllTasks,
-            getAllTasksCount: getAllTasksCount
+            getAllTasksCount: getAllTasksCount,
+            getAllUsersCount: getAllUsersCount,
+            getAllUsers: getAllUsers
         };
 
         return service;

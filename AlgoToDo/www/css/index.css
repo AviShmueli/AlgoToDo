@@ -110,6 +110,14 @@ md-chips .md-chip-input-container{
     position: relative;
 }
 
+.button-active{
+    color: black!important;
+}
+
+.button-unactive{
+    color: #707879;
+}
+
 .image-wraper {
     width: 500px;
     height: 150px;
