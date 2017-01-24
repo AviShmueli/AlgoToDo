@@ -115,7 +115,7 @@
             task.status = newStatus;
             if (task.status === 'done') {
                 task.doneTime = new Date();
-                datacontext.removeAllTaskImagesFromCache(task);
+                //datacontext.removeAllTaskImagesFromCache(task);
                 localNotifications.cancelNotification(task._id);
             }
             if (task.status === 'seen') {
@@ -134,10 +134,12 @@
         vm.galleryImages = [];
         vm.galleryImagesLocations = {};
         vm.galleryImagesCounter = 0;
+        vm.showProgress = true;
 
         var setFileLocalPath = function (comment) {
             if (!device.isMobileDevice()) {
                 comment.fileLocalPath = device.getImagesPath() + "/images/upload-empty.png";
+                vm.showProgress = false;
                 return;
             }
 

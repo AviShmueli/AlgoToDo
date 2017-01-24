@@ -103,9 +103,7 @@
                                         </md-tooltip>
                                     </td>
                                     <td md-cell>
-                                        {{
-task.status === 'done' ? 'בוצע' : 'בתהליך'
-                                        }}
+                                        {{task.status === 'done' ? 'בוצע' : 'בתהליך'}}
                                     </td>
                                     <td md-cell>{{vm.getTotalTaskTime(task)}}</td>
                                     <td md-cell>{{task.comments.length}}</td>
