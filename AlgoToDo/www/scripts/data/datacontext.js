@@ -16,7 +16,7 @@
         
         var self = this;
         self.$storage = $localStorage;
-        self.$storage.usersCache = [];//new Map();
+        self.$storage.usersCache = self.$storage.usersCache === undefined ? [] : self.$storage.usersCache;//new Map();
 
         var saveNewTasks = function(tasks) {
 

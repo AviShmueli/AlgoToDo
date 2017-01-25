@@ -8,13 +8,13 @@
     taskCtrl.$inject = ['$rootScope', '$scope', 'logger', '$q', 'storage',
          'datacontext', '$routeParams', '$window', 'moment',
          'socket', 'cordovaPlugins', 'dropbox', 'appConfig',
-         'localNotifications', 'camera', 'device'
+         'localNotifications', 'camera', 'device', '$mdDialog'
     ];
 
     function taskCtrl($rootScope, $scope, logger, $q, storage,
                       datacontext, $routeParams, $window, moment,
                       socket, cordovaPlugins, dropbox, appConfig,
-                      localNotifications, camera, device) {
+                      localNotifications, camera, device, $mdDialog) {
 
         var vm = this;
 
@@ -75,12 +75,13 @@
                             if (vm.task.from._id !== vm.task.to._id) {                          
                                 dropbox.uploadNewImageToDropbox(fileEntry.filesystem.root.nativeURL, fileEntry.name, fileName).then(function () {
                                     datacontext.newComment(vm.task._id, tempComment);
+                                    camera.cleanupAfterPictureTaken();
                                 });
                             }
                             else {
                                 datacontext.newComment(vm.task._id, tempComment);
                             }
-                            camera.cleanupAfterPictureTaken();
+                            
                         }, function (error) {
                             logger.error("error while trying to save File to Storage", error);
                         });
@@ -312,11 +313,81 @@
             var a = 'target';
         }
 
-        vm.addAlert = function () {
+        vm.addAlert = function (ev) {
+            
+            $mdDialog.show({
+                controller: dateTimePickerCtrl,
+                templateUrl: 'scripts/widgets/dateTimePicker.tmpl.html',
+                parent: angular.element(document.body),
+                targetEvent: ev,
+                clickOutsideToClose: true
+            })
+            .then(function (answer) {
+
+                switch (answer) {
+                    case "15m":
+                        vm.getTasks();
+                        break;
+                    case "30m":
+                        vm.getTasks();
+                        break;
+                    case "1h":
+                        vm.getTasks();
+                        break;
+                    case "2h":
+                        vm.getTasks();
+                        break;
+                    case "today12":
+                        vm.getTasks();
+                        break;
+                    case "today20":
+                        vm.getUsers();
+                        break;
+                    case "tomorow8":
+                        vm.getUsers();
+                        break;
+                    case "tomorow12":
+                        vm.getUsers();
+                        break;
+                    case "tomorow20":
+                        vm.getUsers();
+                        break;
+                    case "custom":
+                        openNativeDateTimePicker();
+                        break;
+                    default:
+                        openNativeDateTimePicker();
+                        break;
+                }
+            }, function () {
+                
+            });      
+        }
+
+        function setLocalNotification(date) {
+            vm.task.notificationId = Math.floor((Math.random() * 10000) + 1);
+            localNotifications.setLocalNotification(vm.task, date);             
+        }
+
+        function openNativeDateTimePicker() {
             cordovaPlugins.showDatePicker().then(function (date) {
                 vm.task.notificationId = Math.floor((Math.random() * 10000) + 1);
                 localNotifications.setLocalNotification(vm.task, date);
-            });         
+            });
+        }
+
+        function dateTimePickerCtrl($scope, $mdDialog) {
+            $scope.hide = function () {
+                $mdDialog.hide();
+            };
+
+            $scope.cancel = function () {
+                $mdDialog.cancel();
+            };
+
+            $scope.answer = function (answer) {
+                $mdDialog.hide(answer);
+            };
         }
         
 

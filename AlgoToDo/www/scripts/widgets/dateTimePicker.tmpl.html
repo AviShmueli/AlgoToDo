@@ -1,0 +1,28 @@
+﻿<md-dialog aria-label="Mango (Fruit)" dir="rtl">
+    <form ng-cloak>
+        <md-toolbar>
+            <div class="md-toolbar-tools">
+                <h3 style="color:white">תאריך ושעה להתראה</h3>
+                <span flex></span>
+                <md-button class="md-icon-button" ng-click="cancel()" aria-label="Close dialog">
+                    <ng-md-icon icon="close"></ng-md-icon>
+                </md-button>
+            </div>
+        </md-toolbar>
+
+        <md-dialog-content>
+            <div class="md-dialog-content">
+                <section layout="row" layout-sm="column" layout-align="center center" layout-wrap>
+                    <md-button class="md-accent" ng-click="answer('15m')">עוד 15 דקות</md-button>
+                    <md-button class="md-accent" ng-click="answer('30m')">עוד 30 דקות</md-button>
+                    <md-button class="md-accent" ng-click="answer('1h')">עוד שעה</md-button>
+                    <md-button class="md-accent" ng-click="answer('2h')">עוד שעתיים</md-button>
+                    <md-button class="md-accent" ng-click="answer('today12')">היום בצהריים</md-button>
+                    <md-button class="md-accent" ng-click="answer('today20')">היום בערב</md-button>
+                    <md-button class="md-accent" ng-click="answer('tomorow8')">מחר בבוקר</md-button>
+                    <md-button class="md-accent" ng-click="answer('custom')">מותאם אישית</md-button>
+                </section>
+            </div>
+        </md-dialog-content> 
+    </form>
+</md-dialog>

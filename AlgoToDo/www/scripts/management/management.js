@@ -127,7 +127,7 @@
                 default:
                     vm.getTasks();
                     break;
-}
+            }
         }
 
         vm.goBack = function () {
