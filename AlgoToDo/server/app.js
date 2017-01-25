@@ -83,7 +83,7 @@ var key = path.join(__dirname, './ApnCertificates/production/aps_prod_key.pem');
 var apnProviderOptions = {
     token: {
         key: APNsAuthKey,
-        keyId: "JXZ3MBK8YA",
+        keyId: "DY2XKZ998J",
         teamId: "TYMZRJ5DHP",
     },   
     /*cert: cert,
