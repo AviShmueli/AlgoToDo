@@ -31,12 +31,12 @@
             llll : 'ddd, D MMM YYYY HH:mm'
         },
         calendar : {
-            sameDay: '[היום ב] <b>LT</b>',
-            nextDay: '[מחר ב] <b>LT</b>',
-            nextWeek: 'dddd [ב] <b>LT</b>',
-            lastDay : '[אתמול ב] <b>LT</b>',
-            lastWeek: 'dddd [ב] <b>LT</b>',
-            sameElse: '<b>L</b>'
+            sameDay: '[היום ב] LT',
+            nextDay: '[מחר ב] LT',
+            nextWeek: 'dddd [ב] LT>',
+            lastDay : '[אתמול ב] LT',
+            lastWeek: 'dddd [ב] LT',
+            sameElse: 'L'
         },
         relativeTime : {
             future : 'בעוד %s',

@@ -11,15 +11,45 @@
         </div>
     </md-toolbar>
     <md-list layout="column" layout-fill>
-        <!--<md-item>
-            <a style="cursor: pointer" ng-click="vm.cancelAllNotifications($event)">
+        <md-item>
+            <md-menu>
+                <a style="cursor: pointer" ng-click="$mdOpenMenu($event)">
+                    <md-item-content md-ink-ripple layout="row" layout-align="start center">
+                        <div class="inset">
+                            <ng-md-icon icon="share"></ng-md-icon>
+                        </div>
+                        <span flex></span>
+                        <div class="inset">
+                            שתף את האפליקציה
+                        </div>
+                    </md-item-content>
+                </a>
+                <md-menu-content width="1">
+                    <md-menu-item>
+                        <md-button ng-click="vm.shareApp('android')">
+                            <ng-md-icon md-menu-align-target icon="android" style="fill: #6ab344"></ng-md-icon>
+                        </md-button>
+                    </md-menu-item>
+                    <md-menu-item>
+                        <md-button ng-click="vm.shareApp('apple')">
+                            <ng-md-icon md-menu-align-target icon="apple"></ng-md-icon>
+                        </md-button>
+                    </md-menu-item>
+                </md-menu-content>
+            </md-menu>
+
+
+            
+        </md-item>
+        <md-item>
+            <a style="cursor: pointer" ng-click="vm.rateApp()">
                 <md-item-content md-ink-ripple layout="row" layout-align="start center">
                     <div class="inset">
-                        <ng-md-icon icon="notifications_off"></ng-md-icon>
+                        <ng-md-icon icon="star"></ng-md-icon>
                     </div>
                     <span flex></span>
                     <div class="inset">
-                        מחק התראות
+                        דרג אותנו
                     </div>
                 </md-item-content>
             </a>
@@ -28,7 +58,7 @@
         <md-subheader dir="rtl">
             <span flex></span>
             <span>ניהול</span>
-        </md-subheader>-->
+        </md-subheader>
         <md-item >
             <a style="cursor: pointer" ng-click="vm.showLogoffButton = true">
                 <md-item-content md-ink-ripple layout="row" layout-align="start center">

@@ -78,7 +78,7 @@
                                     <span class="from">{{item.to.name}}</span>
                                     <!--<ng-md-icon class="head-icon" icon="send" style="fill: black" size="10"></ng-md-icon>-->
                                     <span flex></span>
-                                    <span ng-bind-html="(item.createTime | amCalendar)"></span>
+                                    <span class="font-bold" ng-bind-html="(item.createTime | amCalendar)"></span>
                                 </div>
                                 
                                 <div layout="row" >
@@ -121,7 +121,7 @@
                                     <span class="from">{{item.from.name}}</span>
                                     <!--<ng-md-icon class="head-icon" icon="send" style="fill: black" size="10"></ng-md-icon>-->
                                     <span flex></span>
-                                    <span ng-bind-html="(item.createTime | amCalendar)"></span>
+                                    <span class="font-bold" ng-bind-html="(item.createTime | amCalendar)"></span>
                                 </div>
                                 <div layout="row" style="font-size: 14px;">
                                     <span ng-if="item.description.length > vm.descriptionTextLength()">{{item.description.substring(0, vm.descriptionTextLength()) + '...'}}</span>
