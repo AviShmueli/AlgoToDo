@@ -4,7 +4,7 @@
     angular.module('app.core')
         .config(function ($routeProvider, $mdThemingProvider, $compileProvider,
                           $animateProvider, LogglyLoggerProvider, $mdGestureProvider,
-                          CMRESLoggerProvider) {
+                          CMRESLoggerProvider, $cordovaAppRateProvider) {
 
             CMRESLoggerProvider.setElasticSearchConfig({
                 'host': 'https://xeyy2hb9:ulq4oyqfknu76lvm@aralia-7697095.eu-west-1.bonsaisearch.net',
@@ -60,6 +60,19 @@
               .when('/signUp', {
                   templateUrl: 'scripts/widgets/signUp.html'
               });;
+
+            document.addEventListener("deviceready", function () {
+
+                var prefs = {
+                    language: 'he',
+                    appName: 'Asiti',
+                    iosURL: '1188641206',
+                    androidURL: 'market://details?id=com.algotodo.app'
+                };
+
+                $cordovaAppRateProvider.setPreferences(prefs)
+
+            }, false);
          })
         .service('appConfig', function () {
             var self = this;
@@ -68,7 +81,7 @@
                 appDomain:
                    'https://algotodo.herokuapp.com'
                   //'https://algotodo-test.herokuapp.com'
-                   // 'http://localhost:5001'
+                  // 'http://localhost:5001'
             };
         })
         .run(function (amMoment, datacontext, cordovaPlugins) {

@@ -50,6 +50,9 @@ md-chips .md-chip-input-container{
 .add-comment-footer .md-fab {
         background-color: rgb(255,112,67) !important;
 }
+.font-bold{
+    font-weight: 600;
+}
 .icon-fill{
     fill: rgb(0,131,143) !important;
 }

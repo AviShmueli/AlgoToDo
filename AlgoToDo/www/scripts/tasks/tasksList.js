@@ -50,13 +50,13 @@
         var loadTasks = function () {
             
             if (datacontext.getTaskList().length === 0) {
-                var loadingToast = activateProgress("טוען נתונים...");
+                //var loadingToast = activateProgress("טוען נתונים...");
                 datacontext.getTasks().then(function (response) {
                     datacontext.setTaskList(response.data);
                     var count = datacontext.setMyTaskCount();
                     cordovaPlugins.setBadge(count);
                     vm.progressActivated = false;
-                    deactivateProgress(loadingToast);
+                    //deactivateProgress(loadingToast);
                 });
             }
             else {

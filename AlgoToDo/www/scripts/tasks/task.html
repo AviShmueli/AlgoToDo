@@ -65,7 +65,7 @@
                                 <span class="from">{{:: ((vm.taskIsFromMe) ? 'ל' + vm.task.to.name : 'מ' + vm.task.from.name)}}</span>
                                 <span flex></span>
                                 נשלחה&ensp;
-                                <span ng-bind-html="::(vm.task.createTime | amCalendar)"></span>
+                                <span class="font-bold" ng-bind-html="::(vm.task.createTime | amCalendar)"></span>
                             </div>
                             <div layout="row" style="font-size: 18px;margin-top: 10px;">
                                 {{::vm.task.description}}
@@ -100,7 +100,7 @@
                                     </md-card-avatar>
                                     <span class="from">{{::comment.from.name}}</span>
                                     <span flex></span>
-                                    <span ng-bind-html="::(comment.createTime | amCalendar)"></span>
+                                    <span class="font-bold" ng-bind-html="::(comment.createTime | amCalendar)"></span>
                                 </div>
                                 <div layout="row" style="font-size: 14px" ng-if="comment.text !== ''">
                                     {{::comment.text}}

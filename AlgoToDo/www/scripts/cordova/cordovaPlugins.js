@@ -6,10 +6,12 @@
         .service('cordovaPlugins', cordovaPlugins);
 
     cordovaPlugins.$inject = ['$rootScope', '$cordovaToast', '$cordovaBadge', '$log',
-                              '$q', '$cordovaDatePicker'];
+                              '$q', '$cordovaDatePicker', '$cordovaSocialSharing',
+                              '$cordovaAppRate'];
 
     function cordovaPlugins($rootScope, $cordovaToast, $cordovaBadge, $log,
-                            $q, $cordovaDatePicker) {
+                            $q, $cordovaDatePicker, $cordovaSocialSharing,
+                            $cordovaAppRate) {
 
         var self = this;
         self.appState = 'foreground';
@@ -89,13 +91,40 @@
             self.appState = 'foreground';
         };
 
+        /* ----- Social Sharing -----*/
         
+        var shareApp = function (platform) {
+            var message = '',
+                subject = '',
+                file = [],
+                link = platform === 'android' ? 'https://play.google.com/store/apps/details?id=com.algotodo.app' :
+                                                'https://itunes.apple.com/us/app/asiti/id1188641206?ls=1&mt=8';
+            document.addEventListener("deviceready", function () {
+                $cordovaSocialSharing
+                   .share(message, subject, file, link) // Share via native share sheet
+                   .then(function (result) {
+                       showToast('תודה ששיתפת את האפילקציה 😄', 2000);
+                   }, function (err) {
+                       // An error occured. Show a message to the user
+                   });
+            }, false);
+        }
+
+        var rateApp = function () {
+            document.addEventListener("deviceready", function () {
+                $cordovaAppRate.promptForRating(true).then(function (result) {
+
+                });
+            }, false);
+        }
 
         var service = {
             showToast: showToast,
             clearAppBadge: clearAppBadge,
             setBadge: setBadge,
             showDatePicker: showDatePicker,
+            shareApp: shareApp,
+            rateApp: rateApp
         };
 
         return service;

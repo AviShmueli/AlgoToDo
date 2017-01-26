@@ -29,6 +29,9 @@
         vm.tasks = [];
         vm.allCliqot = {};
         vm.activeTab = 'tasks';
+        vm.tasksFilterStatusInProgress = true;
+        vm.tasksFilterStatusDone = true;
+        //
 
         vm.user = datacontext.getUserFromLocalStorage();
 
@@ -69,6 +72,22 @@
                     }
                 }
             }
+
+            if (vm.tasksFilterStatusInProgress) {
+                vm.tasksFilter.status = 'inProgress';
+            }
+            if (vm.tasksFilterStatusDone) {
+                vm.tasksFilter.status = 'done';
+            }
+            if (vm.tasksFilterStatusDone && vm.tasksFilterStatusInProgress) {
+                delete vm.tasksFilter.status;
+            }
+            if (!vm.tasksFilterStatusDone && !vm.tasksFilterStatusInProgress) {
+                delete vm.tasksFilter.status;
+                vm.tasksFilterStatusDone = true;
+                vm.tasksFilterStatusInProgress = true;
+            }
+
 
             datacontext.getAllTasksCount(vm.tasksFilter).then(function (response) {
                 vm.totalTaskCount = response.data;

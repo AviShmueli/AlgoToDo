@@ -323,34 +323,37 @@
                 clickOutsideToClose: true
             })
             .then(function (answer) {
-
+                var date = new Date();
                 switch (answer) {
                     case "15m":
-                        vm.getTasks();
+                        setLocalNotification(date.setTime(date.getTime() + 15 * 60000));
                         break;
                     case "30m":
-                        vm.getTasks();
+                        setLocalNotification(date.setTime(date.getTime() + 30 * 60000));
                         break;
                     case "1h":
-                        vm.getTasks();
+                        setLocalNotification(date.setTime(date.getTime() + 1 * 3600000));
                         break;
                     case "2h":
-                        vm.getTasks();
+                        setLocalNotification(date.setTime(date.getTime() + 2 * 3600000));
                         break;
                     case "today12":
-                        vm.getTasks();
+                        setLocalNotification(date.setHours(12, 0, 0, 0));
                         break;
                     case "today20":
-                        vm.getUsers();
+                        setLocalNotification(date.setHours(20, 0, 0, 0))
                         break;
                     case "tomorow8":
-                        vm.getUsers();
+                        date.setDate(date.getDate() + 1)
+                        setLocalNotification(date.setHours(8, 0, 0, 0));
                         break;
                     case "tomorow12":
-                        vm.getUsers();
+                        date.setDate(date.getDate() + 1)
+                        setLocalNotification(date.setHours(12, 0, 0, 0))
                         break;
                     case "tomorow20":
-                        vm.getUsers();
+                        date.setDate(date.getDate() + 1)
+                        setLocalNotification(date.setHours(20, 0, 0, 0))
                         break;
                     case "custom":
                         openNativeDateTimePicker();
@@ -366,13 +369,13 @@
 
         function setLocalNotification(date) {
             vm.task.notificationId = Math.floor((Math.random() * 10000) + 1);
-            localNotifications.setLocalNotification(vm.task, date);             
+            localNotifications.setLocalNotification(vm.task, date);
+            cordovaPlugins.showToast('תזכורת נקבעה ' + moment(date).calendar(), 2000);
         }
 
         function openNativeDateTimePicker() {
             cordovaPlugins.showDatePicker().then(function (date) {
-                vm.task.notificationId = Math.floor((Math.random() * 10000) + 1);
-                localNotifications.setLocalNotification(vm.task, date);
+                setLocalNotification(date);
             });
         }
 
