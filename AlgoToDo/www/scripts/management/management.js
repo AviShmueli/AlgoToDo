@@ -6,11 +6,11 @@
         .controller('managementCtrl', managementCtrl);
 
     managementCtrl.$inject = ['$rootScope', '$scope', 'logger', '$q',
-                             'datacontext', 'moment', '$mdMedia'
+                             'datacontext', 'moment', '$mdMedia', 'DAL'
     ];
 
     function managementCtrl($rootScope, $scope, logger, $q,
-                      datacontext, moment, $mdMedia) {
+                      datacontext, moment, $mdMedia, DAL) {
 
         var vm = this;
 
@@ -36,7 +36,7 @@
         vm.user = datacontext.getUserFromLocalStorage();
 
         vm.allVersionInstalled = [];
-        datacontext.getAllVersionInstalled().then(function (allVersions) {
+        DAL.getAllVersionInstalled().then(function (allVersions) {
             vm.allVersionInstalled = allVersions.data;
         });
 
@@ -89,13 +89,13 @@
             }
 
 
-            datacontext.getAllTasksCount(vm.tasksFilter).then(function (response) {
+            DAL.getAllTasksCount(vm.tasksFilter).then(function (response) {
                 vm.totalTaskCount = response.data;
             });
 
             var deferred = $q.defer();
             vm.promise = deferred.promise;
-            datacontext.getAllTasks(vm.query, vm.tasksFilter).then(function (tasks) {
+            DAL.getAllTasks(vm.query, vm.tasksFilter).then(function (tasks) {
                 vm.tasks = tasks.data;
                 deferred.resolve();
             });
@@ -202,13 +202,13 @@
                 }
             }
 
-            datacontext.getAllUsersCount(vm.usersFilter).then(function (response) {
+            DAL.getAllUsersCount(vm.usersFilter).then(function (response) {
                 vm.totalUsersCount = response.data;
             });
 
             var deferred = $q.defer();
             vm.promise = deferred.promise;
-            datacontext.getAllUsers(vm.query, vm.usersFilter).then(function (users) {
+            DAL.getAllUsers(vm.query, vm.usersFilter).then(function (users) {
                 vm.users = users.data;
                 deferred.resolve();
             });

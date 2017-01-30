@@ -17,45 +17,7 @@
         var self = this;
         self.$storage = $localStorage;
         self.$storage.usersCache = self.$storage.usersCache === undefined ? [] : self.$storage.usersCache;//new Map();
-
-        var saveNewTasks = function(tasks) {
-
-            var req = {
-                method: 'POST',
-                url: appConfig.appDomain + '/TaskManeger/newTask',
-                data: {
-                    task: tasks
-                }
-            };
-
-            return $http(req);
-        };
-
-        var getTasks = function () {
-            var req = {
-                method: 'GET',
-                url: appConfig.appDomain + '/TaskManeger/getTasks',
-                params: {
-                    userId: self.$storage.user._id
-                }
-            };
-
-            return $http(req);
-        };
-        
-        var updateTask = function (task) {
-            
-            var req = {
-                method: 'POST',
-                url: appConfig.appDomain + '/TaskManeger/updateTaskStatus',
-                data: {
-                    task: task
-                }
-            };
-
-            return $http(req);
-        };
-
+ 
         var getTaskList = function () {
             return self.$storage.tasksList !== undefined ? self.$storage.tasksList: [];
         };
@@ -86,6 +48,8 @@
                 self.$storage.tasksList[index] = task;
             }
         };
+
+        
         
         var saveUserToLocalStorage = function (user) {
             self.$storage.user = user;
@@ -97,47 +61,6 @@
 
         var deleteUserFromLocalStorage = function () {
             delete self.$storage.user;
-        };
-
-        var registerUser = function (user) {
-            var req = {
-                method: 'POST',
-                url: appConfig.appDomain + '/TaskManeger/registerUser',
-                data: {
-                    user: user
-                }
-            };
-
-            return $http(req);
-        };
-
-        var searchUsers = function (string) {
-            var params = {};
-            if (self.$storage.user.type !== undefined && self.$storage.user.type === 'admin') {
-                params = {
-                    queryString: string
-                };
-            }
-            else {
-                if (self.$storage.user.cliqot !== undefined && self.$storage.user.cliqot[0] !== undefined) {
-                    params = {
-                        queryString: string,
-                        userCliqaId: self.$storage.user.cliqot[0]._id
-                    };
-                }
-                else {
-                    params = {
-                        queryString: string
-                    };
-                }
-            }
-            var req = {
-                method: 'GET',
-                url: appConfig.appDomain + '/TaskManeger/searchUsers',
-                params: params
-            };
-
-            return $http(req);
         };
 
         var addUsersToUsersCache = function (usersList) {
@@ -160,53 +83,6 @@
         
         var getAllCachedUsers = function () {
             return self.$storage.usersCache;
-        }
-
-        var checkIfUserExist = function (user) {
-            var req = {
-                method: 'GET',
-                url: appConfig.appDomain + '/TaskManeger/isUserExist',
-                params: {
-                    userName: user.name,
-                    userPhone: user.phone
-                }
-            };
-
-            return $http(req);
-        }
-
-        var checkIfVerificationCodeMatch = function (user, verificationCode) {
-            var req = {
-                method: 'GET',
-                url: appConfig.appDomain + '/TaskManeger/checkIfVerificationCodeMatch',
-                params: {
-                    userId: user._id,
-                    verificationCode: verificationCode
-                }
-            };
-
-            return $http(req);
-        }
-
-        var getTaskByTaskId = function (taskId) {
-            var result = getTaskList().filter(function (t) { return t._id === taskId });
-            if (result.length === 1) {
-                return result[0];
-            }
-            return {};
-        }
-
-        var newComment = function (taskId, comment) {
-            var req = {
-                method: 'POST',
-                url: appConfig.appDomain + '/TaskManeger/newComment',
-                data: {
-                    taskId: taskId,
-                    comment: comment
-                }
-            };
-
-            return $http(req);
         }
         
         var addCommentToTask = function (taskId, comment) {
@@ -252,21 +128,13 @@
             return -1;
         }
 
-        // when new comment received from the server
-        /*socket.on('new-comment', function (data) {
-
-            var newComment = data.newComment;
-            var taskId = data.taskId;
-            addCommentToTask(taskId, newComment);
-        });*/
-
-        var reloadAllTasks = function () {
-            if (self.$storage.user !== undefined) {
-                getTasks().then(function (response) {
-                    setTaskList(response.data);
-                });
-            }           
-        };
+        var getTaskByTaskId = function (taskId) {
+            var result = getTaskList().filter(function (t) { return t._id === taskId });
+            if (result.length === 1) {
+                return result[0];
+            }
+            return {};
+        }
 
         var setMyTaskCount = function () {
             var userId = self.$storage.user._id;
@@ -275,33 +143,6 @@
 
             return count;
         };
-
-        var updateUserDetails = function (userId, fieldToUpdate, valueToUpdate) {
-            var req = {
-                method: 'POST',
-                url: appConfig.appDomain + '/TaskManeger/updateUserDetails',
-                data: {
-                    userId: userId,
-                    fieldToUpdate: fieldToUpdate,
-                    valueToUpdate: valueToUpdate
-                }
-            };
-
-            return $http(req);
-        }
-
-        var saveUsersNewRegistrationId = function (registrationId, user) {
-            var filedToUpdate = '';
-            if (user.device.platform === 'iOS') {
-                user.ApnRegistrationId = registrationId;
-                filedToUpdate = 'ApnRegistrationId';
-            }
-            if (user.device.platform === 'Android') {
-                user.GcmRegistrationId = registrationId;
-                filedToUpdate = 'GcmRegistrationId';
-            }
-            updateUserDetails(user._id, filedToUpdate, registrationId);
-        }
         
         var setDeviceDetailes = function (device, applicationDirectory) {
             self.$storage.deviceDetailes = device;
@@ -313,158 +154,25 @@
                     self.$storage.deviceDetailes.applicationDirectory !== undefined) ?
                     self.$storage.deviceDetailes : {};
         }
-
-        var saveFileToCache = function (fileName, file) {
-            if (!self.$storage.filesCache) {
-                self.$storage.filesCache = {};
-            }
-            self.$storage.filesCache[fileName] = file;
-        }
-
-        var getFileFromCache = function (fileName) {
-            if (self.$storage.filesCache) {
-                return self.$storage.filesCache[fileName];
-            }
-            return undefined;
-        }
-
-        var removeFileFromCache = function (fileName) {
-            delete self.$storage.filesCache[fileName];
-        }
-
-        var removeAllTaskImagesFromCache = function (task) {
-            for (var i = 0; i < task.comments.length; i++) {
-                if (task.comments[i].fileName !== undefined) {
-                    removeFileFromCache(task.comments[i].fileName);
-                }
-            }
-        }
         
-        var getAllCliqot = function () {
-            var deferred = $q.defer();
-
-            var req = {
-                method: 'GET',
-                url: appConfig.appDomain + '/TaskManeger/getAllCliqot',
-                params: {
-                    
-                }
-            };
-
-            $http(req).then(function (response) {
-                deferred.resolve(response.data);
-            });
-
-            return deferred.promise;
-        }
-
-        var getAllTasks = function (query, filter) {
-            if (self.$storage.user.type === 'admin') {
-
-                var req = {
-                    method: 'GET',
-                    url: appConfig.appDomain + '/TaskManeger/getAllTasks',
-                    params: {
-                        order: query.order,
-                        limit: query.limit,
-                        page: query.page,
-                        filter: filter
-                    }
-                };
-
-                return $http(req);
-            }
-        }
-
-        var getAllTasksCount = function (filter) {
-            var req = {
-                method: 'GET',
-                url: appConfig.appDomain + '/TaskManeger/getAllTasksCount',
-                params: {
-                    filter: filter
-                }
-            };
-
-            return $http(req);
-        }
-
-        var getAllUsers = function (query, filter) {
-            if (self.$storage.user.type === 'admin') {
-
-                var req = {
-                    method: 'GET',
-                    url: appConfig.appDomain + '/TaskManeger/getAllUsers',
-                    params: {
-                        order: query.order,
-                        limit: query.limit,
-                        page: query.page,
-                        filter: filter
-                    }
-                };
-
-                return $http(req);
-            }
-        }
-
-        var getAllUsersCount = function (filter) {
-            var req = {
-                method: 'GET',
-                url: appConfig.appDomain + '/TaskManeger/getAllUsersCount',
-                params: {
-                    filter: filter
-                }
-            };
-
-            return $http(req);
-        }
-
-        var getAllVersionInstalled = function () {
-            var req = {
-                method: 'GET',
-                url: appConfig.appDomain + '/TaskManeger/getAllVersionInstalled'
-            };
-
-            return $http(req);
-        }
-
+        
         var service = {
             getTaskList: getTaskList,
             setTaskList: setTaskList,
             addTaskToTaskList: addTaskToTaskList,
-            saveNewTasks: saveNewTasks,
-            updateTask: updateTask,
             replaceTask: replaceTask,
             saveUserToLocalStorage: saveUserToLocalStorage,
             getUserFromLocalStorage: getUserFromLocalStorage,
             deleteUserFromLocalStorage: deleteUserFromLocalStorage,
-            registerUser: registerUser,
-            getTasks: getTasks,
-            searchUsers: searchUsers,
             addUsersToUsersCache: addUsersToUsersCache,
             getAllCachedUsers: getAllCachedUsers,
-            checkIfUserExist: checkIfUserExist,
-            getTaskByTaskId: getTaskByTaskId,
-            newComment: newComment,
             addCommentToTask: addCommentToTask,
-            reloadAllTasks: reloadAllTasks,
             deleteTaskListFromLocalStorage: deleteTaskListFromLocalStorage,
             setMyTaskCount: setMyTaskCount,
             pushTasksToTasksList: pushTasksToTasksList,
-            saveUsersNewRegistrationId: saveUsersNewRegistrationId,
             setDeviceDetailes: setDeviceDetailes,
             getDeviceDetailes: getDeviceDetailes,
-            removeFileFromCache: removeFileFromCache,
-            getFileFromCache: getFileFromCache,
-            saveFileToCache: saveFileToCache,
-            removeAllTaskImagesFromCache: removeAllTaskImagesFromCache,
-            getAllCliqot: getAllCliqot,
-            checkIfVerificationCodeMatch: checkIfVerificationCodeMatch,
-            updateUserDetails: updateUserDetails,
-            getAllTasks: getAllTasks,
-            getAllTasksCount: getAllTasksCount,
-            getAllUsersCount: getAllUsersCount,
-            getAllUsers: getAllUsers,
-            getAllVersionInstalled: getAllVersionInstalled
+            getTaskByTaskId: getTaskByTaskId
         };
 
         return service;

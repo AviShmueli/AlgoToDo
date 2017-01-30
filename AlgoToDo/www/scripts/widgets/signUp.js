@@ -19,10 +19,10 @@
         };
 */
     signUpCtrl.$inject = ['$scope', 'datacontext', 'logger', 'cordovaPlugins', '$q', 'pushNotifications',
-                          'device', '$mdDialog'];
+                          'device', '$mdDialog', 'DAL'];
 
     function signUpCtrl($scope, datacontext, logger, cordovaPlugins, $q, pushNotifications,
-                        device, $mdDialog) {
+                        device, $mdDialog, DAL) {
             var vm = this;
 
             vm.inProgress = false;
@@ -30,8 +30,8 @@
             vm.AllCliqot = [];
             vm.selectedCliqa;
 
-            datacontext.getAllCliqot().then(function (allCliqot){
-                vm.AllCliqot = allCliqot;
+            DAL.getAllCliqot().then(function (allCliqot){
+                vm.AllCliqot = allCliqot.data;
             });
             
 
@@ -51,7 +51,7 @@
             }
 
             var signUp = function () {
-                datacontext.checkIfUserExist(vm.user).then(function (response) {
+                DAL.checkIfUserExist(vm.user).then(function (response) {
                     if (response.data !== null && response.data !== '') {
                         
                         var user = response.data;
@@ -62,11 +62,11 @@
                          (device.isMobileDevice() && device.getDeviceDetails().platform === 'iOS' &&
                          (user.ApnRegistrationId === '' || user.ApnRegistrationId === undefined))) {
                             registerUserForPushService().then(function (registrationId) {
-                                datacontext.saveUsersNewRegistrationId(registrationId, user);
+                                DAL.saveUsersNewRegistrationId(registrationId, user);
                                 // check here if reg-code recived by sms match reg-code in server
                                 showVerificationCodePrompt().then(function (verificationCode) {
 
-                                    datacontext.checkIfVerificationCodeMatch(user, verificationCode).then(function (result) {
+                                    DAL.checkIfVerificationCodeMatch(user, verificationCode).then(function (result) {
                                         if (result.data === 'ok') {
                                             datacontext.saveUserToLocalStorage(response.data);
                                             window.location = '#/';
@@ -86,7 +86,7 @@
                             // check here if reg-code recived by sms match reg-code in server
                             showVerificationCodePrompt().then(function (verificationCode) {
 
-                                datacontext.checkIfVerificationCodeMatch(user, verificationCode).then(function (result) {
+                                DAL.checkIfVerificationCodeMatch(user, verificationCode).then(function (result) {
                                     if (result.data === 'ok') {
                                         datacontext.saveUserToLocalStorage(response.data);
                                         window.location = '#/';
@@ -139,12 +139,12 @@
                                 if (vm.user.device.platform === 'Android') {
                                     vm.user.GcmRegistrationId = registrationId;
                                 }
-                                datacontext.registerUser(vm.user).then(function (response) {
+                                DAL.registerUser(vm.user).then(function (response) {
 
                                     // check here if reg-code recived by sms match reg-code in server
                                     showVerificationCodePrompt().then(function (verificationCode) {
                                         var user = response.data;
-                                        datacontext.checkIfVerificationCodeMatch(user, verificationCode).then(function (result) {
+                                        DAL.checkIfVerificationCodeMatch(user, verificationCode).then(function (result) {
                                             if (result.data === 'ok') {
                                                 datacontext.saveUserToLocalStorage(user);
                                                 window.location = '#/';
@@ -170,12 +170,12 @@
                     }, false);
                 }
                 else {
-                    datacontext.registerUser(vm.user).then(function (response) {
+                    DAL.registerUser(vm.user).then(function (response) {
 
                         // check here if reg-code recived by sms match reg-code in server
                         showVerificationCodePrompt().then(function (verificationCode) {
                             var user = response.data;
-                            datacontext.checkIfVerificationCodeMatch(user, verificationCode).then(function (result) {
+                            DAL.checkIfVerificationCodeMatch(user, verificationCode).then(function (result) {
                                 if (result.data === 'ok') {
                                     datacontext.saveUserToLocalStorage(response.data);
                                         logger.success('user signUp successfuly', response.data);

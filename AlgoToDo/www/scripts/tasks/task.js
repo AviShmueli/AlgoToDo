@@ -8,13 +8,15 @@
     taskCtrl.$inject = ['$rootScope', '$scope', 'logger', '$q', 'storage',
          'datacontext', '$routeParams', '$window', 'moment',
          'socket', 'cordovaPlugins', 'dropbox', 'appConfig',
-         'localNotifications', 'camera', 'device', '$mdDialog'
+         'localNotifications', 'camera', 'device', '$mdDialog',
+         'DAL', '$offlineHandler'
     ];
 
     function taskCtrl($rootScope, $scope, logger, $q, storage,
                       datacontext, $routeParams, $window, moment,
                       socket, cordovaPlugins, dropbox, appConfig,
-                      localNotifications, camera, device, $mdDialog) {
+                      localNotifications, camera, device, $mdDialog,
+                      DAL, $offlineHandler) {
 
         var vm = this;
 
@@ -32,11 +34,6 @@
         if (vm.task.comments === undefined) {
             vm.task.comments = [];
         }
-
-        // login 
-        /*socket.emit('join', {
-            userId: vm.user._id
-        });*/
 
         vm.goBack = function () {
             window.location = '#/';
@@ -74,12 +71,12 @@
 
                             if (vm.task.from._id !== vm.task.to._id) {                          
                                 dropbox.uploadNewImageToDropbox(fileEntry.filesystem.root.nativeURL, fileEntry.name, fileName).then(function () {
-                                    datacontext.newComment(vm.task._id, tempComment);
+                                    DAL.newComment(vm.task._id, tempComment);
                                     camera.cleanupAfterPictureTaken();
                                 });
                             }
                             else {
-                                datacontext.newComment(vm.task._id, tempComment);
+                                DAL.newComment(vm.task._id, tempComment);
                             }
                             
                         }, function (error) {
@@ -108,7 +105,7 @@
                 text: vm.newCommentText
             };
             vm.task.comments.push(comment);
-            datacontext.newComment(vm.task._id, comment);
+            DAL.newComment(vm.task._id, comment);
             vm.newCommentText = '';
         }
 
@@ -123,10 +120,19 @@
                 task.seenTime = new Date();
             }
 
-            datacontext.updateTask(task).then(function (response) {
-                
+            DAL.updateTask(task).then(function (response) {
+                var count = datacontext.setMyTaskCount();
+                cordovaPlugins.setBadge(count);
             }, function (error) {
-                logger.error('Error while tring to update task ', error);
+                if (error.status === -1) {
+                    error.data = "App lost connection to the server";
+                }
+                logger.error('Error while tring to update task: ', error.data || error);
+                task.offlineMode = true;
+                $offlineHandler.addTaskToCachedTasksToUpdateList(task);
+
+                var count = datacontext.setMyTaskCount();
+                cordovaPlugins.setBadge(count);
             });
 
             vm.goBack();
@@ -189,7 +195,7 @@
                     .then(function (response) {
                          var url = URL.createObjectURL(response.fileBlob);
                          comment.fileLocalPath = url;
-                         datacontext.saveFileToCache(comment.fileName, url);
+                         //datacontext.saveFileToCache(comment.fileName, url);
                     })
                     .catch(function (error) {
                         logger.error("error while trying to get file Thumbnail", error);
@@ -201,7 +207,7 @@
                                    console.log(response);
                                    var downloadUrl = URL.createObjectURL(response.fileBlob);
                                    comment.fileLocalPath = downloadUrl;
-                                   datacontext.saveFileToCache(comment.fileName, downloadUrl);                                   
+                                   //datacontext.saveFileToCache(comment.fileName, downloadUrl);                                   
                               })
                              .catch(function (error) {
                                     logger.error("error while trying to download file from dropbox", error);

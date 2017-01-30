@@ -429,6 +429,8 @@ app.post('/TaskManeger/newTask', function (req, res) {
 
         if (err) {
             winston.log('error', "error while trying to connect MongoDB: ", err);
+            res.status(500).send({message: "error while trying to connect MongoDB", error: err});
+            return;
         }
 
         var collection = db.collection('tasks');
@@ -436,7 +438,9 @@ app.post('/TaskManeger/newTask', function (req, res) {
         collection.insert(tasks, function (err, results) {
 
             if (err) {
-                winston.log('error', "error while trying to add new Task: ", err);
+                winston.log('error', "error while trying to add new Task to DB: ", err);
+                res.status(500).send({message: "error while trying to add new Task to DB", error: err}); 
+                return;
             }
 
             // if the employee is now online send the new task by Socket.io
@@ -552,6 +556,52 @@ app.post('/TaskManeger/updateTaskStatus', function (req, res) {
                 res.send(results.value);
 
             });
+    });
+});
+
+app.post('/TaskManeger/updateTasksStatus', function (req, res) {
+    var tasks = req.body.tasks;
+
+    mongodb.connect(mongoUrl, function (err, db) {
+
+        if (err) {
+            winston.log('error', "error while trying to connect MongoDB: ", err);
+        }
+
+        var collection = db.collection('tasks');
+
+        // Initialize the unordered Batch
+        var batch = collection.initializeUnorderedBulkOp({useLegacyOps: true});
+
+        for (var i = 0; i < tasks.length; i++) {
+            var task = tasks[i];
+            batch.find({ _id: new ObjectID(task._id) }).updateOne({$set: { 'status': task.status, 'doneTime': task.doneTime, 'seenTime': task.seenTime }});
+        }
+
+        batch.execute(function(err, result) {
+            
+            if (err) {
+                winston.log('error', "error while trying to update tasks: ", err);
+            }
+
+            for (var i = 0; i < tasks.length; i++) {
+                var task = tasks[i];
+                
+                // if this task is not from me to me, send notification to the user
+                if (task.to._id !== task.from._id) {
+                    if(task.status === 'done'){
+                        pushUpdatetdTaskToUsersDevice(task, task.from._id);
+                    }
+                    if(task.status === 'inProgress'){
+                        pushTaskToUsersDevice([task], [task.to._id]);
+                    }
+                }
+            }
+
+            db.close();
+            res.send('ok');
+        });
+
     });
 });
 

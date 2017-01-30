@@ -7,11 +7,13 @@
 
     AddTaskDialogController.$inject = [
         '$scope', '$mdDialog', 'datacontext', '$mdMedia', '$q', 'logger',
-        'cordovaPlugins', 'storage', 'dropbox', 'camera', 'device'
+        'cordovaPlugins', 'storage', 'dropbox', 'camera', 'device', 'DAL',
+        '$offlineHandler'
     ];
 
     function AddTaskDialogController($scope, $mdDialog, datacontext, $mdMedia, $q, logger,
-                                     cordovaPlugins, storage, dropbox, camera, device) {
+                                     cordovaPlugins, storage, dropbox, camera, device, DAL,
+                                     $offlineHandler) {
 
         var vm = this;
         
@@ -59,7 +61,7 @@
             
             // if no users found in the cache, search in DB
             var deferred = $q.defer();
-            datacontext.searchUsers(query).then(function (response) {
+            DAL.searchUsers(query).then(function (response) {
                 var usersList = response.data;
                 for (var i = 0; i < usersList.length; i++) {
                     usersList[i]['avatarFullUrl'] = vm.imagesPath + usersList[i].avatarUrl;
@@ -94,6 +96,7 @@
                     vm.task.status = 'inProgress';
                     vm.task.createTime = new Date();                    
                     vm.task.cliqaId = vm.user.cliqot[0]._id;
+                    //vm.task.offlineMode = false;
 
                     if (vm.task.comments.length > 0) {
                         vm.task.comments[0].createTime = new Date();
@@ -103,7 +106,9 @@
                     var isTaskFromMeToMe = (taskListToAdd.length === 1 && taskListToAdd[0].from._id === taskListToAdd[0].to._id)
                     if (vm.taskHasImage === true && !isTaskFromMeToMe) {
                         cordovaPlugins.showToast("שולח, מעלה תמונה...", 100000);
-                        dropbox.uploadNewImageToDropbox(vm.newImage.fileEntry.filesystem.root.nativeURL, vm.newImage.fileEntry.name, vm.newImage.fileName).then(function () {
+                        dropbox.uploadNewImageToDropbox(vm.newImage.fileEntry.filesystem.root.nativeURL,
+                                                        vm.newImage.fileEntry.name,
+                                                        vm.newImage.fileName).then(function () {
                             saveNewTask(taskListToAdd);
                         });
                     }
@@ -119,32 +124,49 @@
         };
 
         var saveNewTask = function (taskListToAdd) {
-            datacontext.saveNewTasks(taskListToAdd).then(function (response) {
-                logger.toast('המשימה נשלחה בהצלחה!', response.data, 1000);
-                logger.info('task added sucsessfuly', response.data);
-                datacontext.pushTasksToTasksList(response.data);
-                var count = datacontext.setMyTaskCount();
-                cordovaPlugins.setBadge(count);
-                $mdDialog.hide();
-
-                if (vm.taskHasImage === true) {                 
-                    storage.saveFileToStorage(response.data[0]._id, vm.newImage.fileName, vm.newImage.fileEntry.nativeURL).
-                        then(function () { 
-                            camera.cleanupAfterPictureTaken();
-                            window.plugins.toast.hide();
-                        },
-                        function (error) {
-                        logger.error("error while trying to save File to Storage", error);
-                    });
-                }
-
-                // clean the form
-                vm.task = {};
-                vm.submitInProcess = false;
+            DAL.saveNewTasks(taskListToAdd).then(function (response) {
+                logger.toast('המשימה נשלחה בהצלחה!', 1000);
+                logger.info('task/s added sucsessfuly', response.data);
+                addTasksAndCloseDialog(response.data);
             }, function (error) {
-                logger.error('Error while tring to add new task ', error);
+                if (error.status === -1) {
+                    error.data = "App lost connection to the server";
+                }
+                logger.error('Error while trying to add new task: ', error.data || error);               
+                $offlineHandler.addTasksToCachedNewTasksList(angular.copy(taskListToAdd));
+                markTaskAsOfflineMode(taskListToAdd);
+                addTasksAndCloseDialog(taskListToAdd);
             });
         };
+
+        var addTasksAndCloseDialog = function (tasks) {
+            datacontext.pushTasksToTasksList(tasks);
+            var count = datacontext.setMyTaskCount();
+            cordovaPlugins.setBadge(count);
+            $mdDialog.hide();
+
+            if (vm.taskHasImage === true) {
+                storage.saveFileToStorage(tasks[0]._id, vm.newImage.fileName, vm.newImage.fileEntry.nativeURL).
+                    then(function () {
+                        camera.cleanupAfterPictureTaken();
+                        window.plugins.toast.hide();
+                    },
+                    function (error) {
+                        logger.error("error while trying to save File to Storage", error);
+                    });
+            }
+
+            // clean the form
+            vm.task = {};
+            vm.submitInProcess = false;
+        }
+
+        var markTaskAsOfflineMode = function (tasks) {
+            for (var i = 0; i < tasks.length; i++) {
+                tasks[i].offlineMode = true;
+                tasks[i]._id = 'tempId' + Math.floor(Math.random() * 90000) + 10000;
+            }
+        }
 
         var createTasksList = function (task, recipients) {
             var listToReturn = [];

@@ -10,14 +10,16 @@
         '$mdMedia', '$mdBottomSheet','$filter', '$timeout',
         '$mdSidenav', '$mdDialog', 'datacontext', 'lodash',
         'socket', '$mdToast', 'moment', '$q', 'CMRESLogger',
-        'pushNotifications', 'localNotifications', 'device'
+        'pushNotifications', 'localNotifications', 'device',
+        'DAL', '$offlineHandler'
     ];
 
     function TasksListCtrl($rootScope, $scope, logger, $location, cordovaPlugins,
                             $mdMedia, $mdBottomSheet,$filter, $timeout,
                             $mdSidenav, $mdDialog, datacontext, lodash,
                             socket, $mdToast, moment, $q, CMRESLogger,
-                            pushNotifications, localNotifications, device) {
+                            pushNotifications, localNotifications, device,
+                            DAL, $offlineHandler) {
 
         var vm = this;
 
@@ -40,7 +42,7 @@
 
         var activateProgress = function (toastText) {
             vm.progressActivated = true;
-            return logger.toast(toastText, null, 10000);
+            return logger.toast(toastText, 10000);
         };
 
         var deactivateProgress = function (toast) {
@@ -51,7 +53,7 @@
             
             if (datacontext.getTaskList().length === 0) {
                 //var loadingToast = activateProgress("טוען נתונים...");
-                datacontext.getTasks().then(function (response) {
+                DAL.getTasks().then(function (response) {
                     datacontext.setTaskList(response.data);
                     var count = datacontext.setMyTaskCount();
                     cordovaPlugins.setBadge(count);
@@ -95,7 +97,7 @@
 
                     device.getAppVersion().then(function (version) {
                         if (version !== vm.user.versionInstalled) {
-                            datacontext.updateUserDetails(vm.user._id, 'versionInstalled', version);
+                            DAL.updateUserDetails(vm.user._id, 'versionInstalled', version);
                             vm.user.versionInstalled = version;
                             datacontext.saveUserToLocalStorage(vm.user);
                         } 
@@ -104,14 +106,13 @@
             }
 
             logger.info("user is now connected", vm.user);
-            //logger.toast("אתה עכשיו מחובר!", null, 1000); 
             document.getElementById('canvas_loadder').style.display = "none";
             document.getElementById('Cube_loadder').style.display = "none";
         };
 
         vm.logOff = function () {
             angular.element(document.querySelectorAll('html')).addClass("hight-auto");
-            datacontext.saveUsersNewRegistrationId('', vm.user);
+            DAL.saveUsersNewRegistrationId('', vm.user);
             datacontext.deleteUserFromLocalStorage();
             datacontext.deleteTaskListFromLocalStorage();           
             vm.userConnected = false;
@@ -119,41 +120,6 @@
             cordovaPlugins.clearAppBadge();
             window.location = '#/signUp';
         };
-
-        // the response to the all-usersr from the server
-        // get from the server the list of users that are connected
-        /*socket.on('all-users', function(data) {
-
-            var users = {};
-            angular.forEach(data, function(value, key) {
-                if (value.userName !== vm.userName) {
-                    users[value.userName] = value;
-                }
-            });
-            datacontext.users = users;
-        });
-
-        // when the server response the users tasks
-        socket.on('users-tasks', function(data) {
-            datacontext.tasksList = data;
-        });*/
-
-        // when new task received from the server
-        /*socket.on('new-task', function(data) {           
-            var newTask = data;
-            if (newTask.from._id !== vm.user._id) {
-                //datacontext.addTaskToTaskList(newTask);
-                //setMyTaskCount();
-            }
-        });*/
-
-        // when the server response the users tasks
-        /*socket.on('updated-task', function (data) {
-            //logger.success('משימה עודכנה', data.value);
-            datacontext.replaceTask(data.value);
-            var count = datacontext.setMyTaskCount();
-            cordovaPlugins.setBadge(count);
-        });*/
 
         vm.toggleSidenav = function(menuId) {
             $mdSidenav(menuId).toggle();
@@ -233,17 +199,24 @@
             if (task.status === 'seen') {
                 task.seenTime = new Date();
             }
-            datacontext.updateTask(task).then(function (response) {
+            DAL.updateTask(task).then(function (response) {
                 var count = datacontext.setMyTaskCount();
                 cordovaPlugins.setBadge(count);
             }, function (error) {
-                logger.error('Error while trying to update task ', error);
+                if (error.status === -1) {
+                    error.data = "App lost connection to the server";
+                }
+                logger.error('Error while tring to update task: ', error.data || error);
+                task.offlineMode = true;
+                $offlineHandler.addTaskToCachedTasksToUpdateList(task);
+                var count = datacontext.setMyTaskCount();
+                cordovaPlugins.setBadge(count);
             });
         };
 
         vm.reloadTasks = function () {
             var deferred = $q.defer();
-            datacontext.getTasks().then(function (response) {
+            DAL.getTasks().then(function (response) {
                 datacontext.setTaskList(response.data);
                 var count = datacontext.setMyTaskCount();
                 cordovaPlugins.setBadge(count);
@@ -291,7 +264,7 @@
 
                 // todo: remove this if in the next releas
                 if (user.cliqot === undefined) {
-                    datacontext.checkIfUserExist(user).then(function (response) {
+                    DAL.checkIfUserExist(user).then(function (response) {
                         var newUser = response.data;
 
                         datacontext.saveUserToLocalStorage(newUser);
@@ -338,6 +311,10 @@
                 }
             }
             return false;
+        }
+
+        vm.goOnline = function () {
+            $offlineHandler.goOnline();
         }
     }
 

@@ -4,26 +4,9 @@
     angular.module('app.core')
         .config(function ($routeProvider, $mdThemingProvider, $compileProvider,
                           $animateProvider, LogglyLoggerProvider, $mdGestureProvider,
-                          CMRESLoggerProvider, $cordovaAppRateProvider) {
+                          $cordovaAppRateProvider) {
 
-            CMRESLoggerProvider.setElasticSearchConfig({
-                'host': 'https://xeyy2hb9:ulq4oyqfknu76lvm@aralia-7697095.eu-west-1.bonsaisearch.net',
-                'apiVersion': '1.7'
-            });
-
-            CMRESLoggerProvider.setLogConfig({
-                'index': 'algotodo2',
-                'type': 'jslog',
-                'bufferSize': 2500,
-                'flushIntervalInMS': 3000
-            });
-
-            CMRESLoggerProvider.setApplicationLogContext({
-                'appNameTag': 'algotodo',
-                'envTag': 'Development'
-            });
-
-            LogglyLoggerProvider.inputToken('301ae60a-8898-4a29-8dd0-cfd69ba095f5').sendConsoleErrors(true);
+            LogglyLoggerProvider.inputToken('301ae60a-8898-4a29-8dd0-cfd69ba095f5').sendConsoleErrors(true).includeUserAgent(true);
             $compileProvider.debugInfoEnabled(false);
             $mdGestureProvider.skipClickHijack();
             //$animateProvider.classNameFilter(/\banimated\b/);
@@ -79,14 +62,14 @@
 
             return {
                 appDomain:
-                   'https://algotodo.herokuapp.com'
-                  //'https://algotodo-test.herokuapp.com'
+                  // 'https://algotodo.herokuapp.com'
+                  'https://algotodo-test.herokuapp.com'
                   // 'http://localhost:5001'
             };
         })
-        .run(function (amMoment, datacontext, cordovaPlugins) {
+        .run(function (amMoment, DAL, cordovaPlugins) {
             //init();
-            datacontext.reloadAllTasks();
+            DAL.reloadAllTasks();
             amMoment.changeLocale('he');
         });
 

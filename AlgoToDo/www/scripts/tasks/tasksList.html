@@ -55,6 +55,11 @@
     <md-fab-trigger>
         <md-button style="z-index: 21" class="md-fab md-fab-bottom-right" aria-label="Add" ng-click="vm.showAdd($event)" ng-if="vm.userConnected" md-no-ink="true">
             <ng-md-icon class="add-icon" icon="add"></ng-md-icon>
+        </md-button>   
+    </md-fab-trigger>
+    <md-fab-trigger>
+        <md-button style="z-index: 21" class="md-fab md-fab-bottom-left" aria-label="sync" ng-click="vm.goOnline()" ng-if="vm.userConnected" md-no-ink="true">
+            <ng-md-icon class="add-icon" icon="sync"></ng-md-icon>
         </md-button>
     </md-fab-trigger>
     <!--im-pull-to-refresh refresh-function="vm.reloadTasks()"-->
@@ -83,12 +88,14 @@
                                 
                                 <div layout="row" >
                                     <div layout="row" flex="90" style="font-size: 14px;">
+                                        <ng-md-icon ng-if="item.offlineMode" icon="sync_problem" style="fill: rgb(126, 79, 79);" size="20"></ng-md-icon>
+
                                         <span ng-if="item.description.length > vm.descriptionTextLength()">{{item.description.substring(0, vm.descriptionTextLength()) + '...'}}</span>
                                         <span ng-if="item.description.length <= vm.descriptionTextLength()">{{item.description}}</span>
                                     </div>
                                     <div layout="column" flex="10" layout-align="center end">
                                         <md-badge class="new-responses-badge-inProcess" ng-if="item.unSeenResponses > 0">{{item.unSeenResponses}}</md-badge>
-                                        <ng-md-icon ng-if="vm.taskHasAttachment(item)" icon="attachment" class="icon-fill" size="20"></ng-md-icon>                        
+                                        <ng-md-icon ng-if="vm.taskHasAttachment(item)" icon="attachment" class="icon-fill" size="20"></ng-md-icon>
                                     </div>
                                 </div>
                             </a>
@@ -124,6 +131,8 @@
                                     <span class="font-bold" ng-bind-html="(item.createTime | amCalendar)"></span>
                                 </div>
                                 <div layout="row" style="font-size: 14px;">
+                                    <ng-md-icon ng-if="item.offlineMode" icon="sync_problem" style="fill: rgb(126, 79, 79);" size="20"></ng-md-icon>
+
                                     <span ng-if="item.description.length > vm.descriptionTextLength()">{{item.description.substring(0, vm.descriptionTextLength()) + '...'}}</span>
                                     <span ng-if="item.description.length <= vm.descriptionTextLength()">{{item.description}}</span>
                                 </div>                               

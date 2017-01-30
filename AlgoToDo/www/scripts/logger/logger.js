@@ -33,7 +33,7 @@
             $log.info('Info: ' + message, data);
         }
 
-        function toast(message, data, toastTime) {
+        function toast(message, toastTime) {
             var simpleToast = $mdToast.build({
                 hideDelay: toastTime,
                 position: 'bottom left',
