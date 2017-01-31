@@ -24,7 +24,6 @@
     function signUpCtrl($scope, datacontext, logger, cordovaPlugins, $q, pushNotifications,
                         device, $mdDialog, DAL) {
             var vm = this;
-
             vm.inProgress = false;
             vm.user = {};
             vm.AllCliqot = [];
@@ -78,6 +77,7 @@
                                     }, function (error) {
                                         vm.inProgress = false;
                                         logger.error("error while trying to check If VerificationCode Match", error);
+                                        showRegistrationFailedAlert();
                                     });
                                 });
                             });
@@ -98,6 +98,7 @@
                                 }, function (error) {
                                     vm.inProgress = false;
                                     logger.error("error while trying to check If VerificationCode Match", error);
+                                    showRegistrationFailedAlert();
                                 });
                             }); 
                         }
@@ -109,6 +110,7 @@
                 }, function (error) {
                     vm.inProgress = false;
                     logger.error("error while trying to check If User Exist", error);
+                    showRegistrationFailedAlert();
                 });
 
             };
@@ -139,6 +141,7 @@
                                 if (vm.user.device.platform === 'Android') {
                                     vm.user.GcmRegistrationId = registrationId;
                                 }
+
                                 DAL.registerUser(vm.user).then(function (response) {
 
                                     // check here if reg-code recived by sms match reg-code in server
@@ -155,17 +158,20 @@
                                             }
                                         }, function (error) {
                                             vm.inProgress = false;
-                                            logger.error("error while trying to check If VerificationCode Match", error);
+                                            logger.error("error while trying to check If VerificationCode Match: ", error.data || error);
+                                            showRegistrationFailedAlert();
                                         });
                                     });                                   
                                 }, function (error) {
                                     vm.inProgress = false;
-                                    logger.error("error while trying to register user to app", error);
+                                    logger.error("error while trying to register user to app: ", error.data || error);
+                                    showRegistrationFailedAlert();
                                 });
                             });
                         }, function (error) {
                             vm.inProgress = false;
-                            logger.error("error while trying to register user to app", error);
+                            logger.error("error while trying to register user to app:", error.data || error);
+                            showRegistrationFailedAlert();
                         });
                     }, false);
                 }
@@ -178,7 +184,7 @@
                             DAL.checkIfVerificationCodeMatch(user, verificationCode).then(function (result) {
                                 if (result.data === 'ok') {
                                     datacontext.saveUserToLocalStorage(response.data);
-                                        logger.success('user signUp successfuly', response.data);
+                                    logger.success('user signUp successfuly', response.data);
                                     window.location = '#/';
                                 }
                                 else {
@@ -187,12 +193,14 @@
                                 }
                             }, function (error) {
                                 vm.inProgress = false;
-                                logger.error("error while trying to check If VerificationCode Match", error);
+                                logger.error("error while trying to check If VerificationCode Match: ", error.data || error);
+                                showRegistrationFailedAlert();
                             });
                         });                       
                     }, function (error) {
                         vm.inProgress = false;
-                        logger.error("error while trying to register user to app", error);
+                        logger.error("error while trying to register user to app:", error.data || error);
+                        showRegistrationFailedAlert();
                     });
                 }
             }
@@ -264,6 +272,18 @@
                     .clickOutsideToClose(true)
                     .title('שגיאה')
                     .textContent('תהליך הזיהוי נכשל, הקוד שהוכנס לא תואם למספר הטלפון שהוקש, אנא נסה שנית.')
+                    .ariaLabel('Alert Dialog Demo')
+                    .ok('המשך')
+                );
+            }
+
+            var showRegistrationFailedAlert = function () {
+                $mdDialog.show(
+                  $mdDialog.alert()
+                    .parent(angular.element(document.querySelector('#popupContainer')))
+                    .clickOutsideToClose(true)
+                    .title('שגיאה')
+                    .textContent('מצטערים!   תהליך ההרשמה נכשל , תנו לנו עוד הזדמנות ונסו שוב להירשם. אם הבעיה נמשכת נשמח אם תפנו אלינו במייל או בטלפון.')
                     .ariaLabel('Alert Dialog Demo')
                     .ok('המשך')
                 );

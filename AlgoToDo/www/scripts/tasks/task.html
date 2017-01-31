@@ -103,6 +103,8 @@
                                     <span class="font-bold" ng-bind-html="::(comment.createTime | amCalendar)"></span>
                                 </div>
                                 <div layout="row" style="font-size: 14px" ng-if="comment.text !== ''">
+                                    <ng-md-icon ng-if="comment.offlineMode" icon="sync_problem" style="fill: rgb(126, 79, 79);" size="20"></ng-md-icon>
+
                                     {{::comment.text}}
                                 </div>
                                 <div class="image-wraper" ng-if="comment.fileName !== undefined">                                
@@ -130,7 +132,7 @@
                               class="texterea-font-size" 
                               placeholder="כתוב תגובה..." 
                               name="comment" ng-model="vm.newCommentText" 
-                              maxlength="75" rows="1" max-rows="2" 
+                              maxlength="125" rows="1" max-rows="2" 
                               md-no-asterisk="true"></textarea>
                 </md-input-container>
             </div>

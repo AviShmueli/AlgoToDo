@@ -94,7 +94,7 @@
         /* ----- Social Sharing -----*/
         
         var shareApp = function (platform) {
-            var message = '',
+            var message = 'קישור להורדת האפליקציה Asiti, אפילקציה לניהול אישי וחברתי.',
                 subject = '',
                 file = [],
                 link = platform === 'android' ? 'https://play.google.com/store/apps/details?id=com.algotodo.app' :

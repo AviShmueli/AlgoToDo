@@ -19,9 +19,7 @@
         'angularMoment',
         'ngSanitize',
         'logglyLogger',
-        'infomofo.angularMdPullToRefresh',
         'ngRoute',
-        'cmanaha.angular-elasticsearch-logger',
         'md.data.table',
 
         /*

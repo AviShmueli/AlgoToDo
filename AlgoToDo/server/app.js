@@ -284,7 +284,7 @@ var sendCommentViaGcm = function (comment, task, regToken) {
         }
     });
 
-    message.addData('notId', task.from._id);
+    //message.addData('notId', task.from._id);
     message.addData('content-available', '1');
     message.addData('image', 'www/images/asiti-logo.png');
     message.addData('style', 'inbox');
@@ -517,6 +517,55 @@ app.post('/TaskManeger/newComment', function (req, res) {
                 res.send('ok');
             });
         });
+});
+
+app.post('/TaskManeger/AddNewComments', function (req, res) {
+
+    var comments = req.body.comments;
+    
+    //add task to Mongo
+    mongodb.connect(mongoUrl, function (err, db) {
+
+        if (err) {
+            winston.log('error', "error while trying to connect MongoDB: ", err);
+        }
+
+        var commentsNotificationsList = [];
+
+        var collection = db.collection('tasks');
+
+        // Initialize the unordered Batch
+        var batch = collection.initializeUnorderedBulkOp({useLegacyOps: true});
+
+        for (var i = 0; i < comments.length; i++) {
+            var commentObj = comments[i];
+            if (commentObj.comment.offlineMode !== undefined) {
+                delete commentObj.comment.offlineMode;
+            }
+            commentObj.comment.from._id = new ObjectID(commentObj.comment.from._id);
+            commentObj.comment._id = new ObjectID();
+            batch.find({ _id: new ObjectID(commentObj.taskId) }).updateOne({ $push: { comments: commentObj.comment } });
+            
+            if (commentObj.userIdToNotify !== '') {
+                commentsNotificationsList.push({comment: commentObj.comment, task: {_id: commentObj.taskId}, userIdToNotify: new ObjectID(commentObj.userIdToNotify)});   
+            }
+        }
+
+        batch.execute(function(err, result) {
+            
+            if (err) {
+                winston.log('error', "error while trying to update tasks: ", err);
+            }
+
+            for (var i = 0; i < commentsNotificationsList.length; i++) {
+                var commentNotification = commentsNotificationsList[i];               
+                pushCommentToUserDevice(commentNotification.comment, commentNotification.task, commentNotification.userIdToNotify);               
+            }
+
+            db.close();
+            res.send('ok');
+        });
+    });
 });
 
 app.post('/TaskManeger/updateTaskStatus', function (req, res) {

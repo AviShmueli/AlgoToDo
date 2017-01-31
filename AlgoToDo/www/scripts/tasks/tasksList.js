@@ -9,7 +9,7 @@
         '$rootScope', '$scope', 'logger', '$location', 'cordovaPlugins',
         '$mdMedia', '$mdBottomSheet','$filter', '$timeout',
         '$mdSidenav', '$mdDialog', 'datacontext', 'lodash',
-        'socket', '$mdToast', 'moment', '$q', 'CMRESLogger',
+        'socket', '$mdToast', 'moment', '$q',
         'pushNotifications', 'localNotifications', 'device',
         'DAL', '$offlineHandler'
     ];
@@ -17,7 +17,7 @@
     function TasksListCtrl($rootScope, $scope, logger, $location, cordovaPlugins,
                             $mdMedia, $mdBottomSheet,$filter, $timeout,
                             $mdSidenav, $mdDialog, datacontext, lodash,
-                            socket, $mdToast, moment, $q, CMRESLogger,
+                            socket, $mdToast, moment, $q,
                             pushNotifications, localNotifications, device,
                             DAL, $offlineHandler) {
 
@@ -35,8 +35,6 @@
         vm.signUpInProggress = true;
         vm.doneTasks = [];
         vm.descriptionTextLength = function () { return Math.floor((window.innerWidth - 70 - 16 - 40 - 16 - 8 ) / 4) };
-
-        //CMRESLogger.info('hello world');
 
         vm.onGoingActivityies = function () { return datacontext.getTaskList(); };      
 
@@ -206,7 +204,7 @@
                 if (error.status === -1) {
                     error.data = "App lost connection to the server";
                 }
-                logger.error('Error while tring to update task: ', error.data || error);
+                logger.error('Error while trying to update task: ', error.data || error);
                 task.offlineMode = true;
                 $offlineHandler.addTaskToCachedTasksToUpdateList(task);
                 var count = datacontext.setMyTaskCount();

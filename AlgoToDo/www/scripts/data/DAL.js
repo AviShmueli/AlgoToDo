@@ -152,6 +152,18 @@
             return $http(req);
         }
 
+        var AddNewComments = function (comments) {
+            var req = {
+                method: 'POST',
+                url: appConfig.appDomain + '/TaskManeger/AddNewComments',
+                data: {
+                    comments: comments
+                }
+            };
+
+            return $http(req);
+        }
+
         var updateUserDetails = function (userId, fieldToUpdate, valueToUpdate) {
             var req = {
                 method: 'POST',
@@ -274,6 +286,7 @@
             checkIfUserExist: checkIfUserExist,
             checkIfVerificationCodeMatch: checkIfVerificationCodeMatch,
             newComment: newComment,
+            AddNewComments: AddNewComments,
             updateUserDetails: updateUserDetails,
             saveUsersNewRegistrationId: saveUsersNewRegistrationId,
             getAllCliqot: getAllCliqot,

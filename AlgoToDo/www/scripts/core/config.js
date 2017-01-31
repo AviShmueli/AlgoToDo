@@ -5,7 +5,6 @@
         .config(function ($routeProvider, $mdThemingProvider, $compileProvider,
                           $animateProvider, LogglyLoggerProvider, $mdGestureProvider,
                           $cordovaAppRateProvider) {
-
             LogglyLoggerProvider.inputToken('301ae60a-8898-4a29-8dd0-cfd69ba095f5').sendConsoleErrors(true).includeUserAgent(true);
             $compileProvider.debugInfoEnabled(false);
             $mdGestureProvider.skipClickHijack();
@@ -64,10 +63,10 @@
                 appDomain:
                   // 'https://algotodo.herokuapp.com'
                   'https://algotodo-test.herokuapp.com'
-                  // 'http://localhost:5001'
+                   //'http://localhost:5001'
             };
         })
-        .run(function (amMoment, DAL, cordovaPlugins) {
+        .run(function (amMoment, DAL) {
             //init();
             DAL.reloadAllTasks();
             amMoment.changeLocale('he');

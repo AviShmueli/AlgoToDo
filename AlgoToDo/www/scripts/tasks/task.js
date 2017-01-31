@@ -105,7 +105,26 @@
                 text: vm.newCommentText
             };
             vm.task.comments.push(comment);
-            DAL.newComment(vm.task._id, comment);
+
+            var userIdToNotify = '';
+            if (vm.task.to._id !== vm.task.from._id) {
+                if (vm.task.from._id === comment.from._id) {
+                    userIdToNotify = vm.task.to._id;
+                }
+                else {
+                    userIdToNotify = vm.task.from._id;
+                }
+            }
+
+            DAL.newComment(vm.task._id, comment).then(function () { },
+                function (error) {
+                    if (error.status === -1) {
+                        error.data = "App lost connection to the server";
+                    }
+                    logger.error('Error while trying to add new comment: ', error.data || error);
+                    comment.offlineMode = true;
+                    $offlineHandler.addCommentToCachedNewCommentsList(vm.task._id, comment, userIdToNotify);
+                });
             vm.newCommentText = '';
         }
 
@@ -127,7 +146,7 @@
                 if (error.status === -1) {
                     error.data = "App lost connection to the server";
                 }
-                logger.error('Error while tring to update task: ', error.data || error);
+                logger.error('Error while trying to update task: ', error.data || error);
                 task.offlineMode = true;
                 $offlineHandler.addTaskToCachedTasksToUpdateList(task);
 
