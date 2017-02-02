@@ -6,10 +6,10 @@
         .service('localNotifications', localNotifications);
 
     localNotifications.$inject = ['$rootScope', 'datacontext', '$cordovaLocalNotification',
-                                  '$log', '$q', 'cordovaPlugins', 'device'];
+                                  '$log', '$q', 'cordovaPlugins', 'device', '$location'];
 
     function localNotifications($rootScope, datacontext, $cordovaLocalNotification,
-                                $log, $q, cordovaPlugins, device) {
+                                $log, $q, cordovaPlugins, device, $location) {
 
         var self = this;
 
@@ -118,7 +118,8 @@
                     }
                 }*/
                 if (task !== undefined && task._id !== undefined) {
-                    window.location = '#/task/' + task._id;
+                    //window.location = '#/task/' + task._id;
+                    $location.path('/task/' + taskId);
                 }
             });
         }, false);

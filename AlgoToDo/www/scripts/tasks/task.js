@@ -9,14 +9,14 @@
          'datacontext', '$routeParams', '$window', 'moment',
          'socket', 'cordovaPlugins', 'dropbox', 'appConfig',
          'localNotifications', 'camera', 'device', '$mdDialog',
-         'DAL', '$offlineHandler'
+         'DAL', '$offlineHandler', '$location'
     ];
 
     function taskCtrl($rootScope, $scope, logger, $q, storage,
                       datacontext, $routeParams, $window, moment,
                       socket, cordovaPlugins, dropbox, appConfig,
                       localNotifications, camera, device, $mdDialog,
-                      DAL, $offlineHandler) {
+                      DAL, $offlineHandler, $location) {
 
         var vm = this;
 
@@ -36,7 +36,8 @@
         }
 
         vm.goBack = function () {
-            window.location = '#/';
+            //window.location = '#/';
+            $location.path('/');
         }
 
         vm.openMenu = function ($mdOpenMenu, ev) {
@@ -123,7 +124,9 @@
                     }
                     logger.error('Error while trying to add new comment: ', error.data || error);
                     comment.offlineMode = true;
-                    $offlineHandler.addCommentToCachedNewCommentsList(vm.task._id, comment, userIdToNotify);
+                    if (vm.task._id.indexOf('tempId') === -1) {
+                        $offlineHandler.addCommentToCachedNewCommentsList(vm.task._id, comment, userIdToNotify);
+                    }
                 });
             vm.newCommentText = '';
         }

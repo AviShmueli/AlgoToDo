@@ -41,7 +41,10 @@
               })
               .when('/signUp', {
                   templateUrl: 'scripts/widgets/signUp.html'
-              });;
+              })
+              .otherwise({
+                  templateUrl: 'scripts/tasks/tasksList.html'
+              });
 
             document.addEventListener("deviceready", function () {
 
@@ -63,11 +66,12 @@
                 appDomain:
                   // 'https://algotodo.herokuapp.com'
                   'https://algotodo-test.herokuapp.com'
-                   //'http://localhost:5001'
+                  // 'http://localhost:5001'
             };
         })
-        .run(function (amMoment, DAL) {
+        .run(function (amMoment, DAL, $offlineHandler) {
             //init();
+            $offlineHandler.goOnline();
             DAL.reloadAllTasks();
             amMoment.changeLocale('he');
         });

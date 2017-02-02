@@ -19,7 +19,7 @@
             }
         };
 
-        function sidenavController($scope, device, cordovaPlugins) {
+        function sidenavController($scope, device, cordovaPlugins, $location) {
             var vm = this;
 
             vm.imagesPath = $scope.imagesPath;
@@ -36,7 +36,8 @@
             }, false);
 
             vm.goToManagementPage = function () {
-                window.location = '#/management'
+                //window.location = '#/management'
+                $location.path('/management');
             }
 
             vm.shareApp = function (platform) {

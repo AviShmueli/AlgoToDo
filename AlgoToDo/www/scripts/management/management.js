@@ -6,11 +6,13 @@
         .controller('managementCtrl', managementCtrl);
 
     managementCtrl.$inject = ['$rootScope', '$scope', 'logger', '$q',
-                             'datacontext', 'moment', '$mdMedia', 'DAL'
+                             'datacontext', 'moment', '$mdMedia', 'DAL',
+                             '$location'
     ];
 
     function managementCtrl($rootScope, $scope, logger, $q,
-                      datacontext, moment, $mdMedia, DAL) {
+                            datacontext, moment, $mdMedia, DAL,
+                            $location) {
 
         var vm = this;
 
@@ -150,7 +152,8 @@
         }
 
         vm.goBack = function () {
-            window.location = '#/';
+            //window.location = '#/';
+            $location.path('/');
         }
 
         vm.showTasksFilter = $mdMedia('gt-sm');

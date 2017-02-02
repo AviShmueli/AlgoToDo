@@ -7,11 +7,11 @@
 
     datacontext.$inject = ['$http', 'logger', 'lodash', 'appConfig', '$rootScope',
                            '$localStorage', '$mdToast', 'socket', '$filter', 'dropbox',
-                           '$q'];
+                           '$q', '$location'];
 
     function datacontext($http, logger, lodash, appConfig, $rootScope,
                          $localStorage, $mdToast, socket, $filter, dropbox,
-                         $q) {
+                         $q, $location) {
 
         
         var self = this;
@@ -116,7 +116,7 @@
         }
 
         function updateUnSeenResponse(task) {
-            if (window.location.hash.indexOf(task._id) === -1) {
+            if ($location.path().indexOf(task._id) === -1) {
                 task.unSeenResponses = task.unSeenResponses === undefined || task.unSeenResponses === '' ? 1 : task.unSeenResponses + 1;
             }
         }

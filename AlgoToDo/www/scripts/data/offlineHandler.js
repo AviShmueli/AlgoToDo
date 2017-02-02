@@ -21,8 +21,8 @@
         var goOnline = function () {
             if (self.$storage.cachedNewTasksList !== undefined && self.$storage.cachedNewTasksList.length > 0) {
                 DAL.saveNewTasks(self.$storage.cachedNewTasksList).then(function (response) {
-                    removeAllTempTaskFromLocalStorage();
-                    datacontext.pushTasksToTasksList(response.data);
+                    replaceAllTempTasksInLocalStorage(response.data);
+                    //datacontext.pushTasksToTasksList(response.data);
                     delete self.$storage.cachedNewTasksList;
                 });
             }
@@ -59,13 +59,21 @@
             }
         }
 
-        var removeAllTempTaskFromLocalStorage = function () {
+        var replaceAllTempTasksInLocalStorage = function (newTasks) {
             var allTasks = self.$storage.tasksList;
-            for (var i = 0; i < allTasks.length; i++) {
-                if (allTasks[i]._id.indexOf('tempId') !== -1) {
-                    allTasks.splice(i,1);
+            for (var i = 0; i < newTasks.length; i++) {
+                var index = arrayObjectIndexOf(allTasks, '_id', newTasks[i].offlineId);
+                if (index !== -1) {
+                    self.$storage.tasksList[index] = newTasks[i];
                 }
             }
+        }
+
+        function arrayObjectIndexOf(myArray, property, searchTerm) {
+            for (var i = 0, len = myArray.length; i < len; i++) {
+                if (myArray[i][property] === searchTerm) return i;
+            }
+            return -1;
         }
 
         var addTaskToCachedTasksToUpdateList = function (task) {
@@ -108,8 +116,11 @@
             // listen for Offline event
             $rootScope.$on('$cordovaNetwork:offline', function (event, networkState) {
                 self.networkState = 'offline';
-            })
+            });
+
+            document.addEventListener('resume', goOnline.bind(this), false);
         }, false);
+
 
 
         var service = {

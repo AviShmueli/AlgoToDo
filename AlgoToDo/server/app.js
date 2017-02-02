@@ -398,25 +398,45 @@ io.on('connection', function (socket) {
 
 app.post('/TaskManeger/newTask', function (req, res) {
 
-    var task = req.body.task;
+    var tempTask = req.body.task;
     var tasks;
     // handel the old version
-    if(Array.isArray(task)){
-        tasks = task;
+    if(Array.isArray(tempTask)){
+        tasks = tempTask;
     }
     else {
-       tasks = [task]; 
+       tasks = [tempTask]; 
     }
 
     /*var to = '';
     if (users[task.to._id] !== undefined) {
         to = users[task.to._id].id;
     }*/
+
     var recipientsIds = [];
     for (var i = 0, len = tasks.length; i < len; i++) {
-        tasks[i].to._id = new ObjectID(tasks[i].to._id);
-        tasks[i].from._id = new ObjectID(tasks[i].from._id);
-        recipientsIds.push(tasks[i].to._id);
+        var task = tasks[i];
+        if (task._id !== undefined && task._id.indexOf('tempId') !== -1) {
+            task.offlineId = task._id;
+            delete task._id;
+        }
+        if (task.offlineMode !== undefined) {
+            delete task.offlineMode;
+        }
+        if (task.comments.length > 0) {
+            for (var index = 0; index < task.comments.length; index++) {
+                var comment = task.comments[index];
+                    if (comment.offlineMode !== undefined) {
+                    delete comment.offlineMode;
+                }
+                comment.from._id = new ObjectID(comment.from._id);
+                comment._id = new ObjectID();
+            }
+        }
+
+        task.to._id = new ObjectID(task.to._id);
+        task.from._id = new ObjectID(task.from._id);
+        recipientsIds.push(task.to._id);
     }
 
     /*var toId = task.to._id;

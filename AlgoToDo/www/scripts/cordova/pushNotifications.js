@@ -7,11 +7,13 @@
 
     pushNotifications.$inject = ['$rootScope', 'datacontext', '$cordovaPushV5',
                               '$log', '$mdToast', '$cordovaVibration', '$q',
-                              'dropbox', 'storage', 'device', '$cordovaSms'];
+                              'dropbox', 'storage', 'device', '$cordovaSms',
+                              '$location'];
 
     function pushNotifications($rootScope, datacontext, $cordovaPushV5,
                              $log, $mdToast, $cordovaVibration, $q,
-                             dropbox, storage, device, $cordovaSms) {
+                             dropbox, storage, device, $cordovaSms,
+                             $location) {
 
         var self = this;
 
@@ -131,10 +133,11 @@
 
         var navigateToTaskPage = function (taskId, task) {
             if (self.appState === 'background') {
-                window.location = '#/task/' + taskId;
+                //window.location = '#/task/' + taskId;
+                $location.path('/task/' + taskId);
             }
             else {
-                if (window.location.hash.indexOf(taskId) === -1) {
+                if ($location.path().indexOf(taskId) === -1) {
                     showNewCommentToast(taskId, task.from.name);
                 }
                 document.addEventListener("deviceready", function () {

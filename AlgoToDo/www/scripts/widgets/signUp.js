@@ -19,10 +19,10 @@
         };
 */
     signUpCtrl.$inject = ['$scope', 'datacontext', 'logger', 'cordovaPlugins', '$q', 'pushNotifications',
-                          'device', '$mdDialog', 'DAL'];
+                          'device', '$mdDialog', 'DAL', '$location'];
 
     function signUpCtrl($scope, datacontext, logger, cordovaPlugins, $q, pushNotifications,
-                        device, $mdDialog, DAL) {
+                        device, $mdDialog, DAL, $location) {
             var vm = this;
             vm.inProgress = false;
             vm.user = {};
@@ -46,7 +46,8 @@
 
             var user = datacontext.getUserFromLocalStorage();
             if (user !== undefined) {
-                window.location = '#/';
+                //window.location = '#/';
+                $location.path('/');
             }
 
             var signUp = function () {
@@ -68,7 +69,8 @@
                                     DAL.checkIfVerificationCodeMatch(user, verificationCode).then(function (result) {
                                         if (result.data === 'ok') {
                                             datacontext.saveUserToLocalStorage(response.data);
-                                            window.location = '#/';
+                                            //window.location = '#/';
+                                            $location.path('/');
                                         }
                                         else {
                                             showVerificationFailedAlert();
@@ -89,7 +91,8 @@
                                 DAL.checkIfVerificationCodeMatch(user, verificationCode).then(function (result) {
                                     if (result.data === 'ok') {
                                         datacontext.saveUserToLocalStorage(response.data);
-                                        window.location = '#/';
+                                        //window.location = '#/';
+                                        $location.path('/');
                                     }
                                     else {
                                         showVerificationFailedAlert();
@@ -150,7 +153,8 @@
                                         DAL.checkIfVerificationCodeMatch(user, verificationCode).then(function (result) {
                                             if (result.data === 'ok') {
                                                 datacontext.saveUserToLocalStorage(user);
-                                                window.location = '#/';
+                                                //window.location = '#/';
+                                                $location.path('/');
                                             }
                                             else {
                                                 showVerificationFailedAlert();
@@ -185,7 +189,8 @@
                                 if (result.data === 'ok') {
                                     datacontext.saveUserToLocalStorage(response.data);
                                     logger.success('user signUp successfuly', response.data);
-                                    window.location = '#/';
+                                    //window.location = '#/';
+                                    $location.path('/');
                                 }
                                 else {
                                     showVerificationFailedAlert();

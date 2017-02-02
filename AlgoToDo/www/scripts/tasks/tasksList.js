@@ -116,8 +116,34 @@
             vm.userConnected = false;
             vm.toggleSidenav('left');
             cordovaPlugins.clearAppBadge();
-            window.location = '#/signUp';
+            $location.path('/signUp');
         };
+
+        var checkIfUserSignIn = function () {
+            var user = datacontext.getUserFromLocalStorage();
+            if (user !== undefined) {
+
+                // todo: remove this if in the next releas
+                if (user.cliqot === undefined) {
+                    DAL.checkIfUserExist(user).then(function (response) {
+                        var newUser = response.data;
+
+                        datacontext.saveUserToLocalStorage(newUser);
+                        vm.user = newUser;
+                        vm.login();
+                    }, function (error) {
+                        logger.error("error while trying to check If User Exist", error);
+                    });
+                }
+                else {
+                    vm.user = user;
+                    vm.login();
+                }
+            }
+            else {
+                $location.path('/signUp');
+            }
+        }();
 
         vm.toggleSidenav = function(menuId) {
             $mdSidenav(menuId).toggle();
@@ -169,7 +195,7 @@
                 return;
                 // do nothing - dialog will be closed
             }
-            if (window.location.hash === '#/') {
+            if ($location.path() === '/') {
                 e.preventDefault();
                 if (!vm.exitApp) {
                     vm.exitApp = true;
@@ -238,11 +264,13 @@
         };
 
         vm.navigateToTaskPage = function (taskId) {
-            window.location = '#/task/' + taskId;
+            //window.location = '#/task/' + taskId;
+            $location.path('/task/' + taskId);
         }
  
         $rootScope.redirectToTaskPage = function (taskId, toast) {
-            window.location = '#/task/' + taskId;
+            //window.location = '#/task/' + taskId;
+            $location.path('/task/' + taskId);
             var toastElement = angular.element(document.querySelectorAll('#message-toast'));
             $mdToast.hide(toastElement);
         }
@@ -254,32 +282,6 @@
         
         var setDoneTasks = function () {
             vm.doneTasks = $filter('doneTasks')(datacontext.getTaskList(), vm.user._id);
-        }();
-
-        var checkIfUserSignIn = function () {
-            var user = datacontext.getUserFromLocalStorage();
-            if (user !== undefined) {
-
-                // todo: remove this if in the next releas
-                if (user.cliqot === undefined) {
-                    DAL.checkIfUserExist(user).then(function (response) {
-                        var newUser = response.data;
-
-                        datacontext.saveUserToLocalStorage(newUser);
-                        vm.user = newUser;
-                        vm.login();
-                    }, function (error) {
-                        logger.error("error while trying to check If User Exist", error);
-                    });
-                }
-                else {
-                    vm.user = user;
-                    vm.login();
-                }
-            }
-            else {
-                window.location = '#/signUp';
-            }
         }();
 
         vm.cancelAllNotifications = function (ev) {

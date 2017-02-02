@@ -133,7 +133,7 @@
                     error.data = "App lost connection to the server";
                 }
                 logger.error('Error while trying to add new task: ', error.data || error);               
-                $offlineHandler.addTasksToCachedNewTasksList(angular.copy(taskListToAdd));
+                $offlineHandler.addTasksToCachedNewTasksList(taskListToAdd);
                 markTaskAsOfflineMode(taskListToAdd);
                 addTasksAndCloseDialog(taskListToAdd);
             });
