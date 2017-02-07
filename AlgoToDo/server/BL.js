@@ -1,3 +1,5 @@
+/*jshint esversion: 6 */
+
 (function (BL) {
 
     BL.addNewTasks = addNewTasks;
@@ -17,6 +19,7 @@
     BL.getAllUsersCount = getAllUsersCount;
     BL.getAllVersionInstalled = getAllVersionInstalled;
     BL.checkIfVerificationCodeMatch = checkIfVerificationCodeMatch;
+    BL.addNewRepeatsTasks = addNewRepeatsTasks;
 
     var ObjectID = require('mongodb').ObjectID;
     var deferred = require('deferred');
@@ -74,7 +77,7 @@
         task.from._id = ObjectID(fromId);*/
 
         //add tasks to Mongo
-        DAL.insertNewTasks(tasks, recipientsIds).then(function (results) {
+        DAL.insertNewTasks(tasks).then(function (results) {
             // if the employee is now online send the new task by Socket.io
             /*console.log("to:", to);
             if (to !== '' && task.to._id !== task.from._id) {
@@ -85,7 +88,7 @@
 
             // if this task is not from me to me, send notification to the user
             //if (task.to._id !== task.from._id) {
-            pushTaskToUsersDevice(newTasks, recipientsIds);
+            pushTasksToUsersDevice(newTasks, recipientsIds);
             //}
 
             // return the new task to the sender
@@ -175,7 +178,7 @@
                     pushUpdatetdTaskToUsersDevice(result, task.from._id);
                 }
                 /*if (task.status === 'inProgress') {
-                    pushTaskToUsersDevice([result], [result.to._id]);
+                    pushTasksToUsersDevice([result], [result.to._id]);
                 }*/
             }
             d.resolve();
@@ -200,7 +203,7 @@
                         pushUpdatetdTaskToUsersDevice(task, task.from._id);
                     }
                     if (task.status === 'inProgress') {
-                        pushTaskToUsersDevice([task], [task.to._id]);
+                        pushTasksToUsersDevice([task], [task.to._id]);
                     }
                 }
             }
@@ -456,6 +459,19 @@
         return d.promise;
     }
 
+    function addNewRepeatsTasks(tasks) {
+
+        var d = deferred();
+
+        DAL.insertNewRepeatsTasks(tasks).then(function (result) {
+            d.resolve(result);
+        }, function (error) {
+            d.deferred(error);
+        });
+
+        return d.promise;
+    }
+
 
 
     /* ---- Private Methods --- */
@@ -474,7 +490,7 @@
         });
     }
 
-    function pushTaskToUsersDevice(tasks, recipientsIds) {
+    function pushTasksToUsersDevice(tasks, recipientsIds) {
 
         // get user from DB and check if there GcmRegId or ApnRegId
         DAL.getUsersByUsersId(recipientsIds).then(function (users) {

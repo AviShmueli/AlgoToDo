@@ -2,22 +2,21 @@
  * Angular Material Design
  * https://github.com/angular/material
  * @license MIT
- * v0.7.0-rc3
+ * v1.1.3
  */
-(function() {
-'use strict';
+(function( window, angular, undefined ){
+"use strict";
 
 /**
  * @ngdoc module
  * @name material.components.divider
  * @description Divider module!
  */
+MdDividerDirective['$inject'] = ["$mdTheming"];
 angular.module('material.components.divider', [
   'material.core'
 ])
   .directive('mdDivider', MdDividerDirective);
-
-function MdDividerController(){}
 
 /**
  * @ngdoc directive
@@ -40,9 +39,8 @@ function MdDividerController(){}
 function MdDividerDirective($mdTheming) {
   return {
     restrict: 'E',
-    link: $mdTheming,
-    controller: [MdDividerController]
+    link: $mdTheming
   };
 }
-MdDividerDirective.$inject = ["$mdTheming"];
-})();
+
+})(window, window.angular);

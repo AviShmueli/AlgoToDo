@@ -270,9 +270,18 @@
             return $http(req);
         }
 
-        var handelError = function (error) {
+        var addNewRepeatsTasks = function (tasks) {
 
-        }
+            var req = {
+                method: 'POST',
+                url: appConfig.appDomain + '/TaskManeger/addNewRepeatsTasks',
+                data: {
+                    tasks: tasks
+                }
+            };
+
+            return $http(req)
+        };
 
 
         var service = {
@@ -294,7 +303,8 @@
             getAllTasksCount: getAllTasksCount,
             getAllUsers: getAllUsers,
             getAllUsersCount: getAllUsersCount,
-            getAllVersionInstalled: getAllVersionInstalled
+            getAllVersionInstalled: getAllVersionInstalled,
+            addNewRepeatsTasks: addNewRepeatsTasks
         };
 
         return service;

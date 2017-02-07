@@ -1,0 +1,27 @@
+﻿<md-dialog aria-label="Avatar Picker" dir="rtl">
+    <md-toolbar>
+        <div class="md-toolbar-tools">
+            <h3 style="color:white">בחר תמונת פרופיל</h3>
+            <span flex></span>
+            <md-button class="md-icon-button" ng-click="cancel()" aria-label="Close dialog">
+                <ng-md-icon icon="close"></ng-md-icon>
+            </md-button>
+        </div>
+    </md-toolbar>
+        <md-dialog-content>
+            <md-input-container style="margin: 0">
+                <md-button class="md-primary" style="margin: 6px 0px;" ng-click="answer(avatar)" aria-label="avtar" ng-repeat="avatar in manAvatars">
+                    <md-card-avatar>
+                        <img alt="user image" ng-src="{{::imagesPath + avatar}}" class="md-avatar user-avatar-med" />
+                    </md-card-avatar>                
+                </md-button>
+                <md-button class="md-primary" style="margin: 6px 0px;" ng-click="answer(avatar)" aria-label="avtar" ng-repeat="avatar in womanAvatars">
+                    <md-card-avatar>
+                        <img alt="user image" ng-src="{{::imagesPath + avatar}}" class="md-avatar user-avatar-med" />
+                    </md-card-avatar>
+                </md-button>
+            </md-input-container>
+        </md-dialog-content>
+
+        
+</md-dialog>

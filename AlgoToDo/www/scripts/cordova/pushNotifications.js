@@ -8,12 +8,12 @@
     pushNotifications.$inject = ['$rootScope', 'datacontext', '$cordovaPushV5',
                               '$log', '$mdToast', '$cordovaVibration', '$q',
                               'dropbox', 'storage', 'device', '$cordovaSms',
-                              '$location'];
+                              '$location', 'cordovaPlugins'];
 
     function pushNotifications($rootScope, datacontext, $cordovaPushV5,
                              $log, $mdToast, $cordovaVibration, $q,
                              dropbox, storage, device, $cordovaSms,
-                             $location) {
+                             $location, cordovaPlugins) {
 
         var self = this;
 
@@ -108,11 +108,13 @@
                 comment.fileLocalPath = device.getImagesPath() + "/images/upload-empty.png";
                 datacontext.addTaskToTaskList(task);
                 $rootScope.taskcount = taskCount;
+                cordovaPlugins.setBadge(taskCount);
                 showNewTaskToast(task._id, task.from.name);
             }
             else {
                 datacontext.addTaskToTaskList(task);
                 $rootScope.taskcount = taskCount;
+                cordovaPlugins.setBadge(taskCount);
                 //$rootScope.$apply();
 
                 showNewTaskToast(task._id, task.from.name);

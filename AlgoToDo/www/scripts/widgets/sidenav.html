@@ -72,6 +72,19 @@
                 </md-item-content>
             </a>
         </md-item>
+        <md-item>
+            <a style="cursor: pointer" ng-click="vm.goToRepeatTasksPage()">
+                <md-item-content md-ink-ripple layout="row" layout-align="start center">
+                    <div class="inset">
+                        <ng-md-icon icon="repeat"></ng-md-icon>
+                    </div>
+                    <span flex></span>
+                    <div class="inset">
+                        משימות חוזרות
+                    </div>
+                </md-item-content>
+            </a>
+        </md-item>
         <md-item ng-if="vm.user.type === 'admin'">
             <a style="cursor: pointer" ng-click="vm.goToManagementPage()">
                 <md-item-content md-ink-ripple layout="row" layout-align="start center">

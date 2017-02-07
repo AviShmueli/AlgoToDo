@@ -1,3 +1,5 @@
+/*jshint esversion: 6 */
+
 (function (pushNotifications) {
 
     pushNotifications.createApnProvider = createApnProvider;

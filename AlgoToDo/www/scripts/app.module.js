@@ -9,6 +9,7 @@
          * it's components are available.
          */
         'ngMaterial',
+        'ngAria',
         'ngMdIcons',
         'ngCookies',
         'ngStorage',
@@ -21,6 +22,7 @@
         'logglyLogger',
         'ngRoute',
         'md.data.table',
+        'ngMaterialDatePicker',
 
         /*
          * Everybody has access to these.

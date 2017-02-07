@@ -40,6 +40,10 @@
                 $location.path('/management');
             }
 
+            vm.goToRepeatTasksPage = function () {
+                $location.path('/repeatsTasks');
+            }
+
             vm.shareApp = function (platform) {
                 cordovaPlugins.shareApp(platform);
             }

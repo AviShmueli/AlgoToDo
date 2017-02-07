@@ -1,3 +1,5 @@
+/*jshint esversion: 6 */
+
 (function (DAL) {
 
     DAL.insertNewTasks = insertNewTasks;
@@ -20,12 +22,14 @@
     DAL.getAllUsersCount = getAllUsersCount;
     DAL.getAllVersionInstalled = getAllVersionInstalled;
     DAL.checkIfVerificationCodeMatch = checkIfVerificationCodeMatch;
-
+    DAL.insertNewRepeatsTasks = insertNewRepeatsTasks;
 
     var deferred = require('deferred');
     var mongodb = require('mongodb').MongoClient;
     var ObjectID = require('mongodb').ObjectID;
     var mongoUrl = 'mongodb://admin:avi3011algo@ds127059-a0.mlab.com:27059/algotodo_db_01';
+    //var mongoUrl = 'mongodb://admin:avi3011algo@ds033996.mlab.com:33996/algotodo_db_01';
+    //var mongoUrl = 'mongodb://localhost:27017/TaskManeger';
 
     function getCollection(collectionName) {
 
@@ -665,6 +669,32 @@
                     mongo.db.close();
                     d.resolve(result);
                 });
+        });
+
+        return d.promise;
+    }
+
+    function insertNewRepeatsTasks(tasks) {
+
+        var d = deferred();
+
+        getCollection('repeats-tasks').then(function (mongo) {
+
+            mongo.collection.insert(tasks, function (err, results) {
+
+                if (err) {
+                    var errorObj = {
+                        message: "error while trying to add new repeats Tasks to DB",
+                        error: err
+                    };
+                    mongo.db.close();
+                    d.reject(errorObj);
+                }
+
+                mongo.db.close();
+                d.resolve(results);
+
+            });
         });
 
         return d.promise;

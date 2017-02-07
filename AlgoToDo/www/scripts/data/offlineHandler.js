@@ -39,6 +39,12 @@
                     delete self.$storage.cachedNewCommentsList;
                 });
             }
+
+            if (self.$storage.cachedNewRepeatsTasksList !== undefined && self.$storage.cachedNewRepeatsTasksList.length > 0) {
+                DAL.addNewRepeatsTasks(self.$storage.cachedNewRepeatsTasksList).then(function (response) {
+                    delete self.$storage.cachedNewRepeatsTasksList;
+                });
+            }
         }
 
         var addTasksToCachedNewTasksList = function (tasks) {
@@ -100,6 +106,18 @@
             }
         }
 
+        var addTasksToCachedNewRepeatsTasksList = function (task) {
+            if (self.$storage.cachedNewRepeatsTasksList === undefined) {
+                self.$storage.cachedNewRepeatsTasksList = [];
+            }
+
+            self.$storage.cachedNewRepeatsTasksList.push(task);
+
+            if (self.networkState === 'offline') {
+                cordovaPlugins.showToast('אתה במצב לא מקוון, המשימה תישמר כשתתחבר לרשת', 2000);
+            }
+        }
+
         var markCommentsAsOnline = function (comments) {
             for (var i = 0; i < comments.length; i++) {
                 comments[i].comment.offlineMode = false;
@@ -127,7 +145,8 @@
             goOnline: goOnline,
             addTasksToCachedNewTasksList: addTasksToCachedNewTasksList,
             addTaskToCachedTasksToUpdateList: addTaskToCachedTasksToUpdateList,
-            addCommentToCachedNewCommentsList: addCommentToCachedNewCommentsList
+            addCommentToCachedNewCommentsList: addCommentToCachedNewCommentsList,
+            addTasksToCachedNewRepeatsTasksList: addTasksToCachedNewRepeatsTasksList
         };
 
         return service;

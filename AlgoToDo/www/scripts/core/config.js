@@ -42,6 +42,9 @@
               .when('/signUp', {
                   templateUrl: 'scripts/widgets/signUp.html'
               })
+              .when('/repeatsTasks', {
+                  templateUrl: 'scripts/tasks/repeatsTasks.html'
+               })
               .otherwise({
                   templateUrl: 'scripts/tasks/tasksList.html'
               });

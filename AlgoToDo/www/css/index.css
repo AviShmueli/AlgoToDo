@@ -1,9 +1,7 @@
 * {
     -webkit-tap-highlight-color: rgba(0,0,0,0);
 }
-.md-dialog-container{
-    direction: rtl;
-}
+
 .input-message-validate{
     padding-right: 0;
     color: rgb(221,44,0);
@@ -137,6 +135,9 @@ md-card-content .from {
     color:  rgb(0,131,143);
     font-size: 14px;
     font-weight: bold;
+}
+.selected-day{
+    background-color: rgb(255,112,67) !important;
 }
 .md-tile-content .time {
     font-size: 14px;

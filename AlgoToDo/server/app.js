@@ -9,12 +9,6 @@
 */
 
 var express = require('express');
-var path = require('path');
-var mongodb = require('mongodb').MongoClient;
-var ObjectID = require('mongodb').ObjectID;
-var mongoUrl = 'mongodb://admin:avi3011algo@ds127059-a0.mlab.com:27059/algotodo_db_01';
-//var mongoUrl = 'mongodb://admin:avi3011algo@ds033996.mlab.com:33996/algotodo_db_01';
-//var mongoUrl = 'mongodb://localhost:27017/TaskManeger';
 var winston = require('./logger');
 var BL = require('./BL');
 
@@ -255,6 +249,17 @@ app.get('/TaskManeger/checkIfVerificationCodeMatch', function (req, res) {
     BL.checkIfVerificationCodeMatch(userId, verificationCode).then(function(result) {
         res.send(result);   
     }, function(error) {
+        winston.log('error', error.message , error.error);
+        res.status(500).send(error); 
+    });
+
+});
+
+app.post('/TaskManeger/addNewRepeatsTasks', function (req, res) {
+
+    BL.addNewRepeatsTasks(req.body.tasks).then(function(result){
+        res.send(result);
+    }, function(error){
         winston.log('error', error.message , error.error);
         res.status(500).send(error); 
     });

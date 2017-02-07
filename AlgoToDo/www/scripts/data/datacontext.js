@@ -47,9 +47,7 @@
             if (index !== -1) {
                 self.$storage.tasksList[index] = task;
             }
-        };
-
-        
+        };      
         
         var saveUserToLocalStorage = function (user) {
             self.$storage.user = user;
@@ -155,6 +153,16 @@
                     self.$storage.deviceDetailes : {};
         }
         
+        var addTasksToRepeatsTasksList = function (tasks) {
+            if (self.$storage.repeatsTasksList === undefined) {
+                self.$storage.repeatsTasksList = [];
+            }
+            self.$storage.repeatsTasksList = self.$storage.repeatsTasksList.concat(tasks);
+        }
+
+        var getRepeatsTasksList = function () {
+            return self.$storage.repeatsTasksList;
+        }
         
         var service = {
             getTaskList: getTaskList,
@@ -172,7 +180,9 @@
             pushTasksToTasksList: pushTasksToTasksList,
             setDeviceDetailes: setDeviceDetailes,
             getDeviceDetailes: getDeviceDetailes,
-            getTaskByTaskId: getTaskByTaskId
+            getTaskByTaskId: getTaskByTaskId,
+            addTasksToRepeatsTasksList: addTasksToRepeatsTasksList,
+            getRepeatsTasksList: getRepeatsTasksList
         };
 
         return service;

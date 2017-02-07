@@ -32,6 +32,10 @@
             DAL.getAllCliqot().then(function (allCliqot){
                 vm.AllCliqot = allCliqot.data;
             });
+            vm.imagesPath = device.getImagesPath();
+
+            vm.womanAvatar = '/images/woman-' + Math.floor((Math.random() * 15) + 1) + '.svg';
+            vm.manAvatar = '/images/man-' + Math.floor((Math.random() * 9) + 1) + '.svg';
             
 
             vm.signMeUp = function () {
@@ -120,13 +124,22 @@
 
             var registerUser = function () {
 
+                if (vm.user.sex === undefined) {
+                    if (vm.user.avatarUrl !== undefined) {
+                        vm.user.sex = (vm.user.avatarUrl.indexOf('woman') === -1) ? 'man': 'woman';
+                    }
+                    else {
+                        vm.user.sex = 'man';
+                        vm.user.avatarUrl = vm.manAvatar;
+                    }
+                }
+                if (vm.user.sex === 'man') {
+                    vm.user.avatarUrl = vm.manAvatar;
+                }
                 if (vm.user.sex === 'woman') {
-                    vm.user.avatarUrl = '/images/woman-' + Math.floor((Math.random() * 15) + 1) + '.svg';
+                    vm.user.avatarUrl = vm.womanAvatar;
                 }
-                else{
-                    vm.user.avatarUrl = '/images/man-' + Math.floor((Math.random() * 9) + 1) + '.svg';
-                }
-            
+
 
                 if (device.isMobileDevice()) {
 
@@ -292,6 +305,51 @@
                     .ariaLabel('Alert Dialog Demo')
                     .ok('המשך')
                 );
+            }
+
+            vm.showMoreAvatars = function (ev) {
+                $mdDialog.show({
+                    controller: pickAvatarCtrl,
+                    templateUrl: 'scripts/widgets/pickAvatarDialog.tmpl.html',
+                    parent: angular.element(document.body),
+                    targetEvent: ev,
+                    clickOutsideToClose: true,
+                    locals: {
+                        imagesPath: vm.imagesPath
+                    }
+                })
+                .then(function (answer) {
+                    vm.user.avatarUrl = answer;               
+                }, function () {
+
+                });
+
+            };
+
+            function pickAvatarCtrl($scope, $mdDialog, imagesPath) {
+                $scope.imagesPath = imagesPath;
+                $scope.manAvatars = [];
+                for (var i = 1; i < 10; i++) {
+                    $scope.manAvatars.push('/images/man-' + i + '.svg');
+                }
+
+                $scope.womanAvatars = [];
+                for (var i = 1; i < 16; i++) {
+                    $scope.womanAvatars.push('/images/woman-' + i + '.svg');
+                }
+                
+
+                $scope.hide = function () {
+                    $mdDialog.hide();
+                };
+
+                $scope.cancel = function () {
+                    $mdDialog.cancel();
+                };
+
+                $scope.answer = function (answer) {
+                    $mdDialog.hide(answer);
+                };
             }
 
             document.getElementById('canvas_loadder').style.display = "none";
