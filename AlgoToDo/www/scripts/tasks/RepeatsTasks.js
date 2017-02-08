@@ -1,6 +1,6 @@
 ﻿(function () {
     'use strict';
-
+     
     angular
         .module('app.tasks')
         .controller('repeatsTasksCtrl', repeatsTasksCtrl);
@@ -17,7 +17,6 @@
         var vm = this;
 
         angular.element(document.querySelectorAll('html')).removeClass("hight-auto");
-        document.getElementById('canvas_loadder').style.display = "none";
         document.getElementById('Cube_loadder').style.display = "none";
 
         vm.repeatsTasks = function () {
