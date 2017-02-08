@@ -25,6 +25,51 @@
 
 </head>
 <body layout="row" >
+    <script type="text/javascript">
+            var c = document.createElement('canvas'),
+        $ = c.getContext('2d'),
+        w = c.width = window.innerWidth,
+        h = c.height = window.innerHeight,
+        d, l,
+        t = 0;
+            c.id = 'canvas_loadder';
+            document.body.appendChild(c);
+
+            function init() {
+                reset();
+                loop();
+            }
+            function draw() {
+                var z = 15 - Math.sin(t) * 15 - Math.cos(t);
+                $.fillStyle = 'rgba(0, 0, 0, 0.025)';
+                $.fillRect(0, 0, w, h);
+                for (var i = 0; i < l; i++) {
+                    var r = ((i * d / 3) / l) * Math.sin((z * 100) + i),
+                        x = Math.sin(i) * r + (w / 2),
+                        y = Math.cos(i) * r + (h / 2);
+                    $.beginPath();
+                    $.fillStyle = 'rgba(0, 255, 255, 1)';
+                    $.fillRect(x, y, 1, 1);
+                }
+                t += 0.00001;
+            }
+
+            function reset() {
+                w = c.width = window.innerWidth;
+                h = c.height = window.innerHeight;
+                d = Math.min(w, h) - 50;
+                l = Math.round(d / 10);
+            }
+
+            function loop() {
+                requestAnimationFrame(loop);
+                draw();
+            }
+
+            window.addEventListener('resize', reset);
+
+            //init();
+    </script>
 
     <div ng-view layout-fill ng-cloak></div>
 

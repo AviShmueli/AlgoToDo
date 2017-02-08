@@ -353,6 +353,8 @@
             }
 
             document.getElementById('Cube_loadder').style.display = "none";
+            document.getElementById('canvas_loadder').style.display = "none";
+
  
         }
 

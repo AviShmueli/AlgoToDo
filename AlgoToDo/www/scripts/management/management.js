@@ -18,6 +18,8 @@
 
         angular.element(document.querySelectorAll('html')).removeClass("hight-auto");
         document.getElementById('Cube_loadder').style.display = "none";
+        document.getElementById('canvas_loadder').style.display = "none";
+
         
         vm.selected = [];
         vm.totalTaskCount = 0;

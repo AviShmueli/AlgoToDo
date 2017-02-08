@@ -28,6 +28,7 @@
         vm.taskIsFromMe = (vm.task.from._id === vm.user._id);
 
         angular.element(document.querySelectorAll('html')).removeClass("hight-auto");
+        document.getElementById('canvas_loadder').style.display = "none";
         document.getElementById('Cube_loadder').style.display = "none";
 
         vm.newCommentText = '';
