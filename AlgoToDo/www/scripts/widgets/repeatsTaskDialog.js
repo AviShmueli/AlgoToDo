@@ -105,7 +105,7 @@
 
         var saveNewTask = function (task) {
             DAL.addNewRepeatsTasks(task).then(function (response) {
-                addTaskAndCloseDialog(response.data.ops);
+                addTaskAndCloseDialog(response.data);
             }, function (error) {
                 if (error.status === -1) {
                     error.data = "App lost connection to the server";

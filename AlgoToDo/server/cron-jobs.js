@@ -2,66 +2,52 @@
 
 (function(jobs){
 
-    jobs.job1 = job1;
+    jobs.startRepeatsTasks = startRepeatsTasks;
 
     var CronJob = require('cron').CronJob;
     var BL = require('./BL');
     var winston = require('./logger');
 
-    function job1( param1 ) {
-        var job = new CronJob({
-            cronTime: '01 * * * * *',
-            onTick: function() {
-                console.log(param1);
+    function startRepeatsTasks( tasks ) {
+        
+        for (var i = 0; i < tasks.length; i++) {
+            var task = tasks[i];
+            
+            var time = new Date(task.startTime);
+            var hour = time.getHours();
+            var minutes = time.getMinutes();
+            var days = task.daysRepeat.toString();
+            
+            var job = new CronJob({
+                cronTime: '00 ' + minutes + ' ' + hour +  ' * * ' + days, // Seconds(0-59) Minutes(0-59) Hours(0-23) Day of Month(1-31) Months(0-11) Day of Week:(0-6)
+                onTick: function() {
+                    console.log(task);
 
-                var sender = {
-                    "_id" : "583b5e200074810011fb7811",
-                    "name" : "אבי iPhone",
-                    "avatarUrl" : "/images/man-3.svg",
-                    "cliqot" : [ 
-                        {
-                            "_id" : "585c1e3dee630b29fc4b2d3e",
-                            "name" : "מנהלים"
-                        }]
-                };
-
-                var description = "משימה חוזרת " + new Date();
-
-                var recipients = [{
-                    "_id" : "583a9399a0c6ee0011573fbd",
-                    "name" : "אבי שמואלי",
-                    "avatarUrl" : "/images/man-7.svg",
-                    "cliqot" : [ 
-                        {
-                            "_id" : "585c1e3dee630b29fc4b2d3e",
-                            "name" : "מנהלים"
-                        }]
-                    }];
-
-                var tasksToSend = preperTaskToSend(sender, description, recipients);
-                
-                BL.addNewTasks(tasksToSend).then(function(result){
-                    console.log("successfuly send repeate task");
-                }, function(error){
-                    winston.log('error', error.message , error.error);
+                    var tasksToSend = preperTaskToSend(task);
                     
-                });
-            },
-            start: true 
-        });
-        job.start();
+                    BL.addNewTasks(tasksToSend).then(function(result){
+                        console.log("successfuly send repeate task");
+                    }, function(error){
+                        winston.log('error', error.message , error.error);                       
+                    });
+                },
+                start: true 
+            });
+            job.start();
+        }
+        
     }
 
-    function preperTaskToSend(sender, description, recipients){
+    function preperTaskToSend(repeatsTask){
         var task = {};
-        task.from = { '_id': sender._id, 'name': sender.name, 'avatarUrl': sender.avatarUrl };
+        task.from = { '_id': repeatsTask.from._id, 'name': repeatsTask.from.name, 'avatarUrl': repeatsTask.from.avatarUrl };
         task.status = 'inProgress';
         task.createTime = new Date();                    
-        task.cliqaId = sender.cliqot[0]._id;
-        task.description = description;
+        task.cliqaId = repeatsTask.cliqaId;
+        task.description = repeatsTask.description;
         task.comments = [];
 
-        return createTasksList(task, recipients);
+        return createTasksList(task, repeatsTask.to);
     }
 
     function createTasksList(task, recipients) {

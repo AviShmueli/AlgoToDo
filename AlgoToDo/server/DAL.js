@@ -692,7 +692,7 @@
                 }
 
                 mongo.db.close();
-                d.resolve(results);
+                d.resolve(results.ops);
 
             });
         });

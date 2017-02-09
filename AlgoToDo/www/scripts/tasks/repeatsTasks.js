@@ -1,6 +1,6 @@
 ﻿(function () {
     'use strict';
-     
+
     angular
         .module('app.tasks')
         .controller('repeatsTasksCtrl', repeatsTasksCtrl);
@@ -15,6 +15,8 @@
                         DAL, $offlineHandler, $location) {
 
         var vm = this;
+        vm.imagesPath = device.getImagesPath();
+        vm.isDialogOpen = false;
 
         angular.element(document.querySelectorAll('html')).removeClass("hight-auto");
         document.getElementById('Cube_loadder').style.display = "none";
@@ -33,18 +35,24 @@
             var time = moment(task.startTime).format("LT");
 
             if (daysRepeat.length === 7) {
-                return 'כל יום ב ' + time;
+                return 'כל יום בשעה ' + time;
             }
             if (daysRepeat.length === 1) {
-                return 'כל יום ' + moment().weekday(daysRepeat[0]).format("dddd") + ' ב ' + time;
+                return 'כל יום ' + moment().weekday(daysRepeat[0]).format("dddd") + ' בשעה ' + time;
             }
-
+            var isConsecutive = false;
             for (var i = 0; i < daysRepeat.length; i++) {
                 days += moment().weekday(daysRepeat[i]).format("dd") + ',';
+                isConsecutive = (daysRepeat[i + 1] !== undefined && parseInt(daysRepeat[i]) + 1 === parseInt(daysRepeat[i + 1])) ? true : (daysRepeat[i + 1] === undefined && isConsecutive) ? true : false;
             }
-            days = 'ימים ' + days.slice(0, -1);
+            if (isConsecutive && daysRepeat.length > 2) {
+                days = 'ימים ' + moment().weekday(daysRepeat[0]).format("dd") + '-' + moment().weekday(daysRepeat[daysRepeat.length - 1]).format("dd");
+            }
+            else {
+                days = 'ימים ' + days.slice(0, -1);
+            }
 
-            return days + ' ב ' + time;
+            return days + ' בשעה ' + time;
         }
 
         vm.descriptionTextLength = function () { return Math.floor((window.innerWidth - 70 - 16 - 40 - 16 - 8) / 4) };
@@ -66,9 +74,41 @@
             });
 
             document.addEventListener("deviceready", function () {
-                document.addEventListener("backbutton", backbuttonClick_FromAddTask_Callback, false);
+                document.addEventListener("backbutton", backbuttonClick_FromAddRepeatTask_Callback, false);
             }, false);
         };
+
+        var backbuttonClick_FromAddRepeatTask_Callback = function (e) {
+            e.preventDefault();
+            $mdDialog.cancel();
+            vm.isDialogOpen = false;
+            document.removeEventListener("backbutton", backbuttonClick_FromAddRepeatTask_Callback, false);
+        }
+
+        var backbuttonClick_allways_Callback1 = function (e) {
+            if (vm.isDialogOpen) {
+                e.preventDefault();
+                return;
+                // do nothing - dialog will be closed
+            }
+            if ($location.path() === '/') {
+                e.preventDefault();
+                if (!vm.exitApp) {
+                    vm.exitApp = true;
+                    cordovaPlugins.showToast("הקש שוב ליציאה", 1000);
+                    $timeout(function () { vm.exitApp = false }, 1000);
+                } else {
+                    navigator.app.exitApp();
+                }
+            }
+            else {
+                window.history.back();
+            }
+        }
+
+        document.addEventListener("deviceready", function () {
+            document.addEventListener("backbutton", backbuttonClick_allways_Callback1, false);
+        }, false);
 
     }
 

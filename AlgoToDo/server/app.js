@@ -258,6 +258,7 @@ app.get('/TaskManeger/checkIfVerificationCodeMatch', function (req, res) {
 app.post('/TaskManeger/addNewRepeatsTasks', function (req, res) {
 
     BL.addNewRepeatsTasks(req.body.tasks).then(function(result){
+        jobs.startRepeatsTasks(result);
         res.send(result);
     }, function(error){
         winston.log('error', error.message , error.error);

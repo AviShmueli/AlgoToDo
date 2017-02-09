@@ -44,7 +44,7 @@
                         </md-card-avatar>
                         <a class="md-tile-content" flex="100" style="margin-bottom: 14px;" ng-click="vm.navigateToTaskPage(item._id)">
                             <div layout="row">
-                                <span class="from">{{(task.to.length === 1 ? task.to[0].name : (task.to[0].name + ', +' + (task.to.length - 1)))}}</span>
+                                <span class="from">{{(task.to.length === 1 ? task.to[0].name : (task.to[0].name + ' +' + (task.to.length - 1)))}}</span>
                                 <!--<ng-md-icon class="head-icon" icon="send" style="fill: black" size="10"></ng-md-icon>-->
                                 <span flex></span>
                                 <span class="font-bold">{{vm.getRepeatedTime(task)}}</span>

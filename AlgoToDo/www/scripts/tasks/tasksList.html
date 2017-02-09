@@ -11,7 +11,7 @@
                 </md-button>
                 <span flex></span>
                 <h2>
-                    <span style="color:white">ניהול משימות</span>
+                    <span style="color:white">Asiti</span>
                 </h2>
                 <!--<span flex="10"></span>-->
                 <md-button class="md-icon-button" ng-click="vm.toggleSidenav('left')" aria-label="Menu">
@@ -57,11 +57,11 @@
             <ng-md-icon class="add-icon" icon="add"></ng-md-icon>
         </md-button>   
     </md-fab-trigger>
-    <!--<md-fab-trigger>
+    <md-fab-trigger>
         <md-button style="z-index: 21" class="md-fab md-fab-bottom-left" aria-label="sync" ng-click="vm.goOnline()" ng-if="vm.userConnected" md-no-ink="true">
             <ng-md-icon class="add-icon" icon="sync"></ng-md-icon>
         </md-button>
-    </md-fab-trigger>-->
+    </md-fab-trigger>
     <!--im-pull-to-refresh refresh-function="vm.reloadTasks()"-->
     <md-content flex md-scroll-y ng-show="vm.userConnected" style="height:100%">
         <ui-view layout="column" layout-fill>

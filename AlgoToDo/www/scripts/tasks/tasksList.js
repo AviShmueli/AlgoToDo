@@ -206,7 +206,12 @@
                 }
             }
             else {
-                window.history.back();
+                if ($location.path() === '/repeatsTasks') {
+                    e.preventDefault();
+                }
+                else {
+                    window.history.back();
+                }
             }
         }
 
