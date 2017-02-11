@@ -17,15 +17,18 @@
         var vm = this;
         vm.imagesPath = device.getImagesPath();
         vm.isDialogOpen = false;
+        vm.user = datacontext.getUserFromLocalStorage();
 
         angular.element(document.querySelectorAll('html')).removeClass("hight-auto");
         document.getElementById('Cube_loadder').style.display = "none";
         document.getElementById('canvas_loadder').style.display = "none";
 
+        DAL.getUsersRepeatsTasks(vm.user._id).then(function (tasks) {
+            vm.repeatsTasks = tasks;
+            datacontext.setRepeatsTasksList();
+        });
 
-        vm.repeatsTasks = function () {
-            return datacontext.getRepeatsTasksList();
-        }
+        vm.repeatsTasks = datacontext.getRepeatsTasksList();
 
         vm.getRepeatedTime = function (task) {
 

@@ -2,11 +2,21 @@
 
 (function(jobs){
 
+    jobs.startAllJobs = startAllJobs;
     jobs.startRepeatsTasks = startRepeatsTasks;
 
     var CronJob = require('cron').CronJob;
     var BL = require('./BL');
-    var winston = require('./logger');
+    var DAL = require('./DAL');
+    var logger = require('./logger');
+
+    function startAllJobs(){
+        DAL.getAllRepeatsTasks().then(function(tasks){
+            startRepeatsTasks( tasks );
+        }, function (error){
+            logger.log('error', error.message , error.error);
+        });
+    }
 
     function startRepeatsTasks( tasks ) {
         
@@ -28,7 +38,7 @@
                     BL.addNewTasks(tasksToSend).then(function(result){
                         console.log("successfuly send repeate task");
                     }, function(error){
-                        winston.log('error', error.message , error.error);                       
+                        logger.log('error', error.message , error.error);                       
                     });
                 },
                 start: true 
@@ -73,6 +83,8 @@
             }
             return listToReturn;
         }
+
+
 
 
 

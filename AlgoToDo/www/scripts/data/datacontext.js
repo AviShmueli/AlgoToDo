@@ -161,7 +161,11 @@
         }
 
         var getRepeatsTasksList = function () {
-            return self.$storage.repeatsTasksList;
+            return self.$storage.repeatsTasksList || [];
+        }
+
+        var setRepeatsTasksList = function (newTasks) {
+            self.$storage.repeatsTasksList = newTasks;
         }
         
         var service = {
@@ -182,7 +186,8 @@
             getDeviceDetailes: getDeviceDetailes,
             getTaskByTaskId: getTaskByTaskId,
             addTasksToRepeatsTasksList: addTasksToRepeatsTasksList,
-            getRepeatsTasksList: getRepeatsTasksList
+            getRepeatsTasksList: getRepeatsTasksList,
+            setRepeatsTasksList: setRepeatsTasksList
         };
 
         return service;

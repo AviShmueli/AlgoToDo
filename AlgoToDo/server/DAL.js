@@ -23,6 +23,8 @@
     DAL.getAllVersionInstalled = getAllVersionInstalled;
     DAL.checkIfVerificationCodeMatch = checkIfVerificationCodeMatch;
     DAL.insertNewRepeatsTasks = insertNewRepeatsTasks;
+    DAL.getAllRepeatsTasks = getAllRepeatsTasks;
+    DAL.getUsersRepeatsTasks = getUsersRepeatsTasks;
 
     var deferred = require('deferred');
     var mongodb = require('mongodb').MongoClient;
@@ -700,6 +702,57 @@
         return d.promise;
     }
 
+    function getAllRepeatsTasks() {
+
+        var d = deferred();
+
+        getCollection('repeats-tasks').then(function (mongo) {
+
+            mongo.collection.find({}).toArray(function (err, results) {
+
+                if (err) {
+                    var errorObj = {
+                        message: "error while trying to get all repeats Tasks from DB",
+                        error: err
+                    };
+                    mongo.db.close();
+                    d.reject(errorObj);
+                }
+
+                mongo.db.close();
+                d.resolve(results);
+
+            });
+        });
+
+        return d.promise;
+    }
+    
+    function getUsersRepeatsTasks(userId) {
+
+        var d = deferred();
+
+        getCollection('repeats-tasks').then(function (mongo) {
+
+            mongo.collection.find({ creatorId :userId}).toArray(function (err, results) {
+
+                if (err) {
+                    var errorObj = {
+                        message: "error while trying to get all users repeats Tasks from DB",
+                        error: err
+                    };
+                    mongo.db.close();
+                    d.reject(errorObj);
+                }
+
+                mongo.db.close();
+                d.resolve(results);
+
+            });
+        });
+
+        return d.promise;
+    }
 
 
 })(module.exports);

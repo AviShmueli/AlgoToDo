@@ -45,8 +45,7 @@ app.use(express.static('../node_modules'));
 
 /* ----- cron  ------ */
 var jobs = require('./cron-jobs');
-
-//jobs.job1('1');
+jobs.startAllJobs();
 
 /* ---- Start the server ------ */
 server.listen(process.env.PORT || 5001, function (err) {
@@ -261,6 +260,17 @@ app.post('/TaskManeger/addNewRepeatsTasks', function (req, res) {
         jobs.startRepeatsTasks(result);
         res.send(result);
     }, function(error){
+        winston.log('error', error.message , error.error);
+        res.status(500).send(error); 
+    });
+
+});
+
+app.get('/TaskManeger/getUsersRepeatsTasks', function (req, res) {
+
+    BL.getUsersRepeatsTasks(req.query.userId).then(function(result) {
+        res.send(result);   
+    }, function(error) {
         winston.log('error', error.message , error.error);
         res.status(500).send(error); 
     });

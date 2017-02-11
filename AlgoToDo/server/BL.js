@@ -20,6 +20,9 @@
     BL.getAllVersionInstalled = getAllVersionInstalled;
     BL.checkIfVerificationCodeMatch = checkIfVerificationCodeMatch;
     BL.addNewRepeatsTasks = addNewRepeatsTasks;
+    BL.getUsersRepeatsTasks = getUsersRepeatsTasks;
+
+
 
     var ObjectID = require('mongodb').ObjectID;
     var deferred = require('deferred');
@@ -544,6 +547,19 @@
                 d.deferred(error);
             });
         }, function (error) {
+            d.deferred(error);
+        });
+
+        return d.promise;
+    }
+
+    function getUsersRepeatsTasks(userId){
+    
+        var d = deferred();
+
+        DAL.getUsersRepeatsTasks(userId).then(function(results) {
+            d.resolve(results);
+        }, function(error) {
             d.deferred(error);
         });
 
