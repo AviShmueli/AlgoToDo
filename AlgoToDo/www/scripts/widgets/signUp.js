@@ -240,7 +240,7 @@
             vm.showCliqaAlert = function (ev) {
                 $mdDialog.show(
                   $mdDialog.alert()
-                    .parent(angular.element(document.querySelector('#popupContainer')))
+                    .parent(angular.element(document.querySelector('#CliqaAlertContainer')))
                     .clickOutsideToClose(true)
                     .title('קליקה')
                     .textContent('קליקה היא קבוצת האנשים (הארגון) איתו אתה עובד ומקבל משימות.'+ '\n'+
@@ -256,7 +256,7 @@
             vm.showTermsOfServiceAlert = function myfunction(ev) {
                 $mdDialog.show(
                   $mdDialog.alert()
-                    .parent(angular.element(document.querySelector('#popupContainer')))
+                    .parent(angular.element(document.querySelector('#TermsOfServiceAlertContainer')))
                     .clickOutsideToClose(true)
                     .title('תנאי השירות')
                     .textContent('האפליקציה פועלת בתחום המשימות, במטרה לסייע לכל אחד לבצע את המשימות האישיות והחברתיות שלו.ניתן לנהל משימות אישיות, לשלוח לנמענים, לעקוב אחר ביצוע ולנהל שיחה על כל משימה ומשימה.האפליקציה מיועדת לאנשים פרטיים, חברות וארגונים, בתי ספר, משפחות וכל אחד שרוצה לבצע את המשימות שלו בצורה קלה ונוחה** האפליקציה נמצאת בגרסת אלפא. לא מיועדת עדיין לשימוש. בנוסף, בשלב הרצת האפליקציה כלל האפשרויות המוצעות באפליקציה הינם חינם לשימוש לאנשים פרטייים וכן לאירגונים, משתהפוך האפליקציה לרישמית ייתכן ואפשרויות מסוימות באפליקציה יהיו בתשלום .')
@@ -286,7 +286,7 @@
             var showVerificationFailedAlert = function () {
                 $mdDialog.show(
                   $mdDialog.alert()
-                    .parent(angular.element(document.querySelector('#popupContainer')))
+                    .parent(angular.element(document.querySelector('#VerificationFailedAlertContainer')))
                     .clickOutsideToClose(true)
                     .title('שגיאה')
                     .textContent('תהליך הזיהוי נכשל, הקוד שהוכנס לא תואם למספר הטלפון שהוקש, אנא נסה שנית.')
@@ -298,7 +298,7 @@
             var showRegistrationFailedAlert = function () {
                 $mdDialog.show(
                   $mdDialog.alert()
-                    .parent(angular.element(document.querySelector('#popupContainer')))
+                    .parent(angular.element(document.querySelector('#RegistrationFailedAlertContainer')))
                     .clickOutsideToClose(true)
                     .title('שגיאה')
                     .textContent('מצטערים!   תהליך ההרשמה נכשל , תנו לנו עוד הזדמנות ונסו שוב להירשם. אם הבעיה נמשכת נשמח אם תפנו אלינו במייל או בטלפון.')
@@ -334,8 +334,8 @@
                 }
 
                 $scope.womanAvatars = [];
-                for (var i = 1; i < 16; i++) {
-                    $scope.womanAvatars.push('/images/woman-' + i + '.svg');
+                for (var j = 1; j < 16; j++) {
+                    $scope.womanAvatars.push('/images/woman-' + j + '.svg');
                 }
                 
 

@@ -283,6 +283,44 @@
             return $http(req)
         };
 
+        var getUsersRepeatsTasks = function (userId) {
+            var req = {
+                method: 'GET',
+                url: appConfig.appDomain + '/TaskManeger/getUsersRepeatsTasks',
+                params: {
+                    userId: userId
+                }
+            };
+
+            return $http(req);
+        }
+
+        var updateRepeatsTasks = function (tasks) {
+
+            var req = {
+                method: 'POST',
+                url: appConfig.appDomain + '/TaskManeger/updateRepeatsTasks',
+                data: {
+                    tasks: tasks
+                }
+            };
+
+            return $http(req)
+        };
+
+        var deleteRepeatsTasks = function (tasks) {
+
+            var req = {
+                method: 'POST',
+                url: appConfig.appDomain + '/TaskManeger/deleteRepeatsTasks',
+                data: {
+                    tasks: tasks
+                }
+            };
+
+            return $http(req)
+        };
+
 
         var service = {
             saveNewTasks: saveNewTasks,
@@ -304,7 +342,10 @@
             getAllUsers: getAllUsers,
             getAllUsersCount: getAllUsersCount,
             getAllVersionInstalled: getAllVersionInstalled,
-            addNewRepeatsTasks: addNewRepeatsTasks
+            addNewRepeatsTasks: addNewRepeatsTasks,
+            getUsersRepeatsTasks: getUsersRepeatsTasks,
+            updateRepeatsTasks: updateRepeatsTasks,
+            deleteRepeatsTasks: deleteRepeatsTasks
         };
 
         return service;

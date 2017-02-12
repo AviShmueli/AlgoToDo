@@ -54,7 +54,7 @@ server.listen(process.env.PORT || 5001, function (err) {
 
 app.post('/TaskManeger/newTask', function (req, res) {
 
-    BL.addNewTasks(req.body.task).then(function(result){
+    BL.addNewTasks(req.body.task, false).then(function(result){
         res.send(result);
     }, function(error){
         winston.log('error', error.message , error.error);
@@ -259,6 +259,30 @@ app.post('/TaskManeger/addNewRepeatsTasks', function (req, res) {
     BL.addNewRepeatsTasks(req.body.tasks).then(function(result){
         jobs.startRepeatsTasks(result);
         res.send(result);
+    }, function(error){
+        winston.log('error', error.message , error.error);
+        res.status(500).send(error); 
+    });
+
+});
+
+app.post('/TaskManeger/updateRepeatsTasks', function (req, res) {
+
+    BL.updateRepeatsTasks(req.body.tasks).then(function(result){
+        jobs.restartRepeatsTasks(req.body.tasks);
+        res.send('ok');
+    }, function(error){
+        winston.log('error', error.message , error.error);
+        res.status(500).send(error); 
+    });
+
+});
+
+app.post('/TaskManeger/deleteRepeatsTasks', function (req, res) {
+
+    BL.deleteRepeatsTasks(req.body.tasks).then(function(result){
+        jobs.stopRepeatsTasks(result);
+        res.send('ok');
     }, function(error){
         winston.log('error', error.message , error.error);
         res.status(500).send(error); 

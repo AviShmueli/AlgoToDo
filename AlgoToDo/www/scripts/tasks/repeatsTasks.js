@@ -18,17 +18,16 @@
         vm.imagesPath = device.getImagesPath();
         vm.isDialogOpen = false;
         vm.user = datacontext.getUserFromLocalStorage();
+        vm.repeatsTasks = datacontext.getRepeatsTasksList();
 
         angular.element(document.querySelectorAll('html')).removeClass("hight-auto");
         document.getElementById('Cube_loadder').style.display = "none";
         document.getElementById('canvas_loadder').style.display = "none";
 
-        DAL.getUsersRepeatsTasks(vm.user._id).then(function (tasks) {
-            vm.repeatsTasks = tasks;
-            datacontext.setRepeatsTasksList();
-        });
-
-        vm.repeatsTasks = datacontext.getRepeatsTasksList();
+        DAL.getUsersRepeatsTasks(vm.user._id).then(function (response) {
+            vm.repeatsTasks = response.data;
+            datacontext.setRepeatsTasksList(response.data);
+        });      
 
         vm.getRepeatedTime = function (task) {
 
@@ -64,6 +63,32 @@
             $location.path('/');
         }
 
+        vm.editTask = function (task, ev) {
+            vm.isDialogOpen = true;
+            $mdDialog.show({
+                controller: 'repeatsTaskDialog',
+                controllerAs: 'vm',
+                templateUrl: 'scripts/widgets/repeatsTaskDialog.html',
+                targetEvent: ev,
+                fullscreen: true,
+                locals: {
+                    taskToEdit: task,
+                    updateList: vm.updateList
+                }
+            }).then(function () {
+                vm.isDialogOpen = false;
+                vm.repeatsTasks = datacontext.getRepeatsTasksList();
+            });
+
+            document.addEventListener("deviceready", function () {
+                document.addEventListener("backbutton", backbuttonClick_FromAddRepeatTask_Callback, false);
+            }, false);
+        }
+
+        vm.updateList = function () {
+            vm.repeatsTasks = datacontext.getRepeatsTasksList();
+        }
+
         vm.showAdd = function (ev) {
             vm.isDialogOpen = true;
             $mdDialog.show({
@@ -71,9 +96,14 @@
                 controllerAs: 'vm',
                 templateUrl: 'scripts/widgets/repeatsTaskDialog.html',
                 targetEvent: ev,
-                fullscreen: true
+                fullscreen: true,
+                locals: {
+                    taskToEdit: {},
+                    updateList: function () { }
+                }
             }).then(function () {
                 vm.isDialogOpen = false;
+                vm.repeatsTasks = datacontext.getRepeatsTasksList();
             });
 
             document.addEventListener("deviceready", function () {

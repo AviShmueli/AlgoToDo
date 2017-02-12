@@ -44,10 +44,6 @@
             $location.path('/');
         }
 
-        vm.openMenu = function ($mdOpenMenu, ev) {
-            $mdOpenMenu(ev);
-        };
-
         vm.takePic = function (sourceType) {
 
             document.addEventListener("deviceready", function () {

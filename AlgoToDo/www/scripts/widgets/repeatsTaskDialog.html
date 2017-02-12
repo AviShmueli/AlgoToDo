@@ -6,10 +6,21 @@
             </md-button>           
             <h3 style="color:white">משימה חוזרת</h3>
             <span flex></span>
-            <md-button class="md-raised md-accent" type="submit" ng-click="vm.save()" ng-disabled="newTaskForm.$invalid">
-                 <span ng-hide="vm.submitInProcess">שמור</span>  
-                 <md-progress-circular md-mode="indeterminate" ng-show="vm.submitInProcess" md-diameter="20px" class="md-accent md-hue-2"></md-progress-circular>
-            </md-button>
+            <md-menu md-position-mode="target-left target" ng-if="vm.isEditMode">
+                    <md-button aria-label="Open phone interactions" class="md-icon-button" ng-click="$mdOpenMenu($event)">
+                        <ng-md-icon icon="more_vert"></ng-md-icon>
+                    </md-button>
+                    <md-menu-content width="4">
+                        <md-menu-item>
+                            <md-button class="no-line-height" ng-click="vm.deleteTask()">
+                                <div layout="row" flex>
+                                    <ng-md-icon class="icon-fill" md-menu-align-target icon="delete"></ng-md-icon>
+                                    <p flex style="text-align:right">מחק משימה</p>
+                                </div>
+                            </md-button>
+                        </md-menu-item>
+                     </md-menu-content>
+                </md-menu>            
         </div>
     </md-toolbar>
     <md-dialog-content flex md-scroll-y class="md-padding" layout-margin>
@@ -51,15 +62,18 @@
                     </section>
                 </md-input-container>
             </div>
+            <div ng-show="vm.showNoDaysSelectedError">
+                <div class="input-message-validate"><b>חובה</b> לבחור יום אחד לפחות</div>
+            </div>
 
             <div layout layout-sm="column">
                 <md-input-container flex class="md-block">
                     <label>שעה</label>
                     <section layout="row" layout-sm="column" layout-align="center center" layout-wrap>
                         <input mdc-datetime-picker="" date="false" time="true" type="text" show-todays-date
-                               format="HH:mm" ng-model="vm.task.startTime" class="md-input"
+                               format="HH:mm a" ng-model="vm.task.startTime" class="md-input" md-no-asterisk="true"
                                readonly="readonly" lang="he" ok-text='שמור' am-text='בוקר' pm-text='ערב' 
-                               cancel-text='ביטול' today-text="">
+                               cancel-text='ביטול' today-text="" required>
                     </section>
                 </md-input-container>
             </div>
@@ -68,5 +82,16 @@
             <!-- https://github.com/logbon72/angular-material-datetimepicker -->      
         </form>
 
-    </md-dialog-content>   
+        
+
+    </md-dialog-content>  
+    <md-dialog-actions>
+        <md-button flex class="md-raised md-accent" type="submit" ng-click="vm.save()" ng-disabled="newTaskForm.$invalid">
+            <span ng-hide="vm.submitInProcess">שמור</span>
+            <md-progress-circular md-mode="indeterminate" ng-show="vm.submitInProcess" md-diameter="20px" class="md-accent md-hue-2"></md-progress-circular>
+        </md-button>
+        <md-button flex class="md-raised md-accent" type="submit" ng-click="vm.cancel()">
+            <span>בטל</span>
+        </md-button>     
+    </md-dialog-actions>
 </md-dialog>

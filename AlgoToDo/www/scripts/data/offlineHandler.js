@@ -22,7 +22,6 @@
             if (self.$storage.cachedNewTasksList !== undefined && self.$storage.cachedNewTasksList.length > 0) {
                 DAL.saveNewTasks(self.$storage.cachedNewTasksList).then(function (response) {
                     replaceAllTempTasksInLocalStorage(response.data);
-                    //datacontext.pushTasksToTasksList(response.data);
                     delete self.$storage.cachedNewTasksList;
                 });
             }
@@ -43,6 +42,19 @@
             if (self.$storage.cachedNewRepeatsTasksList !== undefined && self.$storage.cachedNewRepeatsTasksList.length > 0) {
                 DAL.addNewRepeatsTasks(self.$storage.cachedNewRepeatsTasksList).then(function (response) {
                     delete self.$storage.cachedNewRepeatsTasksList;
+                });
+            }
+
+            if (self.$storage.cachedUpdateRepeatsTasksList !== undefined && self.$storage.cachedUpdateRepeatsTasksList.length > 0) {
+                DAL.updateRepeatsTasks(self.$storage.cachedUpdateRepeatsTasksList).then(function (response) {
+                    datacontext.replaceRepeatsTasks(response.data);
+                    delete self.$storage.cachedUpdateRepeatsTasksList;
+                });
+            }
+
+            if (self.$storage.cachedDeleteRepeatsTasksList !== undefined && self.$storage.cachedDeleteRepeatsTasksList.length > 0) {
+                DAL.deleteRepeatsTask(self.$storage.cachedDeleteRepeatsTasksList).then(function (response) {
+                    delete self.$storage.cachedDeleteRepeatsTasksList;
                 });
             }
         }
@@ -118,6 +130,30 @@
             }
         }
 
+        var addTasksToCachedUpdateRepeatsTasksList = function (task) {
+            if (self.$storage.cachedUpdateRepeatsTasksList === undefined) {
+                self.$storage.cachedUpdateRepeatsTasksList = [];
+            }
+
+            self.$storage.cachedUpdateRepeatsTasksList.push(task);
+
+            if (self.networkState === 'offline') {
+                cordovaPlugins.showToast('אתה במצב לא מקוון, המשימה תישמר כשתתחבר לרשת', 2000);
+            }
+        }
+
+        var addTasksToCachedDeleteRepeatsTasksList = function (task) {
+            if (self.$storage.cachedDeleteRepeatsTasksList === undefined) {
+                self.$storage.cachedDeleteRepeatsTasksList = [];
+            }
+
+            self.$storage.cachedDeleteRepeatsTasksList.push(task);
+
+            if (self.networkState === 'offline') {
+                cordovaPlugins.showToast('אתה במצב לא מקוון, המשימה תימחק כשתתחבר לרשת', 2000);
+            }
+        }
+
         var markCommentsAsOnline = function (comments) {
             for (var i = 0; i < comments.length; i++) {
                 comments[i].comment.offlineMode = false;
@@ -139,14 +175,13 @@
             document.addEventListener('resume', goOnline.bind(this), false);
         }, false);
 
-
-
         var service = {
             goOnline: goOnline,
             addTasksToCachedNewTasksList: addTasksToCachedNewTasksList,
             addTaskToCachedTasksToUpdateList: addTaskToCachedTasksToUpdateList,
             addCommentToCachedNewCommentsList: addCommentToCachedNewCommentsList,
-            addTasksToCachedNewRepeatsTasksList: addTasksToCachedNewRepeatsTasksList
+            addTasksToCachedNewRepeatsTasksList: addTasksToCachedNewRepeatsTasksList,
+            addTasksToCachedUpdateRepeatsTasksList: addTasksToCachedUpdateRepeatsTasksList
         };
 
         return service;

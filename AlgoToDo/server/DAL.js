@@ -25,6 +25,8 @@
     DAL.insertNewRepeatsTasks = insertNewRepeatsTasks;
     DAL.getAllRepeatsTasks = getAllRepeatsTasks;
     DAL.getUsersRepeatsTasks = getUsersRepeatsTasks;
+    DAL.updateRepeatsTasks = updateRepeatsTasks;
+    DAL.deleteRepeatsTasks = deleteRepeatsTasks;
 
     var deferred = require('deferred');
     var mongodb = require('mongodb').MongoClient;
@@ -657,8 +659,11 @@
 
         getCollection('users').then(function (mongo) {
 
-            mongo.collection.findOne({  _id: new ObjectID(userId) , verificationCode: verificationCode },
-            function (err, result) {
+            mongo.collection.findOne({
+                    _id: new ObjectID(userId),
+                    verificationCode: verificationCode
+                },
+                function (err, result) {
                     if (err) {
                         var errorObj = {
                             message: "error while trying to check if verification code match: ",
@@ -702,6 +707,36 @@
         return d.promise;
     }
 
+    function deleteRepeatsTasks(tasksIds) {
+
+        var d = deferred();
+
+        getCollection('repeats-tasks').then(function (mongo) {
+
+            mongo.collection.remove({
+                '_id': {
+                    $in: tasksIds
+                }
+            }, function (err, results) {
+
+                if (err && results.result.n === tasksIds.length) {
+                    var errorObj = {
+                        message: "error while trying to add new repeats Tasks to DB",
+                        error: err
+                    };
+                    mongo.db.close();
+                    d.reject(errorObj);
+                }
+
+                mongo.db.close();
+                d.resolve(results);
+
+            });
+        });
+
+        return d.promise;
+    }
+
     function getAllRepeatsTasks() {
 
         var d = deferred();
@@ -727,14 +762,16 @@
 
         return d.promise;
     }
-    
+
     function getUsersRepeatsTasks(userId) {
 
         var d = deferred();
 
         getCollection('repeats-tasks').then(function (mongo) {
 
-            mongo.collection.find({ creatorId :userId}).toArray(function (err, results) {
+            mongo.collection.find({
+                creatorId: userId
+            }).toArray(function (err, results) {
 
                 if (err) {
                     var errorObj = {
@@ -748,6 +785,46 @@
                 mongo.db.close();
                 d.resolve(results);
 
+            });
+        });
+
+        return d.promise;
+    }
+
+    function updateRepeatsTasks(tasks) {
+
+        var d = deferred();
+
+        getCollection('repeats-tasks').then(function (mongo) {
+
+            var batch = mongo.collection.initializeUnorderedBulkOp({
+                useLegacyOps: true
+            });
+
+            for (var i = 0; i < tasks.length; i++) {
+                var task = JSON.parse(JSON.stringify(tasks[i]));
+                var id = task._id;
+                delete task._id;
+                batch.find({
+                    _id: new ObjectID(id)
+                }).updateOne({
+                    $set: task
+                });
+            }
+
+            batch.execute(function (err, result) {
+
+                if (err && result.getRawResponse().nModified === tasks.length) {
+                    var errorObj = {
+                        message: "error while trying to update repeats tasks: ",
+                        error: err
+                    };
+                    mongo.db.close();
+                    d.reject(errorObj);
+                }
+
+                mongo.db.close();
+                d.resolve();
             });
         });
 

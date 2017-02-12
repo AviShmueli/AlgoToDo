@@ -3,7 +3,7 @@
     <md-toolbar ng-show="!vm.showSearch" class="task-toolbar">
         <div class="md-toolbar-tools">
             <md-menu md-position-mode="target-left target">
-                <md-button aria-label="Open phone interactions menu" class="md-icon-button" ng-click="vm.openMenu($mdOpenMenu, $event)">
+                <md-button aria-label="Open phone interactions menu" class="md-icon-button" ng-click="$mdOpenMenu($event)">
                     <ng-md-icon icon="more_vert"></ng-md-icon>
                 </md-button>
                 <md-menu-content width="4">

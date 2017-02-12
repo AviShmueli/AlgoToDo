@@ -167,7 +167,24 @@
         var setRepeatsTasksList = function (newTasks) {
             self.$storage.repeatsTasksList = newTasks;
         }
+
+        var deleteRepeatsTask = function (taskId) {
+            var index = arrayObjectIndexOf(self.$storage.repeatsTasksList, '_id', taskId);
+            if (index !== -1) {
+                self.$storage.repeatsTasksList.splice(index, 1);
+            }
+        }
         
+        var replaceRepeatsTasks = function (newTasks) {
+            var index;
+            for (var i = 0; i < newTasks.length; i++) {
+                index = arrayObjectIndexOf(self.$storage.repeatsTasksList, '_id', newTasks[i]._id);
+                if (index !== -1) {
+                    self.$storage.repeatsTasksList[index] = newTasks[i];
+                }
+            }
+        }
+
         var service = {
             getTaskList: getTaskList,
             setTaskList: setTaskList,
@@ -187,7 +204,9 @@
             getTaskByTaskId: getTaskByTaskId,
             addTasksToRepeatsTasksList: addTasksToRepeatsTasksList,
             getRepeatsTasksList: getRepeatsTasksList,
-            setRepeatsTasksList: setRepeatsTasksList
+            setRepeatsTasksList: setRepeatsTasksList,
+            deleteRepeatsTask: deleteRepeatsTask,
+            replaceRepeatsTasks: replaceRepeatsTasks
         };
 
         return service;

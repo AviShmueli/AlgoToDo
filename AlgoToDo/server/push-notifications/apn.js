@@ -89,8 +89,8 @@
             console.log("send message", note);
 
             if (response.failed.length > 0) {
-                console.error("error while sending push notification to apple user: ", response.failed);
-                winston.log('error', "error while sending push notification to apple user: ", response.failed);
+                console.error("error while sending push notification to apple user: " + task.to || '', response.failed);
+                winston.log('error', "error while sending push notification to apple user: " + task.to || '', response.failed);
             } else {
                 console.log(response.sent);
             }
@@ -127,8 +127,8 @@
         apnProvider.send(note, ApnRegistrationId).then(function (response) {
 
             if (response.failed.length > 0) {
-                console.error("error while sending push notification to apple user: ", response.failed);
-                winston.log('error', "error while sending push notification to apple user: ", response.failed);
+                console.error("error while sending push notification to apple user: " + task.to || '', response.failed);
+                winston.log('error', "error while sending push notification to apple user: " + task.to || '', response.failed);
             } else {
                 console.log(response.sent);
             }

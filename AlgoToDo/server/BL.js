@@ -21,8 +21,8 @@
     BL.checkIfVerificationCodeMatch = checkIfVerificationCodeMatch;
     BL.addNewRepeatsTasks = addNewRepeatsTasks;
     BL.getUsersRepeatsTasks = getUsersRepeatsTasks;
-
-
+    BL.updateRepeatsTasks = updateRepeatsTasks;
+    BL.deleteRepeatsTasks = deleteRepeatsTasks;
 
     var ObjectID = require('mongodb').ObjectID;
     var deferred = require('deferred');
@@ -31,7 +31,7 @@
     var pushNotifications = require('./push-notifications/push-notifications');
 
 
-    function addNewTasks(tempTask) {
+    function addNewTasks(tempTask, pushToSenderAnyway) {
 
         var d = deferred();
 
@@ -91,7 +91,7 @@
 
             // if this task is not from me to me, send notification to the user
             //if (task.to._id !== task.from._id) {
-            pushTasksToUsersDevice(newTasks, recipientsIds);
+            pushTasksToUsersDevice(newTasks, recipientsIds, pushToSenderAnyway);
             //}
 
             // return the new task to the sender
@@ -206,7 +206,7 @@
                         pushUpdatetdTaskToUsersDevice(task, task.from._id);
                     }
                     if (task.status === 'inProgress') {
-                        pushTasksToUsersDevice([task], [task.to._id]);
+                        pushTasksToUsersDevice([task], [task.to._id], false);
                     }
                 }
             }
@@ -475,6 +475,51 @@
         return d.promise;
     }
 
+    function updateRepeatsTasks(tasks) {
+
+        var d = deferred();
+
+        DAL.updateRepeatsTasks(tasks).then(function () {
+            d.resolve();
+        }, function (error) {
+            d.deferred(error);
+        });
+
+        return d.promise;
+    }
+
+    function deleteRepeatsTasks(tasks) {
+
+        var d = deferred();
+
+        var tasksIds = [];
+        for (var i = 0; i < tasks.length; i++) {
+            var task = tasks[i];
+            tasksIds.push(new ObjectID(task._id));
+        }
+
+        DAL.deleteRepeatsTasks(tasksIds).then(function () {
+            d.resolve(tasksIds);
+        }, function (error) {
+            d.deferred(error);
+        });
+
+        return d.promise;
+    }
+
+    function getUsersRepeatsTasks(userId){
+    
+        var d = deferred();
+
+        DAL.getUsersRepeatsTasks(userId).then(function(results) {
+            d.resolve(results);
+        }, function(error) {
+            d.deferred(error);
+        });
+
+        return d.promise;
+    }
+
 
 
     /* ---- Private Methods --- */
@@ -493,13 +538,13 @@
         });
     }
 
-    function pushTasksToUsersDevice(tasks, recipientsIds) {
+    function pushTasksToUsersDevice(tasks, recipientsIds, pushToSenderAnyway) {
 
         // get user from DB and check if there GcmRegId or ApnRegId
         DAL.getUsersByUsersId(recipientsIds).then(function (users) {
 
             tasks.forEach(function (task, index) {
-                if (!task.to._id.equals(task.from._id)) {
+                if (pushToSenderAnyway || !task.to._id.equals(task.from._id)) {
                     var user = users.find(x => x._id.equals(task.to._id));
                     // get the number that will be set to the app icon badge
                     DAL.getUnDoneTasksCountByUserId(task.to._id).then(function (userUnDoneTaskCount) {
@@ -553,18 +598,6 @@
         return d.promise;
     }
 
-    function getUsersRepeatsTasks(userId){
-    
-        var d = deferred();
-
-        DAL.getUsersRepeatsTasks(userId).then(function(results) {
-            d.resolve(results);
-        }, function(error) {
-            d.deferred(error);
-        });
-
-        return d.promise;
-    }
 
 })(module.exports);
 

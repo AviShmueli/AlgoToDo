@@ -70,8 +70,8 @@
         }, function (err, response) {
             console.log("send message", message);
             if (err) {
-                console.error("error while sending push notification: ", err);
-                winston.log('error', "error while sending push notification: ", err);
+                console.error("error while sending push notification to user: " + task.to || '', err);
+                winston.log('error', "error while sending push notification to user: " + task.to || '', err);
             } else {
                 console.log(response);
             }
@@ -112,8 +112,8 @@
         }, function (err, response) {
             console.log("send message", message);
             if (err) {
-                console.error("error while sending push notification: ", err);
-                winston.log('error', "error while sending push notification: ", err);
+                console.error("error while sending push notification to user: " + task.to || '', err);
+                winston.log('error', "error while sending push notification to user: " + task.to || '', err);
             } else {
                 console.log(response);
             }

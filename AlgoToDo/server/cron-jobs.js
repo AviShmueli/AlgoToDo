@@ -4,11 +4,14 @@
 
     jobs.startAllJobs = startAllJobs;
     jobs.startRepeatsTasks = startRepeatsTasks;
+    jobs.restartRepeatsTasks = restartRepeatsTasks;
+    jobs.stopRepeatsTasks = stopRepeatsTasks;
 
     var CronJob = require('cron').CronJob;
     var BL = require('./BL');
     var DAL = require('./DAL');
     var logger = require('./logger');
+    var tak_job_map = {};
 
     function startAllJobs(){
         DAL.getAllRepeatsTasks().then(function(tasks){
@@ -35,7 +38,7 @@
 
                     var tasksToSend = preperTaskToSend(task);
                     
-                    BL.addNewTasks(tasksToSend).then(function(result){
+                    BL.addNewTasks(tasksToSend, true).then(function(result){
                         console.log("successfuly send repeate task");
                     }, function(error){
                         logger.log('error', error.message , error.error);                       
@@ -43,9 +46,50 @@
                 },
                 start: true 
             });
-            job.start();
+            tak_job_map[task._id] = job;
         }
         
+    }
+
+    function restartRepeatsTasks( tasks ) {
+        
+        for (var i = 0; i < tasks.length; i++) {
+            var task = tasks[i];
+            
+            var time = new Date(task.startTime);
+            var hour = time.getHours();
+            var minutes = time.getMinutes();
+            var days = task.daysRepeat.toString();
+            
+            if (tak_job_map[task._id] !== undefined) {
+                tak_job_map[task._id].stop();
+            }
+
+            var job = new CronJob({
+                cronTime: '00 ' + minutes + ' ' + hour +  ' * * ' + days, // Seconds(0-59) Minutes(0-59) Hours(0-23) Day of Month(1-31) Months(0-11) Day of Week:(0-6)
+                onTick: function() {
+                    console.log(task);
+
+                    var tasksToSend = preperTaskToSend(task);
+                    
+                    BL.addNewTasks(tasksToSend, true).then(function(result){
+                        console.log("successfuly send repeate task");
+                    }, function(error){
+                        logger.log('error', error.message , error.error);                       
+                    });
+                },
+                start: true 
+            });
+            tak_job_map[task._id] = job;
+        }
+        
+    }
+
+    function stopRepeatsTasks(tasksIds){
+        for (var i = 0; i < tasksIds.length; i++) {
+            var job = tak_job_map[tasksIds[i]];
+            job.stop();          
+        }
     }
 
     function preperTaskToSend(repeatsTask){
