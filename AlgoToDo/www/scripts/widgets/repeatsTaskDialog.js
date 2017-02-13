@@ -173,7 +173,7 @@
                         error.data = "App lost connection to the server";
                     }
                     logger.error('Error while trying to delete repeats task: ', error.data || error);
-                    $offlineHandler.addTasksToCachedDeleteRepeatsTasksList(task);
+                    $offlineHandler.addTasksToCachedDeleteRepeatsTasksList(vm.task);
                     datacontext.deleteRepeatsTask(vm.task._id);
                     updateList();
                 });

@@ -11,7 +11,8 @@
     var BL = require('./BL');
     var DAL = require('./DAL');
     var logger = require('./logger');
-    var tak_job_map = {};
+    
+    var taskJobMap = {};
 
     function startAllJobs(){
         DAL.getAllRepeatsTasks().then(function(tasks){
@@ -46,7 +47,7 @@
                 },
                 start: true 
             });
-            tak_job_map[task._id] = job;
+            taskJobMap[task._id] = job;
         }
         
     }
@@ -61,8 +62,8 @@
             var minutes = time.getMinutes();
             var days = task.daysRepeat.toString();
             
-            if (tak_job_map[task._id] !== undefined) {
-                tak_job_map[task._id].stop();
+            if (taskJobMap[task._id] !== undefined) {
+                taskJobMap[task._id].stop();
             }
 
             var job = new CronJob({
@@ -80,15 +81,16 @@
                 },
                 start: true 
             });
-            tak_job_map[task._id] = job;
+            taskJobMap[task._id] = job;
         }
         
     }
 
     function stopRepeatsTasks(tasksIds){
-        for (var i = 0; i < tasksIds.length; i++) {
-            var job = tak_job_map[tasksIds[i]];
-            job.stop();          
+        for (var i = 0; i < tasksIds.length; i++) {        
+            if (taskJobMap[tasksIds[i]] !== undefined) {
+                taskJobMap[tasksIds[i]].stop();
+            }
         }
     }
 

@@ -180,15 +180,17 @@
 
         var saveUsersNewRegistrationId = function (registrationId, user) {
             var filedToUpdate = '';
-            if (user.device.platform === 'iOS') {
+            if (user.device !== undefined && user.device.platform === 'iOS') {
                 user.ApnRegistrationId = registrationId;
                 filedToUpdate = 'ApnRegistrationId';
             }
-            if (user.device.platform === 'Android') {
+            if (user.device !== undefined && user.device.platform === 'Android') {
                 user.GcmRegistrationId = registrationId;
                 filedToUpdate = 'GcmRegistrationId';
             }
-            updateUserDetails(user._id, filedToUpdate, registrationId);
+            if (filedToUpdate !== '') {
+                updateUserDetails(user._id, filedToUpdate, registrationId);
+            }
         }
 
         var getAllCliqot = function () {

@@ -269,6 +269,7 @@
             var showVerificationCodePrompt = function () {
                 // Appending dialog to document.body to cover sidenav in docs app
                 var confirm = $mdDialog.prompt()
+                  .parent(angular.element(document.querySelector('#VerificationCodePromptContainer')))
                   .title('קוד אימות')
                   .htmlContent('<div>אנא הכנס את קוד האימות שנלשח למכשירך</div>' +
                                '<br/>'

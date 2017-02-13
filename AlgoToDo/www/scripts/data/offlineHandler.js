@@ -181,7 +181,8 @@
             addTaskToCachedTasksToUpdateList: addTaskToCachedTasksToUpdateList,
             addCommentToCachedNewCommentsList: addCommentToCachedNewCommentsList,
             addTasksToCachedNewRepeatsTasksList: addTasksToCachedNewRepeatsTasksList,
-            addTasksToCachedUpdateRepeatsTasksList: addTasksToCachedUpdateRepeatsTasksList
+            addTasksToCachedUpdateRepeatsTasksList: addTasksToCachedUpdateRepeatsTasksList,
+            addTasksToCachedDeleteRepeatsTasksList: addTasksToCachedDeleteRepeatsTasksList
         };
 
         return service;

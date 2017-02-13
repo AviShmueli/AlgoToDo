@@ -170,7 +170,8 @@
                 controllerAs: 'vm',
                 templateUrl: 'scripts/widgets/AddTaskDialog.html',
                 targetEvent: ev,
-                fullscreen: true
+                fullscreen: true,
+                clickOutsideToClose: true
             }).then(function () {
                 vm.isDialogOpen = false;
             });

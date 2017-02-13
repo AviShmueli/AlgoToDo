@@ -95,22 +95,32 @@ Or use localization with formatted constants.
 }
 ```
 
-Here is an example using node-gcm that sends the above JSON:
+Here is an example using fcm-node that sends the above JSON:
 
 ```javascript
-var gcm = require('node-gcm');
+var FCM = require('fcm-node');
 // Replace these with your own values.
 var apiKey = "replace with API key";
 var deviceID = "my device id";
-var service = new gcm.Sender(apiKey);
-var message = new gcm.Message();
-message.addData('title', {"locKey": "push_app_title"});
-message.addData('message', 'Simple non-localizable text for message!');
-// Constant with formatted params
-// message.addData('message', {"locKey": "push_message_fox", "locData": ["fox", "dog"]});
-service.send(message, { registrationTokens: [ deviceID ] }, function (err, response) {
-    if(err) console.error(err);
-    else    console.log(response);
+var fcm = new FCM(apiKey);
+
+var message = {
+    to: deviceID,
+    data: {
+        title: {"locKey": "push_app_title"},
+        message: 'Simple non-localizable text for message!'
+        // Constant with formatted params
+        // message: {"locKey": "push_message_fox", "locData": ["fox", "dog"]});
+    }
+};
+
+fcm.send(message, function(err, response){
+  if (err) {
+    console.log(err);
+    console.log("Something has gone wrong!");
+  } else {
+    console.log("Successfully sent with response: ", response);
+  }
 });
 ```
 
@@ -129,9 +139,8 @@ By default the icon displayed in your push notification will be your apps icon. 
 ```javascript
 var push = PushNotification.init({
 	"android": {
-		"senderID": "12345679"
 	},
-    browser: {
+    "browser": {
         pushServiceURL: 'http://push.api.phonegap.com/v1/push'
     },
 	"ios": {
@@ -154,11 +163,10 @@ In order to get a better user experience you can specify an alternate icon and b
 ```javascript
 var push = PushNotification.init({
 	"android": {
-		"senderID": "123456789",
 		"icon": "phonegap",
 		"iconColor": "blue"
 	},
-    browser: {
+    "browser": {
         pushServiceURL: 'http://push.api.phonegap.com/v1/push'
     },
     "ios": {
@@ -193,21 +201,31 @@ The first is the *drawables* folder in your app. This JSON sent from GCM:
 }
 ```
 
-Here is an example using node-gcm that sends the above JSON:
+Here is an example using fcm-node that sends the above JSON:
 
 ```javascript
-var gcm = require('node-gcm');
+var FCM = require('fcm-node');
 // Replace these with your own values.
 var apiKey = "replace with API key";
 var deviceID = "my device id";
-var service = new gcm.Sender(apiKey);
-var message = new gcm.Message();
-message.addData('title', 'Large Icon');
-message.addData('message', 'Loaded from drawables folder.');
-message.addData('image', 'twitter');
-service.send(message, { registrationTokens: [ deviceID ] }, function (err, response) {
-	if(err) console.error(err);
-	else 	console.log(response);
+var fcm = new FCM(apiKey);
+
+var message = {
+    to: deviceID,
+    data: {
+        title: 'Large Icon',
+        message: 'Loaded from drawables folder.',
+        image: 'twitter'
+    }
+};
+
+fcm.send(message, function(err, response){
+  if (err) {
+    console.log(err);
+    console.log("Something has gone wrong!");
+  } else {
+    console.log("Successfully sent with response: ", response);
+  }
 });
 ```
 
@@ -228,21 +246,31 @@ The second is the *assets* folder in your app. This JSON sent from GCM:
 }
 ```
 
-Here is an example using node-gcm that sends the above JSON:
+Here is an example using fcm-node that sends the above JSON:
 
 ```javascript
-var gcm = require('node-gcm');
+var FCM = require('fcm-node');
 // Replace these with your own values.
 var apiKey = "replace with API key";
 var deviceID = "my device id";
-var service = new gcm.Sender(apiKey);
-var message = new gcm.Message();
-message.addData('title', 'Large Icon');
-message.addData('message', 'Loaded from assets folder.');
-message.addData('image', 'www/image/logo.png');
-service.send(message, { registrationTokens: [ deviceID ] }, function (err, response) {
-	if(err) console.error(err);
-	else 	console.log(response);
+var fcm = new FCM(apiKey);
+
+var message = {
+    to: deviceID,
+    data: {
+        title: 'Large Icon',
+        message: 'Loaded from assets folder.',
+        image: 'www/image/logo.png'
+    }
+};
+
+fcm.send(message, function(err, response){
+  if (err) {
+    console.log(err);
+    console.log("Something has gone wrong!");
+  } else {
+    console.log("Successfully sent with response: ", response);
+  }
 });
 ```
 
@@ -264,21 +292,31 @@ The third is the remote *URL*. This JSON sent from GCM:
 }
 ```
 
-Here is an example using node-gcm that sends the above JSON:
+Here is an example using fcm-node that sends the above JSON:
 
 ```javascript
-var gcm = require('node-gcm');
+var FCM = require('fcm-node');
 // Replace these with your own values.
 var apiKey = "replace with API key";
 var deviceID = "my device id";
-var service = new gcm.Sender(apiKey);
-var message = new gcm.Message();
-message.addData('title', 'Large Icon');
-message.addData('message', 'Loaded from URL');
-message.addData('image', 'https://dl.dropboxusercontent.com/u/887989/antshot.png');
-service.send(message, { registrationTokens: [ deviceID ] }, function (err, response) {
-	if(err) console.error(err);
-	else 	console.log(response);
+var fcm = new FCM(apiKey);
+
+var message = {
+    to: deviceID,
+    data: {
+        title: 'Large Icon',
+        message: 'Loaded from URL',
+        image: 'https://dl.dropboxusercontent.com/u/887989/antshot.png'
+    }
+};
+
+fcm.send(message, function(err, response){
+  if (err) {
+    console.log(err);
+    console.log("Something has gone wrong!");
+  } else {
+    console.log("Successfully sent with response: ", response);
+  }
 });
 ```
 
@@ -339,21 +377,31 @@ In order for your your notification to play a custom sound you will need to add 
 }
 ```
 
-Here is an example using node-gcm that sends the above JSON:
+Here is an example using fcm-node that sends the above JSON:
 
 ```javascript
-var gcm = require('node-gcm');
+var FCM = require('fcm-node');
 // Replace these with your own values.
 var apiKey = "replace with API key";
 var deviceID = "my device id";
-var service = new gcm.Sender(apiKey);
-var message = new gcm.Message();
-message.addData('title', 'Sound Test');
-message.addData('message', 'Loaded res/raw');
-message.addData('soundname', 'test');
-service.send(message, { registrationTokens: [ deviceID ] }, function (err, response) {
-	if(err) console.error(err);
-	else 	console.log(response);
+var fcm = new FCM(apiKey);
+
+var message = {
+    to: deviceID,
+    data: {
+        title: 'Sound Test',
+        message: 'Loaded res/raw',
+        soundname: 'test'
+    }
+};
+
+fcm.send(message, function(err, response){
+  if (err) {
+    console.log(err);
+    console.log("Something has gone wrong!");
+  } else {
+    console.log("Successfully sent with response: ", response);
+  }
 });
 ```
 
@@ -375,20 +423,30 @@ If you want to see multiple notifications in the shade you will need to provide 
 }
 ```
 
-Here is an example using node-gcm that sends the above JSON:
+Here is an example using fcm-node that sends the above JSON:
 
 ```javascript
-var gcm = require('node-gcm');
+var FCM = require('fcm-node');
 // Replace these with your own values.
 var apiKey = "replace with API key";
 var deviceID = "my device id";
-var service = new gcm.Sender(apiKey);
-var message = new gcm.Message();
-message.addData('title', 'Test Push');
-message.addData('message', 'Push number 1');
-service.send(message, { registrationTokens: [ deviceID ] }, function (err, response) {
-	if(err) console.error(err);
-	else 	console.log(response);
+var fcm = new FCM(apiKey);
+
+var message = {
+    to: deviceID,
+    data: {
+        title: 'Test Push',
+        message: 'Push number 1'
+    }
+};
+
+fcm.send(message, function(err, response){
+  if (err) {
+    console.log(err);
+    console.log("Something has gone wrong!");
+  } else {
+    console.log("Successfully sent with response: ", response);
+  }
 });
 ```
 
@@ -404,20 +462,30 @@ Followed by:
 }
 ```
 
-Here is an example using node-gcm that sends the above JSON:
+Here is an example using fcm-node that sends the above JSON:
 
 ```javascript
-var gcm = require('node-gcm');
+var FCM = require('fcm-node');
 // Replace these with your own values.
 var apiKey = "replace with API key";
 var deviceID = "my device id";
-var service = new gcm.Sender(apiKey);
-var message = new gcm.Message();
-message.addData('title', 'Test Push');
-message.addData('message', 'Push number 2');
-service.send(message, { registrationTokens: [ deviceID ] }, function (err, response) {
-	if(err) console.error(err);
-	else 	console.log(response);
+var fcm = new FCM(apiKey);
+
+var message = {
+    to: deviceID,
+    data: {
+        title: 'Test Push',
+        message: 'Push number 2'
+    }
+};
+
+fcm.send(message, function(err, response){
+  if (err) {
+    console.log(err);
+    console.log("Something has gone wrong!");
+  } else {
+    console.log("Successfully sent with response: ", response);
+  }
 });
 ```
 
@@ -434,21 +502,31 @@ You will only see "Push number 2" in the shade. However, if you send:
 }
 ```
 
-Here is an example using node-gcm that sends the above JSON:
+Here is an example using fcm-node that sends the above JSON:
 
 ```javascript
-var gcm = require('node-gcm');
+var FCM = require('fcm-node');
 // Replace these with your own values.
 var apiKey = "replace with API key";
 var deviceID = "my device id";
-var service = new gcm.Sender(apiKey);
-var message = new gcm.Message();
-message.addData('title', 'Test Push');
-message.addData('message', 'Push number 1');
-message.addData('notId', 1);
-service.send(message, { registrationTokens: [ deviceID ] }, function (err, response) {
-	if(err) console.error(err);
-	else 	console.log(response);
+var fcm = new FCM(apiKey);
+
+var message = {
+    to: deviceID,
+    data: {
+        title: 'Test Push',
+        message: 'Push number 1',
+        notId: 1
+    }
+};
+
+fcm.send(message, function(err, response){
+  if (err) {
+    console.log(err);
+    console.log("Something has gone wrong!");
+  } else {
+    console.log("Successfully sent with response: ", response);
+  }
 });
 ```
 
@@ -465,21 +543,31 @@ and:
 }
 ```
 
-Here is an example using node-gcm that sends the above JSON:
+Here is an example using fcm-node that sends the above JSON:
 
 ```javascript
-var gcm = require('node-gcm');
+var FCM = require('fcm-node');
 // Replace these with your own values.
 var apiKey = "replace with API key";
 var deviceID = "my device id";
-var service = new gcm.Sender(apiKey);
-var message = new gcm.Message();
-message.addData('title', 'Test Push');
-message.addData('message', 'Push number 2');
-message.addData('notId', 2);
-service.send(message, { registrationTokens: [ deviceID ] }, function (err, response) {
-	if(err) console.error(err);
-	else 	console.log(response);
+var fcm = new FCM(apiKey);
+
+var message = {
+    to: deviceID,
+    data: {
+        title: 'Test Push',
+        message: 'Push number 2',
+        notId: 2
+    }
+};
+
+fcm.send(message, function(err, response){
+  if (err) {
+    console.log(err);
+    console.log("Something has gone wrong!");
+  } else {
+    console.log("Successfully sent with response: ", response);
+  }
 });
 ```
 
@@ -501,22 +589,32 @@ A better alternative to stacking your notifications is to use the inbox style to
 }
 ```
 
-Here is an example using node-gcm that sends the above JSON:
+Here is an example using fcm-node that sends the above JSON:
 
 ```javascript
-var gcm = require('node-gcm');
+var FCM = require('fcm-node');
 // Replace these with your own values.
 var apiKey = "replace with API key";
 var deviceID = "my device id";
-var service = new gcm.Sender(apiKey);
-var message = new gcm.Message();
-message.addData('title', 'My Title');
-message.addData('message', 'My first message');
-message.addData('style', 'inbox');
-message.addData('summaryText', 'There are %n% notifications');
-service.send(message, { registrationTokens: [ deviceID ] }, function (err, response) {
-	if(err) console.error(err);
-	else 	console.log(response);
+var fcm = new FCM(apiKey);
+
+var message = {
+    to: deviceID,
+    data: {
+        title: 'My Title',
+        message: 'My first message',
+        style: 'inbox',
+        summaryText: 'There are %n% notifications'
+    }
+};
+
+fcm.send(message, function(err, response){
+  if (err) {
+    console.log(err);
+    console.log("Something has gone wrong!");
+  } else {
+    console.log("Successfully sent with response: ", response);
+  }
 });
 ```
 
@@ -538,22 +636,32 @@ But, if you follow it up with subsequent notifications like:
 }
 ```
 
-Here is an example using node-gcm that sends the above JSON:
+Here is an example using fcm-node that sends the above JSON:
 
 ```javascript
-var gcm = require('node-gcm');
+var FCM = require('fcm-node');
 // Replace these with your own values.
 var apiKey = "replace with API key";
 var deviceID = "my device id";
-var service = new gcm.Sender(apiKey);
-var message = new gcm.Message();
-message.addData('title', 'My Title');
-message.addData('message', 'My second message');
-message.addData('style', 'inbox');
-message.addData('summaryText', 'There are %n% notifications');
-service.send(message, { registrationTokens: [ deviceID ] }, function (err, response) {
-	if(err) console.error(err);
-	else 	console.log(response);
+var fcm = new FCM(apiKey);
+
+var message = {
+    to: deviceID,
+    data: {
+        title: 'My Title',
+        message: 'My second message',
+        style: 'inbox',
+        summaryText: 'There are %n% notifications'
+    }
+};
+
+fcm.send(message, function(err, response){
+  if (err) {
+    console.log(err);
+    console.log("Something has gone wrong!");
+  } else {
+    console.log("Successfully sent with response: ", response);
+  }
 });
 ```
 
@@ -581,24 +689,34 @@ Your notification can include a maximum of three action buttons. If you wish to 
 }
 ```
 
-Here is an example using node-gcm that sends the above JSON:
+Here is an example using fcm-node that sends the above JSON:
 
 ```javascript
-var gcm = require('node-gcm');
+var FCM = require('fcm-node');
 // Replace these with your own values.
 var apiKey = "replace with API key";
 var deviceID = "my device id";
-var service = new gcm.Sender(apiKey);
-var message = new gcm.Message();
-message.addData('title', 'AUX Scrum');
-message.addData('message', 'Scrum: Daily touchbase @ 10am Please be on time so we can cover everything on the agenda.');
-message.addData('actions', [
-    { "icon": "emailGuests", "title": "EMAIL GUESTS", "callback": "app.emailGuests", "foreground": true},
-    { "icon": "snooze", "title": "SNOOZE", "callback": "app.snooze", "foreground": false},
-]);
-service.send(message, { registrationTokens: [ deviceID ] }, function (err, response) {
-	if(err) console.error(err);
-	else 	console.log(response);
+var fcm = new FCM(apiKey);
+
+var message = {
+    to: deviceID,
+    data: {
+        title: 'AUX Scrum',
+        message: 'Scrum: Daily touchbase @ 10am Please be on time so we can cover everything on the agenda.',
+        actions: [
+            { "icon": "emailGuests", "title": "EMAIL GUESTS", "callback": "app.emailGuests", "foreground": true},
+            { "icon": "snooze", "title": "SNOOZE", "callback": "app.snooze", "foreground": false},
+        ]
+    }
+};
+
+fcm.send(message, function(err, response){
+  if (err) {
+    console.log(err);
+    console.log("Something has gone wrong!");
+  } else {
+    console.log("Successfully sent with response: ", response);
+  }
 });
 ```
 
@@ -606,7 +724,7 @@ This will produce the following notification in your tray:
 
 ![action_combo](https://cloud.githubusercontent.com/assets/353180/9313435/02554d2a-44f1-11e5-8cd9-0aadd1e02b18.png)
 
-If your users clicks on the main body of the notification your app will be opened. However if they click on either of the action buttons the app will open (or start) and the specified JavaScript callback will be executed. In this case it is `app.emailGuests` and `app.snooze` respectively. If you set the `foreground` property to `true` the app will be brought to the front, if `foreground` is `false` then the callback is run without the app being brought to the foreground.
+If your user clicks on the main body of the notification your app will be opened. However if they click on either of the action buttons the app will open (or start) and the specified JavaScript callback will be executed if there is a function defined, and if there isn't an event will be emitted with the callback name. In this case it is `app.emailGuests` and `app.snooze` respectively. If you set the `foreground` property to `true` the app will be brought to the front, if `foreground` is `false` then the callback is run without the app being brought to the foreground.
 
 ### In Line Replies
 
@@ -628,28 +746,38 @@ Your notification can include action buttons. If you wish to include an icon alo
 }
 ```
 
-Here is an example using node-gcm that sends the above JSON:
+Here is an example using fcm-node that sends the above JSON:
 
 ```javascript
-var gcm = require('node-gcm');
+var FCM = require('fcm-node');
 // Replace these with your own values.
 var apiKey = "replace with API key";
 var deviceID = "my device id";
-var service = new gcm.Sender(apiKey);
-var message = new gcm.Message();
-message.addData('title', 'AUX Scrum');
-message.addData('message', 'Scrum: Daily touchbase @ 10am Please be on time so we can cover everything on the agenda.');
-message.addData('actions', [
-    { "icon": "emailGuests", "title": "EMAIL GUESTS", "callback": "app.emailGuests", "foreground": false, "inline": true},
-    { "icon": "snooze", "title": "SNOOZE", "callback": "app.snooze", "foreground": false},
-]);
-service.send(message, { registrationTokens: [ deviceID ] }, function (err, response) {
-	if(err) console.error(err);
-	else 	console.log(response);
+var fcm = new FCM(apiKey);
+
+var message = {
+    to: deviceID,
+    data: {
+        title: 'AUX Scrum',
+        message: 'Scrum: Daily touchbase @ 10am Please be on time so we can cover everything on the agenda.',
+        actions: [
+            { "icon": "emailGuests", "title": "EMAIL GUESTS", "callback": "app.emailGuests", "foreground": false, "inline": true},
+            { "icon": "snooze", "title": "SNOOZE", "callback": "app.snooze", "foreground": false},
+        ]
+    }
+};
+
+fcm.send(message, function(err, response){
+  if (err) {
+    console.log(err);
+    console.log("Something has gone wrong!");
+  } else {
+    console.log("Successfully sent with response: ", response);
+  }
 });
 ```
 
-On Android M and earlier the action buttons will work exactly the same as before but on Android N and greater when the user clicks on the Email Guests button you will see the following:
+On Android N and greater when the user clicks on the Email Guests button they will see the following:
 
 ![inline_reply](https://cloud.githubusercontent.com/assets/353180/17107608/f35c208e-525d-11e6-94de-a3590c6f500d.png)
 
@@ -685,13 +813,15 @@ Then your app's `on('notification')` event handler will be called without the ap
 
 and the text data that the user typed would be located in `data.additionalData.inlineReply`.
 
+**Note:** On Android M and earlier the above in line behavior is not supported. As a fallback when `inline` is set to `true` the `foreground` setting will be changed to the default `true` setting. This allows your app to be launched from a closed state into the foreground where any behavior desired as a result of the user selecting the in line reply action button can be handled through the associated `callback`.
+
 #### Attributes
 
 Attribute | Type | Default | Description
 --------- | ---- | ------- | -----------
 `icon` | `string` | | Optional. The name of a drawable resource to use as the small-icon. The name should not include the extension.
 `title` | `string` | | Required. The label to display for the action button.
-`callback` | `string` | | Required. The function to be executed when the action button is pressed. The function must be accessible from the global namespace. If you provide `myCallback` then it amounts to calling `window.myCallback`. If you provide `app.myCallback` then there needs to be an object call `app`, with a function called `myCallback` accessible from the global namespace, i.e. `window.app.myCallback`.
+`callback` | `string` | | Required. The function to be executed or the event to be emitted when the action button is pressed. The function must be accessible from the global namespace. If you provide `myCallback` then it amounts to calling `window.myCallback`. If you provide `app.myCallback` then there needs to be an object call `app`, with a function called `myCallback` accessible from the global namespace, i.e. `window.app.myCallback`. If there isn't a function with the specified name an event will be emitted with the callback name.
 `foreground` | `boolean` | `true` | Optional. Whether or not to bring the app to the foreground when the action button is pressed.
 `inline` | `boolean` | `false` | Optional. Whether or not to provide a quick reply text field to the user when the button is clicked.
 
@@ -710,21 +840,31 @@ You can use a Led notifcation and choose the color of it. Just add a `ledColor` 
 }
 ```
 
-Here is an example using node-gcm that sends the above JSON:
+Here is an example using fcm-node that sends the above JSON:
 
 ```javascript
-var gcm = require('node-gcm');
+var FCM = require('fcm-node');
 // Replace these with your own values.
 var apiKey = "replace with API key";
 var deviceID = "my device id";
-var service = new gcm.Sender(apiKey);
-var message = new gcm.Message();
-message.addData('title', 'Green LED');
-message.addData('message', 'This is my message with a Green LED');
-message.addData('ledColor', [0, 0, 255, 0]);
-service.send(message, { registrationTokens: [ deviceID ] }, function (err, response) {
-	if(err) console.error(err);
-	else 	console.log(response);
+var fcm = new FCM(apiKey);
+
+var message = {
+    to: deviceID,
+    data: {
+        title: 'Green LED',
+        message: 'This is my message with a Green LED',
+        ledColor: [0, 0, 255, 0]
+    }
+};
+
+fcm.send(message, function(err, response){
+  if (err) {
+    console.log(err);
+    console.log("Something has gone wrong!");
+  } else {
+    console.log("Successfully sent with response: ", response);
+  }
 });
 ```
 
@@ -743,21 +883,31 @@ You can set a Vibration Pattern for your notifications. Just add a `vibrationPat
 }
 ```
 
-Here is an example using node-gcm that sends the above JSON:
+Here is an example using fcm-node that sends the above JSON:
 
 ```javascript
-var gcm = require('node-gcm');
+var FCM = require('fcm-node');
 // Replace these with your own values.
 var apiKey = "replace with API key";
 var deviceID = "my device id";
-var service = new gcm.Sender(apiKey);
-var message = new gcm.Message();
-message.addData('title', 'Vibration Pattern');
-message.addData('message', 'Device should wait for 2 seconds, vibrate for 1 second then be silent for 500 ms then vibrate for 500 ms');
-message.addData('vibrationPattern', [2000, 1000, 500, 500]);
-service.send(message, { registrationTokens: [ deviceID ] }, function (err, response) {
-	if(err) console.error(err);
-	else 	console.log(response);
+var fcm = new FCM(apiKey);
+
+var message = {
+    to: deviceID,
+    data: {
+        title: 'Vibration Pattern',
+        message: 'Device should wait for 2 seconds, vibrate for 1 second then be silent for 500 ms then vibrate for 500 ms',
+        vibrationPattern: [2000, 1000, 500, 500]
+    }
+};
+
+fcm.send(message, function(err, response){
+  if (err) {
+    console.log(err);
+    console.log("Something has gone wrong!");
+  } else {
+    console.log("Successfully sent with response: ", response);
+  }
 });
 ```
 
@@ -776,21 +926,31 @@ You can set a priority parameter for your notifications. This priority value det
 }
 ```
 
-Here is an example using node-gcm that sends the above JSON:
+Here is an example using fcm-node that sends the above JSON:
 
 ```javascript
-var gcm = require('node-gcm');
+var FCM = require('fcm-node');
 // Replace these with your own values.
 var apiKey = "replace with API key";
 var deviceID = "my device id";
-var service = new gcm.Sender(apiKey);
-var message = new gcm.Message();
-message.addData('title', 'This is a maximum priority Notification');
-message.addData('message', 'This notification should appear in front of all others');
-message.addData('priority', 2);
-service.send(message, { registrationTokens: [ deviceID ] }, function (err, response) {
-	if(err) console.error(err);
-	else 	console.log(response);
+var fcm = new FCM(apiKey);
+
+var message = {
+    to: deviceID,
+    data: {
+        title: 'This is a maximum priority Notification',
+        message: 'This notification should appear in front of all others',
+        priority: 2
+    }
+};
+
+fcm.send(message, function(err, response){
+  if (err) {
+    console.log(err);
+    console.log("Something has gone wrong!");
+  } else {
+    console.log("Successfully sent with response: ", response);
+  }
 });
 ```
 
@@ -813,23 +973,32 @@ Perhaps you want to include a large picture in the notification that you are sen
 }
 ```
 
-Here is an example using node-gcm that sends the above JSON:
+Here is an example using fcm-node that sends the above JSON:
 
 ```javascript
-var gcm = require('node-gcm');
+var FCM = require('fcm-node');
 // Replace these with your own values.
 var apiKey = "replace with API key";
 var deviceID = "my device id";
-var service = new gcm.Sender(apiKey);
-var message = new gcm.Message();
-message.addData('title', 'Big Picture');
-message.addData('message', 'This is my big picture message');
-message.addData('style', 'picture');
-message.addData('picture', 'http://36.media.tumblr.com/c066cc2238103856c9ac506faa6f3bc2/tumblr_nmstmqtuo81tssmyno1_1280.jpg');
-message.addData('summaryText', 'The internet is built on cat pictures');
-service.send(message, { registrationTokens: [ deviceID ] }, function (err, response) {
-	if(err) console.error(err);
-	else 	console.log(response);
+var fcm = new FCM(apiKey);
+
+var message = {
+    to: deviceID,
+    data: {
+        title: 'Big Picture',
+        message: 'This is my big picture message',
+        picture: 'http://36.media.tumblr.com/c066cc2238103856c9ac506faa6f3bc2/tumblr_nmstmqtuo81tssmyno1_1280.jpg',
+        summaryText: 'The internet is built on cat pictures'
+    }
+};
+
+fcm.send(message, function(err, response){
+  if (err) {
+    console.log(err);
+    console.log("Something has gone wrong!");
+  } else {
+    console.log("Successfully sent with response: ", response);
+  }
 });
 ```
 
@@ -857,22 +1026,32 @@ First the JSON you send from GCM will need to include `"content-available": "1"`
 }
 ```
 
-Here is an example using node-gcm that sends the above JSON:
+Here is an example using fcm-node that sends the above JSON:
 
 ```javascript
-var gcm = require('node-gcm');
+var FCM = require('fcm-node');
 // Replace these with your own values.
 var apiKey = "replace with API key";
 var deviceID = "my device id";
-var service = new gcm.Sender(apiKey);
-var message = new gcm.Message();
-message.addData('title', 'Test Push');
-message.addData('message', 'Push number 1');
-message.addData('info', 'super secret info');
-message.addData('content-available', '1');
-service.send(message, { registrationTokens: [ deviceID ] }, function (err, response) {
-	if(err) console.error(err);
-	else 	console.log(response);
+var fcm = new FCM(apiKey);
+
+var message = {
+    to: deviceID,
+    data: {
+        title: 'Test Push',
+        message: 'Push number 1',
+        info: 'super secret info',
+        content-available: '1'
+    }
+};
+
+fcm.send(message, function(err, response){
+  if (err) {
+    console.log(err);
+    console.log("Something has gone wrong!");
+  } else {
+    console.log("Successfully sent with response: ", response);
+  }
 });
 ```
 
@@ -889,20 +1068,30 @@ or if you want the payload to be delivered directly to your app without anything
 }
 ```
 
-Here is an example using node-gcm that sends the above JSON:
+Here is an example using fcm-node that sends the above JSON:
 
 ```javascript
-var gcm = require('node-gcm');
+var FCM = require('fcm-node');
 // Replace these with your own values.
 var apiKey = "replace with API key";
 var deviceID = "my device id";
-var service = new gcm.Sender(apiKey);
-var message = new gcm.Message();
-message.addData('info', 'super secret info');
-message.addData('content-available', '1');
-service.send(message, { registrationTokens: [ deviceID ] }, function (err, response) {
-	if(err) console.error(err);
-	else 	console.log(response);
+var fcm = new FCM(apiKey);
+
+var message = {
+    to: deviceID,
+    data: {
+        info: 'super secret info',
+        content-available: '1'
+    }
+};
+
+fcm.send(message, function(err, response){
+  if (err) {
+    console.log(err);
+    console.log("Something has gone wrong!");
+  } else {
+    console.log("Successfully sent with response: ", response);
+  }
 });
 ```
 
@@ -949,6 +1138,35 @@ These phones have a particular quirk that when the app is force closed that you 
 
 ### Application force closed
 
+In order to take advantage of this feature you will need to be using cordova-android 6.0.0 or higher. In order to check if the change has been properly applied look at `platforms/android/**/MainActivity.java`. You should see an `onCreate` method that looks like this:
+
+```java
+@Override
+public void onCreate(Bundle savedInstanceState)
+{
+    super.onCreate(savedInstanceState);
+
+    // enable Cordova apps to be started in the background
+    Bundle extras = getIntent().getExtras();
+    if (extras != null && extras.getBoolean("cdvStartInBackground", false)) {
+        moveTaskToBack(true);
+    }
+
+    // Set by <content src="index.html" /> in config.xml
+    loadUrl(launchUrl);
+}
+```
+
+If you don't see the `if` statement that checks for the appearance of `cdvStartInBackground` you will probably need to do:
+
+```
+phonegap platform rm android
+phonegap platform add android
+phonegap build android
+```
+
+This should add the correct code to the `MainActivity` class.
+
 If you add `force-start: 1` to the data payload the application will be restarted in background even if it was force closed.
 
 ```javascript
@@ -962,21 +1180,31 @@ If you add `force-start: 1` to the data payload the application will be restarte
 }
 ```
 
-Here is an example using node-gcm that sends the above JSON:
+Here is an example using fcm-node that sends the above JSON:
 
 ```javascript
-var gcm = require('node-gcm');
+var FCM = require('fcm-node');
 // Replace these with your own values.
 var apiKey = "replace with API key";
 var deviceID = "my device id";
-var service = new gcm.Sender(apiKey);
-var message = new gcm.Message();
-message.addData('title', 'Force Start');
-message.addData('message', 'This notification should restart the app');
-message.addData('force-start', 1);
-service.send(message, { registrationTokens: [ deviceID ] }, function (err, response) {
-	if(err) console.error(err);
-	else 	console.log(response);
+var fcm = new FCM(apiKey);
+
+var message = {
+    to: deviceID,
+    data: {
+        title: 'Force Start',
+        message: 'This notification should restart the app',
+        force-start: '1'
+    }
+};
+
+fcm.send(message, function(err, response){
+  if (err) {
+    console.log(err);
+    console.log("Something has gone wrong!");
+  } else {
+    console.log("Successfully sent with response: ", response);
+  }
 });
 ```
 
@@ -995,21 +1223,31 @@ You can set a visibility parameter for your notifications. Just add a `visibilit
 }
 ```
 
-Here is an example using node-gcm that sends the above JSON:
+Here is an example using fcm-node that sends the above JSON:
 
 ```javascript
-var gcm = require('node-gcm');
+var FCM = require('fcm-node');
 // Replace these with your own values.
 var apiKey = "replace with API key";
 var deviceID = "my device id";
-var service = new gcm.Sender(apiKey);
-var message = new gcm.Message();
-message.addData('title', 'This is a public Notification');
-message.addData('message', 'You should be able to read this notification on your lock screen');
-message.addData('visibility', 1);
-service.send(message, { registrationTokens: [ deviceID ] }, function (err, response) {
-	if(err) console.error(err);
-	else 	console.log(response);
+var fcm = new FCM(apiKey);
+
+var message = {
+    to: deviceID,
+    data: {
+        title: 'This is a public Notification',
+        message: 'You should be able to read this notification on your lock screen',
+        visibility: 1
+    }
+};
+
+fcm.send(message, function(err, response){
+  if (err) {
+    console.log(err);
+    console.log("Something has gone wrong!");
+  } else {
+    console.log("Successfully sent with response: ", response);
+  }
 });
 ```
 
@@ -1030,21 +1268,31 @@ In order to set the badge number you will need to include the `badge` property i
 }
 ```
 
-Here is an example using node-gcm that sends the above JSON:
+Here is an example using fcm-node that sends the above JSON:
 
 ```javascript
-var gcm = require('node-gcm');
+var FCM = require('fcm-node');
 // Replace these with your own values.
 var apiKey = "replace with API key";
 var deviceID = "my device id";
-var service = new gcm.Sender(apiKey);
-var message = new gcm.Message();
-message.addData('title', 'Badge Test');
-message.addData('message', 'Badges, we don\'t need no stinking badges');
-message.addData('badge', 7);
-service.send(message, { registrationTokens: [ deviceID ] }, function (err, response) {
-	if(err) console.error(err);
-	else 	console.log(response);
+var fcm = new FCM(apiKey);
+
+var message = {
+    to: deviceID,
+    data: {
+        title: 'Badge Test',
+        message: 'Badges, we don\'t need no stinking badges',
+        badge: 7
+    }
+};
+
+fcm.send(message, function(err, response){
+  if (err) {
+    console.log(err);
+    console.log("Something has gone wrong!");
+  } else {
+    console.log("Successfully sent with response: ", response);
+  }
 });
 ```
 
@@ -1114,8 +1362,7 @@ If you want the default sound to play upon receipt of push use this payload:
 
 On iOS if you want your `on('notification')` event handler to be called when your app is in the background you will need to do a few things.
 
-First the JSON you send from APNS will need to include `"content-available": 1` to the `aps` object. The `"content-available": 1` property in your push message is a signal to iOS to wake up your app and give it up to 30 seconds of background processing. If do not want this type of behaviour just omit `"content-available": 1` from your push data.
-
+First the JSON you send from APNS will need to include `"content-available": 1` to the `aps` object. The `"content-available": 1` property in your push message is a signal to iOS to wake up your app and give it up to 30 seconds of background processing. If do not want this type of behaviour just omit `"content-available": 1` from your push data. As well you *should* set a `notId` property in the root of payload object. This is the parameter you pass to the `finish` method in order to tell the operating system that the processing of the push event is done.
 
 For instance the following JSON:
 
@@ -1124,7 +1371,8 @@ For instance the following JSON:
 	"aps": {
 		"alert": "Test background push",
 		"content-available": 1
-	}
+	},
+  "notId": 1 // unique ID you generate
 }
 ```
 
@@ -1140,7 +1388,8 @@ However if you want your `on('notification')` event handler called but no notifi
 		"data": "Test silent background push",
 		"moredata": "Do more stuff",
 		"content-available": 1
-	}
+	},
+  "notId": 2 // unique ID you generate
 }
 ```
 
@@ -1168,7 +1417,9 @@ push.on('notification', function(data) {
 	// then call finish to let the OS know we are done
 	push.finish(function() {
 		console.log("processing of push data is finished");
-	});
+	}, function() {
+    console.log("something went wrong with push.finish for ID = " + data.additionalData.notId)
+  }, data.additionalData.notId);
 });
 ```
 
@@ -1296,7 +1547,7 @@ but in order for the same `notification` event you would need to send your push 
     "registration_ids": ["my device id"],
     "notification": {
         "title": "My Title",
-    	"body": "My message"        
+    	"body": "My message"
     }
     "data": {
     	"key1": "data 1",
@@ -1316,7 +1567,7 @@ For some users of the plugin they are unable to get messages sent via GCM to sho
     "registration_ids": ["my device id"],
     "notification": {
         "title": "My Title",
-    	"body": "My message"        
+    	"body": "My message"
     },
     "priority": "high"
 }
