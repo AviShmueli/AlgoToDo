@@ -19,7 +19,7 @@
             }
         };
 
-        function sidenavController($scope, device, cordovaPlugins, $location) {
+        function sidenavController($scope, device, cordovaPlugins, $location, $mdSidenav) {
             var vm = this;
 
             vm.imagesPath = $scope.imagesPath;
@@ -50,6 +50,10 @@
 
             vm.rateApp = function () {
                 cordovaPlugins.rateApp();
+            }
+
+            vm.closeSidenav = function () {
+                $mdSidenav("left").close();
             }
 
             vm.admin = [{
