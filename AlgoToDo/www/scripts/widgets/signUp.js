@@ -51,7 +51,7 @@
             var user = datacontext.getUserFromLocalStorage();
             if (user !== undefined) {
                 //window.location = '#/';
-                $location.path('/');
+                $location.path('/tasksList');
             }
 
             var signUp = function () {
@@ -74,7 +74,7 @@
                                         if (result.data === 'ok') {
                                             datacontext.saveUserToLocalStorage(response.data);
                                             //window.location = '#/';
-                                            $location.path('/');
+                                            $location.path('/tasksList');
                                         }
                                         else {
                                             showVerificationFailedAlert();
@@ -96,7 +96,7 @@
                                     if (result.data === 'ok') {
                                         datacontext.saveUserToLocalStorage(response.data);
                                         //window.location = '#/';
-                                        $location.path('/');
+                                        $location.path('/tasksList');
                                     }
                                     else {
                                         showVerificationFailedAlert();
@@ -167,7 +167,7 @@
                                             if (result.data === 'ok') {
                                                 datacontext.saveUserToLocalStorage(user);
                                                 //window.location = '#/';
-                                                $location.path('/');
+                                                $location.path('/tasksList');
                                             }
                                             else {
                                                 showVerificationFailedAlert();
@@ -352,10 +352,6 @@
                     $mdDialog.hide(answer);
                 };
             }
-
-            document.getElementById('Cube_loadder').style.display = "none";
-            document.getElementById('canvas_loadder').style.display = "none";
-
  
         }
 

@@ -23,6 +23,8 @@
     BL.getUsersRepeatsTasks = getUsersRepeatsTasks;
     BL.updateRepeatsTasks = updateRepeatsTasks;
     BL.deleteRepeatsTasks = deleteRepeatsTasks;
+    BL.getTasksInProgress = getTasksInProgress;
+    BL.getDoneTasks = getDoneTasks;
 
     var ObjectID = require('mongodb').ObjectID;
     var deferred = require('deferred');
@@ -293,6 +295,32 @@
         var d = deferred();
 
         DAL.getAllUserTasks(userId).then(function (result) {
+            d.resolve(result);
+        }, function (error) {
+            d.deferred(error);
+        });
+
+        return d.promise;
+    }
+
+    function getDoneTasks(userId, page) {
+
+        var d = deferred();
+
+        DAL.getDoneTasks(userId, page).then(function (result) {
+            d.resolve(result);
+        }, function (error) {
+            d.deferred(error);
+        });
+
+        return d.promise;
+    }
+
+    function getTasksInProgress(userId) {
+
+        var d = deferred();
+
+        DAL.getTasksInProgress(userId).then(function (result) {
             d.resolve(result);
         }, function (error) {
             d.deferred(error);

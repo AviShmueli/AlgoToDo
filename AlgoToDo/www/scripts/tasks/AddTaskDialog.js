@@ -2,7 +2,7 @@
     'use strict';
 
     angular
-        .module('app.widgets')
+        .module('app.tasks')
         .controller('AddTaskDialogController', AddTaskDialogController);
 
     AddTaskDialogController.$inject = [
@@ -125,7 +125,7 @@
 
         var saveNewTask = function (taskListToAdd) {
             DAL.saveNewTasks(taskListToAdd).then(function (response) {
-                logger.toast('המשימה נשלחה בהצלחה!', 1000);
+                logger.toast('המשימה נשלחה בהצלחה!', 700);
                 logger.info('task/s added sucsessfuly', response.data);
                 addTasksAndCloseDialog(response.data);
             }, function (error) {

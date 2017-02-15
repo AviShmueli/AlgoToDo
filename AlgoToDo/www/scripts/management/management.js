@@ -17,9 +17,6 @@
         var vm = this;
 
         angular.element(document.querySelectorAll('html')).removeClass("hight-auto");
-        document.getElementById('Cube_loadder').style.display = "none";
-        document.getElementById('canvas_loadder').style.display = "none";
-
         
         vm.selected = [];
         vm.totalTaskCount = 0;
@@ -154,7 +151,7 @@
 
         vm.goBack = function () {
             //window.location = '#/';
-            $location.path('/');
+            $location.path('/tasksList');
         }
 
         vm.showTasksFilter = $mdMedia('gt-sm');

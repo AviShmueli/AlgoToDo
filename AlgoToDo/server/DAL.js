@@ -27,6 +27,8 @@
     DAL.getUsersRepeatsTasks = getUsersRepeatsTasks;
     DAL.updateRepeatsTasks = updateRepeatsTasks;
     DAL.deleteRepeatsTasks = deleteRepeatsTasks;
+    DAL.getDoneTasks = getDoneTasks;
+    DAL.getTasksInProgress = getTasksInProgress;
 
     var deferred = require('deferred');
     var mongodb = require('mongodb').MongoClient;
@@ -451,6 +453,76 @@
                 if (err) {
                     var errorObj = {
                         message: "error while trying to get all Tasks:",
+                        error: err
+                    };
+                    mongo.db.close();
+                    d.reject(errorObj);
+                }
+
+                mongo.db.close();
+                d.resolve(result);
+            });
+        });
+
+        return d.promise;
+    }
+
+    function getTasksInProgress(userId) {
+
+        var d = deferred();
+
+        getCollection('tasks').then(function (mongo) {
+
+            mongo.collection.find({
+                $or: [{
+                    'from._id': new ObjectID(userId)
+                }, {
+                    'to._id': new ObjectID(userId)
+                }],
+                status: 'inProgress'
+            }, {
+                "sort": ['createTime', 'asc']
+            }).toArray(function (err, result) {
+                if (err) {
+                    var errorObj = {
+                        message: "error while trying to get all inProgress Tasks:",
+                        error: err
+                    };
+                    mongo.db.close();
+                    d.reject(errorObj);
+                }
+
+                mongo.db.close();
+                d.resolve(result);
+            });
+        });
+
+        return d.promise;
+    }
+
+    function getDoneTasks(userId, page) {
+
+        var d = deferred();
+
+        getCollection('tasks').then(function (mongo) {
+
+            mongo.collection.find({
+                /*$or: [{
+                    'from._id': new ObjectID(userId)
+                }, {
+                    'to._id': new ObjectID(userId)
+                }],*/
+                'from._id': new ObjectID(userId),
+                status: 'done'
+            }, {
+                skip: parseInt(page),
+                limit: 20
+            }).sort({
+                doneTime: -1
+            }).toArray(function (err, result) {
+                if (err) {
+                    var errorObj = {
+                        message: "error while trying to get all Done Tasks:",
                         error: err
                     };
                     mongo.db.close();

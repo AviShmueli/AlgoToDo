@@ -150,10 +150,32 @@ app.get('/TaskManeger/isUserExist', function (req, res) {
 });
 
 app.get('/TaskManeger/getTasks', function (req, res) {
-    
-    var userId = req.query.userId;
 
     BL.getAllUserTasks(req.query.userId).then(function(result) {
+        res.send(result);   
+    }, function(error) {
+        winston.log('error', error.message , error.error);
+        res.status(500).send(error); 
+    });
+
+});
+
+app.get('/TaskManeger/getTasksInProgress', function (req, res) {
+
+    BL.getTasksInProgress(req.query.userId).then(function(result) {
+        res.send(result);   
+    }, function(error) {
+        winston.log('error', error.message , error.error);
+        res.status(500).send(error); 
+    });
+
+});
+
+app.get('/TaskManeger/getDoneTasks', function (req, res) {
+    var userId = req.query.userId;
+    var page = req.query.page || 0;
+
+    BL.getDoneTasks(userId, page).then(function(result) {
         res.send(result);   
     }, function(error) {
         winston.log('error', error.message , error.error);

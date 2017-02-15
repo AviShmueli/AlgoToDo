@@ -21,8 +21,6 @@
         vm.repeatsTasks = datacontext.getRepeatsTasksList();
 
         angular.element(document.querySelectorAll('html')).removeClass("hight-auto");
-        document.getElementById('Cube_loadder').style.display = "none";
-        document.getElementById('canvas_loadder').style.display = "none";
 
         DAL.getUsersRepeatsTasks(vm.user._id).then(function (response) {
             vm.repeatsTasks = response.data;
@@ -60,7 +58,7 @@
         vm.descriptionTextLength = function () { return Math.floor((window.innerWidth - 70 - 16 - 40 - 16 - 8) / 4) };
 
         vm.goBack = function () {
-            $location.path('/');
+            $location.path('/tasksList');
         }
 
         vm.editTask = function (task, ev) {
@@ -68,7 +66,7 @@
             $mdDialog.show({
                 controller: 'repeatsTaskDialog',
                 controllerAs: 'vm',
-                templateUrl: 'scripts/widgets/repeatsTaskDialog.html',
+                templateUrl: 'scripts/tasks/repeatsTaskDialog.html',
                 targetEvent: ev,
                 fullscreen: true,
                 locals: {
@@ -94,7 +92,7 @@
             $mdDialog.show({
                 controller: 'repeatsTaskDialog',
                 controllerAs: 'vm',
-                templateUrl: 'scripts/widgets/repeatsTaskDialog.html',
+                templateUrl: 'scripts/tasks/repeatsTaskDialog.html',
                 targetEvent: ev,
                 fullscreen: true,
                 locals: {

@@ -36,11 +36,42 @@
 
             return $http(req);
         };
+
+        var getTasksInProgress = function () {
+            var req = {
+                method: 'GET',
+                url: appConfig.appDomain + '/TaskManeger/getTasksInProgress',
+                params: {
+                    userId: datacontext.getUserFromLocalStorage()._id
+                }
+            };
+
+            return $http(req);
+        };
+
+        var getDoneTasks = function (page) {
+            var req = {
+                method: 'GET',
+                url: appConfig.appDomain + '/TaskManeger/getDoneTasks',
+                params: {
+                    userId: datacontext.getUserFromLocalStorage()._id,
+                    page: page
+                }
+            };
+
+            return $http(req);
+        };
         
         var reloadAllTasks = function () {
-            if (datacontext.getUserFromLocalStorage() !== undefined) {
-                getTasks().then(function (response) {
+            if (datacontext.getUserFromLocalStorage() !== undefined) {                
+                getTasksInProgress().then(function (response) {
+                    
                     datacontext.setTaskList(response.data);
+                    datacontext.setMyTaskCount();
+
+                    getDoneTasks().then(function (_response) {
+                        datacontext.pushTasksToTasksList(_response.data);
+                    });
                 });
             }
         };
@@ -347,7 +378,9 @@
             addNewRepeatsTasks: addNewRepeatsTasks,
             getUsersRepeatsTasks: getUsersRepeatsTasks,
             updateRepeatsTasks: updateRepeatsTasks,
-            deleteRepeatsTasks: deleteRepeatsTasks
+            deleteRepeatsTasks: deleteRepeatsTasks,
+            getDoneTasks: getDoneTasks,
+            getTasksInProgress: getTasksInProgress
         };
 
         return service;

@@ -2,7 +2,7 @@
     'use strict';
 
     angular
-        .module('app.widgets')
+        .module('app.tasks')
         .controller('repeatsTaskDialog', repeatsTaskDialog);
 
     function repeatsTaskDialog($scope, taskToEdit, updateList, $mdDialog, datacontext, $mdMedia, $q, logger,

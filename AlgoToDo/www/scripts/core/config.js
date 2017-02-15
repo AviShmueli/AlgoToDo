@@ -31,6 +31,9 @@
 
             $routeProvider.
               when('/', {
+                  templateUrl: 'scripts/widgets/landingPage.html'
+              })
+              .when('/tasksList', {
                   templateUrl: 'scripts/tasks/tasksList.html'
               })
               .when('/task/:taskId', {
@@ -46,7 +49,7 @@
                   templateUrl: 'scripts/tasks/repeatsTasks.html'
                })
               .otherwise({
-                  templateUrl: 'scripts/tasks/tasksList.html'
+                  templateUrl: 'scripts/widgets/landingPage.html'
               });
 
             document.addEventListener("deviceready", function () {

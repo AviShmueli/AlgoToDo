@@ -39,7 +39,7 @@
         };
 
         var pushTasksToTasksList = function (tasks) {
-            self.$storage.tasksList = self.$storage.tasksList.concat(tasks);
+            self.$storage.tasksList = getTaskList().concat(tasks);
         };
         
         var replaceTask = function (task) {
