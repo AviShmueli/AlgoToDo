@@ -28,9 +28,13 @@
             vm.user = {};
             vm.AllCliqot = [];
             vm.selectedCliqa;
+            
 
-            DAL.getAllCliqot().then(function (allCliqot){
+            DAL.getAllCliqot().then(function (allCliqot) {
+                alert(allCliqot.data);
                 vm.AllCliqot = allCliqot.data;
+            }, function (error) {
+                alert(JSON.stringify(error));
             });
             vm.imagesPath = device.getImagesPath();
 
@@ -42,7 +46,7 @@
                 if (vm.inProgress === false) {
                     vm.inProgress = true;
 
-                    vm.user.cliqot = [vm.selectedCliqa];
+                    vm.user.cliqot = [vm.selectedCliqa] || vm.allCliqot[1] || {};
 
                     signUp();
                 }

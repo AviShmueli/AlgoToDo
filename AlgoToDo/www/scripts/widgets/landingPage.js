@@ -5,14 +5,21 @@
         .module('app.widgets')
         .controller('landingPageCtrl', landingPageCtrl)
 
-    landingPageCtrl.$inject = ['$scope', 'datacontext', 'logger', 'cordovaPlugins', 'pushNotifications',
+    landingPageCtrl.$inject = ['$scope', 'datacontext', 'logger', 'pushNotifications',
                           'device', 'DAL', '$location'];
 
-    function landingPageCtrl($scope, datacontext, logger, cordovaPlugins, pushNotifications,
+    function landingPageCtrl($scope, datacontext, logger, pushNotifications,
                         device, DAL, $location) {
         var vm = this;
 
         vm.screenHeight = window.innerHeight;
+
+        DAL.getAllCliqot().then(function (allCliqot) {
+            alert(allCliqot.data);
+            vm.AllCliqot = allCliqot.data;
+        }, function (error) {
+            alert(JSON.stringify(error));
+        });
 
         var login = function () {
 

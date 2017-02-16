@@ -276,9 +276,9 @@
 
         DAL.checkIfUserExist(query).then(function (user) {
             if (user === null) {
-                d.resolve('');
+                d.resolve(''); 
             } else {
-                if (user.type !== 'apple-tester') {
+                if (user.type !== 'apple-tester' && user.type !== 'admin') {
                     sendVerificationCodeToUser(user);
                 }
                 d.resolve(user);

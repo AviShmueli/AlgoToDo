@@ -39,9 +39,6 @@
         "cordova-plugin-vibration": {
             "PACKAGE_NAME": "com.algotodo.app"
         },
-        "cordova-plugin-whitelist": {
-            "PACKAGE_NAME": "com.algotodo.app"
-        },
         "cordova-plugin-x-toast": {
             "PACKAGE_NAME": "com.algotodo.app"
         },
@@ -58,6 +55,9 @@
             "PACKAGE_NAME": "com.algotodo.app"
         },
         "cordova-plugin-apprate": {
+            "PACKAGE_NAME": "com.algotodo.app"
+        },
+        "cordova-plugin-whitelist": {
             "PACKAGE_NAME": "com.algotodo.app"
         }
     },
