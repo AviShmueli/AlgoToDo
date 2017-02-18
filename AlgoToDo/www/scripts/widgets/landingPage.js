@@ -6,10 +6,10 @@
         .controller('landingPageCtrl', landingPageCtrl);
 
     landingPageCtrl.$inject = ['$scope', 'datacontext', 'logger', 'pushNotifications',
-                          'device', 'DAL', '$location'];
+                          'device', 'DAL', '$location', '$timeout'];
 
     function landingPageCtrl($scope, datacontext, logger, pushNotifications,
-                        device, DAL, $location) {
+                        device, DAL, $location, $timeout) {
         var vm = this;
 
         vm.screenHeight = window.innerHeight;
@@ -60,7 +60,7 @@
         };
 
         var checkIfUserSignIn = function () {
-            setTimeout(function () {
+            $timeout(function () {
                 setApplicationDirectory();
             }, 0);
             
@@ -89,8 +89,9 @@
             }
         };
 
-
-        checkIfUserSignIn();
+        $timeout(function () {
+            checkIfUserSignIn();
+        }, 0);
 
     }
 })();

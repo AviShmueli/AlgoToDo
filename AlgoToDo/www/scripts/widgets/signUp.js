@@ -39,7 +39,7 @@
 
             var user = datacontext.getUserFromLocalStorage();
             if (user !== undefined) {
-                //window.location = '#/';
+                DAL.reloadAllTasks();
                 $location.path('/tasksList');
             }
 
@@ -62,7 +62,7 @@
                                     DAL.checkIfVerificationCodeMatch(user, verificationCode).then(function (result) {
                                         if (result.data === 'ok') {
                                             datacontext.saveUserToLocalStorage(response.data);
-                                            //window.location = '#/';
+                                            DAL.reloadAllTasks();
                                             $location.path('/tasksList');
                                         }
                                         else {

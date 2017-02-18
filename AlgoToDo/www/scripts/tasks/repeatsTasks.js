@@ -53,13 +53,13 @@
             }
 
             return days + ' בשעה ' + time;
-        }
+        };
 
-        vm.descriptionTextLength = function () { return Math.floor((window.innerWidth - 70 - 16 - 40 - 16 - 8) / 4) };
+        vm.descriptionTextLength = function () { return Math.floor((window.innerWidth - 70 - 16 - 40 - 16 - 8) / 4); };
 
         vm.goBack = function () {
             $location.path('/tasksList');
-        }
+        };
 
         vm.editTask = function (task, ev) {
             vm.isDialogOpen = true;
@@ -81,11 +81,11 @@
             document.addEventListener("deviceready", function () {
                 document.addEventListener("backbutton", backbuttonClick_FromAddRepeatTask_Callback, false);
             }, false);
-        }
+        };
 
         vm.updateList = function () {
             vm.repeatsTasks = datacontext.getRepeatsTasksList();
-        }
+        };
 
         vm.showAdd = function (ev) {
             vm.isDialogOpen = true;
@@ -114,7 +114,7 @@
             $mdDialog.cancel();
             vm.isDialogOpen = false;
             document.removeEventListener("backbutton", backbuttonClick_FromAddRepeatTask_Callback, false);
-        }
+        };
 
         var backbuttonClick_allways_Callback1 = function (e) {
             if (vm.isDialogOpen) {
@@ -127,7 +127,7 @@
                 if (!vm.exitApp) {
                     vm.exitApp = true;
                     cordovaPlugins.showToast("הקש שוב ליציאה", 1000);
-                    $timeout(function () { vm.exitApp = false }, 1000);
+                    $timeout(function () { vm.exitApp = false; }, 1000);
                 } else {
                     navigator.app.exitApp();
                 }
@@ -135,7 +135,7 @@
             else {
                 window.history.back();
             }
-        }
+        };
 
         document.addEventListener("deviceready", function () {
             document.addEventListener("backbutton", backbuttonClick_allways_Callback1, false);

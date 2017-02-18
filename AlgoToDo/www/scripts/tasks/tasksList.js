@@ -35,11 +35,11 @@
         $rootScope.taskcount = 0;
         vm.signUpInProggress = true; // remove this
         vm.doneTasks = [];
-        vm.descriptionTextLength = function () { return Math.floor((window.innerWidth - 70 - 16 - 40 - 16 - 8 ) / 4) };
+        vm.descriptionTextLength = function () { return Math.floor((window.innerWidth - 70 - 16 - 40 - 16 - 8) / 4); };
 
         vm.allTasks = function () { return datacontext.getTaskList(); };
 
-        setTimeout(function(){
+        $timeout(function () {
             var count = datacontext.setMyTaskCount();
             cordovaPlugins.setBadge(count);
         }, 0);
@@ -95,7 +95,7 @@
             $mdDialog.cancel();
             vm.isDialogOpen = false;
             document.removeEventListener("backbutton", backbuttonClick_FromAddTask_Callback, false);
-        }
+        };
 
         vm.exitApp = false;
 
@@ -105,12 +105,12 @@
                 return;
                 // do nothing - dialog will be closed
             }
-            if ($location.path() === '/tasksList') {
+            if ($location.path() === '/tasksList' || $location.path() === '/signUp') {
                 e.preventDefault();
                 if (!vm.exitApp) {
                     vm.exitApp = true;
                     cordovaPlugins.showToast("הקש שוב ליציאה", 1000);
-                    $timeout(function () { vm.exitApp = false }, 1000);
+                    $timeout(function () { vm.exitApp = false; }, 1000);
                 } else {
                     navigator.app.exitApp();
                 }
@@ -120,10 +120,12 @@
                     e.preventDefault();
                 }
                 else {
-                    window.history.back();
+                    if ($location.path() !== '/signUp') {
+                        window.history.back();
+                    }                  
                 }
             }
-        }
+        };
 
         document.addEventListener("deviceready", function () {
             document.addEventListener("backbutton", backbuttonClick_allways_Callback, false);
@@ -173,19 +175,19 @@
         vm.navigateToTaskPage = function (taskId) {
             //window.location = '#/task/' + taskId;
             $location.path('/task/' + taskId);
-        }
+        };
  
         $rootScope.redirectToTaskPage = function (taskId, toast) {
             //window.location = '#/task/' + taskId;
             $location.path('/task/' + taskId);
             var toastElement = angular.element(document.querySelectorAll('#message-toast'));
             $mdToast.hide(toastElement);
-        }
+        };
 
         $rootScope.hideToast = function (toastId) {
             var toastElement = angular.element(document.querySelectorAll('#' + toastId));
             $mdToast.hide(toastElement);
-        }
+        };
 
         vm.cancelAllNotifications = function (ev) {
             var confirm = $mdDialog.confirm()
@@ -199,13 +201,13 @@
             $mdDialog.show(confirm).then(function () {
                 localNotifications.cancelAllNotifications();
             }, function () {
-                
+
             });
-            
-        }
+
+        };
 
         vm.taskHasAttachment = function (task) {
-            if(task.comments === undefined || task.comments.length === 0){
+            if (task.comments === undefined || task.comments.length === 0) {
                 return false;
             }
             for (var i = 0; i < task.comments.length; i++) {
@@ -214,7 +216,7 @@
                 }
             }
             return false;
-        }
+        };
 
         vm.moreLoadedTasks = [];
 
@@ -262,7 +264,7 @@
 
         /*vm.heightStep = window.innerHeight - 500;
 
-        setTimeout(function () {
+        $timeout(function () {
             angular.element(document.getElementsByTagName('md-content')).on('scroll', function (evt) {
                 if ($rootScope.selectedIndex === 2 && evt.srcElement.scrollTop > vm.heightStep) {
                     vm.heightStep += 500;
@@ -281,9 +283,9 @@
         };*/
 
         // for testing only
-        vm.goOnline = function () { 
+        vm.goOnline = function () {
             $offlineHandler.goOnline();
-        }
+        };
     }
 
 })();
