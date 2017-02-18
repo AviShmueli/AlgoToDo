@@ -105,7 +105,7 @@
                 return;
                 // do nothing - dialog will be closed
             }
-            if ($location.path() === '/') {
+            if ($location.path() === '/tasksList') {
                 e.preventDefault();
                 if (!vm.exitApp) {
                     vm.exitApp = true;
@@ -216,10 +216,17 @@
             return false;
         }
 
-        /*vm.infiniteItems = {
+        vm.moreLoadedTasks = [];
+
+        vm.doneTasks = function () {
+            return $filter('orderBy')($filter('doneTasks')(datacontext.getTaskList(), vm.user._id).concat(vm.moreLoadedTasks), 'createTime', true);
+        };
+
+        vm.infiniteItems = {
             numLoaded_: 19,
             toLoad_: 0,
-            items: $filter('doneTasks')(datacontext.getTaskList(), vm.user._id),
+            //items: $filter('doneTasks')(datacontext.getTaskList(), vm.user._id),
+            //items: ,
             stopLoadData: false,
             
             getItemAtIndex: function (index) {
@@ -228,7 +235,7 @@
                     return null;
                 }
 
-                return this.items[index];
+                return vm.doneTasks()[index];
             },
 
 
@@ -245,15 +252,15 @@
                             this.stopLoadData = true;
                         }
                         else {
-                            this.items = $filter('orderBy')(this.items.concat(response.data), 'doneTime', true);
+                            vm.moreLoadedTasks = vm.moreLoadedTasks.concat(response.data);// = $filter('orderBy')(vm.doneTasks.concat(response.data), 'createTime', true);
                             this.numLoaded_ = this.toLoad_;
                         }
                     }));                                     
                 }
             }
-        };*/
+        };
 
-        vm.heightStep = window.innerHeight - 500;
+        /*vm.heightStep = window.innerHeight - 500;
 
         setTimeout(function () {
             angular.element(document.getElementsByTagName('md-content')).on('scroll', function (evt) {
@@ -271,7 +278,7 @@
             DAL.getDoneTasks(vm.loadedDoneTask).then(function (response) {
                 datacontext.pushTasksToTasksList(response.data);
             });
-        };
+        };*/
 
         // for testing only
         vm.goOnline = function () { 

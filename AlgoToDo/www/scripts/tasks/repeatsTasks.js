@@ -122,7 +122,7 @@
                 return;
                 // do nothing - dialog will be closed
             }
-            if ($location.path() === '/') {
+            if ($location.path() === '/tasksList') {
                 e.preventDefault();
                 if (!vm.exitApp) {
                     vm.exitApp = true;

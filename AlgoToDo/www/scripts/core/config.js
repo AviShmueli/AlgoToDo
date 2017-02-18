@@ -61,7 +61,7 @@
                     androidURL: 'market://details?id=com.algotodo.app'
                 };
 
-                $cordovaAppRateProvider.setPreferences(prefs)
+                $cordovaAppRateProvider.setPreferences(prefs);
 
             }, false);
          })
@@ -72,7 +72,7 @@
                 appDomain:
                   // 'https://algotodo.herokuapp.com'
                   'https://algotodo-test.herokuapp.com'
-                   //'http://localhost:5001'
+                  // 'http://localhost:5001'
             };
         })
         .run(function (amMoment, DAL, $offlineHandler) {

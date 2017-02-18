@@ -1,6 +1,5 @@
 # Installation
 
-- [Installation Requirements](#installation-requirements)
 - [Android details](#android-details)
   - [Compilation](#compilation)
   - [Co-existing with Facebook Plugin](#co-existing-with-facebook-plugin)
@@ -12,50 +11,47 @@
   - [Browser quirks](#browser-quirks)
   - [Browser Support](#browser-support)
 - [iOS details](#ios-details)
-  - [Xcode](#xcode)
+  - [XCode](#xcode)
   - [Bitcode](#bitcode)
-  - [CocoaPods](#cocoapods)
-    - [Common CocoaPod Installation issues](#common-cocoapod-installation-issues)
 - [Additional Resources](#additional-resources)
 
-## Installation Requirements
-
-Plugin version | Cordova CLI | Cordova Android | Cordova iOS | CocoaPods
----- | ---- | ---- | ---- | ----
-2.0.0 | 6.4.0 | 6.0.0 | 4.3.0 | 1.1.1
-1.9.0 | 6.4.0 | 6.0.0 | 4.3.0 | 1.1.1
-1.8.0 | 3.6.3 | 4.0.0 | 4.1.0 | N/A
-
-To install from the command line:
+This requires phonegap/cordova CLI 5.0+
 
 ```
-phonegap plugin add phonegap-plugin-push
+phonegap plugin add phonegap-plugin-push --variable SENDER_ID="XXXXXXX"
 ```
 or
 
 ```
-cordova plugin add phonegap-plugin-push
+cordova plugin add phonegap-plugin-push --variable SENDER_ID="XXXXXXX"
 ```
 
 It is also possible to install via repo url directly ( unstable )
 
 ```
-phonegap plugin add https://github.com/phonegap/phonegap-plugin-push
+phonegap plugin add https://github.com/phonegap/phonegap-plugin-push --variable SENDER_ID="XXXXXXX"
 ```
 
 or
 
 ```
-cordova plugin add https://github.com/phonegap/phonegap-plugin-push
+cordova plugin add https://github.com/phonegap/phonegap-plugin-push --variable SENDER_ID="XXXXXXX"
 ```
 
-As of version 2.0.0 the SENDER_ID parameter has been removed at install time. Instead you put your google-services.json (Android) and/or GoogleService-Info.pList in the root folder of your project and the plugin's hooks will copy the file to the correct place in the platforms directory for you.
+Where the `XXXXXXX` in `SENDER_ID="XXXXXXX"` maps to the project number in the [Google Developer Console](https://www.google.ca/url?sa=t&rct=j&q=&esrc=s&source=web&cd=1&cad=rja&uact=8&ved=0ahUKEwikqt3nyPjMAhXJ5iYKHR0qDcsQFggbMAA&url=https%3A%2F%2Fconsole.developers.google.com%2F&usg=AFQjCNF0eH059mv86nMIlRmfsf42kde-wA&sig2=BQ2BJpchw1CpGt87sk5p6w&bvm=bv.122852650,d.eWE). To find the project number login to the Google Developer Console, select your project and click the menu item in the screen shot below to display your project number.
 
-> Note: if you are using Ionic you may need to specify the SENDER_ID variable in your package.json.
+![zzns8](https://cloud.githubusercontent.com/assets/353180/15588897/2fc14db2-235e-11e6-9326-f97fe0ec15ab.png)
+
+If you are not creating an Android application you can put in anything for this value.
+
+> Note: if you are using ionic you may need to specify the SENDER_ID variable in your package.json.
 
 ```
   "cordovaPlugins": [
     {
+      "variables": {
+        "SENDER_ID": "XXXXXXX"
+      },
       "locator": "phonegap-plugin-push"
     }
   ]
@@ -64,17 +60,23 @@ As of version 2.0.0 the SENDER_ID parameter has been removed at install time. In
 > Note: You need to specify the SENDER_ID variable in your config.xml if you plan on installing/restoring plugins using the prepare method.  The prepare method will skip installing the plugin otherwise.
 
 ```
-<plugin name="phonegap-plugin-push" spec="2.0.0" />
+<plugin name="phonegap-plugin-push" spec="1.6.0">
+    <param name="SENDER_ID" value="XXXXXXX" />
+</plugin>
 ```
 
 ## Android details
 
 ### Compilation
 
-As of version 2.0.0 the plugin has been switched to using pinned version of Gradle libraries. You will need to ensure that you have installed the following items through the Android SDK Manager:
+As of version 1.3.0 the plugin has been switched to using Gradle/Maven for building.
 
-- Android Support Library version 25.1.0
-- FirebaseMessaging Library version 9.8.0
+You will need to ensure that you have installed the following items through the Android SDK Manager:
+
+- Android Support Library version 23 or greater
+- Local Maven repository for Support Libraries (formerly Android Support Repository) version 20 or greater
+- Google Play Services version 27 or greater
+- Google Repository version 22 or greater
 
 ![android support library](https://cloud.githubusercontent.com/assets/353180/10230226/0627931e-684a-11e5-9a6b-72d72997f655.png)
 
@@ -182,8 +184,6 @@ Alternatively, switch to another plugin that provides the same functionality but
 
 For the time being push support on the browser will only work using the PhoneGap push server.
 
-When you run `phonegap serve` to test browser push point your browser at `http://localhost:3000`. The browser push implementation uses the W3C Push Spec's implementation which relies on ServiceWorkers and ServiceWorkers can only be accessed via the `https` protocol or via `http://localhost`. Pointing your browser at `localhost` will be the easiest way to test.
-
 ### Browser Support
 
 Chrome  49+
@@ -191,9 +191,9 @@ Firefox 46+
 
 ## iOS details
 
-### Xcode
+### XCode
 
-Xcode version 8.0 or greater is required for building this plugin.
+XCode version 7.0 or greater is required for building this plugin.
 
 ### Bitcode
 
@@ -208,42 +208,6 @@ You have two options. The first is to [disable bitcode as per this StackOverflow
 ```
 cordova platform update ios@4.0.0
 ```
-
-### CocoaPods
-
-Required `cordova-cli` version: `6.4.0`
-
-Required `cordova-ios` version: `4.3.0`
-
-Version `1.9.0` (and above) of this plugin supports [CocoaPods](https://cocoapods.org) installation of the [Google Cloud Messaging](https://cocoapods.org/pods/GoogleCloudMessaging) library.
-
-If you are installing this plugin using `npm`, and you are using version `6.1.0` or greater of the `cordova-cli`, it will automatically download the right version of this plugin for both your platform and cli.
-
-If you are on a `cordova-cli` version less than `6.1.0`, you will either have to upgrade your `cordova-cli` version, or install the plugin explicitly:
-
-i.e.
-```
-cordova plugin add phonegap-plugin-push@1.8.1
-```
-
-If you are installing this plugin using a `local file reference` or a `git url`, you will have to specify the version of this plugin explicitly (see above) if you don't fulfill the `cordova-cli` and `cordova-ios` requirements.
-
-#### Common CocoaPod Installation issues
-
-If you are attempting to install this plugin and you run into this error:
-
-```
-Installing "phonegap-plugin-push" for ios
-Failed to install 'phonegap-plugin-push':Error: pod: Command failed with exit code 1
-    at ChildProcess.whenDone (/Users/smacdona/code/push151/platforms/ios/cordova/node_modules/cordova-common/src/superspawn.js:169:23)
-    at emitTwo (events.js:87:13)
-    at ChildProcess.emit (events.js:172:7)
-    at maybeClose (internal/child_process.js:818:16)
-    at Process.ChildProcess._handle.onexit (internal/child_process.js:211:5)
-Error: pod: Command failed with exit code 1
-```
-
-Please run the command `pod repo update` and re-install the plugin.
 
 ## Additional Resources
 

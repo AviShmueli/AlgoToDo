@@ -164,28 +164,30 @@
                      layout="row" layout-align="center center" style="height:100%">
                     <md-list id="doneTasksMDList" flex-gt-sm="50" flex-md="66" flex dir="rtl" style="height:100%">
 
-                        <!--<md-virtual-repeat-container id="vertical-container" style="height:100%">-->
-                            <div ng-repeat="item in vm.allTasks() | doneTasks: vm.user._id | filter:vm.search | orderBy: 'createTime':true" class="noright task-item repeated-item" style="margin-top: 7px;padding: 0 16px;" flex>
-                                <a class="md-tile-content" flex="100" style="margin-bottom: 14px;" ng-click="vm.navigateToTaskPage(item._id)" >
-                                    <div layout="row">
-                                        <span class="from">{{item.to.name}}</span>
-                                        <span flex></span>
-                                        <span class="time">{{vm.getTotalTaskTime(item)}}</span>
-                                        <ng-md-icon icon="timer" size="20"></ng-md-icon>
-                                    </div>
-                                    <div layout="row">
-                                        <div layout="row" style="font-size: 14px;">
-                                            <span ng-if="item.description.length > vm.descriptionTextLength()">{{item.description.substring(0, vm.descriptionTextLength()) + '...'}}</span>
-                                            <span ng-if="item.description.length <= vm.descriptionTextLength()">{{item.description}}</span>
+                        <md-virtual-repeat-container id="vertical-container" style="height:100%">
+                            <!--<div md-virtual-repeat="item in vm.allTasks() | doneTasks: vm.user._id | filter:vm.search | orderBy: 'createTime':true" class="noright task-item repeated-item" style="margin-top: 7px;padding: 0 16px;" flex>-->
+                            <div md-on-demand md-virtual-repeat="item in vm.infiniteItems" class="noright task-item repeated-item" style="margin-top: 7px;padding: 0 16px;" flex>
+                             <!--<div md-virtual-repeat="item in vm.allTasks() | doneTasks: vm.user._id | filter:vm.search | orderBy: 'createTime':true" class="noright task-item repeated-item" style="margin-top: 7px;padding: 0 16px;" flex>-->
+                                    <a class="md-tile-content" flex="100" style="margin-bottom: 14px;" ng-click="vm.navigateToTaskPage(item._id)">
+                                        <div layout="row">
+                                            <span class="from">{{item.to.name}}</span>
+                                            <span flex></span>
+                                            <span class="time">{{vm.getTotalTaskTime(item)}}</span>
+                                            <ng-md-icon icon="timer" size="20"></ng-md-icon>
                                         </div>
-                                        <!--<span flex></span>-->
-                                        <!--<span class="time">{{item.doneTime | date:'HH:mm'}}</span>-->
-                                        <!--<ng-md-icon icon="timer_off" size="20"></ng-md-icon>-->
-                                    </div>
-                                </a>
-                                <md-divider ng-if="!$last"></md-divider>
-                            </div>
-                        <!--</md-virtual-repeat-container>-->
+                                        <div layout="row">
+                                            <div layout="row" style="font-size: 14px;">
+                                                <span ng-if="item.description.length > vm.descriptionTextLength()">{{item.description.substring(0, vm.descriptionTextLength()) + '...'}}</span>
+                                                <span ng-if="item.description.length <= vm.descriptionTextLength()">{{item.description}}</span>
+                                            </div>
+                                            <!--<span flex></span>-->
+                                            <!--<span class="time">{{item.doneTime | date:'HH:mm'}}</span>-->
+                                            <!--<ng-md-icon icon="timer_off" size="20"></ng-md-icon>-->
+                                        </div>
+                                    </a>
+                                    <md-divider ng-if="!$last"></md-divider>
+                                </div>
+                        </md-virtual-repeat-container>
                         <md-divider></md-divider>
                     </md-list>
                 </div>

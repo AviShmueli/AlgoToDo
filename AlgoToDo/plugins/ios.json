@@ -59,6 +59,10 @@
         },
         "cordova-plugin-whitelist": {
             "PACKAGE_NAME": "com.algotodo.app"
+        },
+        "phonegap-plugin-push": {
+            "SENDER_ID": "874351794059",
+            "PACKAGE_NAME": "com.algotodo.app"
         }
     },
     "dependent_plugins": {

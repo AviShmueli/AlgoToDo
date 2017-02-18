@@ -3,21 +3,8 @@
     
     angular
         .module('app.widgets')
-        .controller('signUpCtrl', signUpCtrl)
-        /*.directive('tmSignUp', signUp);
+        .controller('signUpCtrl', signUpCtrl);
 
-    function signUp() {
-        var directive = {
-            controller: signUpCtrl,
-            controllerAs: 'vm',
-            templateUrl: 'scripts/widgets/signUp.html',
-            restrict: 'A',
-            scope: {
-                'user': '=',
-                'signUp': '&'
-            }
-        };
-*/
     signUpCtrl.$inject = ['$scope', 'datacontext', 'logger', 'cordovaPlugins', '$q', 'pushNotifications',
                           'device', '$mdDialog', 'DAL', '$location'];
 
@@ -31,11 +18,9 @@
             
 
             DAL.getAllCliqot().then(function (allCliqot) {
-                alert(allCliqot.data);
                 vm.AllCliqot = allCliqot.data;
-            }, function (error) {
-                alert(JSON.stringify(error));
             });
+
             vm.imagesPath = device.getImagesPath();
 
             vm.womanAvatar = '/images/woman-' + Math.floor((Math.random() * 15) + 1) + '.svg';
@@ -50,7 +35,7 @@
 
                     signUp();
                 }
-            }
+            };
 
             var user = datacontext.getUserFromLocalStorage();
             if (user !== undefined) {
@@ -99,7 +84,7 @@
                                 DAL.checkIfVerificationCodeMatch(user, verificationCode).then(function (result) {
                                     if (result.data === 'ok') {
                                         datacontext.saveUserToLocalStorage(response.data);
-                                        //window.location = '#/';
+                                        DAL.reloadAllTasks();
                                         $location.path('/tasksList');
                                     }
                                     else {
@@ -130,7 +115,7 @@
 
                 if (vm.user.sex === undefined) {
                     if (vm.user.avatarUrl !== undefined) {
-                        vm.user.sex = (vm.user.avatarUrl.indexOf('woman') === -1) ? 'man': 'woman';
+                        vm.user.sex = (vm.user.avatarUrl.indexOf('woman') === -1) ? 'man' : 'woman';
                     }
                     else {
                         vm.user.sex = 'man';
@@ -182,7 +167,7 @@
                                             logger.error("error while trying to check If VerificationCode Match: ", error.data || error);
                                             showRegistrationFailedAlert();
                                         });
-                                    });                                   
+                                    });
                                 }, function (error) {
                                     vm.inProgress = false;
                                     logger.error("error while trying to register user to app: ", error.data || error);
@@ -218,28 +203,28 @@
                                 logger.error("error while trying to check If VerificationCode Match: ", error.data || error);
                                 showRegistrationFailedAlert();
                             });
-                        });                       
+                        });
                     }, function (error) {
                         vm.inProgress = false;
                         logger.error("error while trying to register user to app:", error.data || error);
                         showRegistrationFailedAlert();
                     });
                 }
-            }
+            };
 
             var registerUserForPushService = function () {
                 var deferred = $q.defer();
 
                 pushNotifications.initializePushV5().then(function () {
                     pushNotifications.registerForPushNotifications().then(function (registrationId) {
-                        deferred.resolve(registrationId);                        
+                        deferred.resolve(registrationId);
                     });
                 }, function (error) {
                     logger.error("error while trying to register user to app", error);
                 });
 
                 return deferred.promise;
-            }
+            };
 
             vm.showCliqaAlert = function (ev) {
                 $mdDialog.show(
@@ -268,7 +253,7 @@
                     .ok('סגור')
                     .targetEvent(ev)
                 );
-            }
+            };
             
             var showVerificationCodePrompt = function () {
                 // Appending dialog to document.body to cover sidenav in docs app
@@ -298,7 +283,7 @@
                     .ariaLabel('Alert Dialog Demo')
                     .ok('המשך')
                 );
-            }
+            };
 
             var showRegistrationFailedAlert = function () {
                 $mdDialog.show(
@@ -310,7 +295,7 @@
                     .ariaLabel('Alert Dialog Demo')
                     .ok('המשך')
                 );
-            }
+            };
 
             vm.showMoreAvatars = function (ev) {
                 $mdDialog.show({
