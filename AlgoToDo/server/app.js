@@ -46,10 +46,12 @@ app.use(express.static('../bower_components'));
 app.use(express.static('../node_modules'));
 
 var serverDomain;
+var serverDomain2;
 
 /* ---- Start the server ------ */
 server.listen(process.env.PORT || 5001, function (err) {
-    serverDomain = this;
+    serverDomain = this.domain;
+    serverDomain2 = this._connectionKey;
     console.log("Express server listening on port %d in %s mode", this.address().port, app.settings.env);
 });
 
@@ -332,6 +334,7 @@ app.get('/TaskManeger/getUsersRepeatsTasks', function (req, res) {
     setTimeout(function(){
         jobs.startAllJobs();
         console.log("*** start all cron jobs! ***" + serverDomain);//JSON.stringify(serverDomain)
+         console.log("*** start all cron jobs! ***" + serverDomain2);
     }, 100);
 
 //}
