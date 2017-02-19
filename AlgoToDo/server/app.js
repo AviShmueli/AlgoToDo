@@ -8,11 +8,9 @@
 *
 */
 
-var os = require('os');
 var express = require('express');
 var winston = require('./logger');
 var BL = require('./BL');
-var jobs = require('./cron-jobs');
 
 var app = express();
 
@@ -45,13 +43,22 @@ app.use(express.static('../www'));
 app.use(express.static('../bower_components'));
 app.use(express.static('../node_modules'));
 
-var serverDomain;
-var serverDomain2;
+/* ----- cron  ------ */
+var jobs = require('./cron-jobs');
+
+    // *********
+    // IMPORTANT: uncomment this if deploy to production!!!
+    // *********
+    setTimeout(function(){
+        jobs.startAllJobs();
+        console.log("*** start all cron jobs! ***");
+    },0);
+
+
+
 
 /* ---- Start the server ------ */
 server.listen(process.env.PORT || 5001, function (err) {
-    serverDomain = this.domain;
-    serverDomain2 = this._connectionKey;
     console.log("Express server listening on port %d in %s mode", this.address().port, app.settings.env);
 });
 
@@ -325,16 +332,3 @@ app.get('/TaskManeger/getUsersRepeatsTasks', function (req, res) {
     });
 
 });
-
-
-/* ----- cron  ------ */
-
-//if(process.env.PORT) {
-
-    setTimeout(function(){
-        jobs.startAllJobs();
-        console.log("*** start all cron jobs! ***" + serverDomain);//JSON.stringify(serverDomain)
-         console.log("*** start all cron jobs! ***" + serverDomain2);
-    }, 100);
-
-//}
