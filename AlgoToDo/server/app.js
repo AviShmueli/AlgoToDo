@@ -44,16 +44,11 @@ app.use(express.static('../www'));
 app.use(express.static('../bower_components'));
 app.use(express.static('../node_modules'));
 
-/* ----- cron  ------ */
-var jobs = require('./cron-jobs');
-//if(process.env.PORT) {
-    jobs.startAllJobs();
-    console.log("*** start all cron jobs! ***" + JSON.stringify(app.settings));
-//}
-
+var serverDomain = '';
 
 /* ---- Start the server ------ */
 server.listen(process.env.PORT || 5001, function (err) {
+    serverDomain = this.address();
     console.log("Express server listening on port %d in %s mode", this.address().port, app.settings.env);
 });
 
@@ -327,3 +322,11 @@ app.get('/TaskManeger/getUsersRepeatsTasks', function (req, res) {
     });
 
 });
+
+
+/* ----- cron  ------ */
+var jobs = require('./cron-jobs');
+//if(process.env.PORT) {
+    jobs.startAllJobs();
+    console.log("*** start all cron jobs! ***" + JSON.stringify(serverDomain));
+//}
