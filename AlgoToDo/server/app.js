@@ -12,6 +12,7 @@ var os = require('os');
 var express = require('express');
 var winston = require('./logger');
 var BL = require('./BL');
+var jobs = require('./cron-jobs');
 
 var app = express();
 
@@ -325,12 +326,12 @@ app.get('/TaskManeger/getUsersRepeatsTasks', function (req, res) {
 
 
 /* ----- cron  ------ */
-var jobs = require('./cron-jobs');
+
 //if(process.env.PORT) {
 
     setTimeout(function(){
         jobs.startAllJobs();
-        console.log("*** start all cron jobs! ***" + serverDomain);//JSON.stringify(serverDomain)
+        console.log("*** start all cron jobs! ***" + JSON.stringify(serverDomain));//JSON.stringify(serverDomain)
     }, 100);
 
 //}
