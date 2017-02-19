@@ -327,6 +327,10 @@ app.get('/TaskManeger/getUsersRepeatsTasks', function (req, res) {
 /* ----- cron  ------ */
 var jobs = require('./cron-jobs');
 //if(process.env.PORT) {
-    jobs.startAllJobs();
-    console.log("*** start all cron jobs! ***" + JSON.stringify(serverDomain));
+
+    setTimeout(function(){
+        jobs.startAllJobs();
+        console.log("*** start all cron jobs! ***" + serverDomain);//JSON.stringify(serverDomain)
+    }, 100);
+
 //}
