@@ -8,6 +8,7 @@
 *
 */
 
+var os = require('os');
 var express = require('express');
 var winston = require('./logger');
 var BL = require('./BL');
@@ -47,9 +48,7 @@ app.use(express.static('../node_modules'));
 var jobs = require('./cron-jobs');
 //if(process.env.PORT) {
     jobs.startAllJobs();
-    console.log("*** start all cron jobs! ***" + app.domain);
-    console.log("*** start all cron jobs! ***" + app.settings);
-    console.log("*** start all cron jobs! ***" + process.env);
+    console.log("*** start all cron jobs! ***" + os.hostname());
 //}
 
 
