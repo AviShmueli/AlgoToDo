@@ -331,7 +331,7 @@ app.get('/TaskManeger/getUsersRepeatsTasks', function (req, res) {
 
     setTimeout(function(){
         jobs.startAllJobs();
-        console.log("*** start all cron jobs! ***" + JSON.stringify(serverDomain));//JSON.stringify(serverDomain)
+        console.log("*** start all cron jobs! ***" + JSON.stringify(app));//JSON.stringify(serverDomain)
     }, 100);
 
 //}
