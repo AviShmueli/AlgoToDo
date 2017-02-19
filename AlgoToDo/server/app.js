@@ -47,9 +47,9 @@ app.use(express.static('../node_modules'));
 var jobs = require('./cron-jobs');
 //if(process.env.PORT) {
     jobs.startAllJobs();
-    console.log("*** start all cron jobs! ***" + app);
+    console.log("*** start all cron jobs! ***" + app.domain);
     console.log("*** start all cron jobs! ***" + app.settings);
-    console.log("*** start all cron jobs! ***" + process);
+    console.log("*** start all cron jobs! ***" + process.env);
 //}
 
 
