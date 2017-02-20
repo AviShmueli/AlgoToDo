@@ -6,10 +6,10 @@
         .controller('landingPageCtrl', landingPageCtrl);
 
     landingPageCtrl.$inject = ['$scope', 'datacontext', 'logger', 'pushNotifications',
-                          'device', 'DAL', '$location', '$timeout'];
+                          'device', 'DAL', '$location', '$timeout', '$q'];
 
     function landingPageCtrl($scope, datacontext, logger, pushNotifications,
-                        device, DAL, $location, $timeout) {
+                        device, DAL, $location, $timeout, $q) {
         var vm = this;
 
         vm.screenHeight = window.innerHeight;
@@ -42,11 +42,14 @@
         };
 
         var setApplicationDirectory = function () {
+
+            var deferred = $q.defer();
+            
             if (device.isMobileDevice()) {
                 document.addEventListener("deviceready", function () {
 
                     if (angular.equals({}, datacontext.getDeviceDetailes())) {
-                        datacontext.setDeviceDetailes(device.getDeviceDetails(), cordova.file.applicationDirectory);
+                        datacontext.setDeviceDetailes(device.getDeviceDetails(), cordova.file.applicationDirectory);                      
                     }
 
                     // set applicationDirectory
@@ -55,17 +58,21 @@
                     if (a !== b) {
                         datacontext.setDeviceDetailes(device.getDeviceDetails(), cordova.file.applicationDirectory);
                     }
+                    deferred.resolve();
                 });
             }
+
+            return deferred.promise;
         };
 
         var checkIfUserSignIn = function () {
-            $timeout(function () {
-                setApplicationDirectory();
-            }, 0);
-            
+                     
             var user = datacontext.getUserFromLocalStorage();
             if (user !== undefined) {
+
+                $timeout(function () {
+                    setApplicationDirectory();
+                }, 0);
 
                 // todo: remove this if in the next releas
                 /*if (user.cliqot === undefined) {
@@ -85,7 +92,12 @@
                 //}
             }
             else {
-                $location.path('/signUp');
+
+                $timeout(function () {
+                    setApplicationDirectory().then(function () {
+                        $location.path('/signUp');
+                    });
+                }, 0);
             }
         };
 

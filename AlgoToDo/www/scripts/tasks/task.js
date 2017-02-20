@@ -9,14 +9,14 @@
          'datacontext', '$routeParams', '$window', 'moment',
          'socket', 'cordovaPlugins', 'dropbox', 'appConfig',
          'localNotifications', 'camera', 'device', '$mdDialog',
-         'DAL', '$offlineHandler', '$location'
+         'DAL', '$offlineHandler', '$location', '$timeout'
     ];
 
     function taskCtrl($rootScope, $scope, logger, $q, storage,
                       datacontext, $routeParams, $window, moment,
                       socket, cordovaPlugins, dropbox, appConfig,
                       localNotifications, camera, device, $mdDialog,
-                      DAL, $offlineHandler, $location) {
+                      DAL, $offlineHandler, $location, $timeout) {
 
         var vm = this;
 
@@ -40,7 +40,7 @@
         vm.goBack = function () {
             //window.location = '#/';
             $location.path('/tasksList');
-        }
+        };
 
         vm.takePic = function (sourceType) {
 
@@ -68,7 +68,7 @@
                             vm.task.comments.push(comment);
                             addImageToGallery(comment.fileName, comment.fileLocalPath);
 
-                            if (vm.task.from._id !== vm.task.to._id) {                          
+                            if (vm.task.from._id !== vm.task.to._id) {
                                 dropbox.uploadNewImageToDropbox(fileEntry.filesystem.root.nativeURL, fileEntry.name, fileName).then(function () {
                                     DAL.newComment(vm.task._id, tempComment);
                                     camera.cleanupAfterPictureTaken();
@@ -77,18 +77,18 @@
                             else {
                                 DAL.newComment(vm.task._id, tempComment);
                             }
-                            
+
                         }, function (error) {
                             logger.error("error while trying to save File to Storage", error);
                         });
-                    });                                      
+                    });
                 }, function (err) {
                     logger.error("error while trying to take a picture", err);
                 });
 
                 device.setStatusbarOverlays();
             }, false);
-        }
+        };
 
         vm.addComment = function () {
             if (vm.task.comments === undefined) {
@@ -127,7 +127,7 @@
                     }
                 });
             vm.newCommentText = '';
-        }
+        };
 
         vm.setTaskStatus = function (task, newStatus) {
             task.status = newStatus;
@@ -208,50 +208,50 @@
                     });
                 });
 
-                
+
             }
             //else {
-                /*dropbox.getThumbnail(comment.fileName, 'w128h128')
-                    .then(function (response) {
-                         var url = URL.createObjectURL(response.fileBlob);
-                         comment.fileLocalPath = url;
-                         //datacontext.saveFileToCache(comment.fileName, url);
+            /*dropbox.getThumbnail(comment.fileName, 'w128h128')
+                .then(function (response) {
+                     var url = URL.createObjectURL(response.fileBlob);
+                     comment.fileLocalPath = url;
+                     //datacontext.saveFileToCache(comment.fileName, url);
+                })
+                .catch(function (error) {
+                    logger.error("error while trying to get file Thumbnail", error);
+                });
+            dropbox.downloadFile(comment.fileName).then(function (response) {
+                    console.log(response);
+                    dropbox.getSharedLinkFile(response.url)
+                         .then(function (response) {
+                               console.log(response);
+                               var downloadUrl = URL.createObjectURL(response.fileBlob);
+                               comment.fileLocalPath = downloadUrl;
+                               //datacontext.saveFileToCache(comment.fileName, downloadUrl);                                   
+                          })
+                         .catch(function (error) {
+                                logger.error("error while trying to download file from dropbox", error);
+                          });
                     })
-                    .catch(function (error) {
-                        logger.error("error while trying to get file Thumbnail", error);
-                    });
-                dropbox.downloadFile(comment.fileName).then(function (response) {
-                        console.log(response);
-                        dropbox.getSharedLinkFile(response.url)
-                             .then(function (response) {
-                                   console.log(response);
-                                   var downloadUrl = URL.createObjectURL(response.fileBlob);
-                                   comment.fileLocalPath = downloadUrl;
-                                   //datacontext.saveFileToCache(comment.fileName, downloadUrl);                                   
-                              })
-                             .catch(function (error) {
-                                    logger.error("error while trying to download file from dropbox", error);
-                              });
-                        })
-                    .catch(function (error) {
-                        console.error(error);
-                    });
-                    */
+                .catch(function (error) {
+                    console.error(error);
+                });
+                */
             //}
-        }
+        };
 
-        var addImageToGallery = function (fileName, fileLocalPath) {           
+        var addImageToGallery = function (fileName, fileLocalPath) {
             var img = new Image();
-            img.onload = function () { 
+            img.onload = function () {
                 vm.galleryImages.push({
                     src: fileLocalPath,
                     w: this.width,
                     h: this.height
                 });
                 vm.galleryImagesLocations[fileName] = vm.galleryImagesCounter++;
-            }
+            };
             img.src = fileLocalPath;
-        }
+        };
 
         var addImageToGallery_Sync = function (fileName, fileLocalPath) {
             var deferred = $q.defer();
@@ -265,10 +265,10 @@
                 });
                 vm.galleryImagesLocations[fileName] = vm.galleryImagesCounter++;
                 deferred.resolve();
-            }
+            };
             img.src = fileLocalPath;
             return deferred.promise;
-        }
+        };
  
         var setImagesLocalPath = function(){
             for(var i = 0; i < vm.task.comments.length; i++){
@@ -276,26 +276,17 @@
                     setFileLocalPath(vm.task.comments[i]);
                 }
             }
-        }();
+        };
+
+        $timeout(function () {
+            setImagesLocalPath();
+        }, 0);
         
         var gallery;
 
         vm.showGalary = function (comment) {
 
             var pswpElement = document.querySelectorAll('.pswp')[0];
-
-            /*vm.galleryImages = [
-                {
-                    src: 'https://photos-1.dropbox.com/t/2/AAC43kVSA1R6MAoqXYgWFmon8pQwLtBVmEYGvO5wUw571w/12/579965904/jpeg/32x32/1/_/1/2/2016-12-11T21%3A23%3A02.851Z.jpg/EJisz4wFGIQBIAcoBw/S3PGdSH1wBffOyyUAzWxN_YkkIgQo78iiZCDJycE6dk?size=1600x1200&size_mode=3',
-                    w: 600,
-                    h: 400
-                },
-                {
-                    src: 'https://photos-6.dropbox.com/t/2/AAA8rFSk8vNeHrinwCcR3Ol606AGV2uHCu1_KI15F4tsPw/12/579965904/jpeg/32x32/1/_/1/2/avi.jpg/EJisz4wFGEsgBygH/HbMSs18ptds-T-3U_RxSoO1V9hQiAgTbcpTVvPtuqvA?size=1600x1200&size_mode=3',
-                    w: 600,
-                    h: 400
-                }
-            ];*/
 
             var options = {
                 index: vm.galleryImagesLocations[comment.fileName] || 0, // start at first slide // 
@@ -322,12 +313,12 @@
             gallery.listen('close', function () {
                 document.removeEventListener("backbutton", backbuttonClickCallback, false);
             });
-        }
+        };
 
         var backbuttonClickCallback = function () {
             gallery.close();
             document.removeEventListener("backbutton", backbuttonClickCallback, false);
-        }
+        };
 
         vm.shareImage = function () {
             // e - original click event
@@ -337,10 +328,10 @@
             // does not have `download` attribute - 
             // share modal window will popup
             var a = 'target';
-        }
+        };
 
         vm.addAlert = function (ev) {
-            
+
             $mdDialog.show({
                 controller: dateTimePickerCtrl,
                 templateUrl: 'scripts/widgets/dateTimePicker.tmpl.html',
@@ -367,19 +358,19 @@
                         setLocalNotification(date.setHours(12, 0, 0, 0));
                         break;
                     case "today20":
-                        setLocalNotification(date.setHours(20, 0, 0, 0))
+                        setLocalNotification(date.setHours(20, 0, 0, 0));
                         break;
                     case "tomorow8":
-                        date.setDate(date.getDate() + 1)
+                        date.setDate(date.getDate() + 1);
                         setLocalNotification(date.setHours(8, 0, 0, 0));
                         break;
                     case "tomorow12":
-                        date.setDate(date.getDate() + 1)
-                        setLocalNotification(date.setHours(12, 0, 0, 0))
+                        date.setDate(date.getDate() + 1);
+                        setLocalNotification(date.setHours(12, 0, 0, 0));
                         break;
                     case "tomorow20":
-                        date.setDate(date.getDate() + 1)
-                        setLocalNotification(date.setHours(20, 0, 0, 0))
+                        date.setDate(date.getDate() + 1);
+                        setLocalNotification(date.setHours(20, 0, 0, 0));
                         break;
                     case "custom":
                         openNativeDateTimePicker();
@@ -389,9 +380,9 @@
                         break;
                 }
             }, function () {
-                
-            });      
-        }
+
+            });
+        };
 
         function setLocalNotification(date) {
             vm.task.notificationId = Math.floor((Math.random() * 10000) + 1);

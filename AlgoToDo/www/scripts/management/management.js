@@ -41,15 +41,18 @@
         });
 
         var userCliqotIds = [];
-        vm.allCliqot['all'] = { name: 'כל הקליקות', '_id': { $in: userCliqotIds } };
-        for (var i = 0; i < vm.user.cliqot.length; i++) {
-            vm.allCliqot[vm.user.cliqot[i]._id] = vm.user.cliqot[i];
-            userCliqotIds.push(vm.user.cliqot[i]._id);
-        }
-        // { "$exists" : false } - to get the task that dont contains cliqaId filed
 
-        // always filer the table according to admin's cliqot!
-        vm.tasksFilter.cliqaId = { $in: userCliqotIds };
+        $timeout(function () {
+            vm.allCliqot['all'] = { name: 'כל הקליקות', '_id': { $in: userCliqotIds } };
+            for (var i = 0; i < vm.user.cliqot.length; i++) {
+                vm.allCliqot[vm.user.cliqot[i]._id] = vm.user.cliqot[i];
+                userCliqotIds.push(vm.user.cliqot[i]._id);
+            }
+            // { "$exists" : false } - to get the task that dont contains cliqaId filed
+
+            // always filer the table according to admin's cliqot!
+            vm.tasksFilter.cliqaId = { $in: userCliqotIds };
+        }, 0);
 
         vm.getTasks = function () {
 
@@ -101,7 +104,9 @@
             });
         };
 
-        vm.getTasks();
+        $timeout(function () {
+            vm.getTasks();
+        }, 0);       
 
         vm.getTotalTaskTime = function (task) {
             if (task.doneTime === undefined) {

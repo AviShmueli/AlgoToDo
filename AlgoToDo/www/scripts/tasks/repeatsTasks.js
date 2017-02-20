@@ -7,12 +7,12 @@
 
     repeatsTasksCtrl.$inject = ['$rootScope', '$scope', 'logger', '$q', 'storage',
                                 'datacontext', 'moment', 'device', '$mdDialog',
-                                'DAL', '$offlineHandler', '$location'
+                                'DAL', '$offlineHandler', '$location', 'cordovaPlugins'
     ];
 
     function repeatsTasksCtrl($rootScope, $scope, logger, $q, storage,
                         datacontext, moment, device, $mdDialog,
-                        DAL, $offlineHandler, $location) {
+                        DAL, $offlineHandler, $location, cordovaPlugins) {
 
         var vm = this;
         vm.imagesPath = device.getImagesPath();

@@ -33,7 +33,6 @@
         vm.imagesPath = device.getImagesPath();
         vm.progressActivated = false;
         $rootScope.taskcount = 0;
-        vm.signUpInProggress = true; // remove this
         vm.doneTasks = [];
         vm.descriptionTextLength = function () { return Math.floor((window.innerWidth - 70 - 16 - 40 - 16 - 8) / 4); };
 

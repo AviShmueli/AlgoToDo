@@ -95,7 +95,7 @@
                         var _e = e;
                     });
             });
-        }
+        };
 
         document.addEventListener("deviceready", function (e) {
             cordova.plugins.notification.local.on('click', function (notification) {
@@ -119,7 +119,7 @@
                 }*/
                 if (task !== undefined && task._id !== undefined) {
                     //window.location = '#/task/' + task._id;
-                    $location.path('/task/' + taskId);
+                    $location.path('/task/' + task._id);
                 }
             });
         }, false);
@@ -130,7 +130,7 @@
                     var a = result;
                 });
             }, false);
-        }
+        };
 
         var service = {
             setLocalNotification: setLocalNotification,
