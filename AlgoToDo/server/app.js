@@ -300,7 +300,7 @@ app.post('/TaskManeger/addNewRepeatsTasks', function (req, res) {
 app.post('/TaskManeger/updateRepeatsTasks', function (req, res) {
 
     BL.updateRepeatsTasks(req.body.tasks).then(function(result){
-        jobs.restartRepeatsTasks(req.body.tasks);
+        jobs.startRepeatsTasks(req.body.tasks);
         res.send('ok');
     }, function(error){
         winston.log('error', error.message , error.error);

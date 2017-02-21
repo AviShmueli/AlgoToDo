@@ -31,18 +31,24 @@
             var hour = time.getHours();
             var minutes = time.getMinutes();
             var days = task.daysRepeat.toString();
-            console.log("start repeates task: " + '00 ' + minutes + ' ' + hour +  ' * * ' + days, task);
+
+            if (taskJobMap[task._id] !== undefined) {
+                taskJobMap[task._id].stop();
+            }
+
             logger.log('info', "start repeates task: " + '00 ' + minutes + ' ' + hour +  ' * * ' + days , task);
+
             var job = new CronJob({
                 cronTime: '00 ' + minutes + ' ' + hour +  ' * * ' + days, // Seconds(0-59) Minutes(0-59) Hours(0-23) Day of Month(1-31) Months(0-11) Day of Week:(0-6)
+                context: task,
                 onTick: function() {
-                    console.log("sending repeats task, time now is: " + new Date(), task);
-                    logger.log("info","sending repeats task, time now is: " + new Date(), task);
+                    var _task = this;
+                    logger.log("info","sending repeats task, time now is: " + new Date(), _task);
                     
-                    var tasksToSend = preperTaskToSend(task);
+                    var tasksToSend = preperTaskToSend(_task);
                     
                     BL.addNewTasks(tasksToSend, true).then(function(result){
-                        console.log("successfuly send repeate task");
+                        console.log("successfuly send repeate tasks");
                     }, function(error){
                         logger.log('error', error.message , error.error);                       
                     });
@@ -50,7 +56,6 @@
                 start: true 
             });
             taskJobMap[task._id] = job;
-            console.log("all repeates task: " , taskJobMap);
         }
         
     }
@@ -71,6 +76,7 @@
 
             var job = new CronJob({
                 cronTime: '00 ' + minutes + ' ' + hour +  ' * * ' + days, // Seconds(0-59) Minutes(0-59) Hours(0-23) Day of Month(1-31) Months(0-11) Day of Week:(0-6)
+                
                 onTick: function() {
                     console.log(task);
 
