@@ -31,12 +31,14 @@
             var hour = time.getHours();
             var minutes = time.getMinutes();
             var days = task.daysRepeat.toString();
-            
+            console.log("start repeates task: " + '00 ' + minutes + ' ' + hour +  ' * * ' + days, task);
+            logger.log('info', "start repeates task: " + '00 ' + minutes + ' ' + hour +  ' * * ' + days , task);
             var job = new CronJob({
                 cronTime: '00 ' + minutes + ' ' + hour +  ' * * ' + days, // Seconds(0-59) Minutes(0-59) Hours(0-23) Day of Month(1-31) Months(0-11) Day of Week:(0-6)
                 onTick: function() {
-                    console.log(task);
-
+                    console.log("sending repeats task, time now is: " + new Date(), task);
+                    logger.log("info","sending repeats task, time now is: " + new Date(), task);
+                    
                     var tasksToSend = preperTaskToSend(task);
                     
                     BL.addNewTasks(tasksToSend, true).then(function(result){
@@ -48,6 +50,7 @@
                 start: true 
             });
             taskJobMap[task._id] = job;
+            console.log("all repeates task: " , taskJobMap);
         }
         
     }
