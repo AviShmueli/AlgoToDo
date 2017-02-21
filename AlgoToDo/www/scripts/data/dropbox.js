@@ -47,16 +47,16 @@
                     reader.onload = (function (file_reader) {
 
                         uploadFile(newFileName, file_reader).then(function (response) {
-                            deferred.resolve();
+                            deferred.resolve(newFileName);
                         })
                         .catch(function (error) {
                             logger.error("error while trying to upload file to dropbox", error);
-                            deferred.reject();
+                            deferred.reject(error);
                         });
                     })(blob);
                 }, function (error) {
                     logger.error("error while trying to get File From Storage", error);
-                    deferred.reject();
+                    deferred.reject(error);
                 });
             return deferred.promise;
         }

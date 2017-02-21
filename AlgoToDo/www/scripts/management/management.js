@@ -7,12 +7,12 @@
 
     managementCtrl.$inject = ['$rootScope', '$scope', 'logger', '$q',
                              'datacontext', 'moment', '$mdMedia', 'DAL',
-                             '$location'
+                             '$location', '$timeout'
     ];
 
     function managementCtrl($rootScope, $scope, logger, $q,
                             datacontext, moment, $mdMedia, DAL,
-                            $location) {
+                            $location, $timeout) {
 
         var vm = this;
 

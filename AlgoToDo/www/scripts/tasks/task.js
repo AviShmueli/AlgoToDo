@@ -134,7 +134,7 @@
             if (task.status === 'done') {
                 task.doneTime = new Date();
                 //datacontext.removeAllTaskImagesFromCache(task);
-                localNotifications.cancelNotification(task._id);
+                //localNotifications.cancelNotification(task._id);
             }
             if (task.status === 'seen') {
                 task.seenTime = new Date();
@@ -171,6 +171,15 @@
             }
 
             if (comment.fileLocalPath !== undefined && comment.fileLocalPath.indexOf("upload-empty") !== -1) {
+                dropbox.getThumbnail(comment.fileName, 'w128h128')
+                    .then(function (response) {
+                        var url = URL.createObjectURL(response.fileBlob);
+                        comment.fileLocalPath = url;
+                        //datacontext.saveFileToCache(comment.fileName, url);
+                    })
+                    .catch(function (error) {
+                        logger.error("error while trying to get file Thumbnail", error);
+                    });
                 dropbox.downloadFile(comment.fileName).then(function (response) {
                     storage.saveFileToStorage(vm.task._id, comment.fileName, response.url).then(function (storageFilePath) {
                         comment.fileLocalPath = storageFilePath;
@@ -187,7 +196,7 @@
             if (comment.fileLocalPath === undefined) { // && 
                 // if this is file you uploaded - the file will be in the cache
                 var dataDirectory = (cordova.platformId.toLowerCase() === 'ios') ? cordova.file.dataDirectory : cordova.file.externalDataDirectory;
-                var newPath = 'pictures/' + vm.taskId + '/';
+                var newPath = 'Asiti/' + vm.taskId + '/';
                 var src = dataDirectory + newPath + comment.fileName;
 
                 storage.checkIfFileExists(dataDirectory + newPath, comment.fileName).then(function (success) {
@@ -195,6 +204,15 @@
                     addImageToGallery(comment.fileName, src);
                 }, function (error) {
                     comment.fileLocalPath = device.getImagesPath() + "/images/upload-empty.png";
+                    dropbox.getThumbnail(comment.fileName, 'w128h128')
+                        .then(function (response) {
+                            var url = URL.createObjectURL(response.fileBlob);
+                            comment.fileLocalPath = url;
+                            //datacontext.saveFileToCache(comment.fileName, url);
+                        })
+                        .catch(function (error) {
+                            logger.error("error while trying to get file Thumbnail", error);
+                        });
                     dropbox.downloadFile(comment.fileName).then(function (response) {
                         storage.saveFileToStorage(vm.task._id, comment.fileName, response.url).then(function (storageFilePath) {
                             comment.fileLocalPath = storageFilePath;
@@ -207,8 +225,6 @@
                         $log.error("error while trying to download file from dropbox", error);
                     });
                 });
-
-
             }
             //else {
             /*dropbox.getThumbnail(comment.fileName, 'w128h128')

@@ -7,11 +7,11 @@
 
     offlineHandler.$inject = ['$http', 'logger', 'lodash', 'appConfig', '$rootScope',
                               '$localStorage', '$q', 'DAL', 'datacontext', '$cordovaNetwork',
-                              'cordovaPlugins'];
+                              'cordovaPlugins', 'dropbox'];
 
     function offlineHandler($http, logger, lodash, appConfig, $rootScope,
                             $localStorage, $q, DAL, datacontext, $cordovaNetwork,
-                            cordovaPlugins) {
+                            cordovaPlugins, dropbox) {
 
         
         var self = this;
@@ -56,6 +56,17 @@
                 DAL.deleteRepeatsTask(self.$storage.cachedDeleteRepeatsTasksList).then(function (response) {
                     delete self.$storage.cachedDeleteRepeatsTasksList;
                 });
+            }
+
+            if (self.$storage.cachedImagesList !== undefined && self.$storage.cachedImagesList.length > 0) {
+                for (var i = 0; i < self.$storage.cachedImagesList.length; i++) {
+                    var image = self.$storage.cachedImagesList[i];
+                    dropbox.uploadNewImageToDropbox(image.fileEntry.filesystem.root.nativeURL, image.fileEntry.name, image.fileName)
+                        .then(function (fileName) {
+                            var index = arrayObjectIndexOf(self.$storage.cachedImagesList, 'fileName', fileName);
+                            self.$storage.cachedImagesList.splice(index, 1);
+                    });
+                }
             }
         }
 
@@ -154,6 +165,19 @@
             }
         }
 
+        var addTasksToCachedImagesList = function (image) {
+            if (self.$storage.cachedImagesList === undefined) {
+                self.$storage.cachedImagesList = [];
+            }
+
+            self.$storage.cachedImagesList.push(image);
+
+            if (self.networkState === 'offline') {
+                cordovaPlugins.showToast('אתה במצב לא מקוון, התמונה תישלח כשתתחבר לרשת', 2000);
+            }
+        }
+
+
         var markCommentsAsOnline = function (comments) {
             for (var i = 0; i < comments.length; i++) {
                 comments[i].comment.offlineMode = false;
@@ -182,7 +206,8 @@
             addCommentToCachedNewCommentsList: addCommentToCachedNewCommentsList,
             addTasksToCachedNewRepeatsTasksList: addTasksToCachedNewRepeatsTasksList,
             addTasksToCachedUpdateRepeatsTasksList: addTasksToCachedUpdateRepeatsTasksList,
-            addTasksToCachedDeleteRepeatsTasksList: addTasksToCachedDeleteRepeatsTasksList
+            addTasksToCachedDeleteRepeatsTasksList: addTasksToCachedDeleteRepeatsTasksList,
+            addTasksToCachedImagesList: addTasksToCachedImagesList
         };
 
         return service;

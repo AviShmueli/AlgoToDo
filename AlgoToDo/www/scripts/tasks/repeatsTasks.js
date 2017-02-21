@@ -129,6 +129,7 @@
                     cordovaPlugins.showToast("הקש שוב ליציאה", 1000);
                     $timeout(function () { vm.exitApp = false; }, 1000);
                 } else {
+                    window.plugins.toast.hide();
                     navigator.app.exitApp();
                 }
             }

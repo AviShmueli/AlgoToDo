@@ -66,11 +66,14 @@
                     if (comment.offlineMode !== undefined) {
                         delete comment.offlineMode;
                     }
+
+                    comment.createTime = new Date();
                     comment.from._id = new ObjectID(comment.from._id);
                     comment._id = new ObjectID();
                 }
             }
 
+            task.createTime = new Date(); 
             task.to._id = new ObjectID(task.to._id);
             task.from._id = new ObjectID(task.from._id);
             recipientsIds.push(task.to._id);
@@ -170,6 +173,13 @@
         if (users[task.from._id] !== undefined) {
             from = users[task.from._id].id;
         }*/
+        if (task.status === 'done') {
+            task.doneTime = new Date();
+            //localNotifications.cancelNotification(task._id);
+        }
+        if (task.status === 'seen') {
+            task.seenTime = new Date();
+        }
 
         DAL.updateTaskStatus(task).then(function (result) {
             /*// send the updated task to the maneger and return it to the employee

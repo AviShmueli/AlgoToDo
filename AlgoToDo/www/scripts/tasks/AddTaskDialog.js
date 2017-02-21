@@ -83,20 +83,21 @@
         vm.hide = function () {
             $mdDialog.hide();
         };
+
         vm.cancel = function () {
             vm.task = {};
             $mdDialog.cancel();
         };
+
         vm.save = function () {
             if (vm.submitInProcess === false) {
                 vm.submitInProcess = true;
                 if (vm.selectedRecipients.length !== 0) {
 
                     vm.task.from = { '_id': vm.user._id, 'name': vm.user.name, 'avatarUrl': vm.user.avatarUrl };
-                    vm.task.status = 'inProgress';
-                    vm.task.createTime = new Date();                    
+                    vm.task.status = 'inProgress';                                       
+                    vm.task.createTime = new Date();
                     vm.task.cliqaId = vm.user.cliqot[0]._id;
-                    //vm.task.offlineMode = false;
 
                     if (vm.task.comments.length > 0) {
                         vm.task.comments[0].createTime = new Date();
@@ -105,16 +106,21 @@
                     var taskListToAdd = createTasksList(vm.task, vm.selectedRecipients);
                     var isTaskFromMeToMe = (taskListToAdd.length === 1 && taskListToAdd[0].from._id === taskListToAdd[0].to._id)
                     if (vm.taskHasImage === true && !isTaskFromMeToMe) {
-                        cordovaPlugins.showToast("שולח, מעלה תמונה...", 100000);
+                        //cordovaPlugins.showToast("שולח, מעלה תמונה...", 100000);
                         dropbox.uploadNewImageToDropbox(vm.newImage.fileEntry.filesystem.root.nativeURL,
                                                         vm.newImage.fileEntry.name,
-                                                        vm.newImage.fileName).then(function () {
-                            saveNewTask(taskListToAdd);
-                        });
+                                                        vm.newImage.fileName)
+                            .then(function () {}, function (error) {
+                                if (error.status === -1) {
+                                    error.data = "App lost connection to the server";
+                                }
+                                logger.error('Error while trying to upload image to Dropbox: ', error.data || error);
+                                $offlineHandler.addTasksToCachedImagesList(vm.newImage);
+                            });
                     }
-                    else {
-                        saveNewTask(taskListToAdd);                       
-                    }
+
+                    saveNewTask(taskListToAdd);                       
+
                 }
                 else {
                     vm.showNoRecipientsSelectedError = true;
@@ -201,6 +207,8 @@
 
                     window.resolveLocalFileSystemURL(fileUrl, function success(fileEntry) {
                         
+                        vm.takeingPic = false;
+
                         var fileName = new Date().toISOString().replace(/:/g, "_") + '.jpg';
 
                         vm.newImage.fileEntry = fileEntry
@@ -216,8 +224,7 @@
                             fileName: fileName
                         };
 
-                        vm.task.comments.push(comment);
-                        vm.takeingPic = false;
+                        vm.task.comments.push(comment);                      
                     });
                 }, function (err) {
                     vm.taskHasImage = false;

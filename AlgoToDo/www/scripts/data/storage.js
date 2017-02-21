@@ -15,7 +15,7 @@
             var deferred = $q.defer();
 
             var dataDirectory = (cordova.platformId.toLowerCase() === 'ios') ? cordova.file.dataDirectory : cordova.file.externalDataDirectory;
-            var folderpath = dataDirectory + 'pictures/' + taskId + "/" + fileName;
+            var folderpath = dataDirectory + 'Asiti/' + taskId + "/" + fileName;
             var uri = encodeURI(downloadUrl.replace("?dl=0", "?dl=1"));
 
             var fileTransfer = new FileTransfer();

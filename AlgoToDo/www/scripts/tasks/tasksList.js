@@ -111,6 +111,7 @@
                     cordovaPlugins.showToast("הקש שוב ליציאה", 1000);
                     $timeout(function () { vm.exitApp = false; }, 1000);
                 } else {
+                    window.plugins.toast.hide();
                     navigator.app.exitApp();
                 }
             }
@@ -134,11 +135,13 @@
             task.status = newStatus;
             if (task.status === 'done') {
                 task.doneTime = new Date();
-                //localNotifications.cancelNotification(task._id);
+                //datacontext.removeAllTaskImagesFromCache(task);
+                localNotifications.cancelNotification(task._id);
             }
             if (task.status === 'seen') {
                 task.seenTime = new Date();
             }
+
             DAL.updateTask(task).then(function (response) {
                 var count = datacontext.setMyTaskCount();
                 cordovaPlugins.setBadge(count);
