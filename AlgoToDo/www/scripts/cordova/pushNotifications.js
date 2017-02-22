@@ -124,13 +124,31 @@
         var handelNewCommentRecived = function (taskId, comment) {
             if (comment.fileName !== undefined) {
                 comment.fileLocalPath = device.getImagesPath() + "/images/upload-empty.png";
-                datacontext.addCommentToTask(taskId, comment);
-                navigateToTaskPage(taskId, comment);                
+                downloadImage(taskId, comment);
             }
-            else {
-                datacontext.addCommentToTask(taskId, comment);
-                navigateToTaskPage(taskId, comment);
-            }
+
+            datacontext.addCommentToTask(taskId, comment);
+            navigateToTaskPage(taskId, comment);
+        }
+
+        var downloadImage = function (taskId, comment) {
+            dropbox.getThumbnail(comment.fileName, 'w128h128')
+                    .then(function (response) {
+                        var url = URL.createObjectURL(response.fileBlob);
+                        comment.fileLocalPath = url;
+                    })
+                    .catch(function (error) {
+                        $log.error("error while trying to get file Thumbnail", error);
+                    });
+            dropbox.downloadFile(comment.fileName).then(function (response) {
+                storage.saveFileToStorage(taskId, comment.fileName, response.url).then(function (storageFilePath) {
+                    comment.fileLocalPath = storageFilePath;
+                    dropbox.deleteFile(comment.fileName);
+                });
+            })
+            .catch(function (error) {
+                $log.error("error while trying to download file from dropbox", error);
+            });
         }
 
         var navigateToTaskPage = function (taskId, task) {
@@ -151,7 +169,7 @@
         var showNewCommentToast = function (taskId, name) {
 
             var NewCommentToast = $mdToast.build({
-                hideDelay: 5000,
+                hideDelay: 2500,
                 position: 'top',
                 template: '<md-toast class="md-capsule" id="message-toast" md-swipe-left="$root.hideToast(\'message-toast\')" md-swipe-right="$root.hideToast(\'message-toast\')">' +
                              '<div layout="row" class="md-toast-content message-toast" dir="rtl" ng-click="$root.redirectToTaskPage(\'' + taskId + '\')"> ' +
@@ -175,7 +193,7 @@
             }, false);
 
             var NewCommentToast = $mdToast.build({
-                hideDelay: 5000,
+                hideDelay: 2500,
                 position: 'top',
                 template: '<md-toast class="md-capsule" id="message-toast" md-swipe-left="$root.hideToast(\'message-toast\')" md-swipe-right="$root.hideToast(\'message-toast\')">' +
                              '<div layout="row" class="md-toast-content message-toast" dir="rtl" ng-click="$root.redirectToTaskPage(\'' + taskId + '\')"> ' +

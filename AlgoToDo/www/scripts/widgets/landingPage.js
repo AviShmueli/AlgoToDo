@@ -16,9 +16,9 @@
 
         var login = function () {
 
-            /*if (datacontext.getTaskList().length === 0) {
+            if (datacontext.getTaskList().length === 0) {
                 DAL.reloadAllTasks();
-            }*/
+            }
 
             // register for push notifications
             if (device.isMobileDevice()) {

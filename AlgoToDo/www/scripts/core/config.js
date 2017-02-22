@@ -78,7 +78,7 @@
         .run(function (amMoment, DAL, $offlineHandler) {
             //init();
             $offlineHandler.goOnline();
-            DAL.reloadAllTasks();
+            ///DAL.reloadAllTasks();
             amMoment.changeLocale('he');
         });
 
