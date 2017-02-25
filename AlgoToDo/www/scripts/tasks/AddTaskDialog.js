@@ -89,10 +89,12 @@
             $mdDialog.cancel();
         };
 
-        vm.save = function () {
+        vm.save = function () {            
             if (vm.submitInProcess === false) {
                 vm.submitInProcess = true;
                 if (vm.selectedRecipients.length !== 0) {
+
+                    $mdDialog.hide();
 
                     vm.task.from = { '_id': vm.user._id, 'name': vm.user.name, 'avatarUrl': vm.user.avatarUrl };
                     vm.task.status = 'inProgress';                                       

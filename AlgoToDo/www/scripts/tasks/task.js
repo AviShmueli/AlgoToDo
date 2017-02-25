@@ -139,9 +139,11 @@
                 task.seenTime = new Date();
             }
 
+            var count = datacontext.setMyTaskCount();
+            cordovaPlugins.setBadge(count);
+
             DAL.updateTask(task).then(function (response) {
-                var count = datacontext.setMyTaskCount();
-                cordovaPlugins.setBadge(count);
+                
             }, function (error) {
                 if (error.status === -1) {
                     error.data = "App lost connection to the server";
@@ -149,9 +151,6 @@
                 logger.error('Error while trying to update task: ', error.data || error);
                 task.offlineMode = true;
                 $offlineHandler.addTaskToCachedTasksToUpdateList(task);
-
-                var count = datacontext.setMyTaskCount();
-                cordovaPlugins.setBadge(count);
             });
 
             vm.goBack();
