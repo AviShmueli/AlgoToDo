@@ -99,11 +99,16 @@
                     vm.task.createTime = new Date();
                     vm.task.cliqaId = vm.user.cliqot[0]._id;
 
+                    if (vm.selectedRecipients.length > 1) {
+                        vm.task.type = 'group-sub';
+                    }
+
                     if (vm.task.comments.length > 0) {
                         vm.task.comments[0].createTime = new Date();
                     }
 
                     var taskListToAdd = createTasksList(vm.task, vm.selectedRecipients);
+
                     var isTaskFromMeToMe = (taskListToAdd.length === 1 && taskListToAdd[0].from._id === taskListToAdd[0].to._id)
                     if (vm.taskHasImage === true && !isTaskFromMeToMe) {
                         //cordovaPlugins.showToast("שולח, מעלה תמונה...", 100000);
@@ -117,6 +122,11 @@
                                 logger.error('Error while trying to upload image to Dropbox: ', error.data || error);
                                 $offlineHandler.addTasksToCachedImagesList(vm.newImage);
                             });
+                    }
+
+                    if (taskListToAdd.length > 1) {
+                        var groupTask = createGroupMainTask(vm.task, vm.selectedRecipients);
+                        taskListToAdd.push(groupTask);
                     }
 
                     saveNewTask(taskListToAdd);                       
@@ -195,6 +205,13 @@
             });
             return listToReturn;
         };     
+    
+        var createGroupMainTask = function (task, recipients) {
+            var groupTask = angular.copy(task);
+            groupTask.type = 'group-main';
+            groupTask.to = recipients;
+            return groupTask;
+        };
 
         vm.takePic = function (sourceType) {
             vm.taskHasImage = true;

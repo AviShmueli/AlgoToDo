@@ -45,11 +45,8 @@
             tasks = [tempTask];
         }
 
-        /*var to = '';
-        if (users[task.to._id] !== undefined) {
-            to = users[task.to._id].id;
-        }*/
-
+        var groupMainTask;
+        var groupMainTaskIndex;
         var recipientsIds = [];
         for (var i = 0, len = tasks.length; i < len; i++) {
             var task = tasks[i];
@@ -73,38 +70,60 @@
                 }
             }
 
-            task.createTime = new Date(); 
-            task.to._id = new ObjectID(task.to._id);
+            task.createTime = new Date();
             task.from._id = new ObjectID(task.from._id);
-            recipientsIds.push(task.to._id);
+
+            if (task.type === 'group-main') {
+                groupMainTask = task;
+                groupMainTaskIndex = i;
+            } else {
+                task.to._id = new ObjectID(task.to._id);
+                recipientsIds.push(task.to._id);
+            }
+
         }
 
-        /*var toId = task.to._id;
-        var fromId = task.from._id;
-        task.to._id = ObjectID(toId);
-        task.from._id = ObjectID(fromId);*/
+        // if this is a group task
+        if (groupMainTask !== undefined && groupMainTaskIndex !== undefined) {
+            // remove the main task from the list
+            tasks.splice(groupMainTaskIndex, 1);
 
-        //add tasks to Mongo
-        DAL.insertNewTasks(tasks).then(function (results) {
-            // if the employee is now online send the new task by Socket.io
-            /*console.log("to:", to);
-            if (to !== '' && task.to._id !== task.from._id) {
-                io.to(to).emit('new-task', results.ops[0]);
-            }*/
-            var newTasks = results.ops;
-            console.log("trying to send new tasks", newTasks);
+            // insert the main task, then set his id to all the subs tasks
+            DAL.insertNewTasks([groupMainTask]).then(function (results) {
 
-            // if this task is not from me to me, send notification to the user
-            //if (task.to._id !== task.from._id) {
-            pushTasksToUsersDevice(newTasks, recipientsIds, pushToSenderAnyway);
-            //}
+                var mainTask = results.ops[0];
 
-            // return the new task to the sender
-            d.resolve(results.ops);
-        }, function (error) {
-            d.reject(error);
-        });
+                // if the task created by the server (repeats task)
+                if (pushToSenderAnyway) {
+                    pushTasksToUsersDevice([mainTask], [groupMainTask.from._id], pushToSenderAnyway);
+                }
 
+                // set the main task id to all the subs tasks
+                for (var index = 0; index < tasks.length; index++) {
+                    var task = tasks[index];
+                    task.groupMainTaskId = mainTask._id;
+                }
+
+                // insert the subs tasks
+                DAL.insertNewTasks(tasks).then(function (results) {
+                    pushTasksToUsersDevice(results.ops, recipientsIds, pushToSenderAnyway);
+                    results.ops.push(mainTask);
+                    d.resolve(results.ops);
+                }, function (error) {
+                    d.reject(error);
+                });
+
+            }, function (error) {
+                d.reject(error);
+            });
+        } else {
+            DAL.insertNewTasks(tasks).then(function (results) {
+                pushTasksToUsersDevice(results.ops, recipientsIds, pushToSenderAnyway);
+                d.resolve(results.ops);
+            }, function (error) {
+                d.reject(error);
+            });
+        }
         return d.promise;
     }
 
@@ -286,7 +305,7 @@
 
         DAL.checkIfUserExist(query).then(function (user) {
             if (user === null) {
-                d.resolve(''); 
+                d.resolve('');
             } else {
                 if (user.type !== 'apple-tester' && user.type !== 'admin') {
                     sendVerificationCodeToUser(user);
@@ -487,10 +506,9 @@
         var d = deferred();
 
         DAL.checkIfVerificationCodeMatch(userId, verificationCode).then(function (result) {
-            if(result !== null){
+            if (result !== null) {
                 d.resolve('ok');
-            }
-            else{
+            } else {
                 d.resolve('notMatch');
             }
         }, function (error) {
@@ -545,13 +563,13 @@
         return d.promise;
     }
 
-    function getUsersRepeatsTasks(userId){
-    
+    function getUsersRepeatsTasks(userId) {
+
         var d = deferred();
 
-        DAL.getUsersRepeatsTasks(userId).then(function(results) {
+        DAL.getUsersRepeatsTasks(userId).then(function (results) {
             d.resolve(results);
-        }, function(error) {
+        }, function (error) {
             d.deferred(error);
         });
 
@@ -561,6 +579,32 @@
 
 
     /* ---- Private Methods --- */
+
+    function insertNewTasksAndSendToUser(tasks, recipientsIds, pushToSenderAnyway) {
+        var d = deferred;
+
+        DAL.insertNewTasks(tasks).then(function (results) {
+            // if the employee is now online send the new task by Socket.io
+            /*console.log("to:", to);
+            if (to !== '' && task.to._id !== task.from._id) {
+                io.to(to).emit('new-task', results.ops[0]);
+            }*/
+            var newTasks = results.ops;
+            console.log("trying to send new tasks", newTasks);
+
+            // if this task is not from me to me, send notification to the user
+            //if (task.to._id !== task.from._id) {
+            pushTasksToUsersDevice(newTasks, recipientsIds, pushToSenderAnyway);
+            //}
+
+            // return the new task to the sender
+            d.resolve(results.ops);
+        }, function (error) {
+            d.reject(error);
+        });
+
+        return d.promise;
+    }
 
     function pushCommentToUserDevice(comment, task, userIdToNotify) {
 

@@ -19,7 +19,6 @@
                       DAL, $offlineHandler, $location, $timeout) {
 
         var vm = this;
-
         vm.taskId = $routeParams.taskId.split('&')[0];
         vm.task = datacontext.getTaskByTaskId(vm.taskId);
         vm.user = datacontext.getUserFromLocalStorage();
@@ -38,8 +37,8 @@
         }
 
         vm.goBack = function () {
-            //window.location = '#/';
-            $location.path('/tasksList');
+            window.history.back();
+            //$location.path('/tasksList');
         };
 
         vm.takePic = function (sourceType) {
@@ -425,20 +424,6 @@
                 $mdDialog.hide(answer);
             };
         }
-        
-
-        /*dropbox.getThumbnail(, 'w128h128')
-                        .then(function (response) {
-                            var url = URL.createObjectURL(response.fileBlob);
-                            //dataFromServer.object.fileLocalPath = url;
-
-                            storage.saveFileToStorage('2016-12-11T21:23:02.851Z.jpg', response);
-                            //datacontext.saveFileToCache(dataFromServer.object.fileName, url);
-                            //datacontext.addCommentToTask(dataFromServer.taskId, dataFromServer.object);
-                        })
-                        .catch(function (error) {
-                            logger.error("error while trying to get file Thumbnail", error);
-                        });*/
 
     }
 

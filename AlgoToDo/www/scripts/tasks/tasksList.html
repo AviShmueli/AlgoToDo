@@ -74,11 +74,14 @@
                     <md-list flex flex-gt-sm="50" flex-md="66" dir="rtl" ng-show="(vm.allTasks() | tasksInProgress: vm.user._id).length > 0">
                         <md-list-item ng-repeat="item in vm.allTasks() | tasksInProgress: vm.user._id | filter:vm.search" class="noright task-item" style="margin-top: 7px">
                             <md-card-avatar>
-                                <img alt="{{item.to.name}}" ng-src="{{vm.imagesPath + item.to.avatarUrl}}" class="md-avatar user-avatar" style="margin-right: 0;" />
+                                <img ng-if="item.type === 'group-main'" alt="avatar" ng-src="{{vm.imagesPath + '/images/group-1.svg'}}" class="md-avatar user-avatar" style="margin-right: 0;" />
+                                <img ng-if="item.type !== 'group-main'" alt="{{item.to.name}}" ng-src="{{vm.imagesPath + item.to.avatarUrl}}" class="md-avatar user-avatar" style="margin-right: 0;" />
                             </md-card-avatar>
-                            <a class="md-tile-content" flex="100" style="margin-bottom: 14px;" ng-click="vm.navigateToTaskPage(item._id)">
+                            <a class="md-tile-content" flex="100" style="margin-bottom: 14px;" ng-click="vm.navigateToTaskPage(item)">
                                 <div layout="row">
-                                    <span class="from">{{item.to.name}}</span>
+                                    <span ng-if="item.type !== 'group-main'" class="from">{{item.to.name}}</span>
+                                    <span ng-if="item.type === 'group-main'" class="from">{{(item.to.length === 1 ? item.to[0].name : (item.to[0].name + ' +' + (item.to.length - 1)))}}</span>
+
                                     <!--<ng-md-icon class="head-icon" icon="send" style="fill: black" size="10"></ng-md-icon>-->
                                     <span flex></span>
                                     <span class="font-bold" ng-bind-html="(item.createTime | amCalendar)"></span>
@@ -121,7 +124,7 @@
                             <md-card-avatar>
                                 <img alt="{{item.from.name}}" ng-src="{{vm.imagesPath + item.from.avatarUrl}}" class="md-avatar user-avatar" style="margin-right: 0;" />
                             </md-card-avatar>
-                            <a class="md-tile-content" flex="100" style="margin-bottom: 14px;" ng-click="vm.navigateToTaskPage(item._id)">
+                            <a class="md-tile-content" flex="100" style="margin-bottom: 14px;" ng-click="vm.navigateToTaskPage(item)">
                                 <div layout="row">
                                     <span class="from">{{item.from.name}}</span>
                                     <!--<ng-md-icon class="head-icon" icon="send" style="fill: black" size="10"></ng-md-icon>-->
@@ -168,7 +171,7 @@
                             <!--<div md-virtual-repeat="item in vm.allTasks() | doneTasks: vm.user._id | filter:vm.search | orderBy: 'createTime':true" class="noright task-item repeated-item" style="margin-top: 7px;padding: 0 16px;" flex>-->
                             <div md-on-demand md-virtual-repeat="item in vm.infiniteItems" class="noright task-item repeated-item" style="margin-top: 7px;padding: 0 16px;" flex>
                              <!--<div md-virtual-repeat="item in vm.allTasks() | doneTasks: vm.user._id | filter:vm.search | orderBy: 'createTime':true" class="noright task-item repeated-item" style="margin-top: 7px;padding: 0 16px;" flex>-->
-                                    <a class="md-tile-content" flex="100" style="margin-bottom: 14px;" ng-click="vm.navigateToTaskPage(item._id)">
+                                    <a class="md-tile-content" flex="100" style="margin-bottom: 14px;" ng-click="vm.navigateToTaskPage(item)">
                                         <div layout="row">
                                             <span class="from">{{item.to.name}}</span>
                                             <span flex></span>

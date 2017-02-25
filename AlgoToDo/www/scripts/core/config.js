@@ -47,7 +47,10 @@
               })
               .when('/repeatsTasks', {
                   templateUrl: 'scripts/tasks/repeatsTasks.html'
-               })
+              })
+              .when('/groupTask/:taskId', {
+                  templateUrl: 'scripts/tasks/groupTask.html'
+              })
               .otherwise({
                   templateUrl: 'scripts/widgets/landingPage.html'
               });
@@ -78,7 +81,7 @@
         .run(function (amMoment, DAL, $offlineHandler) {
             //init();
             $offlineHandler.goOnline();
-            ///DAL.reloadAllTasks();
+            //DAL.reloadAllTasks();
             amMoment.changeLocale('he');
         });
 

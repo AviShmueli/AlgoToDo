@@ -16,7 +16,7 @@
 
         var login = function () {
 
-            if (datacontext.getTaskList().length === 0) {
+            if (datacontext.getTaskList().length === 0 || !device.isMobileDevice()) {
                 DAL.reloadAllTasks();
             }
 

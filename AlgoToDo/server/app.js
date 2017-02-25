@@ -67,7 +67,7 @@ app.post('/TaskManeger/newTask', function (req, res) {
         res.send(result);
     }, function(error){
         winston.log('error', error.message , error.error);
-        res.status(500).send(error); 
+        res.sendStatus(500).send(error); 
     });
 
 });

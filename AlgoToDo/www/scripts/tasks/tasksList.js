@@ -174,9 +174,13 @@
             }
         };
 
-        vm.navigateToTaskPage = function (taskId) {
-            //window.location = '#/task/' + taskId;
-            $location.path('/task/' + taskId);
+        vm.navigateToTaskPage = function (task) {
+            if (task.type === 'group-main') {
+                $location.path('/groupTask/' + task._id);
+            }
+            else {
+                $location.path('/task/' + task._id);
+            }
         };
  
         $rootScope.redirectToTaskPage = function (taskId, toast) {

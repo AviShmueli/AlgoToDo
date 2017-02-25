@@ -20,7 +20,8 @@
             angular.forEach(tasks, function (task) {
                 if (task.status === 'inProgress' &&
                     task.from._id === userId &&
-                    task.to._id !== userId) {
+                    task.to._id !== userId &&
+                    task.type !== 'group-sub') {
                     filtered.push(task);
                 }
             });
@@ -31,7 +32,30 @@
             var filtered = [];
             angular.forEach(tasks, function (task) {
                 if (task.status === 'done' &&
-                    task.from._id === userId) {
+                    task.from._id === userId &&
+                    task.type !== 'group-sub') {
+                    filtered.push(task);
+                }
+            });
+            return filtered;
+        };
+    }).filter('groupTasks_inProgress', function () {
+        return function (tasks, mainTaskId) {
+            var filtered = [];
+            angular.forEach(tasks, function (task) {
+                if (task.groupMainTaskId === mainTaskId &&
+                    task.status === 'inProgress') {
+                    filtered.push(task);
+                }
+            });
+            return filtered;
+        };
+    }).filter('groupTasks_done', function () {
+        return function (tasks, mainTaskId) {
+            var filtered = [];
+            angular.forEach(tasks, function (task) {
+                if (task.groupMainTaskId === mainTaskId &&
+                    task.status === 'done') {
                     filtered.push(task);
                 }
             });
