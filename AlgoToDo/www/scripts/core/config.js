@@ -74,7 +74,7 @@
             return {
                 appDomain:
                   // 'https://algotodo.herokuapp.com'
-                 'https://algotodo-test.herokuapp.com'
+                  'https://algotodo-test.herokuapp.com'
                   // 'http://localhost:5001'
             };
         })

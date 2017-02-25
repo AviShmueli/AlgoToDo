@@ -209,11 +209,14 @@
             // if this task is not from me to me, send notification to the user
             if (task.to._id !== task.from._id) {
                 if (task.status === 'done') {
-                    pushUpdatetdTaskToUsersDevice(result, task.from._id);
+                    pushUpdatetdTaskToUsersDevice(result, task.from._id);                  
                 }
                 /*if (task.status === 'inProgress') {
                     pushTasksToUsersDevice([result], [result.to._id]);
                 }*/
+            }
+            if (task.type === 'group-sub') {
+                checkIfGroupMainTaskIsDone(task.groupMainTaskId);
             }
             d.resolve();
         }, function (error) {
@@ -678,6 +681,20 @@
         });
 
         return d.promise;
+    }
+
+    function checkIfGroupMainTaskIsDone(mainTaskId){
+        DAL.getGroupSubTasksInProgress(mainTaskId).then(function(result) {
+            if (result === 0) {
+                DAL.updateTaskStatus({_id: mainTaskId, 'status': 'done', 'doneTime': new Date(), 'seenTime': null}).then(function (result) {
+                    pushUpdatetdTaskToUsersDevice(result, result.from._id);
+                }, function(error){
+                    winston.log(error);
+                });
+            }
+        }, function(error) {
+            winston.log(error);
+        });
     }
 
 

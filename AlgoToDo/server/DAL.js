@@ -29,6 +29,7 @@
     DAL.deleteRepeatsTasks = deleteRepeatsTasks;
     DAL.getDoneTasks = getDoneTasks;
     DAL.getTasksInProgress = getTasksInProgress;
+    DAL.getGroupSubTasksInProgress = getGroupSubTasksInProgress;
 
     var deferred = require('deferred');
     var mongodb = require('mongodb').MongoClient;
@@ -513,7 +514,8 @@
                     'to._id': new ObjectID(userId)
                 }],*/
                 'from._id': new ObjectID(userId),
-                status: 'done'
+                status: 'done',
+                type: {'$ne': 'group-sub'}
             }, {
                 skip: parseInt(page),
                 limit: 20
@@ -898,6 +900,33 @@
                 mongo.db.close();
                 d.resolve();
             });
+        });
+
+        return d.promise;
+    }
+
+    function getGroupSubTasksInProgress(mainTaskId){
+        var d = deferred();
+
+        getCollection('tasks').then(function (mongo) {
+
+            mongo.collection.count({
+                _id: mainTaskId,
+                status: {'$ne': 'done'}
+            },
+            function (err, result) {
+                    if (err) {
+                        var errorObj = {
+                            message: "error while trying to get Group SubTasks InProgress",
+                            error: err
+                        };
+                        mongo.db.close();
+                        d.reject(errorObj);
+                    }
+
+                    mongo.db.close();
+                    d.resolve(result);
+                });
         });
 
         return d.promise;

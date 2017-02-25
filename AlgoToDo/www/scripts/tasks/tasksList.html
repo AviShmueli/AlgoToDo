@@ -173,7 +173,8 @@
                              <!--<div md-virtual-repeat="item in vm.allTasks() | doneTasks: vm.user._id | filter:vm.search | orderBy: 'createTime':true" class="noright task-item repeated-item" style="margin-top: 7px;padding: 0 16px;" flex>-->
                                     <a class="md-tile-content" flex="100" style="margin-bottom: 14px;" ng-click="vm.navigateToTaskPage(item)">
                                         <div layout="row">
-                                            <span class="from">{{item.to.name}}</span>
+                                            <span ng-if="item.type !== 'group-main'" class="from">{{item.to.name}}</span>
+                                            <span ng-if="item.type === 'group-main'" class="from">{{(item.to.length === 1 ? item.to[0].name : (item.to[0].name + ' +' + (item.to.length - 1)))}}</span>
                                             <span flex></span>
                                             <span class="time">{{vm.getTotalTaskTime(item)}}</span>
                                             <ng-md-icon icon="timer" size="20"></ng-md-icon>
