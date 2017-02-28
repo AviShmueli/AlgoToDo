@@ -51,7 +51,7 @@
                             </div>
 
                             <div layout="row">
-                                <div layout="row" flex="90" style="font-size: 14px;">
+                                <div layout="row" flex="90" style="font-size: 14px;margin-left: 15px">
                                     <span ng-if="task.description.length > vm.descriptionTextLength()">{{task.description.substring(0, vm.descriptionTextLength()) + '...'}}</span>
                                     <span ng-if="task.description.length <= vm.descriptionTextLength()">{{task.description}}</span>
                                 </div>

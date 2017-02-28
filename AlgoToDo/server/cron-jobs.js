@@ -43,7 +43,7 @@
                 context: task,
                 onTick: function() {
                     var _task = this;
-                    logger.log("info","sending repeats task, time now is: " + new Date(), _task);
+                    logger.log("info", "sending repeats task, time now is: " + new Date(), _task);
                     
                     var tasksToSend = preperTaskToSend(_task);
                     
@@ -112,7 +112,18 @@
         task.description = repeatsTask.description;
         task.comments = [];
 
-        return createTasksList(task, repeatsTask.to);
+        var taskListToreturn = [];
+        if (repeatsTask.to.length > 1) {
+            task.type = 'group-sub';
+        }
+
+        taskListToreturn = createTasksList(task, repeatsTask.to);
+
+        if (taskListToreturn.length > 1) {
+            taskListToreturn.push(createGroupMainTask(task,repeatsTask.to));
+        }
+
+        return taskListToreturn;
     }
 
     function createTasksList(task, recipients) {
@@ -127,10 +138,12 @@
                         var user = recipient.usersInGroup[j];
                         tempTask = JSON.parse(JSON.stringify(task));
                         tempTask.to = { 'name': user.name, '_id': user._id, 'avatarUrl': user.avatarUrl };
+                        tempTask.type = 'group-sub';
                         listToReturn.push(tempTask);
                     }
                 }
                 else {
+                    
                     tempTask = JSON.parse(JSON.stringify(task));
                     tempTask.to = { 'name': recipient.name, '_id': recipient._id, 'avatarUrl': recipient.avatarUrl };
                     listToReturn.push(tempTask);
@@ -139,8 +152,12 @@
             return listToReturn;
         }
 
-
-
+        var createGroupMainTask = function (task, recipients) {
+            var groupTask = JSON.parse(JSON.stringify(task));
+            groupTask.type = 'group-main';
+            groupTask.to = recipients;
+            return groupTask;
+        };
 
 
 })(module.exports);

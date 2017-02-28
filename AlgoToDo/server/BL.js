@@ -48,6 +48,11 @@
         var groupMainTask;
         var groupMainTaskIndex;
         var recipientsIds = [];
+        
+        if (pushToSenderAnyway) {
+            recipientsIds.push(new ObjectID(tasks[0].from._id));
+        }
+        
         for (var i = 0, len = tasks.length; i < len; i++) {
             var task = tasks[i];
             if (task._id !== undefined && task._id.indexOf('tempId') !== -1) {
@@ -625,18 +630,35 @@
 
     function pushTasksToUsersDevice(tasks, recipientsIds, pushToSenderAnyway) {
 
+        var sender;
         // get user from DB and check if there GcmRegId or ApnRegId
         DAL.getUsersByUsersId(recipientsIds).then(function (users) {
+            
+            if (pushToSenderAnyway) {
+                sender = users.find(x => x._id.equals(tasks[0].from._id));
+            }
 
             tasks.forEach(function (task, index) {
                 if (pushToSenderAnyway || !task.to._id.equals(task.from._id)) {
                     var user = users.find(x => x._id.equals(task.to._id));
-                    // get the number that will be set to the app icon badge
-                    DAL.getUnDoneTasksCountByUserId(task.to._id).then(function (userUnDoneTaskCount) {
-                        pushNotifications.pushNewTask(task, userUnDoneTaskCount, user);
-                    }, function (error) {
-                        winston.log('error', error.message, error.err);
-                    });
+                    if (user === undefined) {
+                        user = users.find(x => x._id.equals(task.from._id));
+                    }
+
+                    if (task.type === 'group-main') {
+                        pushNotifications.pushUpdatedTask(task, sender);
+                    }
+                    else{
+                        // get the number that will be set to the app icon badge
+                        DAL.getUnDoneTasksCountByUserId(task.to._id).then(function (userUnDoneTaskCount) {                           
+                            pushNotifications.pushNewTask(task, userUnDoneTaskCount, user);
+                            if (pushToSenderAnyway) {
+                                pushNotifications.pushUpdatedTask(task, sender);
+                            }
+                        }, function (error) {
+                            winston.log('error', error.message, error.err);
+                        });
+                    }
                 }
             });
         }, function (error) {
@@ -684,7 +706,7 @@
     }
 
     function checkIfGroupMainTaskIsDone(mainTaskId){
-        DAL.getGroupSubTasksInProgress(mainTaskId).then(function(result) {
+        DAL.getGroupSubTasksInProgress(new ObjectID(mainTaskId)).then(function(result) {
             if (result === 0) {
                 DAL.updateTaskStatus({_id: mainTaskId, 'status': 'done', 'doneTime': new Date(), 'seenTime': null}).then(function (result) {
                     pushUpdatetdTaskToUsersDevice(result, result.from._id);

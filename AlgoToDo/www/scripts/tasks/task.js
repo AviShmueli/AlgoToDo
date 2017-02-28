@@ -37,6 +37,7 @@
         }
 
         vm.goBack = function () {
+            //alert(JSON.stringify(window.history));
             window.history.back();
             //$location.path('/tasksList');
         };
@@ -139,8 +140,10 @@
                 task.seenTime = new Date();
             }
 
-            var count = datacontext.setMyTaskCount();
-            cordovaPlugins.setBadge(count);
+            $timeout(function () {
+                var count = datacontext.setMyTaskCount();
+                cordovaPlugins.setBadge(count);
+            }, 0);
 
             DAL.updateTask(task).then(function (response) {
                 

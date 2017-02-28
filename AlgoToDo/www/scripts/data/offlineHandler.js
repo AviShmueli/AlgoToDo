@@ -177,7 +177,6 @@
             }
         }
 
-
         var markCommentsAsOnline = function (comments) {
             for (var i = 0; i < comments.length; i++) {
                 comments[i].comment.offlineMode = false;

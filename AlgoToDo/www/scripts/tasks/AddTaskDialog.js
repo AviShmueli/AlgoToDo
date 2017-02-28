@@ -110,6 +110,7 @@
                     }
 
                     var taskListToAdd = createTasksList(vm.task, vm.selectedRecipients);
+                    var groupMainTask;
 
                     var isTaskFromMeToMe = (taskListToAdd.length === 1 && taskListToAdd[0].from._id === taskListToAdd[0].to._id)
                     if (vm.taskHasImage === true && !isTaskFromMeToMe) {
@@ -127,11 +128,11 @@
                     }
 
                     if (taskListToAdd.length > 1) {
-                        var groupTask = createGroupMainTask(vm.task, vm.selectedRecipients);
-                        taskListToAdd.push(groupTask);
+                        groupMainTask = createGroupMainTask(vm.task, vm.selectedRecipients);
+                        taskListToAdd.push(groupMainTask);
                     }
 
-                    saveNewTask(taskListToAdd);                       
+                    saveNewTask(taskListToAdd, groupMainTask);
 
                 }
                 else {
@@ -141,7 +142,7 @@
             }
         };
 
-        var saveNewTask = function (taskListToAdd) {
+        var saveNewTask = function (taskListToAdd, groupMainTask) {
             DAL.saveNewTasks(taskListToAdd).then(function (response) {
                 logger.toast('המשימה נשלחה בהצלחה!', 700);
                 logger.info('task/s added sucsessfuly', response.data);
@@ -152,7 +153,7 @@
                 }
                 logger.error('Error while trying to add new task: ', error.data || error);               
                 $offlineHandler.addTasksToCachedNewTasksList(taskListToAdd);
-                markTaskAsOfflineMode(taskListToAdd);
+                markTaskAsOfflineMode(taskListToAdd, groupMainTask);
                 addTasksAndCloseDialog(taskListToAdd);
             });
         };
@@ -179,10 +180,22 @@
             vm.submitInProcess = false;
         }
 
-        var markTaskAsOfflineMode = function (tasks) {
+        var markTaskAsOfflineMode = function (tasks, groupMainTask) {
+            if (groupMainTask !== undefined) {
+                groupMainTask._id = 'tempId' + Math.floor(Math.random() * 90000) + 10000;
+                groupMainTask.offlineMode = true;
+            }
             for (var i = 0; i < tasks.length; i++) {
                 tasks[i].offlineMode = true;
-                tasks[i]._id = 'tempId' + Math.floor(Math.random() * 90000) + 10000;
+                if (groupMainTask !== undefined ) {
+                    if (tasks[i].type !== 'group-main') {
+                        tasks[i]._id = 'tempId' + Math.floor(Math.random() * 90000) + 10000;
+                        tasks[i].groupMainTaskId = groupMainTask._id;
+                    }
+                }
+                else {
+                    tasks[i]._id = 'tempId' + Math.floor(Math.random() * 90000) + 10000;
+                }
             }
         }
 
@@ -196,6 +209,7 @@
                     angular.forEach(value.usersInGroup, function (userInGroup, key) {
                         tempTask = angular.copy(task);
                         tempTask.to = { 'name': userInGroup.name, '_id': userInGroup._id, 'avatarUrl': userInGroup.avatarUrl };
+                        tempTask.type = 'group-sub';
                         listToReturn.push(tempTask);
                     });
                 }

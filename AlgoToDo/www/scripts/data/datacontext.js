@@ -47,6 +47,9 @@
             if (index !== -1) {
                 self.$storage.tasksList[index] = task;
             }
+            else {
+                addTaskToTaskList(task);
+            }
         };      
         
         var saveUserToLocalStorage = function (user) {
