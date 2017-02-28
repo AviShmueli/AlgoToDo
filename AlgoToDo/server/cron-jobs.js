@@ -36,14 +36,13 @@
                 taskJobMap[task._id].stop();
             }
 
-            logger.log('info', "start repeates task: " + '00 ' + minutes + ' ' + hour +  ' * * ' + days , task);
+            //logger.log('info', "start repeates task: " + '00 ' + minutes + ' ' + hour +  ' * * ' + days , task);
 
             var job = new CronJob({
                 cronTime: '00 ' + minutes + ' ' + hour +  ' * * ' + days, // Seconds(0-59) Minutes(0-59) Hours(0-23) Day of Month(1-31) Months(0-11) Day of Week:(0-6)
                 context: task,
                 onTick: function() {
                     var _task = this;
-                    logger.log("info", "sending repeats task, time now is: " + new Date(), _task);
                     
                     var tasksToSend = preperTaskToSend(_task);
                     
