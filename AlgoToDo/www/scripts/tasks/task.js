@@ -427,6 +427,43 @@
             };
         }
 
+        vm.startRecord = function () {
+            /*vm.newCommentText = 'מקליט...';
+            $timeout(function () {
+                if (vm.newCommentText === 'מקליט...') {
+                    vm.newCommentText = '';
+                }
+            }, 5000);*/
+        }
+
+        vm.endRecord = function () {
+            /*var recognition;
+            if (!device.isMobileDevice()) {
+                recognition = new webkitSpeechRecognition();
+            }
+            else {
+                recognition = new SpeechRecognition();
+            }
+            recognition.lang = 'en-US';
+            recognition.interimResults = false;
+            recognition.maxAlternatives = 5;
+            recognition.start();
+
+            recognition.onresult = function (event) {
+                console.log('You said: ', event.results[0][0].transcript);
+                $rootScope.transcript = event.results[0][0].transcript;
+                if (!$scope.$$phase) {
+                    $scope.$digest();
+                }
+            };*/
+
+            vm.newCommentText = $rootScope.transcript;
+            if (!$scope.$$phase) {
+                $scope.$digest();
+            }
+            //vm.addComment();
+        }
+
     }
 
 })();

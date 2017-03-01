@@ -35,7 +35,8 @@
         'app.logger',
         'app.cordova',
         'app.tasks',
-        'app.management'
+        'app.management',
+        'app.directives'
         /*
          * Feature areas
          */

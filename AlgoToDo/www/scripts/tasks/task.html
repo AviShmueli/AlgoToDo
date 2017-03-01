@@ -88,7 +88,7 @@
                         </md-button>
                         <md-button class="md-icon-button" aria-label="report" ng-click="vm.takePic('camera')">
                             <ng-md-icon icon="add_a_photo" class="icon-fill"></ng-md-icon>
-                        </md-button>
+                        </md-button>                       
                     </md-card-actions>
                 </md-card>
                 <md-card dir="rtl" class="response-card"
@@ -121,8 +121,11 @@
     <footer class="add-comment-footer" ng-if="vm.task.status !== 'done'">
         <md-toolbar class="md-scroll-shrink" style="background-color: transparent;">
             <div layout="row" layout-align="center center" flex style="padding-bottom: 8px;padding-top: 8px;">
-                <md-button class="md-fab md-icon-button md-med" aria-label="done" ng-click="vm.addComment()" ng-disabled="vm.newCommentText === ''">
-                    <ng-md-icon class="rotate" icon="send" size="28"></ng-md-icon>
+                <md-button class="md-fab md-icon-button md-med" aria-label="done" ng-click="vm.addComment()" ng-speech-recognition-start="vm.startRecord()" ng-speech-recognition-end="vm.endRecord()">
+                    <!--<ng-md-icon ng-if="vm.newCommentText !== ''" class="rotate" icon="send" size="28"></ng-md-icon>
+                    <ng-md-icon ng-if="vm.newCommentText === ''" icon="mic" size="28"></ng-md-icon>-->
+                    <ng-md-icon icon="{{vm.newCommentText !== '' ? 'send' : 'mic'}}" ng-class="{'rotate' : vm.newCommentText !== ''}" options='{"rotation": "counterclock"}'></ng-md-icon>
+
                 </md-button>
                 <md-input-container md-no-float class="md-block comment-input">
                     <textarea id="commentText"

@@ -63,6 +63,11 @@
         "phonegap-plugin-push": {
             "SENDER_ID": "874351794059",
             "PACKAGE_NAME": "com.algotodo.app"
+        },
+        "org.apache.cordova.speech.speechrecognition": {
+            "MICROPHONE_USAGE_DESCRIPTION": "In order to send voice tasks",
+            "SPEECH_RECOGNITION_USAGE_DESCRIPTION": " ",
+            "PACKAGE_NAME": "com.algotodo.app"
         }
     },
     "dependent_plugins": {
