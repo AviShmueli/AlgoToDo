@@ -11,7 +11,7 @@
                 </md-button>
                 <span flex></span>
                 <h2>
-                    <span style="color:white">Asiti</span>
+                    <span class="color-white">Asiti</span>
                 </h2>
                 <!--<span flex="10"></span>-->
                 <md-button class="md-icon-button" ng-click="vm.toggleSidenav('left')" aria-label="Menu">
@@ -21,17 +21,17 @@
             <md-tabs md-stretch-tabs="always" class="md-primary main-tabs" md-selected="$root.selectedIndex" md-swipe-content="true" md-no-ink-bar="true">
                 <md-tab id="tab1" aria-controls="tab1-content">
                     <ng-md-icon icon="assignment"></ng-md-icon>
-                    <br /><span style="font-size: 12px">בתהליך</span>
+                    <br /><span class="font-12px">בתהליך</span>
                 </md-tab>
                 <md-tab id="tab2" aria-controls="tab2-content">
                     <ng-md-icon icon="assignment_ind"></ng-md-icon>
                     <br />
                     <md-badge ng-if="$root.taskcount > 0">{{$root.taskcount}}</md-badge>
-                    <span style="font-size: 12px">המשימות שלי</span>
+                    <span class="font-12px">המשימות שלי</span>
                 </md-tab>
                 <md-tab id="tab3" aria-controls="tab3-content">
                     <ng-md-icon icon="done_all"></ng-md-icon>
-                    <br /><span style="font-size: 12px">בוצע</span>
+                    <br /><span class="font-12px">בוצע</span>
                 </md-tab>
             </md-tabs>
         </md-toolbar>
@@ -53,43 +53,43 @@
         </md-toolbar>
     </div>
     <md-fab-trigger>
-        <md-button style="z-index: 21" class="md-fab md-fab-bottom-right" aria-label="Add" ng-click="vm.showAdd($event)" md-no-ink="true">
+        <md-button class="md-fab md-fab-bottom-right z-index-21" aria-label="Add" ng-click="vm.showAdd($event)" md-no-ink="true">
             <ng-md-icon class="add-icon" icon="add"></ng-md-icon>
         </md-button>   
     </md-fab-trigger>
     <!--<md-fab-trigger>
-        <md-button style="z-index: 21" class="md-fab md-fab-bottom-left" aria-label="sync" ng-click="vm.goOnline()" md-no-ink="true">
+        <md-button class="md-fab md-fab-bottom-left z-index-21" aria-label="sync" ng-click="vm.goOnline()" md-no-ink="true">
             <ng-md-icon class="add-icon" icon="sync"></ng-md-icon>
         </md-button>
     </md-fab-trigger>-->
-    <md-content flex md-scroll-y style="height:100%">
+    <md-content flex md-scroll-y class="height-100P">
         <ui-view layout="column" layout-fill>
             <!--<div class="inset" hide-sm></div>-->
-            <ng-switch on="$root.selectedIndex" class="tabpanel-container" style="height:100%">
+            <ng-switch on="$root.selectedIndex" class="tabpanel-container height-100P">
                 <div role="tabpanel"
                      id="tab1-content"
                      aria-labelledby="tab1"
                      ng-switch-when="0"
                      layout="row" layout-align="center center">
                     <md-list flex flex-gt-sm="50" flex-md="66" dir="rtl" ng-show="(vm.allTasks() | tasksInProgress: vm.user._id).length > 0">
-                        <md-list-item ng-repeat="item in vm.allTasks() | tasksInProgress: vm.user._id | filter:vm.search" class="noright task-item" style="margin-top: 7px">
+                        <md-list-item ng-repeat="item in vm.allTasks() | tasksInProgress: vm.user._id | filter:vm.search" class="noright task-item margin-top-7px">
                             <md-card-avatar>
-                                <img ng-if="item.type === 'group-main'" alt="avatar" ng-src="{{vm.imagesPath + '/images/group-1.svg'}}" class="md-avatar user-avatar" style="margin-right: 0;" />
-                                <img ng-if="item.type !== 'group-main'" alt="{{item.to.name}}" ng-src="{{vm.imagesPath + item.to.avatarUrl}}" class="md-avatar user-avatar" style="margin-right: 0;" />
+                                <img ng-if="item.type === 'group-main'" alt="avatar" ng-src="{{vm.imagesPath + '/images/group-1.svg'}}" class="md-avatar user-avatar margin-right-0" />
+                                <img ng-if="item.type !== 'group-main'" alt="{{item.to.name}}" ng-src="{{vm.imagesPath + item.to.avatarUrl}}" class="md-avatar user-avatar margin-right-0" />
                             </md-card-avatar>
-                            <a class="md-tile-content" flex="100" style="margin-bottom: 14px;" ng-click="vm.navigateToTaskPage(item)">
+                            <a class="md-tile-content margin-bottom-4px" flex="100" ng-click="vm.navigateToTaskPage(item)">
                                 <div layout="row">
                                     <span ng-if="item.type !== 'group-main'" class="from">{{item.to.name}}</span>
                                     <span ng-if="item.type === 'group-main'" class="from">{{(item.to.length === 1 ? item.to[0].name : (item.to[0].name + ' +' + (item.to.length - 1)))}}</span>
 
-                                    <!--<ng-md-icon class="head-icon" icon="send" style="fill: black" size="10"></ng-md-icon>-->
+                                    <!--<ng-md-icon class="head-icon fill-black" icon="send" size="10"></ng-md-icon>-->
                                     <span flex></span>
                                     <span class="font-bold" ng-bind-html="(item.createTime | amCalendar)"></span>
                                 </div>
                                 
                                 <div layout="row" >
-                                    <div layout="row" flex="90" style="font-size: 14px;">
-                                        <ng-md-icon ng-if="item.offlineMode" icon="sync_problem" style="fill: rgb(126, 79, 79);" size="20"></ng-md-icon>
+                                    <div layout="row" flex="90" class="font-14px">
+                                        <ng-md-icon ng-if="item.offlineMode" icon="sync_problem" class="offline-icon-fill" size="20"></ng-md-icon>
 
                                         <span ng-if="item.description.length > vm.descriptionTextLength()">{{item.description.substring(0, vm.descriptionTextLength()) + '...'}}</span>
                                         <span ng-if="item.description.length <= vm.descriptionTextLength()">{{item.description}}</span>
@@ -120,19 +120,19 @@
                      layout="row" layout-align="center center">
                     <md-list flex-gt-sm="50" flex-md="66" flex dir="rtl" ng-show="$root.taskcount > 0">
                         <md-list-item ng-repeat="item in vm.allTasks() | myTasks: vm.user._id | filter:vm.search" 
-                                      class="noright task-item md-no-proxy" style="margin-top: 7px" >
+                                      class="noright task-item md-no-proxy margin-top-7px" >
                             <md-card-avatar>
-                                <img alt="{{item.from.name}}" ng-src="{{vm.imagesPath + item.from.avatarUrl}}" class="md-avatar user-avatar" style="margin-right: 0;" />
+                                <img alt="{{item.from.name}}" ng-src="{{vm.imagesPath + item.from.avatarUrl}}" class="md-avatar user-avatar margin-right-0" />
                             </md-card-avatar>
-                            <a class="md-tile-content" flex="100" style="margin-bottom: 14px;" ng-click="vm.navigateToTaskPage(item)">
+                            <a class="md-tile-content margin-bottom-14px" flex="100" ng-click="vm.navigateToTaskPage(item)">
                                 <div layout="row">
                                     <span class="from">{{item.from.name}}</span>
-                                    <!--<ng-md-icon class="head-icon" icon="send" style="fill: black" size="10"></ng-md-icon>-->
+                                    <!--<ng-md-icon class="head-icon fill-black" icon="send" size="10"></ng-md-icon>-->
                                     <span flex></span>
                                     <span class="font-bold" ng-bind-html="(item.createTime | amCalendar)"></span>
                                 </div>
-                                <div layout="row" style="font-size: 14px;">
-                                    <ng-md-icon ng-if="item.offlineMode" icon="sync_problem" style="fill: rgb(126, 79, 79);" size="20"></ng-md-icon>
+                                <div layout="row" class="font-14px">
+                                    <ng-md-icon ng-if="item.offlineMode" icon="sync_problem" class="offline-icon-fill" size="20"></ng-md-icon>
 
                                     <span ng-if="item.description.length > vm.descriptionTextLength()">{{item.description.substring(0, vm.descriptionTextLength()) + '...'}}</span>
                                     <span ng-if="item.description.length <= vm.descriptionTextLength()">{{item.description}}</span>
@@ -143,7 +143,7 @@
                                     <ng-md-icon icon="attachment" class="icon-fill attachment-icon" size="20"></ng-md-icon>
                                 </div>
                                 <md-badge class="new-responses-badge" ng-if="item.unSeenResponses > 0">{{item.unSeenResponses}}</md-badge>
-                                <md-button class="md-fab md-mini md-icon-button" style="background-color: rgba(105, 178, 137, 0.95);" ng-click="vm.setTaskStatus(item, 'done')" aria-label="done">
+                                <md-button class="md-fab md-mini md-icon-button background-color-green" ng-click="vm.setTaskStatus(item, 'done')" aria-label="done">
                                     <ng-md-icon icon="done"></ng-md-icon>
                                 </md-button>
                             </div>
@@ -164,14 +164,14 @@
                      id="tab3-content"
                      aria-labelledby="tab3"
                      ng-switch-when="2"
-                     layout="row" layout-align="center center" style="height:100%">
-                    <md-list id="doneTasksMDList" flex-gt-sm="50" flex-md="66" flex dir="rtl" style="height:100%">
+                     layout="row" layout-align="center center" class="height-100P">
+                    <md-list id="doneTasksMDList" flex-gt-sm="50" flex-md="66" flex dir="rtl" class="height-100P">
 
-                        <md-virtual-repeat-container id="vertical-container" style="height:100%">
-                            <!--<div md-virtual-repeat="item in vm.allTasks() | doneTasks: vm.user._id | filter:vm.search | orderBy: 'createTime':true" class="noright task-item repeated-item" style="margin-top: 7px;padding: 0 16px;" flex>-->
-                            <div md-on-demand md-virtual-repeat="item in vm.infiniteItems" class="noright task-item repeated-item" style="margin-top: 7px;padding: 0 16px;" flex>
-                             <!--<div md-virtual-repeat="item in vm.allTasks() | doneTasks: vm.user._id | filter:vm.search | orderBy: 'createTime':true" class="noright task-item repeated-item" style="margin-top: 7px;padding: 0 16px;" flex>-->
-                                    <a class="md-tile-content" flex="100" style="margin-bottom: 14px;" ng-click="vm.navigateToTaskPage(item)">
+                        <md-virtual-repeat-container id="vertical-container" class="height-100P">
+                            <!--<div md-virtual-repeat="item in vm.allTasks() | doneTasks: vm.user._id | filter:vm.search | orderBy: 'createTime':true" class="noright task-item repeated-item infinit-repeat-container" flex>-->
+                            <div md-on-demand md-virtual-repeat="item in vm.infiniteItems" class="noright task-item repeated-item infinit-repeat-container" flex>
+                             <!--<div md-virtual-repeat="item in vm.allTasks() | doneTasks: vm.user._id | filter:vm.search | orderBy: 'createTime':true" class="noright task-item repeated-item infinit-repeat-container" flex>-->
+                                    <a class="md-tile-content margin-bottom-14px" flex="100" ng-click="vm.navigateToTaskPage(item)">
                                         <div layout="row">
                                             <span ng-if="item.type !== 'group-main'" class="from">{{item.to.name}}</span>
                                             <span ng-if="item.type === 'group-main'" class="from">{{(item.to.length === 1 ? item.to[0].name : (item.to[0].name + ' +' + (item.to.length - 1)))}}</span>
@@ -180,7 +180,7 @@
                                             <ng-md-icon icon="timer" size="20"></ng-md-icon>
                                         </div>
                                         <div layout="row">
-                                            <div layout="row" style="font-size: 14px;">
+                                            <div layout="row" class="font-14px">
                                                 <span ng-if="item.description.length > vm.descriptionTextLength()">{{item.description.substring(0, vm.descriptionTextLength()) + '...'}}</span>
                                                 <span ng-if="item.description.length <= vm.descriptionTextLength()">{{item.description}}</span>
                                             </div>

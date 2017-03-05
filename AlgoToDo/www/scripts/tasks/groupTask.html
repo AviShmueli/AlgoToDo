@@ -10,24 +10,24 @@
                     <md-menu-item>
                         <md-button class="no-line-height" ng-disabled="!vm.taskIsFromMe" ng-click="ctrl.redial($event)">
                             <div layout="row" flex>
-                                <ng-md-icon class="rotate" style="fill: rgb(196, 207, 208)" ng-class="{'icon-fill': vm.taskIsFromMe}" md-menu-align-target icon="forward"></ng-md-icon>
-                                <p flex style="text-align:right">העבר משימה</p>
+                                <ng-md-icon class="rotate icon-fill" ng-class="{'icon-fill': vm.taskIsFromMe}" md-menu-align-target icon="forward"></ng-md-icon>
+                                <p flex class="text-align-right">העבר משימה</p>
                             </div>
                         </md-button>
                     </md-menu-item>
                     <md-menu-item>
                         <md-button ng-disabled="!vm.taskIsFromMe" class="no-line-height">
                             <div layout="row" flex>
-                                <ng-md-icon md-menu-align-target icon="settings_backup_restore" style="fill: rgb(196, 207, 208)" ng-class="{'icon-fill': vm.taskIsFromMe}"></ng-md-icon>
-                                <p flex style="text-align:right">שלח מחדש</p>
+                                <ng-md-icon md-menu-align-target icon="settings_backup_restore" class="icon-fill" ng-class="{'icon-fill': vm.taskIsFromMe}"></ng-md-icon>
+                                <p flex class="text-align-right">שלח מחדש</p>
                             </div>
                         </md-button>
                     </md-menu-item>
                     <md-menu-item>
                         <md-button ng-disabled="!vm.taskIsToMe" class="no-line-height" ng-click="vm.addAlert()">
                             <div layout="row" flex>
-                                <ng-md-icon md-menu-align-target icon="add_alert" style="fill: rgb(196, 207, 208)" ng-class="{'icon-fill': vm.taskIsToMe}"></ng-md-icon>
-                                <p flex style="text-align:right">קבע תזכורת</p>
+                                <ng-md-icon md-menu-align-target icon="add_alert" class="icon-fill" ng-class="{'icon-fill': vm.taskIsToMe}"></ng-md-icon>
+                                <p flex class="text-align-right">קבע תזכורת</p>
                             </div>
                         </md-button>
                     </md-menu-item>
@@ -35,7 +35,7 @@
                         <md-button class="no-line-height" ng-click="ctrl.redial($event)">
                             <div layout="row" flex>
                                 <ng-md-icon md-menu-align-target icon="info" class="icon-fill"></ng-md-icon>
-                                <p flex style="text-align:right">פרטים</p>
+                                <p flex class="text-align-right">פרטים</p>
                             </div>
                         </md-button>
                     </md-menu-item>
@@ -52,21 +52,21 @@
         </div>
     </md-toolbar>
 
-    <md-content flex md-scroll-y style="background-color: transparent">
+    <md-content flex md-scroll-y class="background-color-transparent">
         <main flex>
             <ui-view layout="column" layout-fill>
                 <md-card dir="rtl">
                     <md-card-content>
                         <div layout="row">
                             <md-card-avatar>
-                                <img alt="user image" ng-src="{{::vm.imagesPath + ((vm.taskIsFromMe) ? vm.task.to.avatarUrl : vm.task.from.avatarUrl)}}" class="md-avatar user-avatar-small" style="margin-left: 10px;" />
+                                <img alt="user image" ng-src="{{::vm.imagesPath + ((vm.taskIsFromMe) ? vm.task.to.avatarUrl : vm.task.from.avatarUrl)}}" class="md-avatar user-avatar-small margin-left-10px" />
                             </md-card-avatar>
                             <span class="from">{{:: ((vm.taskIsFromMe) ? 'ל' + vm.task.to.name : 'מ' + vm.task.from.name)}}</span>
                             <span flex></span>
                             נשלחה&ensp;
                             <span class="font-bold" ng-bind-html="::(vm.task.createTime | amCalendar)"></span>
                         </div>
-                        <div layout="row" style="font-size: 18px;margin-top: 10px;">
+                        <div layout="row" class="margin-top-10px font-18px">
                             {{::vm.task.description}}
                         </div>
                     </md-card-content>                   
@@ -74,20 +74,20 @@
 
                 <md-card dir="rtl">
                     
-                    <md-card-title style="border-bottom-width: 1px;border-bottom-style: inset;">
+                    <md-card-title class="group-task-title">
                         <md-card-title-text>
                             <span class="md-title">בתהליך</span>
                         </md-card-title-text>
                         <ng-md-icon icon="assignment" class="icon-fill"></ng-md-icon>
                     </md-card-title>
 
-                    <md-card-content style="padding-top: 0;">
+                    <md-card-content class="padding-top-0">
                         <md-list flex flex-gt-sm="50" flex-md="66" dir="rtl">
-                            <md-list-item ng-repeat="task in vm.subsTasks_inProgress()" class="noright task-item" style="margin-top: 7px">
+                            <md-list-item ng-repeat="task in vm.subsTasks_inProgress()" class="noright task-item margin-top-7px">
                                 <md-card-avatar>
-                                    <img alt="{{task.to.name}}" ng-src="{{vm.imagesPath + task.to.avatarUrl}}" class="md-avatar user-avatar-med" style="margin-right: 0;" />
+                                    <img alt="{{task.to.name}}" ng-src="{{vm.imagesPath + task.to.avatarUrl}}" class="md-avatar user-avatar-med margin-right-0"/>
                                 </md-card-avatar>
-                                <a class="md-tile-content" flex="100" style="margin-bottom: 14px;" ng-click="vm.navigateToTaskPage(task)">
+                                <a class="md-tile-content margin-bottom-14px" flex="100" ng-click="vm.navigateToTaskPage(task)">
                                     <div layout="row">
                                         <span class="from">{{task.to.name}}</span>
                                     </div>
@@ -109,20 +109,20 @@
                 </md-card>
 
                 <md-card dir="rtl">
-                    <md-card-title style="border-bottom-width: 1px;border-bottom-style: inset;">
+                    <md-card-title class="group-task-title">
                         <md-card-title-text>
                             <span class="md-title">בוצע</span>                            
                         </md-card-title-text>
                         <ng-md-icon icon="done_all" class="icon-fill"></ng-md-icon>
                     </md-card-title>
                     
-                    <md-card-content style="padding-top: 0;">
+                    <md-card-content class="padding-top-0">
                         <md-list flex flex-gt-sm="50" flex-md="66" dir="rtl">
-                            <md-list-item ng-repeat="task in vm.subsTasks_done()" class="noright task-item" style="margin-top: 7px">
+                            <md-list-item ng-repeat="task in vm.subsTasks_done()" class="margin-top-7px noright task-item">
                                 <md-card-avatar>
-                                    <img alt="{{task.to.name}}" ng-src="{{vm.imagesPath + task.to.avatarUrl}}" class="md-avatar user-avatar-med" style="margin-right: 0;" />
+                                    <img alt="{{task.to.name}}" ng-src="{{vm.imagesPath + task.to.avatarUrl}}" class="md-avatar user-avatar-med margin-right-0"/>
                                 </md-card-avatar>
-                                <a class="md-tile-content" flex="100" style="margin-bottom: 14px;" ng-click="vm.navigateToTaskPage(task)">
+                                <a class="margin-bottom-14px md-tile-content" flex="100" ng-click="vm.navigateToTaskPage(task)">
                                     <div layout="row">
                                         <span class="from">{{task.to.name}}</span>
                                         <span flex></span>

@@ -4,7 +4,7 @@
             <md-button class="md-icon-button" ng-click="vm.cancel()">
                 <ng-md-icon icon="arrow_forward" aria-label="Close dialog"></ng-md-icon>
             </md-button>           
-            <h3 style="color:white">משימה חדשה</h3>
+            <h3 class="color-white">משימה חדשה</h3>
             <span flex></span>
             <md-button class="md-icon-button" aria-label="report" ng-click="vm.takePic('camera')">
                 <ng-md-icon icon="add_a_photo"></ng-md-icon>
@@ -37,7 +37,7 @@
             <div layout layout-sm="column">
                 <md-input-container flex class="md-block">
                     <label>תיאור המשימה</label>
-                    <textarea style="width: 450px;max-width: 100%;"  class="texterea-font-size" name="description" ng-model="vm.task.description" md-maxlength="150" rows="2" max-rows="7" required md-no-asterisk="true"></textarea>
+                    <textarea class="texterea-font-size new-task-text" name="description" ng-model="vm.task.description" md-maxlength="150" rows="2" max-rows="7" required md-no-asterisk="true"></textarea>
                     <div ng-messages="newTaskForm.description.$error" ng-if="newTaskForm.description.$touched">
                         <div ng-message="required">נא להכניס תיאור למשימה</div>
                     </div>

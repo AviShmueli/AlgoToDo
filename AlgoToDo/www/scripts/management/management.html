@@ -1,38 +1,38 @@
 ﻿<div id="management-div" ng-controller="managementCtrl as vm" layout="column" class="relative" layout-fill role="main" dir="rtl" ng-cloak>
 
     <md-toolbar class="md-table-toolbar" md-scroll-shrink ng-if="true">
-        <div class="md-toolbar-tools" style="padding:16px!important">   
+        <div class="md-toolbar-tools padding-16px">   
             <md-button class="md-icon-button" ng-click="vm.goBack()" aria-label="back">
                 <ng-md-icon icon="arrow_forward"></ng-md-icon>
             </md-button>        
-            <h2 hide-xs style="margin-right: 15px;">
-                <span style="color:white">ממשק ניהול</span>
+            <h2 hide-xs class="margin-right-15px">
+                <span class="color-white">ממשק ניהול</span>
             </h2>
             <span flex></span>
-            <!--<md-button class="button-unactive" aria-label="reports"
-                       style="margin:0" ng-class="{'button-active': vm.activeTab === 'reports'}"
+            <!--<md-button class="button-unactive margin-0" aria-label="reports"
+                       ng-class="{'button-active': vm.activeTab === 'reports'}"
                        ng-click="vm.siwtchTab('reports')">
                 דוחות
             </md-button>-->
-            <md-button class="button-unactive" aria-label="users"
-                       style="margin:0" ng-class="{'button-active': vm.activeTab === 'users'}"
+            <md-button class="button-unactive margin-0" aria-label="users"
+                       ng-class="{'button-active': vm.activeTab === 'users'}"
                        ng-click="vm.siwtchTab('users')">
                 משתמשים
             </md-button>
-            <md-button class="button-unactive" aria-label="tasks"
-                       style="margin:0" ng-class="{'button-active': vm.activeTab === 'tasks'}"
+            <md-button class="button-unactive margin-0" aria-label="tasks"
+                       ng-class="{'button-active': vm.activeTab === 'tasks'}"
                        ng-click="vm.siwtchTab('tasks')">
                 משימות
             </md-button>
         </div>
     </md-toolbar>
 
-    <md-content flex md-scroll-y style="background-color: transparent">
+    <md-content flex md-scroll-y class="background-color-transparent">
         <main flex>
             <ui-view layout="column" layout-fill ng-if="vm.activeTab === 'tasks'">
 
                 <md-card layout="column">
-                    <md-card-title style="padding: 0px 18px 0px 0px;" hide-gt-md>
+                    <md-card-title class="management-filter-card-title" hide-gt-md>
                         <md-card-title-text>
                             <h3>סינון</h3>
                         </md-card-title-text>
@@ -118,7 +118,7 @@
 
                 <md-card layout="column">
                     
-                    <md-card-title style="padding: 0px 18px 0px 0px;" hide-gt-md>
+                    <md-card-title class="management-filter-card-title" hide-gt-md>
                         <md-card-title-text>
                             <h3>סינון</h3>
                         </md-card-title-text>
@@ -145,7 +145,7 @@
                                 <label>מערכת הפעלה</label>
                                 <md-select md-no-asterisk ng-model="vm.usersFilterPlatform" name="status">
                                     <md-option ng-repeat="(key, value) in { 'הכל' : '', 'אנדואיד' : 'Android', 'אפל' : 'iOS'}" value="{{value}}" dir="rtl">
-                                        <ng-md-icon ng-if="value === 'Android'" icon="android" style="fill: #6ab344"></ng-md-icon>
+                                        <ng-md-icon ng-if="value === 'Android'" icon="android" class="android-color"></ng-md-icon>
                                         <ng-md-icon ng-if="value === 'iOS'" icon="apple"></ng-md-icon>
                                         <span ng-if="key === 'הכל'">הכל</span>
                                     </md-option>
@@ -193,7 +193,7 @@
                                     <td md-cell>{{user.name}}</td>
                                     <td md-cell>{{user.phone}}</td>
                                     <td md-cell>
-                                        <ng-md-icon ng-if="user.device.platform === 'Android'" icon="android" style="fill: #6ab344"></ng-md-icon>
+                                        <ng-md-icon ng-if="user.device.platform === 'Android'" icon="android" class="android-color"></ng-md-icon>
                                         <ng-md-icon ng-if="user.device.platform === 'iOS'" icon="apple"></ng-md-icon>
                                     </td>
                                     <td md-cell>{{user.device.manufacturer + ' ' + user.device.model}}</td>
@@ -220,7 +220,7 @@
 
                 <md-card layout-gt-xs="row" layout="column">
 
-                    <div layout-gt-xs="column" flex-sm flex-gt-xs="80" layout-padding style="margin-top: 15px;">
+                    <div layout-gt-xs="column" flex-sm flex-gt-xs="80" layout-padding class="margin-top-10px">
                         <div layout-gt-xs="row" layout="column">
 
                             <md-input-container layout-fill layout-margin>

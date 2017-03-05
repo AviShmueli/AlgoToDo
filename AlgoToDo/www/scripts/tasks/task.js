@@ -19,25 +19,26 @@
                       DAL, $offlineHandler, $location, $timeout) {
 
         var vm = this;
-        vm.taskId = $routeParams.taskId.split('&')[0];
-        vm.task = datacontext.getTaskByTaskId(vm.taskId);
-        vm.user = datacontext.getUserFromLocalStorage();
-        vm.imagesPath = device.getImagesPath();
-        vm.taskIsToMe = (vm.task.to._id === vm.user._id);
-        vm.taskIsFromMe = (vm.task.from._id === vm.user._id);
 
-        angular.element(document.querySelectorAll('html')).removeClass("hight-auto");
+        $timeout(function () {
+            vm.taskId = $routeParams.taskId.split('&')[0];
+            vm.task = datacontext.getTaskByTaskId(vm.taskId);
+            vm.user = datacontext.getUserFromLocalStorage();
+            vm.imagesPath = device.getImagesPath();
+            vm.taskIsToMe = (vm.task.to._id === vm.user._id);
+            vm.taskIsFromMe = (vm.task.from._id === vm.user._id);
+            vm.task.unSeenResponses = 0;
+
+            if (vm.task.comments === undefined) {
+                vm.task.comments = [];
+            }
+
+            angular.element(document.querySelectorAll('html')).removeClass("hight-auto");
+        }, 0);
 
         vm.newCommentText = '';
 
-        vm.task.unSeenResponses = 0;
-
-        if (vm.task.comments === undefined) {
-            vm.task.comments = [];
-        }
-
         vm.goBack = function () {
-            //alert(JSON.stringify(window.history));
             window.history.back();
             //$location.path('/tasksList');
         };
@@ -91,6 +92,9 @@
         };
 
         vm.addComment = function () {
+            if (vm.newCommentText === '') {
+                return;
+            }
             if (vm.task.comments === undefined) {
                 vm.task.comments = [];
             }
@@ -127,6 +131,7 @@
                     }
                 });
             vm.newCommentText = '';
+            vm.btnState = 'mic';
         };
 
         vm.setTaskStatus = function (task, newStatus) {
@@ -196,7 +201,7 @@
 
             if (comment.fileLocalPath === undefined) { // && 
                 // if this is file you uploaded - the file will be in the cache
-                var dataDirectory = (cordova.platformId.toLowerCase() === 'ios') ? cordova.file.dataDirectory : cordova.file.externalDataDirectory;
+                var dataDirectory = storage.getRootDirectory();//(cordova.platformId.toLowerCase() === 'ios') ? cordova.file.dataDirectory : cordova.file.externalDataDirectory;
                 var newPath = 'Asiti/' + vm.taskId + '/';
                 var src = dataDirectory + newPath + comment.fileName;
 
@@ -227,34 +232,6 @@
                     });
                 });
             }
-            //else {
-            /*dropbox.getThumbnail(comment.fileName, 'w128h128')
-                .then(function (response) {
-                     var url = URL.createObjectURL(response.fileBlob);
-                     comment.fileLocalPath = url;
-                     //datacontext.saveFileToCache(comment.fileName, url);
-                })
-                .catch(function (error) {
-                    logger.error("error while trying to get file Thumbnail", error);
-                });
-            dropbox.downloadFile(comment.fileName).then(function (response) {
-                    console.log(response);
-                    dropbox.getSharedLinkFile(response.url)
-                         .then(function (response) {
-                               console.log(response);
-                               var downloadUrl = URL.createObjectURL(response.fileBlob);
-                               comment.fileLocalPath = downloadUrl;
-                               //datacontext.saveFileToCache(comment.fileName, downloadUrl);                                   
-                          })
-                         .catch(function (error) {
-                                logger.error("error while trying to download file from dropbox", error);
-                          });
-                    })
-                .catch(function (error) {
-                    console.error(error);
-                });
-                */
-            //}
         };
 
         var addImageToGallery = function (fileName, fileLocalPath) {
@@ -297,7 +274,7 @@
 
         $timeout(function () {
             setImagesLocalPath();
-        }, 0);
+        }, 100);
         
         var gallery;
 
@@ -425,43 +402,6 @@
             $scope.answer = function (answer) {
                 $mdDialog.hide(answer);
             };
-        }
-
-        vm.startRecord = function () {
-            /*vm.newCommentText = 'מקליט...';
-            $timeout(function () {
-                if (vm.newCommentText === 'מקליט...') {
-                    vm.newCommentText = '';
-                }
-            }, 5000);*/
-        }
-
-        vm.endRecord = function () {
-            /*var recognition;
-            if (!device.isMobileDevice()) {
-                recognition = new webkitSpeechRecognition();
-            }
-            else {
-                recognition = new SpeechRecognition();
-            }
-            recognition.lang = 'en-US';
-            recognition.interimResults = false;
-            recognition.maxAlternatives = 5;
-            recognition.start();
-
-            recognition.onresult = function (event) {
-                console.log('You said: ', event.results[0][0].transcript);
-                $rootScope.transcript = event.results[0][0].transcript;
-                if (!$scope.$$phase) {
-                    $scope.$digest();
-                }
-            };*/
-
-            vm.newCommentText = $rootScope.transcript;
-            if (!$scope.$$phase) {
-                $scope.$digest();
-            }
-            //vm.addComment();
         }
 
     }

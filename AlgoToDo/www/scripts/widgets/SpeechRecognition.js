@@ -2,7 +2,7 @@
     return {
         restrict: 'A',
         link: function ($scope, $element, $attrs) {
-            var recognition;// = new webkitSpeechRecognition();
+            var recognition;
             if (!device.isMobileDevice()) {
                 recognition = new webkitSpeechRecognition();
             }
@@ -11,9 +11,31 @@
             }
             recognition.continuous = true;
             recognition.interimResults = false;
-
-            //Change the recognition language here.
             recognition.lang = 'he-IL';
+
+            recognition.onerror = errorFunc;
+            /*recognition.onaudiostart = errorFunc;
+            recognition.onsoundstart = errorFunc;
+            recognition.onspeechstart = errorFunc;
+            recognition.onspeechend = errorFunc;
+            recognition.onsoundend = errorFunc;
+            recognition.onaudioend = errorFunc;
+            recognition.onresult = errorFunc;
+            recognition.onnomatch = errorFunc;
+            recognition.onstart = errorFunc;*/
+            recognition.onend = errorFunc;
+
+            var errorFunc = function (error) {
+                if (!device.isMobileDevice()) {
+                    recognition = new webkitSpeechRecognition();
+                }
+                else {
+                    recognition = new SpeechRecognition();
+                }
+                recognition.continuous = true;
+                recognition.interimResults = false;
+                recognition.lang = 'he-IL';
+            }
 
             var recognitionIsAlreadyCalled = false;
 

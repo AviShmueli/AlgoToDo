@@ -6,10 +6,10 @@
         .service('device', device);
 
     device.$inject = ['$rootScope', 'datacontext', '$cordovaDevice', '$log', '$q',
-                              '$cordovaNetwork', '$cordovaAppVersion'/*, '$cordovaContacts'*/];
+                              '$cordovaNetwork', '$cordovaAppVersion', '$cordovaVibration'];
 
     function device($rootScope, datacontext, $cordovaDevice, $log, $q,
-                            $cordovaNetwork, $cordovaAppVersion/*, $cordovaContacts*/) {
+                            $cordovaNetwork, $cordovaAppVersion, $cordovaVibration) {
 
         var self = this;
         self.appState = 'foreground';
@@ -81,6 +81,26 @@
             return deferred.promise;*/
         }
 
+        var recordAudio = function () {
+            var deferred = $q.defer();
+
+            document.addEventListener("deviceready", function () {
+
+                window.plugins.audioRecorderAPI.record(function (savedFilePath) {
+                    deferred.resolve(savedFilePath);                  
+                }, function (msg) {
+                    deferred.reject(msg);
+                }, 10);
+
+            }, false);
+            
+            return deferred.promise;
+        }
+
+        var vibrate = function (duration) {
+            $cordovaVibration.vibrate(duration);
+        }
+
         var service = {
             getDeviceDetails: getDeviceDetails,
             isMobileDevice: isMobileDevice,
@@ -88,7 +108,9 @@
             getImagesPath: getImagesPath,
             getAppVersion: getAppVersion,
             setStatusbarOverlays: setStatusbarOverlays,
-            getContacts: getContacts
+            getContacts: getContacts,
+            recordAudio: recordAudio,
+            vibrate: vibrate
         };
 
         return service;

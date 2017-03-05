@@ -14,8 +14,8 @@
         var saveFileToStorage = function (taskId, fileName, downloadUrl) {
             var deferred = $q.defer();
 
-            var dataDirectory = (cordova.platformId.toLowerCase() === 'ios') ? cordova.file.dataDirectory : cordova.file.externalDataDirectory;
-            var folderpath = dataDirectory + 'Asiti/' + taskId + "/" + fileName;
+            //var dataDirectory = (cordova.platformId.toLowerCase() === 'ios') ? cordova.file.dataDirectory : cordova.file.externalDataDirectory;
+            var folderpath = getRootDirectory() + 'Asiti/' + taskId + "/" + fileName;
             var uri = encodeURI(downloadUrl.replace("?dl=0", "?dl=1"));
 
             var fileTransfer = new FileTransfer();
@@ -39,9 +39,9 @@
 
         var moveFileToAppFolder = function (fileUrl, oldFileName, newPath, newFileName) {
             var deferred = $q.defer();
-            $cordovaFile.checkDir(cordova.file.externalDataDirectory, newPath)
+            $cordovaFile.checkDir(getRootDirectory(), newPath)
               .then(function (success) {
-                  $cordovaFile.copyFile(fileUrl, oldFileName, cordova.file.externalDataDirectory + newPath, newFileName).then(function (success) {
+                  $cordovaFile.copyFile(fileUrl, oldFileName, getRootDirectory() + newPath, newFileName).then(function (success) {
                       var s = success;
                       deferred.resolve(s);
                   }, function (error) {
@@ -49,9 +49,9 @@
                       deferred.reject(e);
                   });
               }, function (error) {
-                  $cordovaFile.createDir(cordova.file.externalDataDirectory, newPath, false)
+                  $cordovaFile.createDir(getRootDirectory(), newPath, false)
                     .then(function (success) {
-                        $cordovaFile.copyFile(fileUrl, oldFileName, cordova.file.externalDataDirectory + newPath, newFileName).then(function (success) {
+                        $cordovaFile.copyFile(fileUrl, oldFileName, getRootDirectory() + newPath, newFileName).then(function (success) {
                             var s = success;
                             deferred.resolve(s);
                         }, function (error) {
@@ -70,11 +70,25 @@
             return $cordovaFile.checkFile(encodeURI(folder), encodeURI(file));
         }
 
+        var copyLocalFile = function (sourceDir, sourceFileName, distDir, distFileName) {
+            return $cordovaFile.copyFile(sourceDir, sourceFileName, distDir, distFileName);
+        }
+
+        var getRootDirectory = function () {
+            if (cordova.platformId.toLowerCase() === 'ios') {
+                return cordova.file.documentsDirectory; // for iOS
+            } else {
+                return cordova.file.externalRootDirectory; // for Android
+            }
+        }
+
         return {
             saveFileToStorage: saveFileToStorage,
             getFileFromStorage: getFileFromStorage,
             moveFileToAppFolder: moveFileToAppFolder,
-            checkIfFileExists: checkIfFileExists
+            checkIfFileExists: checkIfFileExists,
+            copyLocalFile: copyLocalFile,
+            getRootDirectory: getRootDirectory
         };
 
     }

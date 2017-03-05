@@ -4,7 +4,7 @@
             <md-button class="md-icon-button" ng-click="vm.cancel()">
                 <ng-md-icon icon="arrow_forward" aria-label="Close dialog"></ng-md-icon>
             </md-button>           
-            <h3 style="color:white">משימה חוזרת</h3>
+            <h3 class="color-white">משימה חוזרת</h3>
             <span flex></span>
             <md-menu md-position-mode="target-left target" ng-if="vm.isEditMode">
                     <md-button aria-label="Open phone interactions" class="md-icon-button" ng-click="$mdOpenMenu($event)">
@@ -15,7 +15,7 @@
                             <md-button class="no-line-height" ng-click="vm.deleteTask()">
                                 <div layout="row" flex>
                                     <ng-md-icon class="icon-fill" md-menu-align-target icon="delete"></ng-md-icon>
-                                    <p flex style="text-align:right">מחק משימה</p>
+                                    <p flex class="text-align-right">מחק משימה</p>
                                 </div>
                             </md-button>
                         </md-menu-item>

@@ -1,6 +1,6 @@
 ﻿<md-sidenav layout="column" class="md-sidenav-right md-whiteframe-z2" md-component-id="left">
     <md-toolbar class="md-tall md-hue-2" dir="rtl">
-        <div style="text-align: left;" >
+        <div class="text-align-left" >
             <md-button aria-label="Open phone interactions menu" class="md-icon-button" ng-click="vm.closeSidenav()">
                 <ng-md-icon icon="close"></ng-md-icon>
             </md-button>
@@ -18,7 +18,7 @@
     <md-list layout="column" layout-fill>
         <md-item>
             <md-menu>
-                <a style="cursor: pointer" ng-click="$mdOpenMenu($event)">
+                <a class="cursor-pointer" ng-click="$mdOpenMenu($event)">
                     <md-item-content md-ink-ripple layout="row" layout-align="start center">
                         <div class="inset">
                             <ng-md-icon icon="share"></ng-md-icon>
@@ -32,7 +32,7 @@
                 <md-menu-content width="1">
                     <md-menu-item>
                         <md-button ng-click="vm.shareApp('android')" aria-label="android-share">
-                            <ng-md-icon md-menu-align-target icon="android" style="fill: #6ab344"></ng-md-icon>
+                            <ng-md-icon md-menu-align-target icon="android" class="android-color"></ng-md-icon>
                         </md-button>
                     </md-menu-item>
                     <md-menu-item>
@@ -47,7 +47,7 @@
             
         </md-item>
         <md-item>
-            <a style="cursor: pointer" ng-click="vm.rateApp()">
+            <a class="cursor-pointer" ng-click="vm.rateApp()">
                 <md-item-content md-ink-ripple layout="row" layout-align="start center">
                     <div class="inset">
                         <ng-md-icon icon="star"></ng-md-icon>
@@ -65,7 +65,7 @@
             <span>ניהול</span>
         </md-subheader>
         <md-item >
-            <a style="cursor: pointer" ng-click="vm.showLogoffButton = true">
+            <a class="cursor-pointer" ng-click="vm.showLogoffButton = true">
                 <md-item-content md-ink-ripple layout="row" layout-align="start center">
                     <div class="inset">
                         <ng-md-icon icon="settings"></ng-md-icon>
@@ -78,7 +78,7 @@
             </a>
         </md-item>
         <md-item>
-            <a style="cursor: pointer" ng-click="vm.goToRepeatTasksPage()">
+            <a class="cursor-pointer" ng-click="vm.goToRepeatTasksPage()">
                 <md-item-content md-ink-ripple layout="row" layout-align="start center">
                     <div class="inset">
                         <ng-md-icon icon="repeat"></ng-md-icon>
@@ -91,7 +91,7 @@
             </a>
         </md-item>
         <md-item ng-if="vm.user.type === 'admin'">
-            <a style="cursor: pointer" ng-click="vm.goToManagementPage()">
+            <a class="cursor-pointer" ng-click="vm.goToManagementPage()">
                 <md-item-content md-ink-ripple layout="row" layout-align="start center">
                     <div class="inset">
                         <ng-md-icon icon="dashboard"></ng-md-icon>
@@ -105,7 +105,7 @@
         </md-item>
         <md-divider></md-divider>
         <md-item ng-if="vm.showLogoffButton === true">
-            <a ng-click="vm.logOff()" style="cursor: pointer">
+            <a ng-click="vm.logOff()" class="cursor-pointer">
                 <md-item-content md-ink-ripple layout="row" layout-align="start center">
                     <div class="inset">
                         <ng-md-icon icon="logout"></ng-md-icon>
