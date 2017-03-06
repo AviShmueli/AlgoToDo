@@ -61,6 +61,9 @@
                     deferred.resolve();
                 });
             }
+            else {
+                deferred.resolve();
+            }
 
             return deferred.promise;
         };

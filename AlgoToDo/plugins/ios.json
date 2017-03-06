@@ -45,9 +45,6 @@
         "cordova-plugin-datepicker": {
             "PACKAGE_NAME": "com.algotodo.app"
         },
-        "cordova-plugin-local-notifications-db": {
-            "PACKAGE_NAME": "com.algotodo.app"
-        },
         "cordova-sms-plugin": {
             "PACKAGE_NAME": "com.algotodo.app"
         },
@@ -62,6 +59,9 @@
         },
         "phonegap-plugin-push": {
             "SENDER_ID": "874351794059",
+            "PACKAGE_NAME": "com.algotodo.app"
+        },
+        "de.appplant.cordova.plugin.local-notification": {
             "PACKAGE_NAME": "com.algotodo.app"
         }
     },
