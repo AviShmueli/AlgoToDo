@@ -422,7 +422,8 @@
             limit = parseInt(query.limit),
             page = query.page,
             filter = JSON.parse(query.filter);
-
+        
+        filter.type = {$ne: 'group-main'};
         var options = {
             "limit": limit,
             "skip": (page - 1) * limit
