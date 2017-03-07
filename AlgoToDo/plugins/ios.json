@@ -63,6 +63,9 @@
         },
         "de.appplant.cordova.plugin.local-notification": {
             "PACKAGE_NAME": "com.algotodo.app"
+        },
+        "com.borismus.webintent": {
+            "PACKAGE_NAME": "com.algotodo.app"
         }
     },
     "dependent_plugins": {

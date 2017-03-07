@@ -106,6 +106,7 @@
                 var comment = task.comments[0];
 
                 comment.fileLocalPath = device.getImagesPath() + "/images/upload-empty.png";
+                downloadImage(task._id, comment);
                 datacontext.addTaskToTaskList(task);
                 $rootScope.taskcount = taskCount;
                 cordovaPlugins.setBadge(taskCount);

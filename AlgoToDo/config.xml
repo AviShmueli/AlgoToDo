@@ -156,4 +156,6 @@
   <plugin name="phonegap-plugin-push" version="1.8.4">
     <variable name="SENDER_ID" value="874351794059" />
   </plugin>
+  <plugin name="de.appplant.cordova.plugin.local-notification" version="0.8.4" />
+  <plugin name="com.borismus.webintent" version="1.0.0" />
 </widget>

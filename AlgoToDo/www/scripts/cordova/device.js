@@ -101,6 +101,8 @@
             $cordovaVibration.vibrate(duration);
         }
 
+        
+
         var service = {
             getDeviceDetails: getDeviceDetails,
             isMobileDevice: isMobileDevice,

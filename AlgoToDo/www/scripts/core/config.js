@@ -73,8 +73,8 @@
 
             return {
                 appDomain:
-                  // 'https://algotodo.herokuapp.com'
-                  'https://algotodo-test.herokuapp.com'
+                  'http://app.asiti.net'// 'https://algotodo.herokuapp.com'
+                  //'https://algotodo-test.herokuapp.com'
                   // 'http://localhost:5001'
             };
         })
@@ -83,6 +83,16 @@
             $offlineHandler.goOnline();
             //DAL.reloadAllTasks();
             amMoment.changeLocale('he');
+
+            /*document.addEventListener('deviceready', function () {
+                window.plugins.webintent.getExtra(window.plugins.webintent.EXTRA_STREAM, function (url) {
+                    // url is the value of EXTRA_TEXT 
+                    //alert(url);
+                    var a = url;
+                }, function () {
+                    // There was no extra supplied.
+                });
+            }, false);*/
         });
 
 })();

@@ -176,7 +176,7 @@
                 return;
             }
 
-            if (comment.fileLocalPath !== undefined && comment.fileLocalPath.indexOf("upload-empty") !== -1) {
+            if (comment.fileLocalPath !== undefined && (comment.fileLocalPath.indexOf("upload-empty") !== -1 || comment.fileLocalPath.indexOf(comment.fileName) === -1)) {
                 dropbox.getThumbnail(comment.fileName, 'w128h128')
                     .then(function (response) {
                         var url = URL.createObjectURL(response.fileBlob);
@@ -274,7 +274,7 @@
 
         $timeout(function () {
             setImagesLocalPath();
-        }, 100);
+        }, 200);
         
         var gallery;
 

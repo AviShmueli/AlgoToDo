@@ -292,6 +292,40 @@
         vm.goOnline = function () {
             $offlineHandler.goOnline();
         };
+
+        document.addEventListener('deviceready', function () {
+            window.plugins.webintent.getExtra(window.plugins.webintent.EXTRA_STREAM, function (url) {
+                // url is the value of EXTRA_TEXT 
+                var a = url;
+            }, function () {
+                var b = '1';
+                // There was no extra supplied.
+            });
+
+            window.plugins.webintent.onNewIntent(window.plugins.webintent.EXTRA_STREAM, function (url) {
+                // url is the value of EXTRA_TEXT 
+                var a = url;
+            }, function () {
+                var b = '1';
+                // There was no extra supplied.
+            });
+
+            window.plugins.webintent.getUri(window.plugins.webintent.EXTRA_STREAM, function (url) {
+                // url is the value of EXTRA_TEXT 
+                var a = url;
+            }, function () {
+                var b = '1';
+                // There was no extra supplied.
+            });
+
+            window.plugins.webintent.hasExtra(window.plugins.webintent.EXTRA_STREAM, function (url) {
+                // url is the value of EXTRA_TEXT 
+                var a = url;
+            }, function () {
+                var b = '1';
+                // There was no extra supplied.
+            });
+        });
     }
 
 })();
