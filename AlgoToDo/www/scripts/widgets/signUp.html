@@ -4,8 +4,8 @@
         <h3>ברוכים הבאים למערכת ™Asiti</h3>
         <h3>לפניך טופס הרשמה קצר</h3>
     </div>
-    <form name="signUpForm">
-        <md-content class="md-no-momentum" layout-padding>
+    <form name="signUpForm" layout="column" layout-align="center center" flex flex-gt-sm="50" flex-md="66">
+        <md-content class="md-no-momentum" layout-padding  > 
             <md-input-container class="md-block">
                 <md-icon ng-md-icon icon="person"></md-icon>
                 <input md-no-asterisk name="name" ng-model="vm.user.name" type="text" placeholder="שם פרטי ומשפחה" ng-required="true">
