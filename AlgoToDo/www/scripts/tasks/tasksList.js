@@ -71,7 +71,7 @@
 
         vm.isDialogOpen = false;
 
-        vm.showAdd = function (ev) {           
+        vm.showAdd = function (ev, imageURI, text, calledFromIntent) {           
             vm.isDialogOpen = true;
             $mdDialog.show({
                 controller: 'AddTaskDialogController',
@@ -79,7 +79,12 @@
                 templateUrl: 'scripts/tasks/AddTaskDialog.html',
                 targetEvent: ev,
                 fullscreen: true,
-                clickOutsideToClose: true
+                clickOutsideToClose: true,
+                locals: {
+                    imageURI: imageURI,
+                    text: text,
+                    calledFromIntent: calledFromIntent
+                }
             }).then(function () {
                 vm.isDialogOpen = false;
             });
@@ -136,7 +141,7 @@
             if (task.status === 'done') {
                 task.doneTime = new Date();
                 //datacontext.removeAllTaskImagesFromCache(task);
-                localNotifications.cancelNotification(task._id);
+                //localNotifications.cancelNotification(task._id);
             }
             if (task.status === 'seen') {
                 task.seenTime = new Date();
@@ -294,38 +299,20 @@
         };
 
         document.addEventListener('deviceready', function () {
-            window.plugins.webintent.getExtra(window.plugins.webintent.EXTRA_STREAM, function (url) {
-                // url is the value of EXTRA_TEXT 
-                var a = url;
-            }, function () {
-                var b = '1';
-                // There was no extra supplied.
-            });
 
-            window.plugins.webintent.onNewIntent(window.plugins.webintent.EXTRA_STREAM, function (url) {
-                // url is the value of EXTRA_TEXT 
-                var a = url;
-            }, function () {
-                var b = '1';
-                // There was no extra supplied.
-            });
+            window.plugins.webintent.getExtra(window.plugins.webintent.EXTRA_STREAM,
+                function (url) {
+                    vm.showAdd(null, url, '', true);
+                }, function () {}
+            );
 
-            window.plugins.webintent.getUri(window.plugins.webintent.EXTRA_STREAM, function (url) {
-                // url is the value of EXTRA_TEXT 
-                var a = url;
-            }, function () {
-                var b = '1';
-                // There was no extra supplied.
-            });
+            window.plugins.webintent.getExtra(window.plugins.webintent.EXTRA_TEXT,
+                function (text) {
+                    vm.showAdd(null, '', text, true);
+                }, function () {}
+            );
 
-            window.plugins.webintent.hasExtra(window.plugins.webintent.EXTRA_STREAM, function (url) {
-                // url is the value of EXTRA_TEXT 
-                var a = url;
-            }, function () {
-                var b = '1';
-                // There was no extra supplied.
-            });
-        });
+        }, false);
     }
 
 })();

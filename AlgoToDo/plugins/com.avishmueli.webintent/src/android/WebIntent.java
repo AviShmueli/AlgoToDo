@@ -88,9 +88,14 @@ public class WebIntent extends CordovaPlugin {
                 Intent i = ((CordovaActivity)this.cordova.getActivity()).getIntent();
                 String extraName = args.getString(0);
                 if (i.hasExtra(extraName)) {
-                    //return new PluginResult(PluginResult.Status.OK, i.getStringExtra(extraName));
-                    callbackContext.sendPluginResult(new PluginResult(PluginResult.Status.OK, i.getStringExtra(extraName)));
-                    return true;
+                    String r = i.getStringExtra(extraName);
+                    if (r == null || r.isEmpty()) {
+                        r = ((Uri) i.getParcelableExtra(extraName)).toString();
+                    }
+                    callbackContext.sendPluginResult(new PluginResult(PluginResult.Status.OK, r));
+					//return new PluginResult(PluginResult.Status.OK, i.getStringExtra(extraName));
+                    //callbackContext.sendPluginResult(new PluginResult(PluginResult.Status.OK, i.getStringExtra(extraName)));
+                    //return true;
                 } else {
                     //return new PluginResult(PluginResult.Status.ERROR);
                     callbackContext.sendPluginResult(new PluginResult(PluginResult.Status.ERROR));
@@ -166,6 +171,7 @@ public class WebIntent extends CordovaPlugin {
     @Override
     public void onNewIntent(Intent intent) {
     	 
+        super.onNewIntent(intent);
         if (this.onNewIntentCallbackContext != null) {
         	PluginResult result = new PluginResult(PluginResult.Status.OK, intent.getDataString());
         	result.setKeepCallback(true);

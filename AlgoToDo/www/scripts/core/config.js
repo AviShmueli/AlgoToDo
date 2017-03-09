@@ -83,16 +83,6 @@
             $offlineHandler.goOnline();
             //DAL.reloadAllTasks();
             amMoment.changeLocale('he');
-
-            /*document.addEventListener('deviceready', function () {
-                window.plugins.webintent.getExtra(window.plugins.webintent.EXTRA_STREAM, function (url) {
-                    // url is the value of EXTRA_TEXT 
-                    //alert(url);
-                    var a = url;
-                }, function () {
-                    // There was no extra supplied.
-                });
-            }, false);*/
         });
 
 })();

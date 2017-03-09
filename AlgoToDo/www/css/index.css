@@ -121,10 +121,17 @@ md-chips .md-chip-input-container{
 }
 
 .image-wraper > md-progress-circular {
-    position: absolute; 
-    top: 55%; 
-    left: 70%;  
+    position: relative;
+    bottom: 62%;
+    right: 11%; 
 }
+
+.image-wraper > ng-md-icon {
+    position: relative;
+    bottom: 38%;
+    left: 20%; 
+}
+
 
 .md-tile-content .from,
 md-card-content .from {

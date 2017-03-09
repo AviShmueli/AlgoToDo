@@ -183,10 +183,19 @@
         "is_top_level": true,
         "variables": {}
     },
-    "com.borismus.webintent": {
+    "com.avishmueli.webintent": {
         "source": {
             "type": "git",
-            "url": "https://github.com/Initsogar/cordova-webintent.git",
+            "url": "https://github.com/AviShmueli/android-webintent",
+            "subdir": "."
+        },
+        "is_top_level": true,
+        "variables": {}
+    },
+    "cordova-plugin-appminimize": {
+        "source": {
+            "type": "git",
+            "url": "https://github.com/tomloprod/cordova-plugin-appminimize.git",
             "subdir": "."
         },
         "is_top_level": true,

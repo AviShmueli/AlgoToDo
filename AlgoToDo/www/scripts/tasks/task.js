@@ -173,6 +173,7 @@
             if (!device.isMobileDevice()) {
                 comment.fileLocalPath = device.getImagesPath() + "/images/upload-empty.png";
                 vm.showProgress = false;
+                comment.errorDownloadFile = true;
                 return;
             }
 
@@ -185,6 +186,8 @@
                     })
                     .catch(function (error) {
                         logger.error("error while trying to get file Thumbnail", error);
+                        vm.showProgress = false;
+                        comment.errorDownloadFile = true;
                     });
                 dropbox.downloadFile(comment.fileName).then(function (response) {
                     storage.saveFileToStorage(vm.task._id, comment.fileName, response.url).then(function (storageFilePath) {
@@ -195,14 +198,16 @@
                     });
                 })
                 .catch(function (error) {
-                    $log.error("error while trying to download file from dropbox", error);
+                    logger.error("error while trying to download file from dropbox", error);
+                    vm.showProgress = false;
+                    comment.errorDownloadFile = true;
                 });
             }
 
             if (comment.fileLocalPath === undefined) { // && 
                 // if this is file you uploaded - the file will be in the cache
                 var dataDirectory = storage.getRootDirectory();//(cordova.platformId.toLowerCase() === 'ios') ? cordova.file.dataDirectory : cordova.file.externalDataDirectory;
-                var newPath = 'Asiti/' + vm.taskId + '/';
+                var newPath = 'Asiti/Asiti Images/' + vm.taskId + '/';
                 var src = dataDirectory + newPath + comment.fileName;
 
                 storage.checkIfFileExists(dataDirectory + newPath, comment.fileName).then(function (success) {
@@ -218,6 +223,8 @@
                         })
                         .catch(function (error) {
                             logger.error("error while trying to get file Thumbnail", error);
+                            vm.showProgress = false;
+                            comment.errorDownloadFile = true;
                         });
                     dropbox.downloadFile(comment.fileName).then(function (response) {
                         storage.saveFileToStorage(vm.task._id, comment.fileName, response.url).then(function (storageFilePath) {
@@ -228,7 +235,9 @@
                         });
                     })
                     .catch(function (error) {
-                        $log.error("error while trying to download file from dropbox", error);
+                        logger.error("error while trying to download file from dropbox", error);
+                        vm.showProgress = false;
+                        comment.errorDownloadFile = true;
                     });
                 });
             }

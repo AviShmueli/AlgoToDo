@@ -61,7 +61,12 @@
             if (self.$storage.cachedImagesList !== undefined && self.$storage.cachedImagesList.length > 0) {
                 for (var i = 0; i < self.$storage.cachedImagesList.length; i++) {
                     var image = self.$storage.cachedImagesList[i];
-                    dropbox.uploadNewImageToDropbox(image.fileEntry.filesystem.root.nativeURL, image.fileEntry.name, image.fileName)
+
+                    var splitedPath = image.nativeUrl.split('/');
+                    var fileName = splitedPath[splitedPath.length - 1];
+                    var path = image.nativeUrl.substring(0, image.nativeUrl.indexOf(fileName));
+
+                    dropbox.uploadNewImageToDropbox(path, fileName, image.fileName)
                         .then(function (fileName) {
                             var index = arrayObjectIndexOf(self.$storage.cachedImagesList, 'fileName', fileName);
                             self.$storage.cachedImagesList.splice(index, 1);

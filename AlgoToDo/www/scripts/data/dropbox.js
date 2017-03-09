@@ -45,7 +45,6 @@
 
                     var reader = new FileReader();
                     reader.onload = (function (file_reader) {
-
                         uploadFile(newFileName, file_reader).then(function (response) {
                             deferred.resolve(newFileName);
                         })

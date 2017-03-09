@@ -89,6 +89,11 @@
 
         function onResume() {
             self.appState = 'foreground';
+            $rootScope.$apply();
+        };
+
+        function minimizeApp() {
+            window.plugins.appMinimize.minimize();
         };
 
         /* ----- Social Sharing -----*/
@@ -124,7 +129,8 @@
             setBadge: setBadge,
             showDatePicker: showDatePicker,
             shareApp: shareApp,
-            rateApp: rateApp
+            rateApp: rateApp,
+            minimizeApp: minimizeApp
         };
 
         return service;

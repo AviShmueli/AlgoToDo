@@ -8,6 +8,7 @@
   <preference name="SplashScreen" value="screen" />
   <preference name="windows-target-version" value="8.1" />
   <preference name="loadUrlTimeoutValue" value="700000" />
+  <preference name="AndroidLaunchMode" value="singleTop" />
   <allow-intent href="http://*/*" />
   <allow-intent href="https://*/*" />
   <allow-intent href="tel:*" />
@@ -157,5 +158,4 @@
     <variable name="SENDER_ID" value="874351794059" />
   </plugin>
   <plugin name="de.appplant.cordova.plugin.local-notification" version="0.8.4" />
-  <plugin name="com.borismus.webintent" version="1.0.0" />
 </widget>
