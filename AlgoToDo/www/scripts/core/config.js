@@ -45,6 +45,9 @@
               .when('/signUp', {
                   templateUrl: 'scripts/widgets/signUp.html'
               })
+              .when('/logIn', {
+                  templateUrl: 'scripts/widgets/logIn.html'
+              })
               .when('/repeatsTasks', {
                   templateUrl: 'scripts/tasks/repeatsTasks.html'
               })

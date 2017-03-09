@@ -50,7 +50,7 @@
             datacontext.deleteTaskListFromLocalStorage();           
             vm.toggleSidenav('left');
             cordovaPlugins.clearAppBadge();
-            $location.path('/signUp');
+            $location.path('/logIn');
         };
 
         vm.toggleSidenav = function(menuId) {
@@ -109,7 +109,7 @@
                 return;
                 // do nothing - dialog will be closed
             }
-            if ($location.path() === '/tasksList' || $location.path() === '/signUp') {
+            if ($location.path() === '/tasksList' || $location.path() === '/signUp' || $location.path() === '/logIn') {
                 e.preventDefault();
                 if (!vm.exitApp) {
                     vm.exitApp = true;
@@ -125,7 +125,7 @@
                     e.preventDefault();
                 }
                 else {
-                    if ($location.path() !== '/signUp') {
+                    if ($location.path() !== '/signUp' || $location.path() !== '/logIn') {
                         window.history.back();
                     }                  
                 }

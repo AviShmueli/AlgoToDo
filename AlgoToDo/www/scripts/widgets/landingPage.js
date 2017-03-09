@@ -98,7 +98,7 @@
 
                 $timeout(function () {
                     setApplicationDirectory().then(function () {
-                        $location.path('/signUp');
+                        $location.path('/logIn');
                     });
                 }, 0);
             }
