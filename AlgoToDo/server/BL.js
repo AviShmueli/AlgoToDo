@@ -25,6 +25,7 @@
     BL.deleteRepeatsTasks = deleteRepeatsTasks;
     BL.getTasksInProgress = getTasksInProgress;
     BL.getDoneTasks = getDoneTasks;
+    BL.createNewCliqa = createNewCliqa;
 
     var ObjectID = require('mongodb').ObjectID;
     var deferred = require('deferred');
@@ -48,11 +49,11 @@
         var groupMainTask;
         var groupMainTaskIndex;
         var recipientsIds = [];
-        
+
         if (pushToSenderAnyway) {
             recipientsIds.push(new ObjectID(tasks[0].from._id));
         }
-        
+
         for (var i = 0, len = tasks.length; i < len; i++) {
             var task = tasks[i];
             if (task._id !== undefined && task._id.indexOf('tempId') !== -1) {
@@ -214,7 +215,7 @@
             // if this task is not from me to me, send notification to the user
             if (task.to._id !== task.from._id) {
                 if (task.status === 'done') {
-                    pushUpdatetdTaskToUsersDevice(result, task.from._id);                  
+                    pushUpdatetdTaskToUsersDevice(result, task.from._id);
                 }
                 /*if (task.status === 'inProgress') {
                     pushTasksToUsersDevice([result], [result.to._id]);
@@ -422,8 +423,10 @@
             limit = parseInt(query.limit),
             page = query.page,
             filter = JSON.parse(query.filter);
-        
-        filter.type = {$ne: 'group-main'};
+
+        filter.type = {
+            $ne: 'group-main'
+        };
         var options = {
             "limit": limit,
             "skip": (page - 1) * limit
@@ -585,6 +588,19 @@
         return d.promise;
     }
 
+    function createNewCliqa(cliqaName) {
+
+        var d = deferred();
+
+        DAL.createNewCliqa(cliqaName).then(function (result) {
+            DAL.addNewCliqaToAdmins(result.ops[0]);
+            d.resolve();
+        }, function (error) {
+            d.deferred(error);
+        });
+
+        return d.promise;
+    }
 
 
     /* ---- Private Methods --- */
@@ -634,7 +650,7 @@
         var sender;
         // get user from DB and check if there GcmRegId or ApnRegId
         DAL.getUsersByUsersId(recipientsIds).then(function (users) {
-            
+
             if (pushToSenderAnyway) {
                 sender = users.find(x => x._id.equals(tasks[0].from._id));
             }
@@ -648,10 +664,9 @@
 
                     if (task.type === 'group-main') {
                         pushNotifications.pushUpdatedTask(task, sender);
-                    }
-                    else{
+                    } else {
                         // get the number that will be set to the app icon badge
-                        DAL.getUnDoneTasksCountByUserId(task.to._id).then(function (userUnDoneTaskCount) {                           
+                        DAL.getUnDoneTasksCountByUserId(task.to._id).then(function (userUnDoneTaskCount) {
                             pushNotifications.pushNewTask(task, userUnDoneTaskCount, user);
                             if (pushToSenderAnyway) {
                                 pushNotifications.pushUpdatedTask(task, sender);
@@ -706,16 +721,21 @@
         return d.promise;
     }
 
-    function checkIfGroupMainTaskIsDone(mainTaskId){
-        DAL.getGroupSubTasksInProgress(new ObjectID(mainTaskId)).then(function(result) {
+    function checkIfGroupMainTaskIsDone(mainTaskId) {
+        DAL.getGroupSubTasksInProgress(new ObjectID(mainTaskId)).then(function (result) {
             if (result === 0) {
-                DAL.updateTaskStatus({_id: mainTaskId, 'status': 'done', 'doneTime': new Date(), 'seenTime': null}).then(function (result) {
+                DAL.updateTaskStatus({
+                    _id: mainTaskId,
+                    'status': 'done',
+                    'doneTime': new Date(),
+                    'seenTime': null
+                }).then(function (result) {
                     pushUpdatetdTaskToUsersDevice(result, result.from._id);
-                }, function(error){
+                }, function (error) {
                     winston.log(error);
                 });
             }
-        }, function(error) {
+        }, function (error) {
             winston.log(error);
         });
     }

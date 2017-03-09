@@ -30,6 +30,8 @@
     DAL.getDoneTasks = getDoneTasks;
     DAL.getTasksInProgress = getTasksInProgress;
     DAL.getGroupSubTasksInProgress = getGroupSubTasksInProgress;
+    DAL.createNewCliqa = createNewCliqa;
+    DAL.addNewCliqaToAdmins = addNewCliqaToAdmins;
 
     var deferred = require('deferred');
     var mongodb = require('mongodb').MongoClient;
@@ -515,7 +517,9 @@
                 }],*/
                 'from._id': new ObjectID(userId),
                 status: 'done',
-                type: {'$ne': 'group-sub'}
+                type: {
+                    '$ne': 'group-sub'
+                }
             }, {
                 skip: parseInt(page),
                 limit: 20
@@ -905,16 +909,18 @@
         return d.promise;
     }
 
-    function getGroupSubTasksInProgress(mainTaskId){
+    function getGroupSubTasksInProgress(mainTaskId) {
         var d = deferred();
 
         getCollection('tasks').then(function (mongo) {
 
             mongo.collection.count({
-                _id: mainTaskId,
-                status: {'$ne': 'done'}
-            },
-            function (err, result) {
+                    _id: mainTaskId,
+                    status: {
+                        '$ne': 'done'
+                    }
+                },
+                function (err, result) {
                     if (err) {
                         var errorObj = {
                             message: "error while trying to get Group SubTasks InProgress",
@@ -930,6 +936,60 @@
         });
 
         return d.promise;
+    }
+
+    function createNewCliqa(cliqaName) {
+
+        var d = deferred();
+
+        getCollection('Cliqot').then(function (mongo) {
+
+            mongo.collection.insert({name: cliqaName}, function (err, results) {
+
+                if (err) {
+                    var errorObj = {
+                        message: "error while trying to add new Cliqa to DB",
+                        error: err
+                    };
+                    mongo.db.close();
+                    d.reject(errorObj);
+                }
+
+                mongo.db.close();
+                d.resolve(results);
+
+            });
+        });
+
+        return d.promise;
+    }
+
+    function addNewCliqaToAdmins(newCliqa) {
+        
+        getCollection('users').then(function (mongo) {
+
+            mongo.collection.updateMany({
+                    type: 'admin'
+                }, {
+                    $push: {
+                        cliqot: newCliqa
+                    }
+                },
+                function (err, result) {
+                    if (err) {
+                        var errorObj = {
+                            message: "error while trying to update user details: ",
+                            error: err
+                        };
+                        mongo.db.close();
+                    }
+
+                    mongo.db.close();
+                });
+        });
+
+
+
     }
 
 

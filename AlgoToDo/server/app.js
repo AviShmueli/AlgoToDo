@@ -331,3 +331,14 @@ app.get('/TaskManeger/getUsersRepeatsTasks', function (req, res) {
     });
 
 });
+
+app.post('/TaskManeger/createNewCliqa', function (req, res) {
+
+    BL.createNewCliqa(req.body.cliqaName).then(function(result){
+        res.send('ok');
+    }, function(error){
+        winston.log('error', error.message , error.error);
+        res.status(500).send(error); 
+    });
+
+});

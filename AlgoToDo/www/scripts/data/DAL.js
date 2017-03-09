@@ -354,6 +354,17 @@
             return $http(req)
         };
 
+        var createNewCliqa = function (cliqaName) {
+            var req = {
+                method: 'POST',
+                url: appConfig.appDomain + '/TaskManeger/createNewCliqa',
+                data: {
+                    cliqaName: cliqaName
+                }
+            };
+
+            return $http(req)
+        };
 
         var service = {
             saveNewTasks: saveNewTasks,
@@ -380,7 +391,8 @@
             updateRepeatsTasks: updateRepeatsTasks,
             deleteRepeatsTasks: deleteRepeatsTasks,
             getDoneTasks: getDoneTasks,
-            getTasksInProgress: getTasksInProgress
+            getTasksInProgress: getTasksInProgress,
+            createNewCliqa: createNewCliqa
         };
 
         return service;

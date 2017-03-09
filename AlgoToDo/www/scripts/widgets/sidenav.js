@@ -19,7 +19,7 @@
             }
         };
 
-        function sidenavController($scope, device, cordovaPlugins, $location, $mdSidenav) {
+        function sidenavController($scope, device, cordovaPlugins, $location, $mdSidenav, $mdDialog, DAL, logger) {
             var vm = this;
 
             vm.imagesPath = $scope.imagesPath;
@@ -54,6 +54,25 @@
 
             vm.closeSidenav = function () {
                 $mdSidenav("left").close();
+            }
+
+            vm.showAddCliqaDialog = function () {
+                var confirm = $mdDialog.prompt()
+                  .parent(angular.element(document.querySelector('#VerificationCodePromptContainer')))
+                  .title('קליקה חדשה')
+                  .placeholder('איך תרצה לקרוא לקליקה?')
+                  .ariaLabel('cliqaName')
+                  .ok('הוסף');
+
+                $mdDialog.show(confirm).then(function (cliqaName) {
+                    if (cliqaName !== undefined && cliqaName !== '') {                  
+                        DAL.createNewCliqa(cliqaName).then(function () {
+                            cordovaPlugins.showToast("הקליקה נוצרה בהצלחה!", 2000);
+                        }, function (error) {
+                            logger.error("error while trying to add new cliqa", error);
+                        });
+                    }
+                });
             }
 
             vm.admin = [{
