@@ -239,11 +239,13 @@
         vm.moreLoadedTasks = [];
 
         vm.doneTasks = function () {
-            return $filter('orderBy')($filter('doneTasks')(datacontext.getTaskList(), vm.user._id).concat(vm.moreLoadedTasks), 'createTime', true);
+            return $filter('orderBy')($filter('doneTasks')(datacontext.getTaskList(), vm.user._id).concat(vm.moreLoadedTasks), 'doneTime', true);
         };
+        
+        //vm.numLoaded = $filter('doneTasks')(datacontext.getTaskList(), vm.user._id).length;
 
         vm.infiniteItems = {
-            numLoaded_: 19,
+            numLoaded_: vm.doneTasks().length,//vm.numLoaded,
             toLoad_: 0,
             //items: $filter('doneTasks')(datacontext.getTaskList(), vm.user._id),
             //items: ,
@@ -255,7 +257,7 @@
                     return null;
                 }
 
-                return vm.doneTasks()[index];
+                return vm.doneTasks()[index] || null;
             },
 
 
