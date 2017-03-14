@@ -16,6 +16,7 @@
                              $location, cordovaPlugins) {
 
         var self = this;
+        self.push = {};
 
         var PushOptions = {
             android: {
@@ -48,7 +49,8 @@
         }
 
         var startListening = function () {
-            initializePushV5().then(function () {
+            initializePushV5().then(function (push) {
+                //alert('from pushPlugin:' + JSON.stringify(push)); self.push = push;
                 // start listening for new notifications
                 $cordovaPushV5.onNotification();
 
@@ -215,6 +217,14 @@
             $log.error('errorOcurred: ' + event, e);
         };
 
+        var clearAllNotifications = function () {
+        /*push.clearAllNotifications(function() {
+            console.log('success');
+                }, function() {
+            console.log('error');
+            });*/
+        }
+
         /* ---- App State ----- */
 
         document.addEventListener("deviceready", function () {
@@ -256,7 +266,8 @@
             registerForPushNotifications: registerForPushNotifications,
             initializePushV5: initializePushV5,
             onNotificationReceived: onNotificationReceived,
-            startListening: startListening
+            startListening: startListening,
+            clearAllNotifications: clearAllNotifications
         };
 
         return service;

@@ -105,7 +105,8 @@
             var registerUserForPushService = function () {
                 var deferred = $q.defer();
 
-                pushNotifications.initializePushV5().then(function () {
+                pushNotifications.initializePushV5().then(function (push) {
+                    //alert('from login:' + JSON.stringify(push));
                     pushNotifications.registerForPushNotifications().then(function (registrationId) {
                         deferred.resolve(registrationId);
                     });

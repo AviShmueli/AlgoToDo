@@ -41,11 +41,18 @@
         $timeout(function () {
             var count = datacontext.setMyTaskCount();
             cordovaPlugins.setBadge(count);
+
+            if (!device.isMobileDevice()) {
+                DAL.reloadAllTasks();
+            }
         }, 0);
 
         vm.logOff = function () {
             angular.element(document.querySelectorAll('html')).addClass("hight-auto");
-            DAL.saveUsersNewRegistrationId('', vm.user);
+
+            if (device.isMobileDevice()) {
+                DAL.saveUsersNewRegistrationId('', vm.user);
+            }
             datacontext.deleteUserFromLocalStorage();
             datacontext.deleteTaskListFromLocalStorage();           
             vm.toggleSidenav('left');

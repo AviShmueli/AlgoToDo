@@ -16,9 +16,10 @@
 
         var login = function () {
 
-            if (datacontext.getTaskList().length === 0 || !device.isMobileDevice()) {
+            
+            $timeout(function () {
                 DAL.reloadAllTasks();
-            }
+            },100);
 
             // register for push notifications
             if (device.isMobileDevice()) {
@@ -106,6 +107,9 @@
 
         $timeout(function () {
             checkIfUserSignIn();
+            if (!device.isMobileDevice() && window.location.hostname.indexOf("algotodo.herokuapp.com") !== -1) {
+                window.location = "http://app.asiti.net";
+            }
         }, 0);
 
     }

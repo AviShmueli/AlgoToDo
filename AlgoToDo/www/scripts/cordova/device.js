@@ -6,10 +6,12 @@
         .service('device', device);
 
     device.$inject = ['$rootScope', 'datacontext', '$cordovaDevice', '$log', '$q',
-                              '$cordovaNetwork', '$cordovaAppVersion', '$cordovaVibration'];
+                              '$cordovaNetwork', '$cordovaAppVersion', '$cordovaVibration'/*,
+                               '$cordovaStatusbar'*/];
 
     function device($rootScope, datacontext, $cordovaDevice, $log, $q,
-                            $cordovaNetwork, $cordovaAppVersion, $cordovaVibration) {
+                            $cordovaNetwork, $cordovaAppVersion, $cordovaVibration/*,
+                            $cordovaStatusbar*/) {
 
         var self = this;
         self.appState = 'foreground';
@@ -28,6 +30,10 @@
 
         var setStatusbarOverlays = function () {
             //$cordovaStatusbar.overlaysWebView(false);
+        }
+
+        var setStatusBarStyleBlackTranslucent = function () {
+            //$cordovaStatusbar.styleBlackTranslucent();
         }
 
         var getImagesPath = function () {
@@ -112,7 +118,8 @@
             setStatusbarOverlays: setStatusbarOverlays,
             getContacts: getContacts,
             recordAudio: recordAudio,
-            vibrate: vibrate
+            vibrate: vibrate,
+            setStatusBarStyleBlackTranslucent: setStatusBarStyleBlackTranslucent
         };
 
         return service;

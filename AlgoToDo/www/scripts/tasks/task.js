@@ -9,14 +9,16 @@
          'datacontext', '$routeParams', '$window', 'moment',
          'socket', 'cordovaPlugins', 'dropbox', 'appConfig',
          'localNotifications', 'camera', 'device', '$mdDialog',
-         'DAL', '$offlineHandler', '$location', '$timeout'
+         'DAL', '$offlineHandler', '$location', '$timeout',
+         'pushNotifications'
     ];
 
     function taskCtrl($rootScope, $scope, logger, $q, storage,
                       datacontext, $routeParams, $window, moment,
                       socket, cordovaPlugins, dropbox, appConfig,
                       localNotifications, camera, device, $mdDialog,
-                      DAL, $offlineHandler, $location, $timeout) {
+                      DAL, $offlineHandler, $location, $timeout,
+                      pushNotifications) {
 
         var vm = this;
 
@@ -27,6 +29,10 @@
             vm.imagesPath = device.getImagesPath();
             vm.taskIsToMe = (vm.task.to._id === vm.user._id);
             vm.taskIsFromMe = (vm.task.from._id === vm.user._id);
+
+            if (vm.task.unSeenResponses > 0) {
+                pushNotifications.clearAllNotifications();
+            }
             vm.task.unSeenResponses = 0;
 
             if (vm.task.comments === undefined) {

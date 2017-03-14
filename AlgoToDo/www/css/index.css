@@ -793,3 +793,17 @@ md-tabs.md-primary > md-tabs-wrapper > md-tabs-canvas > md-pagination-wrapper > 
 .group-task-title { border-bottom-width: 1px;border-bottom-style: inset;}
 .cursor-pointer { cursor: pointer}
 .login-phone { width: 450px!important;max-width: 100%;}
+.toolBar {
+    background: url('../images/mb-bg-fb-07.png') no-repeat center top;
+    background-size: cover;
+}
+.toolBar .username {
+         color: white;
+  text-shadow:
+   -1px -1px 0 #000,  
+    1px -1px 0 #000,
+    -1px 1px 0 #000,
+     1px 1px 0 #000;
+  font-size: large;
+}
+.logo{ width: 40px}
