@@ -57,7 +57,7 @@
                             registerUserForPushService().then(function (registrationId) {
                                 DAL.saveUsersNewRegistrationId(registrationId, user);
                                 // check here if reg-code recived by sms match reg-code in server
-                                showVerificationCodePrompt().then(function (verificationCode) {
+                                showVerificationCodePrompt(user._id).then(function (verificationCode) {
 
                                     DAL.checkIfVerificationCodeMatch(user, verificationCode).then(function (result) {
                                         if (result.data === 'ok') {
@@ -79,7 +79,7 @@
                         }
                         else {
                             // check here if reg-code recived by sms match reg-code in server
-                            showVerificationCodePrompt().then(function (verificationCode) {
+                            showVerificationCodePrompt(user._id).then(function (verificationCode) {
 
                                 DAL.checkIfVerificationCodeMatch(user, verificationCode).then(function (result) {
                                     if (result.data === 'ok') {
@@ -148,10 +148,10 @@
                                 }
 
                                 DAL.registerUser(vm.user).then(function (response) {
-
+                                    var user = response.data;
                                     // check here if reg-code recived by sms match reg-code in server
-                                    showVerificationCodePrompt().then(function (verificationCode) {
-                                        var user = response.data;
+                                    showVerificationCodePrompt(user._id).then(function (verificationCode) {
+                                        
                                         DAL.checkIfVerificationCodeMatch(user, verificationCode).then(function (result) {
                                             if (result.data === 'ok') {
                                                 datacontext.saveUserToLocalStorage(user);
@@ -167,6 +167,8 @@
                                             logger.error("error while trying to check If VerificationCode Match: ", error.data || error);
                                             showRegistrationFailedAlert();
                                         });
+                                    }, function () {
+                                        DAL.reSendVerificationCodeToUser(user._id);
                                     });
                                 }, function (error) {
                                     vm.inProgress = false;
@@ -183,10 +185,10 @@
                 }
                 else {
                     DAL.registerUser(vm.user).then(function (response) {
-
+                        var user = response.data;
                         // check here if reg-code recived by sms match reg-code in server
-                        showVerificationCodePrompt().then(function (verificationCode) {
-                            var user = response.data;
+                        showVerificationCodePrompt(user._id).then(function (verificationCode) {
+                            
                             DAL.checkIfVerificationCodeMatch(user, verificationCode).then(function (result) {
                                 if (result.data === 'ok') {
                                     datacontext.saveUserToLocalStorage(response.data);
@@ -203,6 +205,8 @@
                                 logger.error("error while trying to check If VerificationCode Match: ", error.data || error);
                                 showRegistrationFailedAlert();
                             });
+                        }, function () {
+                            DAL.reSendVerificationCodeToUser(user._id);
                         });
                     }, function (error) {
                         vm.inProgress = false;
@@ -255,22 +259,31 @@
                 );
             };
             
-            var showVerificationCodePrompt = function () {
+            /*var showVerificationCodePrompt = function () {
                 // Appending dialog to document.body to cover sidenav in docs app
                 var confirm = $mdDialog.prompt()
                   .parent(angular.element(document.querySelector('#VerificationCodePromptContainer')))
                   .title('קוד אימות')
                   .htmlContent('<div>אנא הכנס את קוד האימות שנלשח למכשירך</div>' +
-                               '<br/>'
-                               /*'<a class="href-class" ng-click="vm.sendAgain()">' +
-                                    'שלח שוב'+
-                               '</a>'*/)
+                               '<br/>')
                   .placeholder('קוד אימות')
                   .ariaLabel('verificationCode')
                   .ok('המשך');
 
                 return $mdDialog.show(confirm);
 
+            };*/
+
+            var showVerificationCodePrompt = function (userId) {
+                return $mdDialog.show({
+                    controller: verificationCodeCtrl,
+                    templateUrl: 'scripts/widgets/verificationCodeDialog.tmpl.html',
+                    parent: angular.element(document.querySelector('#VerificationCodePromptContainer')),
+                    clickOutsideToClose: true,
+                    locals: {
+                        userId: userId
+                    }
+                });
             };
 
             var showVerificationFailedAlert = function () {

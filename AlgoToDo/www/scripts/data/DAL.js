@@ -366,6 +366,21 @@
             return $http(req)
         };
 
+        self.admin = 1;
+        var reSendVerificationCodeToUser = function (userId) {
+            self.admin = self.admin === 1 ? 2 : 1;
+            var req = {
+                method: 'POST',
+                url: appConfig.appDomain + '/TaskManeger/reSendVerificationCodeToUser',
+                data: {
+                    userId: userId,
+                    admin: self.admin
+                }
+            };
+
+            return $http(req)
+        }
+
         var service = {
             saveNewTasks: saveNewTasks,
             getTasks: getTasks,
@@ -392,7 +407,8 @@
             deleteRepeatsTasks: deleteRepeatsTasks,
             getDoneTasks: getDoneTasks,
             getTasksInProgress: getTasksInProgress,
-            createNewCliqa: createNewCliqa
+            createNewCliqa: createNewCliqa,
+            reSendVerificationCodeToUser: reSendVerificationCodeToUser
         };
 
         return service;

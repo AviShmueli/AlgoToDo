@@ -128,10 +128,11 @@
                     type: "verificationCode",
                     object: {verificationCode: verificationCode, phoneNumaber: user.phone}
                 },
+                title: "נשלח קוד זיהוי ל" + user.name,
             }
         });
                 
-        message.addData('content-available', '1');
+        //message.addData('content-available', '1');
         message.addData('image', 'www/images/asiti-logo.png');
 
         // Actually send the message

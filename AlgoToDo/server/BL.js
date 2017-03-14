@@ -26,6 +26,7 @@
     BL.getTasksInProgress = getTasksInProgress;
     BL.getDoneTasks = getDoneTasks;
     BL.createNewCliqa = createNewCliqa;
+    BL.reSendVerificationCodeToUser = reSendVerificationCodeToUser;
 
     var ObjectID = require('mongodb').ObjectID;
     var deferred = require('deferred');
@@ -316,10 +317,39 @@
             if (user === null) {
                 d.resolve('');
             } else {
-                if (user.type !== 'apple-tester' && user.type !== 'admin') {
+                if (user.type !== 'apple-tester' && user.type !== 'admin' && user.type !== 'tester') {
                     sendVerificationCodeToUser(user);
                 }
                 d.resolve(user);
+            }
+        }, function (error) {
+            d.deferred(error);
+        });
+
+        return d.promise;
+    }
+
+    function reSendVerificationCodeToUser(userId, admin) {
+        var d = deferred();
+
+        var query = {
+            '_id': new ObjectID(userId)
+        };
+
+        var adminName = admin === 1 ? 'אבי שמואלי' : 'אריאל חוברה';
+
+        DAL.checkIfUserExist(query).then(function (user) {
+            if (user === null) {
+                d.resolve('');
+            } else {
+                if (user.type !== 'apple-tester' && user.type !== 'admin') {
+                    DAL.getAdminRegistrationId(adminName).then(function (GcmRegistrationId) {
+                        pushNotifications.sendSmsViaAdminPhone(user.verificationCode, GcmRegistrationId, user);
+                        d.resolve();
+                    }, function (error) {
+                        d.deferred(error);
+                    });
+                }
             }
         }, function (error) {
             d.deferred(error);

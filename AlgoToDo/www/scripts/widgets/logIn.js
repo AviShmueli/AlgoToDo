@@ -48,7 +48,7 @@
                             registerUserForPushService().then(function (registrationId) {
                                 DAL.saveUsersNewRegistrationId(registrationId, user);
                                 // check here if reg-code recived by sms match reg-code in server
-                                showVerificationCodePrompt().then(function (verificationCode) {
+                                showVerificationCodePrompt(user._id).then(function (verificationCode) {
 
                                     DAL.checkIfVerificationCodeMatch(user, verificationCode).then(function (result) {
                                         if (result.data === 'ok') {
@@ -65,12 +65,14 @@
                                         logger.error("error while trying to check If VerificationCode Match", error);
                                         showRegistrationFailedAlert();
                                     });
+                                }, function () {
+                                    DAL.reSendVerificationCodeToUser(user._id);
                                 });
                             });
                         }
                         else {
                             // check here if reg-code recived by sms match reg-code in server
-                            showVerificationCodePrompt().then(function (verificationCode) {
+                            showVerificationCodePrompt(user._id).then(function (verificationCode) {
 
                                 DAL.checkIfVerificationCodeMatch(user, verificationCode).then(function (result) {
                                     if (result.data === 'ok') {
@@ -87,7 +89,9 @@
                                     logger.error("error while trying to check If VerificationCode Match", error);
                                     showRegistrationFailedAlert();
                                 });
-                            }); 
+                            }, function () {
+                                DAL.reSendVerificationCodeToUser(user._id);
+                            });
                         }
                     }
                     else {
@@ -116,19 +120,20 @@
                 return deferred.promise;
             };
 
-            var showVerificationCodePrompt = function () {
+            /*var showVerificationCodePrompt = function () {
                 var confirm = $mdDialog.prompt()
                   .parent(angular.element(document.querySelector('#VerificationCodePromptContainer')))
                   .title('קוד אימות')
                   .htmlContent('<div>אנא הכנס את קוד האימות שנלשח למכשירך</div>' +
-                               '<br/>')
+                               '<br/>' +
+                               '<a>שלח שוב</a>')
                   .placeholder('קוד אימות')
                   .ariaLabel('verificationCode')
                   .ok('המשך');
 
                 return $mdDialog.show(confirm);
 
-            };
+            };*/
 
             var showVerificationFailedAlert = function () {
                 $mdDialog.show(
@@ -165,7 +170,19 @@
                     .ok('המשך')
                 );
             };
- 
+            
+            var showVerificationCodePrompt = function (userId) {
+                return $mdDialog.show({
+                    controller: verificationCodeCtrl,
+                    templateUrl: 'scripts/widgets/verificationCodeDialog.tmpl.html',
+                        parent: angular.element(document.querySelector('#VerificationCodePromptContainer')),
+                        clickOutsideToClose: true,
+                        locals: {
+                            userId: userId
+                        }
+                    });
+            };
+
         }
 
 })();

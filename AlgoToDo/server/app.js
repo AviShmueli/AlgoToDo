@@ -342,3 +342,14 @@ app.post('/TaskManeger/createNewCliqa', function (req, res) {
     });
 
 });
+
+app.post('/TaskManeger/reSendVerificationCodeToUser', function (req, res) {
+
+    BL.reSendVerificationCodeToUser(req.body.userId, req.body.admin).then(function(result){
+        res.send('ok');
+    }, function(error){
+        winston.log('error', error.message , error.error);
+        res.status(500).send(error); 
+    });
+
+});

@@ -1,0 +1,27 @@
+﻿<md-dialog aria-label="Avatar Picker" dir="rtl">
+    <md-toolbar>
+        <div class="md-toolbar-tools">
+            <h3 class="color-white">הכנס קוד אימות</h3>
+        </div>
+    </md-toolbar>
+    <br/>
+    <md-dialog-content layout="row">
+        <md-input-container layout-margin>
+            <input md-no-asterisk name="verificationCode" ng-model="verificationCode" type="number"
+                    placeholder="קוד אימות">
+            
+        </md-input-container>
+        <md-button class="md-fab md-mini md-icon-button" ng-disabled="!showButton" aria-label="report" ng-click="resend()">
+            <span ng-if="!showButton" class="timer-text">{{counter}}</span>
+            <ng-md-icon ng-if="showButton" icon="refresh" ></ng-md-icon>
+            
+        </md-button>
+    </md-dialog-content>
+        
+    <md-dialog-actions layout="row">
+        <md-button ng-click="answer(verificationCode)">
+            המשך
+        </md-button>
+    </md-dialog-actions>
+        
+</md-dialog>
