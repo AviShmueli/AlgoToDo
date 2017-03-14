@@ -5,16 +5,15 @@
         </div>
     </md-toolbar>
     <br/>
-    <md-dialog-content layout="row">
-        <md-input-container layout-margin>
+    <md-dialog-content layout="row" layout-padding>
+        <md-input-container layout-margin >
             <input md-no-asterisk name="verificationCode" ng-model="verificationCode" type="number"
                     placeholder="קוד אימות">
             
         </md-input-container>
         <md-button class="md-fab md-mini md-icon-button" ng-disabled="!showButton" aria-label="report" ng-click="resend()">
             <span ng-if="!showButton" class="timer-text">{{counter}}</span>
-            <ng-md-icon ng-if="showButton" icon="refresh" ></ng-md-icon>
-            
+            <ng-md-icon ng-if="showButton" icon="refresh" ></ng-md-icon>         
         </md-button>
     </md-dialog-content>
         

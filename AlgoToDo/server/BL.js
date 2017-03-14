@@ -113,6 +113,7 @@
 
                 // insert the subs tasks
                 DAL.insertNewTasks(tasks).then(function (results) {
+                    winston.log("info","insert the following tasks: ", results.ops);
                     pushTasksToUsersDevice(results.ops, recipientsIds, pushToSenderAnyway);
                     results.ops.push(mainTask);
                     d.resolve(results.ops);
@@ -697,6 +698,7 @@
                     } else {
                         // get the number that will be set to the app icon badge
                         DAL.getUnDoneTasksCountByUserId(task.to._id).then(function (userUnDoneTaskCount) {
+                            winston.log("info","sending task to user: ", task);
                             pushNotifications.pushNewTask(task, userUnDoneTaskCount, user);
                             if (pushToSenderAnyway) {
                                 pushNotifications.pushUpdatedTask(task, sender);
@@ -752,6 +754,7 @@
     }
 
     function checkIfGroupMainTaskIsDone(mainTaskId) {
+
         DAL.getGroupSubTasksInProgress(new ObjectID(mainTaskId)).then(function (result) {
             if (result === 0) {
                 DAL.updateTaskStatus({
@@ -762,11 +765,11 @@
                 }).then(function (result) {
                     pushUpdatetdTaskToUsersDevice(result, result.from._id);
                 }, function (error) {
-                    winston.log(error);
+                    winston.log('error', error.message, error.err);
                 });
             }
         }, function (error) {
-            winston.log(error);
+            winston.log('error', error.message, error.err);
         });
     }
 

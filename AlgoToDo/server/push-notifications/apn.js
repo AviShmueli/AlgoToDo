@@ -93,6 +93,7 @@
                 winston.log('error', "error while sending push notification to apple user: " + task.to || '', response.failed);
             } else {
                 console.log(response.sent);
+                winston.log("info", "task have been send sucessfuly to user:", task);
             }
         });
     }

@@ -45,7 +45,7 @@
                     var _task = this;
                     
                     var tasksToSend = preperTaskToSend(_task);
-                    
+                    logger.log("info","sending repeats task :", tasksToSend);
                     BL.addNewTasks(tasksToSend, true).then(function(result){
                         console.log("successfuly send repeate tasks");
                     }, function(error){
@@ -157,6 +157,7 @@
             groupTask.to = recipients;
             return groupTask;
         };
+
 
 
 })(module.exports);

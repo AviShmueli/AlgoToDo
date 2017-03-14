@@ -173,7 +173,7 @@
             
             var showVerificationCodePrompt = function (userId) {
                 return $mdDialog.show({
-                    controller: verificationCodeCtrl,
+                    controller: 'verificationCodeCtrl',
                     templateUrl: 'scripts/widgets/verificationCodeDialog.tmpl.html',
                         parent: angular.element(document.querySelector('#VerificationCodePromptContainer')),
                         clickOutsideToClose: true,

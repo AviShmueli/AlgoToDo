@@ -915,7 +915,7 @@
         getCollection('tasks').then(function (mongo) {
 
             mongo.collection.count({
-                    _id: mainTaskId,
+                    groupMainTaskId: mainTaskId,
                     status: {
                         '$ne': 'done'
                     }
