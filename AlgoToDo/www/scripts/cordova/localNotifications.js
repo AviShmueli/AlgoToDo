@@ -24,7 +24,7 @@
                     id: notificationId,
                     title: "תזכורת לביצוע משימה",
                     at: date,
-                    text: task.from.name + ': ' + task.description,
+                    text: /*task.from.name + ': ' +*/ task.description,
                     icon: 'res://icon',
                     smallIcon: 'res://ic_popup_reminder',
                     data: task,
