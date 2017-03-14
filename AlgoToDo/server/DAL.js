@@ -516,10 +516,10 @@
                     'to._id': new ObjectID(userId)
                 }],*/
                 'from._id': new ObjectID(userId),
-                status: 'done',
+                status: 'done'/*,
                 type: {
                     '$ne': 'group-sub'
-                }
+                }*/
             }, {
                 skip: parseInt(page),
                 limit: 20
