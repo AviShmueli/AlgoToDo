@@ -33,7 +33,14 @@
         };
 
         var initializePushV5 = function () {
-            return $cordovaPushV5.initialize(PushOptions);
+            var deferred = $q.defer();
+
+            $cordovaPushV5.initialize(PushOptions).then(function(push){
+                self.push = push;
+                deferred.resolve();
+            });
+            
+            return deferred.promise;
         };
 
         var registerForPushNotifications = function () {
@@ -49,8 +56,7 @@
         }
 
         var startListening = function () {
-            initializePushV5().then(function (push) {
-                //alert('from pushPlugin:' + JSON.stringify(push)); self.push = push;
+            initializePushV5().then(function () {
                 // start listening for new notifications
                 $cordovaPushV5.onNotification();
 
@@ -218,11 +224,10 @@
         };
 
         var clearAllNotifications = function () {
-        /*push.clearAllNotifications(function() {
-            console.log('success');
-                }, function() {
-            console.log('error');
-            });*/
+            self.push.clearAllNotifications(function () {
+            }, function (error) {
+                $log.error("error while trying to clear All Notifications", error);
+            });
         }
 
         /* ---- App State ----- */
