@@ -8,10 +8,10 @@
         <span flex></span>
         <div layout="column" layout-align="end start" class="md-toolbar-tools-bottom inset">
             <md-card-avatar>
-                <img class="md-user-avatar user-avatar-big" ng-src="{{vm.imagesPath + user.avatarUrl}}">
+                <img class="md-user-avatar user-avatar-big" ng-src="{{::vm.imagesPath + user.avatarUrl}}">
             </md-card-avatar>
-            <div class="username">{{user.name}}</div>
-            <div>{{user.cliqot[0].name}}</div>
+            <div class="username">{{::user.name}}</div>
+            <div>{{::user.cliqot[0].name}}</div>
         </div>
     </md-toolbar>
     <md-list layout="column" layout-fill>
@@ -134,7 +134,7 @@
                 <md-item-content md-ink-ripple layout="row" layout-align="start center">
                     <span flex></span>
                     <div class="inset">
-                       Asiti {{vm.appVersion}}
+                       Asiti {{::vm.appVersion}}
                     </div>
                 </md-item-content>
         </md-item>
