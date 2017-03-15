@@ -62,7 +62,7 @@
                         <md-card-content>
                             <div layout="row">
                                 <md-card-avatar>
-                                    <img alt="user image" ng-src="{{vm.imagesPath + ((vm.taskIsFromMe) ? vm.task.to.avatarUrl : vm.task.from.avatarUrl)}}" class="md-avatar user-avatar-small margin-left-10px" />
+                                    <img alt="user image" ng-src="{{::vm.imagesPath + ((vm.taskIsFromMe) ? vm.task.to.avatarUrl : vm.task.from.avatarUrl)}}" class="md-avatar user-avatar-small margin-left-10px" />
                                 </md-card-avatar>
                                 <span class="from">{{ ((vm.taskIsFromMe) ? 'ל' + vm.task.to.name : 'מ' + vm.task.from.name)}}</span>
                                 <span flex></span>

@@ -76,9 +76,9 @@
 
             return {
                 appDomain:
-                   'http://app.asiti.net'// 'https://algotodo.herokuapp.com'
-                  //'https://algotodo-test.herokuapp.com'
-                  // 'http://localhost:5001'
+                   //'http://app.asiti.net'// 'https://algotodo.herokuapp.com'
+                  'https://algotodo-test.herokuapp.com'
+                   //'http://localhost:5001'
             };
         })
         .run(function (amMoment, DAL, $offlineHandler) {
