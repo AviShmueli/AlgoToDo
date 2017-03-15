@@ -102,7 +102,9 @@
 
                 // if the task created by the server (repeats task)
                 if (pushToSenderAnyway) {
-                    pushTasksToUsersDevice([mainTask], [groupMainTask.from._id], pushToSenderAnyway);
+                    setTimeout(function () {
+                        pushTasksToUsersDevice([mainTask], [groupMainTask.from._id], pushToSenderAnyway);
+                    }, 0);
                 }
 
                 // set the main task id to all the subs tasks
@@ -113,8 +115,10 @@
 
                 // insert the subs tasks
                 DAL.insertNewTasks(tasks).then(function (results) {
-                    winston.log("info","insert the following tasks: ", results.ops);
-                    pushTasksToUsersDevice(results.ops, recipientsIds, pushToSenderAnyway);
+                    winston.log("info", "insert the following tasks: ", results.ops);
+                    setTimeout(function () {
+                        pushTasksToUsersDevice(results.ops, recipientsIds, pushToSenderAnyway);
+                    }, 0);
                     results.ops.push(mainTask);
                     d.resolve(results.ops);
                 }, function (error) {
@@ -126,7 +130,9 @@
             });
         } else {
             DAL.insertNewTasks(tasks).then(function (results) {
-                pushTasksToUsersDevice(results.ops, recipientsIds, pushToSenderAnyway);
+                setTimeout(function () {
+                    pushTasksToUsersDevice(results.ops, recipientsIds, pushToSenderAnyway);
+                }, 0);
                 d.resolve(results.ops);
             }, function (error) {
                 d.reject(error);
@@ -164,7 +170,9 @@
 
             // if this task is not from me to me, send notification to the user
             if (!task.to._id.equals(task.from._id)) {
-                pushCommentToUserDevice(comment, task, userIdToNotify);
+                setTimeout(function(){
+                    pushCommentToUserDevice(comment, task, userIdToNotify);
+                },0);
             }
 
             d.resolve();
@@ -217,14 +225,18 @@
             // if this task is not from me to me, send notification to the user
             if (task.to._id !== task.from._id) {
                 if (task.status === 'done') {
-                    pushUpdatetdTaskToUsersDevice(result, task.from._id);
+                    setTimeout(function(){
+                        pushUpdatetdTaskToUsersDevice(result, task.from._id);
+                    },0);
                 }
                 /*if (task.status === 'inProgress') {
                     pushTasksToUsersDevice([result], [result.to._id]);
                 }*/
             }
             if (task.type === 'group-sub') {
-                checkIfGroupMainTaskIsDone(task.groupMainTaskId);
+                setTimeout(function(){
+                    checkIfGroupMainTaskIsDone(task.groupMainTaskId);
+                },0);
             }
             d.resolve();
         }, function (error) {
@@ -319,7 +331,9 @@
                 d.resolve('');
             } else {
                 if (user.type !== 'apple-tester' && user.type !== 'admin' && user.type !== 'tester') {
-                    sendVerificationCodeToUser(user);
+                    setTimeout(function(){
+                        sendVerificationCodeToUser(user);
+                    },0);
                 }
                 d.resolve(user);
             }
@@ -698,7 +712,7 @@
                     } else {
                         // get the number that will be set to the app icon badge
                         DAL.getUnDoneTasksCountByUserId(task.to._id).then(function (userUnDoneTaskCount) {
-                            winston.log("info","sending task to user: ", task);
+                            winston.log("info", "sending task to user: ", task);
                             pushNotifications.pushNewTask(task, userUnDoneTaskCount, user);
                             if (pushToSenderAnyway) {
                                 pushNotifications.pushUpdatedTask(task, sender);
