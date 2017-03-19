@@ -11,6 +11,7 @@
 
         
         var self = this;
+        self.admin = 1;
 
         var saveNewTasks = function (tasks) {
             
@@ -366,7 +367,6 @@
             return $http(req)
         };
 
-        self.admin = 1;
         var reSendVerificationCodeToUser = function (userId) {
             self.admin = self.admin === 1 ? 2 : 1;
             var req = {
@@ -375,6 +375,19 @@
                 data: {
                     userId: userId,
                     admin: self.admin
+                }
+            };
+
+            return $http(req)
+        }
+
+        var sendBroadcastUpdateAlert = function (paltform, version) {
+            var req = {
+                method: 'POST',
+                url: appConfig.appDomain + '/TaskManeger/sendBroadcastUpdateAlert',
+                data: {
+                    paltform: paltform,
+                    version: version
                 }
             };
 
@@ -408,7 +421,8 @@
             getDoneTasks: getDoneTasks,
             getTasksInProgress: getTasksInProgress,
             createNewCliqa: createNewCliqa,
-            reSendVerificationCodeToUser: reSendVerificationCodeToUser
+            reSendVerificationCodeToUser: reSendVerificationCodeToUser,
+            sendBroadcastUpdateAlert: sendBroadcastUpdateAlert
         };
 
         return service;

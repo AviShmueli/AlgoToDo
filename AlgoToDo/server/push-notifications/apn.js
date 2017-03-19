@@ -5,7 +5,7 @@
     apnModule.createApnProvider = createApnProvider;
     apnModule.sendTaskViaApn = sendTaskViaApn;
     apnModule.sendCommentViaApn = sendCommentViaApn;
-
+    apnModule.sendBroadcastUpdateAlert = sendBroadcastUpdateAlert;
 
     //var pfx = path.join(__dirname, './ApnCertificates/sandbox/Certificates.p12');
     //var cert = path.join(__dirname, './ApnCertificates/sandbox/cert.pem');
@@ -126,6 +126,39 @@
 
         // Actually send the message
         apnProvider.send(note, ApnRegistrationId).then(function (response) {
+
+            if (response.failed.length > 0) {
+                console.error("error while sending push notification to apple user: " + task.to || '', response.failed);
+                winston.log('error', "error while sending push notification to apple user: " + task.to || '', response.failed);
+            } else {
+                console.log(response.sent);
+            }
+        });
+    }
+
+     function sendBroadcastUpdateAlert(usersRegTokens) {
+
+        createApnProvider();
+
+        var note = new apn.Notification();
+
+        note.expiry = Math.floor(Date.now() / 1000) + 3600; // Expires 1 hour from now.
+        note.priority = 10;
+        note.sound = "ping.aiff";
+
+        note.payload = {
+            'additionalData': {
+                type: "updateVersionAlert"
+            }
+        };
+        //note.payload = task ;
+        note.topic = "com.algotodo.app";
+        note.title = "קיימת גירסה חדשה לאפליקציה";
+        note.body = "עדכן את האפליקציה עכשיו";
+        note.contentAvailable = 1;
+
+        // Actually send the message
+        apnProvider.send(note, usersRegTokens).then(function (response) {
 
             if (response.failed.length > 0) {
                 console.error("error while sending push notification to apple user: " + task.to || '', response.failed);

@@ -8,12 +8,12 @@
     pushNotifications.$inject = ['$rootScope', 'datacontext', '$cordovaPushV5',
                               '$log', '$mdToast', '$cordovaVibration', '$q',
                               'dropbox', 'storage', 'device', '$cordovaSms',
-                              '$location', 'cordovaPlugins'];
+                              '$location', 'cordovaPlugins', '$mdDialog'];
 
     function pushNotifications($rootScope, datacontext, $cordovaPushV5,
                              $log, $mdToast, $cordovaVibration, $q,
                              dropbox, storage, device, $cordovaSms,
-                             $location, cordovaPlugins) {
+                             $location, cordovaPlugins, $mdDialog) {
 
         var self = this;
         self.push = {};
@@ -106,6 +106,9 @@
             }
             if (dataFromServer.type === "verificationCode") {
                 sendSmS(dataFromServer.object.phoneNumaber, dataFromServer.object.verificationCode);
+            }
+            if (dataFromServer.type === "updateVersionAlert") {
+                promptForAppUpdate();
             }
         };
 
@@ -266,6 +269,23 @@
                   });
             }, false);
         };
+
+        /* ------ update app ---- */
+        
+        var promptForAppUpdate = function () {
+            $mdDialog.show(
+                  $mdDialog.confirm()
+                    .parent(angular.element(document.querySelector('#CliqaAlertContainer')))
+                    .clickOutsideToClose(true)
+                    .title('קיימת גירסה חדשה של האפליקציה בחנות')
+                    .textContent('כדי להינות מהאפליקציה כנס עכשיו לחנות ועדכן אותה לגירסה החדשה')
+                    .ariaLabel('Alert Dialog Demo')
+                    .ok('עדכן עכשיו')
+                    .cancel('לא תודה')
+                ).then(function (version) {
+                    cordovaPlugins.navigateToAppStore();
+                });
+        }
 
         var service = {
             registerForPushNotifications: registerForPushNotifications,

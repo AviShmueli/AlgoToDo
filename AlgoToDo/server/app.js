@@ -353,3 +353,14 @@ app.post('/TaskManeger/reSendVerificationCodeToUser', function (req, res) {
     });
 
 });
+
+app.post('/TaskManeger/sendBroadcastUpdateAlert', function (req, res) {
+
+    BL.sendBroadcastUpdateAlert(req.body.paltform, req.body.version).then(function(result){
+        res.send(result);
+    }, function(error){
+        winston.log('error', error.message , error.error);
+        res.status(500).send(error); 
+    });
+
+});

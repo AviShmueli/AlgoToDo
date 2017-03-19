@@ -123,6 +123,12 @@
             }, false);
         }
 
+        var navigateToAppStore = function () {
+            document.addEventListener("deviceready", function () {
+                $cordovaAppRate.navigateToAppStore();
+            }, false);
+        }
+
         var service = {
             showToast: showToast,
             clearAppBadge: clearAppBadge,
@@ -130,7 +136,8 @@
             showDatePicker: showDatePicker,
             shareApp: shareApp,
             rateApp: rateApp,
-            minimizeApp: minimizeApp
+            minimizeApp: minimizeApp,
+            navigateToAppStore: navigateToAppStore
         };
 
         return service;

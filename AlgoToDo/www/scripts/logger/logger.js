@@ -8,9 +8,12 @@
     logger.$inject = ['$log', '$mdToast', '$mdDialog'];
 
     function logger($log, $mdToast, $mdDialog) {
+
+        var self = this;
+
         var service = {
             showToasts: true,
-
+            setUser: setUser,
             error: error,
             info: info,
             success: success,
@@ -25,8 +28,7 @@
 
         function error(message, data) {
             //toastr.error(message, title);
-            $log.error('Error: ' + message, data);
-            //showErrorOcurredAlert(message + ' \n ***' + data)
+            $log.error('Error: ' + message, data, self.user);
         }
 
         function info(message, data) {           
@@ -56,17 +58,8 @@
             $log.warn('Warning: ' + message, data);
         }
 
-        showErrorOcurredAlert = function showErrorOcurredAlert(error) {
-            $mdDialog.show(
-              $mdDialog.alert()
-                .parent(angular.element(document.querySelector('#popupContainer')))
-                .clickOutsideToClose(true)
-                .title('????? ?????')
-                .textContent('???????! ????? ????? ?????????, ???? ????? ??? ????? ?? ????? ???? ?? ???? ????? ????? ??? ????? 0542240608 ?? ????? avis@algo.bz , ????? ?? ?? ?????? ??????, ??? ???? ????? ?? ????? ????? ??????. ' + error)
-                .ariaLabel('Alert Dialog Demo')
-                .ok('?????!')
-                .targetEvent(ev)
-            );
+        function setUser(user) {
+            self.user = user;
         }
     }
 }());

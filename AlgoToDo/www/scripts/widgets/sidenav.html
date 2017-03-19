@@ -40,10 +40,7 @@
                         </md-button>
                     </md-menu-item>
                 </md-menu-content>
-            </md-menu>
-
-
-            
+            </md-menu>      
         </md-item>
         <md-item>
             <a class="cursor-pointer" ng-click="vm.rateApp()">
@@ -101,6 +98,40 @@
                     </div>
                 </md-item-content>
             </a>
+        </md-item>
+        <md-item ng-if="vm.user.type === 'admin'">
+            <md-menu>
+                <a class="cursor-pointer" ng-click="$mdOpenMenu($event)">
+                    <md-item-content md-ink-ripple layout="row" layout-align="start center">
+                        <div class="inset">
+                            <ng-md-icon icon="system_update"></ng-md-icon>
+                        </div>
+                        <span flex></span>
+                        <div class="inset">
+                            שלח התראה על עדכון גירסה 
+                        </div>
+                    </md-item-content>
+                </a>
+                <md-menu-content width="1">
+                    <md-menu-item>
+                        <md-button ng-click="vm.sendBroadcastUpdateAlert('Android')" aria-label="android-share">
+                            <ng-md-icon md-menu-align-target icon="android" class="android-color"></ng-md-icon>
+                            <span class="float-right">
+                                למשתמשי אנדרואיד
+                            </span>                            
+                        </md-button>
+                    </md-menu-item>
+                    <md-menu-item>
+                        <md-button ng-click="vm.sendBroadcastUpdateAlert('iOS')" aria-label="apple-share">
+                            <ng-md-icon md-menu-align-target icon="apple"></ng-md-icon>
+                            <span flex></span>
+                            <span class="float-right">
+                                למשתמשי אפל
+                            </span>                         
+                        </md-button>
+                    </md-menu-item>
+                </md-menu-content>
+            </md-menu>
         </md-item>
         <md-item ng-if="vm.user.type === 'admin'">
             <a class="cursor-pointer" ng-click="vm.goToManagementPage()">

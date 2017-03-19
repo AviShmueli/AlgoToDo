@@ -7,6 +7,7 @@
     pushNotifications.pushNewComment = pushNewComment;
     pushNotifications.pushUpdatedTask = pushUpdatedTask;
     pushNotifications.sendSmsViaAdminPhone = sendSmsViaAdminPhone;
+    pushNotifications.sendBroadcastUpdateAlert = sendBroadcastUpdateAlert;
 
 
     var apn = require('./apn');
@@ -40,6 +41,15 @@
         }
         if (user.ApnRegistrationId !== undefined) {
             apn.sendTaskViaApn(task, '', user.ApnRegistrationId, true);
+        }
+    }
+
+    function sendBroadcastUpdateAlert(platform, usersRegTokens) {
+        if (platform === 'Android') {
+            gcm.sendBroadcastUpdateAlert(usersRegTokens);
+        }
+        if (platform === 'iOS') {
+            apn.sendBroadcastUpdateAlert(usersRegTokens);
         }
     }
 

@@ -22,25 +22,25 @@
 
         var vm = this;
 
-        $timeout(function () {
-            vm.taskId = $routeParams.taskId.split('&')[0];
-            vm.task = datacontext.getTaskByTaskId(vm.taskId);
-            vm.user = datacontext.getUserFromLocalStorage();
-            vm.imagesPath = device.getImagesPath();
-            vm.taskIsToMe = (vm.task.to._id === vm.user._id);
-            vm.taskIsFromMe = (vm.task.from._id === vm.user._id);
+        vm.taskId = $routeParams.taskId.split('&')[0];
+        vm.task = datacontext.getTaskByTaskId(vm.taskId);
+        vm.user = datacontext.getUserFromLocalStorage();
+        vm.imagesPath = device.getImagesPath();
+        vm.taskIsToMe = (vm.task.to._id === vm.user._id);
+        vm.taskIsFromMe = (vm.task.from._id === vm.user._id);
 
-            if (vm.task.unSeenResponses > 0) {
+        if (vm.task.unSeenResponses > 0) {
+            $timeout(function () {
                 pushNotifications.clearAllNotifications();
-            }
-            vm.task.unSeenResponses = 0;
+            },0);
+        }
+        vm.task.unSeenResponses = 0;
 
-            if (vm.task.comments === undefined) {
-                vm.task.comments = [];
-            }
+        if (vm.task.comments === undefined) {
+            vm.task.comments = [];
+        }
 
-            angular.element(document.querySelectorAll('html')).removeClass("hight-auto");
-        }, 0);
+        angular.element(document.querySelectorAll('html')).removeClass("hight-auto");
 
         vm.newCommentText = '';
 
@@ -90,7 +90,9 @@
                         });
                     });
                 }, function (err) {
-                    logger.error("error while trying to take a picture", err);
+                    if (err.indexOf("Selection cancelled") === -1) {
+                        logger.error("error while trying to take a picture", err);
+                    }
                 });
 
                 device.setStatusbarOverlays();

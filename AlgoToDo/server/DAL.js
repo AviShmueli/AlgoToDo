@@ -32,6 +32,7 @@
     DAL.getGroupSubTasksInProgress = getGroupSubTasksInProgress;
     DAL.createNewCliqa = createNewCliqa;
     DAL.addNewCliqaToAdmins = addNewCliqaToAdmins;
+    DAL.getAllOldVersionUsers = getAllOldVersionUsers;
 
     var deferred = require('deferred');
     var mongodb = require('mongodb').MongoClient;
@@ -516,10 +517,11 @@
                     'to._id': new ObjectID(userId)
                 }],*/
                 'from._id': new ObjectID(userId),
-                status: 'done'/*,
-                type: {
-                    '$ne': 'group-sub'
-                }*/
+                status: 'done'
+                /*,
+                                type: {
+                                    '$ne': 'group-sub'
+                                }*/
             }, {
                 skip: parseInt(page),
                 limit: 20
@@ -944,7 +946,9 @@
 
         getCollection('Cliqot').then(function (mongo) {
 
-            mongo.collection.insert({name: cliqaName}, function (err, results) {
+            mongo.collection.insert({
+                name: cliqaName
+            }, function (err, results) {
 
                 if (err) {
                     var errorObj = {
@@ -965,7 +969,7 @@
     }
 
     function addNewCliqaToAdmins(newCliqa) {
-        
+
         getCollection('users').then(function (mongo) {
 
             mongo.collection.updateMany({
@@ -987,11 +991,38 @@
                     mongo.db.close();
                 });
         });
-
-
-
     }
 
+    function getAllOldVersionUsers(platform, latestVersion) {
+
+        var d = deferred();
+        
+        getCollection('users').then(function (mongo) {
+            
+            mongo.collection.find({
+                    'device.platform': platform,
+                    versionInstalled: {'$ne': latestVersion}
+                }, {
+                    ApnRegistrationId: true,
+                    GcmRegistrationId: true
+                }).toArray(
+                function (err, result) {
+                    if (err) {
+                        var errorObj = {
+                            message: "error while trying to update user details: ",
+                            error: err
+                        };
+                        mongo.db.close();
+                        d.reject(errorObj);
+                    }
+
+                    mongo.db.close();
+                    d.resolve(result);
+                });
+        });
+
+        return d.promise;
+    }
 
 })(module.exports);
 

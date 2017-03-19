@@ -7,17 +7,17 @@
 
     datacontext.$inject = ['$http', 'logger', 'lodash', 'appConfig', '$rootScope',
                            '$localStorage', '$mdToast', 'socket', '$filter', 'dropbox',
-                           '$q', '$location'];
+                           '$q', '$location', '$timeout'];
 
     function datacontext($http, logger, lodash, appConfig, $rootScope,
                          $localStorage, $mdToast, socket, $filter, dropbox,
-                         $q, $location) {
+                         $q, $location, $timeout) {
 
         
         var self = this;
         self.$storage = $localStorage;
         self.$storage.usersCache = self.$storage.usersCache === undefined ? [] : self.$storage.usersCache;//new Map();
- 
+
         var getTaskList = function () {
             return self.$storage.tasksList !== undefined ? self.$storage.tasksList: [];
         };
@@ -188,6 +188,20 @@
                 }
             }
         };
+
+        var isMobileDevice = function () {
+            return document.URL.indexOf('http://') === -1 && document.URL.indexOf('https://') === -1;
+        };
+      
+        (function(){
+            var user = getUserFromLocalStorage();
+            if (user !== undefined) {           
+                var logUser = { name: user.name, _id: user._id, phone: user.phone, versionInstalled: user.versionInstalled };
+                logUser.device = isMobileDevice() ? user.device.manufacturer + ' ' + user.device.model: 'Browser',
+                logger.setUser(logUser);
+            }
+        })();
+        
 
         var service = {
             getTaskList: getTaskList,

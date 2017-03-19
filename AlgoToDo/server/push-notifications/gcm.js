@@ -5,7 +5,7 @@
     gcmModule.sendTaskViaGcm = sendTaskViaGcm;
     gcmModule.sendCommentViaGcm = sendCommentViaGcm;
     gcmModule.sendSmsViaAdminPhone = sendSmsViaAdminPhone;
-
+    gcmModule.sendBroadcastUpdateAlert = sendBroadcastUpdateAlert;
 
     var winston = require('../logger');
     var gcm = require('node-gcm');
@@ -138,6 +138,33 @@
 
         // Actually send the message
         GcmSender.send(message, { registrationTokens: [AdminRegToken] }, function (err, response) {
+            console.log("send message", message);
+            if (err) {
+                winston.log('error', "error while sending push notification: ", err);
+            }
+            else {
+                console.log(response);
+            }
+        });
+    }
+
+    function sendBroadcastUpdateAlert(usersRegTokens) {
+
+        var message = new gcm.Message({
+            data: {
+                additionalData: {
+                    type: "updateVersionAlert"
+                },
+                title: "קיימת גירסה חדשה לאפליקציה",
+                body: "עדכן את האפליקציה עכשיו",
+            }
+        });
+                
+        //message.addData('content-available', '1');
+        message.addData('image', 'www/images/asiti-logo.png');
+
+        // Actually send the message
+        GcmSender.send(message, { registrationTokens: usersRegTokens }, function (err, response) {
             console.log("send message", message);
             if (err) {
                 winston.log('error', "error while sending push notification: ", err);

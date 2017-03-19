@@ -27,6 +27,7 @@
     BL.getDoneTasks = getDoneTasks;
     BL.createNewCliqa = createNewCliqa;
     BL.reSendVerificationCodeToUser = reSendVerificationCodeToUser;
+    BL.sendBroadcastUpdateAlert = sendBroadcastUpdateAlert;
 
     var ObjectID = require('mongodb').ObjectID;
     var deferred = require('deferred');
@@ -640,6 +641,30 @@
         DAL.createNewCliqa(cliqaName).then(function (result) {
             DAL.addNewCliqaToAdmins(result.ops[0]);
             d.resolve();
+        }, function (error) {
+            d.deferred(error);
+        });
+
+        return d.promise;
+    }
+
+    function sendBroadcastUpdateAlert(platform, version) {
+
+        var d = deferred();
+        var regTokens = [];
+        DAL.getAllOldVersionUsers(platform, version).then(function (result) {
+            setTimeout(function () {
+                for (var i = 0; i < result.length; i++) {
+                    if (platform === 'iOS') {
+                        regTokens.push(result[i].ApnRegistrationId);    
+                    }
+                    else{
+                        regTokens.push(result[i].GcmRegistrationId);                   
+                    }
+                }
+                pushNotifications.sendBroadcastUpdateAlert(platform, regTokens);
+            }, 0);
+            d.resolve(result.length.toString());
         }, function (error) {
             d.deferred(error);
         });

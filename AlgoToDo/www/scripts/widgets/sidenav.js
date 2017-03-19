@@ -75,6 +75,31 @@
                 });
             }
 
+            vm.sendBroadcastUpdateAlert = function (paltform) {
+                $mdDialog.show(
+                  $mdDialog.prompt()
+                    .parent(angular.element(document.querySelector('#CliqaAlertContainer')))
+                    .clickOutsideToClose(true)
+                    .title('עדכן את כל משתמשי ' + paltform + ' על עדכון גירסה')
+                    .placeholder('איזו גירסה?')
+                    .ariaLabel('Alert Dialog Demo')
+                    .ok('שלח')
+                    .cancel('בטל')
+                ).then(function (version) {
+                    vm.closeSidenav();
+                    DAL.sendBroadcastUpdateAlert(paltform, version).then(function (result) {
+                        if (device.isMobileDevice()) {
+                            cordovaPlugins.showToast("עדכון נשלח ל " + result.data + " משתמשים", 2000);
+                        }
+                        else {
+                            logger.toast("עדכון נשלח ל " + result.data + " משתמשים", 2000);
+                        }
+                    }, function (error) {
+                        logger.error(error);
+                    });
+                });
+            }
+
             vm.admin = [{
                 link: '',
                 title: 'רוקן משימות',
