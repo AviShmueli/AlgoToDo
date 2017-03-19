@@ -79,6 +79,7 @@
             }
 
             task.createTime = new Date();
+            task.lastModified = new Date();
             task.from._id = new ObjectID(task.from._id);
 
             if (task.type === 'group-main') {

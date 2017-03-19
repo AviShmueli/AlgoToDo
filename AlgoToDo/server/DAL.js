@@ -165,6 +165,9 @@
                 ], {
                     $push: {
                         comments: comment
+                    },
+                    $set: {
+                        lastModified: new Date()
                     }
                 }, {
                     new: true
@@ -214,6 +217,9 @@
                 }).updateOne({
                     $push: {
                         comments: commentObj.comment
+                    },
+                    $set: {
+                        lastModified: new Date()
                     }
                 });
 
@@ -261,7 +267,8 @@
                     $set: {
                         'status': task.status,
                         'doneTime': task.doneTime,
-                        'seenTime': task.seenTime
+                        'seenTime': task.seenTime,
+                        'lastModified': new Date()
                     }
                 }, {
                     new: true
@@ -303,7 +310,8 @@
                     $set: {
                         'status': task.status,
                         'doneTime': task.doneTime,
-                        'seenTime': task.seenTime
+                        'seenTime': task.seenTime,
+                        'lastModified': new Date()
                     }
                 });
             }
@@ -996,16 +1004,18 @@
     function getAllOldVersionUsers(platform, latestVersion) {
 
         var d = deferred();
-        
+
         getCollection('users').then(function (mongo) {
-            
+
             mongo.collection.find({
-                    'device.platform': platform,
-                    versionInstalled: {'$ne': latestVersion}
-                }, {
-                    ApnRegistrationId: true,
-                    GcmRegistrationId: true
-                }).toArray(
+                'device.platform': platform,
+                versionInstalled: {
+                    '$ne': latestVersion
+                }
+            }, {
+                ApnRegistrationId: true,
+                GcmRegistrationId: true
+            }).toArray(
                 function (err, result) {
                     if (err) {
                         var errorObj = {
