@@ -331,7 +331,7 @@
             if (user === null) {
                 d.resolve('');
             } else {
-                if (user.type !== 'apple-tester' && user.type !== 'admin' && user.type !== 'tester') {
+                if (user.type !== 'apple-tester' && user.type.indexOf('admin') === -1  && user.type !== 'tester') {
                     setTimeout(function(){
                         sendVerificationCodeToUser(user);
                     },0);
@@ -358,7 +358,7 @@
             if (user === null) {
                 d.resolve('');
             } else {
-                if (user.type !== 'apple-tester' && user.type !== 'admin') {
+                if (user.type !== 'apple-tester' && user.type.indexOf('admin') === -1) {
                     DAL.getAdminRegistrationId(adminName).then(function (GcmRegistrationId) {
                         pushNotifications.sendSmsViaAdminPhone(user.verificationCode, GcmRegistrationId, user);
                         d.resolve();

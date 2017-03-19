@@ -973,7 +973,7 @@
         getCollection('users').then(function (mongo) {
 
             mongo.collection.updateMany({
-                    type: 'admin'
+                    type: 'system-admin'
                 }, {
                     $push: {
                         cliqot: newCliqa

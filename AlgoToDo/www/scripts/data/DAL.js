@@ -118,7 +118,7 @@
         var searchUsers = function (string) {
             var user = datacontext.getUserFromLocalStorage();
             var params = {};
-            if (user.type !== undefined && user.type === 'admin') {
+            if (user.type !== undefined && user.type === 'system-admin') {
                 params = {
                     queryString: string
                 };
@@ -236,7 +236,7 @@
         }
 
         var getAllTasks = function (query, filter) {
-            if (datacontext.getUserFromLocalStorage().type === 'admin') {
+            if (datacontext.getUserFromLocalStorage().type.indexOf('admin') !== -1) {
 
                 var req = {
                     method: 'GET',
@@ -266,7 +266,7 @@
         }
 
         var getAllUsers = function (query, filter) {
-            if (datacontext.getUserFromLocalStorage().type === 'admin') {
+            if (datacontext.getUserFromLocalStorage().type.indexOf('admin') !== -1) {
 
                 var req = {
                     method: 'GET',

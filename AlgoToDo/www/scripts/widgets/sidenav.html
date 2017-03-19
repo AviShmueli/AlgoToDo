@@ -86,7 +86,7 @@
                 </md-item-content>
             </a>
         </md-item>
-        <md-item ng-if="vm.user.type === 'admin'">
+        <md-item ng-if="vm.user.type === 'system-admin'">
             <a class="cursor-pointer" ng-click="vm.showAddCliqaDialog()">
                 <md-item-content md-ink-ripple layout="row" layout-align="start center">
                     <div class="inset">
@@ -99,7 +99,7 @@
                 </md-item-content>
             </a>
         </md-item>
-        <md-item ng-if="vm.user.type === 'admin'">
+        <md-item ng-if="vm.user.type === 'system-admin'">
             <md-menu>
                 <a class="cursor-pointer" ng-click="$mdOpenMenu($event)">
                     <md-item-content md-ink-ripple layout="row" layout-align="start center">
@@ -133,7 +133,7 @@
                 </md-menu-content>
             </md-menu>
         </md-item>
-        <md-item ng-if="vm.user.type === 'admin'">
+        <md-item ng-if="vm.user.type.indexOf('admin') !== -1">
             <a class="cursor-pointer" ng-click="vm.goToManagementPage()">
                 <md-item-content md-ink-ripple layout="row" layout-align="start center">
                     <div class="inset">
