@@ -266,6 +266,9 @@
                         pushTasksToUsersDevice([task], [task.to._id], false);
                     }
                 }
+                if (task.type === 'group-sub') {
+                    checkIfGroupMainTaskIsDone(task.groupMainTaskId);               
+                }
             }
             d.resolve();
         }, function (error) {
