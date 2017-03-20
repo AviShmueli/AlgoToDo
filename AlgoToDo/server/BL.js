@@ -831,7 +831,7 @@
     function checkIfGroupMainTaskIsDone(mainTaskId) {
 
         DAL.getGroupSubTasksInProgress(new ObjectID(mainTaskId)).then(function (result) {
-            if (result === 0) {
+            if (result.count === 0) {
                 DAL.updateTaskStatus({
                     _id: mainTaskId,
                     'status': 'done',

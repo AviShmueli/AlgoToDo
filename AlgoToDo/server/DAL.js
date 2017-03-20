@@ -941,7 +941,7 @@
                     }
 
                     mongo.db.close();
-                    d.resolve(result);
+                    d.resolve({count: result, id: mainTaskId});
                 });
         });
 
