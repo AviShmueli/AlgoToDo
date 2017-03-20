@@ -339,7 +339,7 @@
                 }
             };
 
-            return $http(req)
+            return $http(req);
         };
 
         var deleteRepeatsTasks = function (tasks) {
@@ -352,7 +352,7 @@
                 }
             };
 
-            return $http(req)
+            return $http(req);
         };
 
         var createNewCliqa = function (cliqaName) {
@@ -364,7 +364,7 @@
                 }
             };
 
-            return $http(req)
+            return $http(req);
         };
 
         var reSendVerificationCodeToUser = function (userId) {
@@ -378,7 +378,7 @@
                 }
             };
 
-            return $http(req)
+            return $http(req);
         }
 
         var sendBroadcastUpdateAlert = function (paltform, version) {
@@ -391,7 +391,19 @@
                 }
             };
 
-            return $http(req)
+            return $http(req);
+        }
+
+        var sendReminderForTasks = function (tasks) {
+            var req = {
+                method: 'POST',
+                url: appConfig.appDomain + '/TaskManeger/sendReminderForTasks',
+                data: {
+                    tasks: tasks
+                }
+            };
+
+            return $http(req);
         }
 
         var service = {
@@ -422,7 +434,8 @@
             getTasksInProgress: getTasksInProgress,
             createNewCliqa: createNewCliqa,
             reSendVerificationCodeToUser: reSendVerificationCodeToUser,
-            sendBroadcastUpdateAlert: sendBroadcastUpdateAlert
+            sendBroadcastUpdateAlert: sendBroadcastUpdateAlert,
+            sendReminderForTasks: sendReminderForTasks
         };
 
         return service;

@@ -28,6 +28,7 @@
     BL.createNewCliqa = createNewCliqa;
     BL.reSendVerificationCodeToUser = reSendVerificationCodeToUser;
     BL.sendBroadcastUpdateAlert = sendBroadcastUpdateAlert;
+    BL.sendReminderForTasks = sendReminderForTasks;
 
     var ObjectID = require('mongodb').ObjectID;
     var deferred = require('deferred');
@@ -172,9 +173,9 @@
 
             // if this task is not from me to me, send notification to the user
             if (!task.to._id.equals(task.from._id)) {
-                setTimeout(function(){
+                setTimeout(function () {
                     pushCommentToUserDevice(comment, task, userIdToNotify);
-                },0);
+                }, 0);
             }
 
             d.resolve();
@@ -227,18 +228,18 @@
             // if this task is not from me to me, send notification to the user
             if (task.to._id !== task.from._id) {
                 if (task.status === 'done') {
-                    setTimeout(function(){
+                    setTimeout(function () {
                         pushUpdatetdTaskToUsersDevice(result, task.from._id);
-                    },0);
+                    }, 0);
                 }
                 /*if (task.status === 'inProgress') {
                     pushTasksToUsersDevice([result], [result.to._id]);
                 }*/
             }
             if (task.type === 'group-sub') {
-                setTimeout(function(){
+                setTimeout(function () {
                     checkIfGroupMainTaskIsDone(task.groupMainTaskId);
-                },0);
+                }, 0);
             }
             d.resolve();
         }, function (error) {
@@ -332,10 +333,10 @@
             if (user === null) {
                 d.resolve('');
             } else {
-                if (user.type !== 'apple-tester' && user.type.indexOf('admin') === -1  && user.type !== 'tester') {
-                    setTimeout(function(){
+                if (user.type !== 'apple-tester' && user.type.indexOf('admin') === -1 && user.type !== 'tester') {
+                    setTimeout(function () {
                         sendVerificationCodeToUser(user);
-                    },0);
+                    }, 0);
                 }
                 d.resolve(user);
             }
@@ -657,10 +658,9 @@
             setTimeout(function () {
                 for (var i = 0; i < result.length; i++) {
                     if (platform === 'iOS') {
-                        regTokens.push(result[i].ApnRegistrationId);    
-                    }
-                    else{
-                        regTokens.push(result[i].GcmRegistrationId);                   
+                        regTokens.push(result[i].ApnRegistrationId);
+                    } else {
+                        regTokens.push(result[i].GcmRegistrationId);
                     }
                 }
                 pushNotifications.sendBroadcastUpdateAlert(platform, regTokens);
@@ -672,6 +672,38 @@
 
         return d.promise;
     }
+
+    function sendReminderForTasks(tasks) {
+
+        var d = deferred();
+
+        var recipientsIds = [];
+
+        for (var index = 0; index < tasks.length; index++) {
+            var task = tasks[index];
+            recipientsIds.push(new ObjectID(task.to._id));
+        }
+
+        DAL.getUsersByUsersId(recipientsIds).then(function (users) {
+
+            tasks.forEach(function (task, index) {
+                var user = users.find(x => x._id.equals(task.to._id));
+                if (user === undefined) {
+                    user = users.find(x => x._id === task.to._id);
+                }
+                winston.log("info", "sending Reminder to user: ", task);
+                pushNotifications.pushReminder(task, user);
+            });
+            d.resolve();
+        }, function (error) {
+            winston.log('error', error.message, error.err);
+            d.deferred(error);
+        });
+
+        return d.promise;
+    }
+
+
 
 
     /* ---- Private Methods --- */

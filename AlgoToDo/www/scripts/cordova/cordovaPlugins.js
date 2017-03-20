@@ -98,12 +98,12 @@
 
         /* ----- Social Sharing -----*/
         
-        var shareApp = function (platform) {
-            var message = 'קישור להורדת האפליקציה Asiti, אפילקציה לניהול אישי וחברתי.',
+        var shareApp = function () {
+            var message = 'קישור להורדת האפליקציה Asiti, אפליקצית מסרים מידית מוכוונת משימות אישיות וחברתיות.',
                 subject = '',
                 file = [],
-                link = platform === 'android' ? 'https://play.google.com/store/apps/details?id=com.algotodo.app' :
-                                                'https://itunes.apple.com/us/app/asiti/id1188641206?ls=1&mt=8';
+                link = 'http://www.asiti.net/link-to-app-store';
+                                                                                    
             document.addEventListener("deviceready", function () {
                 $cordovaSocialSharing
                    .share(message, subject, file, link) // Share via native share sheet
@@ -118,7 +118,6 @@
         var rateApp = function () {
             document.addEventListener("deviceready", function () {
                 $cordovaAppRate.promptForRating(true).then(function (result) {
-
                 });
             }, false);
         }

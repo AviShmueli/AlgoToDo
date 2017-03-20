@@ -778,7 +778,7 @@ md-tabs.md-primary > md-tabs-wrapper > md-tabs-canvas > md-pagination-wrapper > 
 .background-color-orange-hard {background-color: rgb(255,112,67) !important}
 .infinit-repeat-container { margin-top: 7px;padding: 0 16px;}
 .background-color-transparent { background-color: transparent !important }
-.icon-fill { fill: rgb(196, 207, 208) }
+.icon-fill-disabled { fill: rgb(196, 207, 208) }
 .text-align-right{ text-align:right }
 .text-align-left { text-align: left }
 .text-align-center { text-align: center;}

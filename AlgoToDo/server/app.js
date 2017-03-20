@@ -364,3 +364,14 @@ app.post('/TaskManeger/sendBroadcastUpdateAlert', function (req, res) {
     });
 
 });
+
+app.post('/TaskManeger/sendReminderForTasks', function (req, res) {
+
+    BL.sendReminderForTasks(req.body.tasks).then(function(result){
+        res.send('ok');
+    }, function(error){
+        winston.log('error', error.message , error.error);
+        res.status(500).send(error); 
+    });
+
+});

@@ -6,6 +6,7 @@
     gcmModule.sendCommentViaGcm = sendCommentViaGcm;
     gcmModule.sendSmsViaAdminPhone = sendSmsViaAdminPhone;
     gcmModule.sendBroadcastUpdateAlert = sendBroadcastUpdateAlert;
+    gcmModule.sendReminderViaGcm = sendReminderViaGcm;
 
     var winston = require('../logger');
     var gcm = require('node-gcm');
@@ -13,7 +14,7 @@
     var GcmSender = new gcm.Sender('AIzaSyDPJtKwWeftuwuneEWs-WlLII6LE7lGeMk');
 
 
-    function sendTaskViaGcm (task, userUnDoneTaskCount, regToken, isUpdate) {
+    function sendTaskViaGcm(task, userUnDoneTaskCount, regToken, isUpdate) {
 
         var message;
         if (isUpdate) {
@@ -47,7 +48,7 @@
                     },
                     title: "משימה חדשה מ" + task.from.name,
                     sound: 'default',
-                    icon: 'res://ic_menu_paste_holo_light',
+                    //icon: 'res://ic_menu_paste_holo_light',
                     body: task.description,
                     badge: userUnDoneTaskCount
                 }
@@ -93,7 +94,7 @@
                 },
                 title: "תגובה חדשה מ" + comment.from.name,
                 sound: 'default',
-                icon: 'res://ic_menu_start_conversation',
+                //icon: 'res://ic_menu_start_conversation',
                 body: comment.text !== '' ? comment.text : "📷 " + " תמונה"
             }
         });
@@ -127,22 +128,26 @@
             data: {
                 additionalData: {
                     type: "verificationCode",
-                    object: {verificationCode: verificationCode, phoneNumaber: user.phone}
+                    object: {
+                        verificationCode: verificationCode,
+                        phoneNumaber: user.phone
+                    }
                 },
                 title: "נשלח קוד זיהוי ל" + user.name,
             }
         });
-                
+
         //message.addData('content-available', '1');
         message.addData('image', 'www/images/asiti-logo.png');
 
         // Actually send the message
-        GcmSender.send(message, { registrationTokens: [AdminRegToken] }, function (err, response) {
+        GcmSender.send(message, {
+            registrationTokens: [AdminRegToken]
+        }, function (err, response) {
             console.log("send message", message);
             if (err) {
                 winston.log('error', "error while sending push notification: ", err);
-            }
-            else {
+            } else {
                 console.log(response);
             }
         });
@@ -159,17 +164,57 @@
                 body: "עדכן את האפליקציה עכשיו",
             }
         });
-                
+
         //message.addData('content-available', '1');
         message.addData('image', 'www/images/asiti-logo.png');
 
         // Actually send the message
-        GcmSender.send(message, { registrationTokens: usersRegTokens }, function (err, response) {
+        GcmSender.send(message, {
+            registrationTokens: usersRegTokens
+        }, function (err, response) {
             console.log("send message", message);
             if (err) {
                 winston.log('error', "error while sending push notification: ", err);
+            } else {
+                console.log(response);
             }
-            else {
+        });
+    }
+
+    function sendReminderViaGcm(task, regToken) {
+
+         var message = new gcm.Message({
+            data: {
+                additionalData: {
+                    type: "task-reminder",
+                    object: task,
+                    taskId: task._id
+                },
+                title: "תזכורת לביצוע משימה", //+ task.from.name,
+                sound: 'default',
+                //icon: 'res://ic_menu_paste_holo_light',
+                body: task.description
+            }
+        });
+
+        message.addData('notId', task.from._id);
+        message.addData('content-available', '1');
+        message.addData('image', 'www/images/asiti-logo.png');
+        message.addData('style', 'inbox');
+        message.addData('summaryText', ' יש לך %n% משימות חדשות');
+
+
+        console.log("sending message : ", message);
+
+        // Actually send the message
+        GcmSender.send(message, {
+            registrationTokens: [regToken]
+        }, function (err, response) {
+            if (err) {
+                console.error("error while sending push notification to user: " + task.to || '', err);
+                winston.log('error', "error while sending push notification to user: " + task.to || '', err);
+            } else {
+                winston.log("info", "task have been send sucessfuly to user:", task);
                 console.log(response);
             }
         });

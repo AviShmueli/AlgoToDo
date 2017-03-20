@@ -8,6 +8,7 @@
     pushNotifications.pushUpdatedTask = pushUpdatedTask;
     pushNotifications.sendSmsViaAdminPhone = sendSmsViaAdminPhone;
     pushNotifications.sendBroadcastUpdateAlert = sendBroadcastUpdateAlert;
+    pushNotifications.pushReminder = pushReminder;
 
 
     var apn = require('./apn');
@@ -41,6 +42,15 @@
         }
         if (user.ApnRegistrationId !== undefined) {
             apn.sendTaskViaApn(task, '', user.ApnRegistrationId, true);
+        }
+    }
+
+    function pushReminder(task, user) {
+        if (user.GcmRegistrationId !== undefined) {
+            gcm.sendReminderViaGcm(task, user.GcmRegistrationId);
+        }
+        if (user.ApnRegistrationId !== undefined) {
+            apn.sendReminderViaApn(task, user.ApnRegistrationId);
         }
     }
 

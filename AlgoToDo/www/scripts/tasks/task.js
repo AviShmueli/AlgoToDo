@@ -32,7 +32,7 @@
         if (vm.task.unSeenResponses > 0) {
             $timeout(function () {
                 pushNotifications.clearAllNotifications();
-            },0);
+            }, 0);
         }
         vm.task.unSeenResponses = 0;
 
@@ -159,7 +159,7 @@
             }, 0);
 
             DAL.updateTask(task).then(function (response) {
-                
+
             }, function (error) {
                 if (error.status === -1) {
                     error.data = "App lost connection to the server";
@@ -280,10 +280,10 @@
             img.src = fileLocalPath;
             return deferred.promise;
         };
- 
-        var setImagesLocalPath = function(){
-            for(var i = 0; i < vm.task.comments.length; i++){
-                if(vm.task.comments[i].fileName !== undefined){
+
+        var setImagesLocalPath = function () {
+            for (var i = 0; i < vm.task.comments.length; i++) {
+                if (vm.task.comments[i].fileName !== undefined) {
                     setFileLocalPath(vm.task.comments[i]);
                 }
             }
@@ -292,7 +292,7 @@
         $timeout(function () {
             setImagesLocalPath();
         }, 200);
-        
+
         var gallery;
 
         vm.showGalary = function (comment) {
@@ -421,6 +421,19 @@
             };
         }
 
+        vm.sendReminder = function () {
+            var confirm = $mdDialog.confirm()
+               .parent(angular.element(document.querySelector('#deleteRepeatsTaskContainer')))
+               .title('לשלוח תזכורת ל' + vm.task.to.name + '?')
+               .ariaLabel('sendReminder')
+               .ok('שלח')
+               .cancel('בטל');
+
+            $mdDialog.show(confirm).then(function () {
+                DAL.sendReminderForTasks([vm.task]);
+            }, function () {
+            });
+        }
     }
 
 })();

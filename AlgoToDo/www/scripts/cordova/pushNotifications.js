@@ -110,6 +110,9 @@
             if (dataFromServer.type === "updateVersionAlert") {
                 promptForAppUpdate();
             }
+            if (dataFromServer.type === "task-reminder") {
+                handelTaskReminderRecived(taskId, dataFromServer.object);
+            }
         };
 
         var handelNewTaskRecived = function (task, taskCount) {
@@ -178,6 +181,21 @@
             }
         }
 
+        var handelTaskReminderRecived = function (taskId, task) {
+            if (self.appState === 'background') {
+                //window.location = '#/task/' + taskId;
+                $location.path('/task/' + taskId);
+            }
+            else {
+                if ($location.path().indexOf(taskId) === -1) {
+                    showTaskReminderToast(taskId, task.from.name);
+                    document.addEventListener("deviceready", function () {
+                        $cordovaVibration.vibrate(300);
+                    }, false);
+                }
+            }
+        }
+
         var showNewCommentToast = function (taskId, name) {
 
             var NewCommentToast = $mdToast.build({
@@ -196,6 +214,26 @@
                           '</md-toast>'
             });
             $mdToast.show(NewCommentToast);
+        };
+
+        var showTaskReminderToast = function (taskId, name) {
+
+            var TaskReminderToast = $mdToast.build({
+                hideDelay: 2500,
+                position: 'top',
+                template: '<md-toast class="md-capsule" id="message-toast" md-swipe-left="$root.hideToast(\'message-toast\')" md-swipe-right="$root.hideToast(\'message-toast\')">' +
+                             '<div layout="row" class="md-toast-content message-toast" dir="rtl" ng-click="$root.redirectToTaskPage(\'' + taskId + '\')"> ' +
+                                '<span flex="66" layout-padding>' +
+                                    name + ' שלח לך תזכורת לביצוע משימה ' +
+                                    '<br/>הקש/י כדי לעבור למשימה' +
+                                '</span>' +
+                                '<span layout="row" flex="33" layout-align="center center">' +
+                                    '<ng-md-icon icon="notifications" size="48" style="fill:rgb(3, 87, 95)"></ng-md-icon>' +
+                                '</span>' +
+                             '</div>' +
+                          '</md-toast>'
+            });
+            $mdToast.show(TaskReminderToast);
         };
 
         var showNewTaskToast = function (taskId, name) {

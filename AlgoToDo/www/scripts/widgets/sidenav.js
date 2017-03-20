@@ -44,8 +44,8 @@
                 $location.path('/repeatsTasks');
             }
 
-            vm.shareApp = function (platform) {
-                cordovaPlugins.shareApp(platform);
+            vm.shareApp = function () {
+                cordovaPlugins.shareApp();
             }
 
             vm.rateApp = function () {

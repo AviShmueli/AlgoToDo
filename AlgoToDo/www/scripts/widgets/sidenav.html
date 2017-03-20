@@ -1,6 +1,6 @@
-﻿<md-sidenav layout="column" class="md-sidenav-right md-whiteframe-z2" md-component-id="left" >
+﻿<md-sidenav layout="column" class="md-sidenav-right md-whiteframe-z2" md-component-id="left">
     <md-toolbar class="md-tall md-hue-2 toolBar" dir="rtl">
-        <div class="text-align-left" >
+        <div class="text-align-left">
             <md-button aria-label="Open phone interactions menu" class="md-icon-button" ng-click="vm.closeSidenav()">
                 <ng-md-icon icon="close"></ng-md-icon>
             </md-button>
@@ -16,31 +16,17 @@
     </md-toolbar>
     <md-list layout="column" layout-fill>
         <md-item>
-            <md-menu>
-                <a class="cursor-pointer" ng-click="$mdOpenMenu($event)">
-                    <md-item-content md-ink-ripple layout="row" layout-align="start center">
-                        <div class="inset">
-                            <ng-md-icon icon="share"></ng-md-icon>
-                        </div>
-                        <span flex></span>
-                        <div class="inset">
-                            שתף את האפליקציה
-                        </div>
-                    </md-item-content>
-                </a>
-                <md-menu-content width="1">
-                    <md-menu-item>
-                        <md-button ng-click="vm.shareApp('android')" aria-label="android-share">
-                            <ng-md-icon md-menu-align-target icon="android" class="android-color"></ng-md-icon>
-                        </md-button>
-                    </md-menu-item>
-                    <md-menu-item>
-                        <md-button ng-click="vm.shareApp('apple')" aria-label="apple-share">
-                            <ng-md-icon md-menu-align-target icon="apple"></ng-md-icon>
-                        </md-button>
-                    </md-menu-item>
-                </md-menu-content>
-            </md-menu>      
+            <a class="cursor-pointer" ng-click="vm.shareApp()">
+                <md-item-content md-ink-ripple layout="row" layout-align="start center">
+                    <div class="inset">
+                        <ng-md-icon icon="share"></ng-md-icon>
+                    </div>
+                    <span flex></span>
+                    <div class="inset">
+                        שתף את האפליקציה
+                    </div>
+                </md-item-content>
+            </a>
         </md-item>
         <md-item>
             <a class="cursor-pointer" ng-click="vm.rateApp()">
@@ -60,7 +46,7 @@
             <span flex></span>
             <span>ניהול</span>
         </md-subheader>
-        <md-item >
+        <md-item>
             <a class="cursor-pointer" ng-click="vm.showLogoffButton = true">
                 <md-item-content md-ink-ripple layout="row" layout-align="start center">
                     <div class="inset">
@@ -108,7 +94,7 @@
                         </div>
                         <span flex></span>
                         <div class="inset">
-                            שלח התראה על עדכון גירסה 
+                            שלח התראה על עדכון גירסה
                         </div>
                     </md-item-content>
                 </a>
@@ -118,7 +104,7 @@
                             <ng-md-icon md-menu-align-target icon="android" class="android-color"></ng-md-icon>
                             <span class="float-right">
                                 למשתמשי אנדרואיד
-                            </span>                            
+                            </span>
                         </md-button>
                     </md-menu-item>
                     <md-menu-item>
@@ -127,7 +113,7 @@
                             <span flex></span>
                             <span class="float-right">
                                 למשתמשי אפל
-                            </span>                         
+                            </span>
                         </md-button>
                     </md-menu-item>
                 </md-menu-content>
@@ -162,12 +148,12 @@
         </md-item>
         <span flex></span>
         <md-item>
-                <md-item-content md-ink-ripple layout="row" layout-align="start center">
-                    <span flex></span>
-                    <div class="inset">
-                       Asiti {{::vm.appVersion}}
-                    </div>
-                </md-item-content>
+            <md-item-content md-ink-ripple layout="row" layout-align="start center">
+                <span flex></span>
+                <div class="inset">
+                    Asiti {{vm.appVersion}}
+                </div>
+            </md-item-content>
         </md-item>
     </md-list>
 </md-sidenav>
