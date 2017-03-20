@@ -16,9 +16,9 @@
                         </md-button>
                     </md-menu-item>
                     <md-menu-item>
-                        <md-button ng-disabled="!vm.taskIsFromMe" class="no-line-height" ng-click="vm.sendReminder()">
+                        <md-button ng-disabled="(vm.taskIsFromMe && vm.taskIsToMe) || !vm.taskIsFromMe" class="no-line-height" ng-click="vm.sendReminder()">
                             <div layout="row" flex>
-                                <ng-md-icon md-menu-align-target icon="notifications_active" class="icon-fill-disabled" ng-class="{'icon-fill': vm.taskIsFromMe}"></ng-md-icon>
+                                <ng-md-icon md-menu-align-target icon="notifications_active" class="icon-fill-disabled" ng-class="{'icon-fill': !((vm.taskIsFromMe && vm.taskIsToMe) || !vm.taskIsFromMe)}"></ng-md-icon>
                                 <p flex class="text-align-right">שלח תזכורת</p>
                             </div>
                         </md-button>
