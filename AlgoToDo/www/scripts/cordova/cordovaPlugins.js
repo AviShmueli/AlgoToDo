@@ -102,7 +102,7 @@
             var message = 'קישור להורדת האפליקציה Asiti, אפליקצית מסרים מידית מוכוונת משימות אישיות וחברתיות.',
                 subject = '',
                 file = [],
-                link = 'http://www.asiti.net/link-to-app-store';
+                link = 'http://www.asiti.net/download-asiti';
                                                                                     
             document.addEventListener("deviceready", function () {
                 $cordovaSocialSharing
