@@ -33,52 +33,54 @@
     </md-fab-trigger>
 
     <md-content flex md-scroll-y class="height-100P">
-        <ui-view layout="column" layout-fill>
+        <main flex>
+            <ui-view layout="column" layout-fill>
 
-            <div aria-labelledby="all"
-                 layout="row" layout-align="center center">
-                <md-list flex flex-gt-sm="50" flex-md="66" dir="rtl" ng-show="vm.repeatsTasks.length > 0">
-                    <md-list-item ng-repeat="task in vm.repeatsTasks" class="noright task-item margin margin-top-7px">
-                        <md-card-avatar>
-                            <img alt="avatar" ng-src="{{vm.imagesPath + (task.to.length === 1 ? task.to[0].avatarUrl : '/images/group-1.svg')}}" class="md-avatar user-avatar marg margin-right-10px"/>
-                        </md-card-avatar>
-                        <a class="md-tile-content margin-bottom-14px" flex="100" ng-click="vm.navigateToTaskPage(item._id)">
-                            <div layout="row">
-                                <span class="from">{{(task.to.length === 1 ? task.to[0].name : (task.to[0].name + ' +' + (task.to.length - 1)))}}</span>
-                                <!--<ng-md-icon class="head-icon fill-black" icon="send" size="10"></ng-md-icon>-->
-                                <span flex></span>
-                                <span class="font-bold">{{vm.getRepeatedTime(task)}}</span>
-                            </div>
-
-                            <div layout="row">
-                                <div layout="row" flex="90" class="font-14px margin-left-15px">
-                                    <span ng-if="task.description.length > vm.descriptionTextLength()">{{task.description.substring(0, vm.descriptionTextLength()) + '...'}}</span>
-                                    <span ng-if="task.description.length <= vm.descriptionTextLength()">{{task.description}}</span>
+                <div aria-labelledby="all"
+                     layout="row" layout-align="center center">
+                    <md-list flex flex-gt-sm="50" flex-md="66" dir="rtl" ng-show="vm.repeatsTasks.length > 0">
+                        <md-list-item ng-repeat="task in vm.repeatsTasks" class="noright task-item margin margin-top-7px">
+                            <md-card-avatar>
+                                <img alt="avatar" ng-src="{{vm.imagesPath + (task.to.length === 1 ? task.to[0].avatarUrl : '/images/group-1.svg')}}" class="md-avatar user-avatar marg margin-right-10px" />
+                            </md-card-avatar>
+                            <a class="md-tile-content margin-bottom-14px" flex="100" ng-click="vm.navigateToTaskPage(item._id)">
+                                <div layout="row">
+                                    <span class="from">{{(task.to.length === 1 ? task.to[0].name : (task.to[0].name + ' +' + (task.to.length - 1)))}}</span>
+                                    <!--<ng-md-icon class="head-icon fill-black" icon="send" size="10"></ng-md-icon>-->
+                                    <span flex></span>
+                                    <span class="font-bold">{{vm.getRepeatedTime(task)}}</span>
                                 </div>
-                                <div layout="column" flex="10" layout-align="center end">
-                                    <md-badge class="new-responses-badge-inProcess" ng-if="task.unSeenResponses > 0">{{item.unSeenResponses}}</md-badge>
 
-                                    <md-button class="md-fab md-mini md-icon-button background-color-orange-hard" ng-click="vm.editTask(task, $event)" aria-label="done">
-                                        <ng-md-icon icon="edit"></ng-md-icon>
-                                    </md-button>
+                                <div layout="row">
+                                    <div layout="row" flex="90" class="font-14px margin-left-15px">
+                                        <span ng-if="task.description.length > vm.descriptionTextLength()">{{task.description.substring(0, vm.descriptionTextLength()) + '...'}}</span>
+                                        <span ng-if="task.description.length <= vm.descriptionTextLength()">{{task.description}}</span>
+                                    </div>
+                                    <div layout="column" flex="10" layout-align="center end">
+                                        <md-badge class="new-responses-badge-inProcess" ng-if="task.unSeenResponses > 0">{{item.unSeenResponses}}</md-badge>
+
+                                        <md-button class="md-fab md-mini md-icon-button background-color-orange-hard" ng-click="vm.editTask(task, $event)" aria-label="done">
+                                            <ng-md-icon icon="edit"></ng-md-icon>
+                                        </md-button>
+                                    </div>
                                 </div>
-                            </div>
-                        </a>
-                        <md-divider md-inset ng-if="!$last"></md-divider>
-                    </md-list-item>
-                    <md-divider></md-divider>
-                </md-list>
-                <md-list dir="rtl" ng-hide="vm.repeatsTasks.length > 0">
-                    <md-item>
-                        <md-item-content>
-                            <h3 class="text-align-center" > עוד לא יצרת משימות חוזרות </h3>
-                            <h4> לחץ על כפתור + בכדי ליצור משימה חוזרת </h4>
-                        </md-item-content>
-                    </md-item>
-                    <md-divider></md-divider>
-                </md-list>
-            </div>
-        </ui-view>
-    </md-content>
+                            </a>
+                            <md-divider md-inset ng-if="!$last"></md-divider>
+                        </md-list-item>
+                        <md-divider></md-divider>
+                    </md-list>
+                    <md-list dir="rtl" ng-hide="vm.repeatsTasks.length > 0">
+                        <md-item>
+                            <md-item-content>
+                                <h3 class="text-align-center"> עוד לא יצרת משימות חוזרות </h3>
+                                <h4> לחץ על כפתור + בכדי ליצור משימה חוזרת </h4>
+                            </md-item-content>
+                        </md-item>
+                        <md-divider></md-divider>
+                    </md-list>
+                </div>
+            </ui-view>
+        </main>
+</md-content>
 
 </div>
