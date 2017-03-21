@@ -409,7 +409,7 @@
 
         var getUsersByPhoneNumbers = function (phoneNumbers) {
             var req = {
-                method: 'GET',
+                method: 'POST',
                 url: appConfig.appDomain + '/TaskManeger/getUsersByPhoneNumbers',
                 params: {
                     phoneNumbers: phoneNumbers

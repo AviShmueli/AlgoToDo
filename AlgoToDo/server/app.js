@@ -376,7 +376,7 @@ app.post('/TaskManeger/sendReminderForTasks', function (req, res) {
 
 });
 
-app.get('/TaskManeger/getUsersByPhoneNumbers', function (req, res) {
+app.post('/TaskManeger/getUsersByPhoneNumbers', function (req, res) {
 
     BL.getUsersByPhoneNumbers(req.query.phoneNumbers).then(function(result) {
         res.send(result);   
