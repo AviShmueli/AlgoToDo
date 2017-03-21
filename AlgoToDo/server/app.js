@@ -378,7 +378,7 @@ app.post('/TaskManeger/sendReminderForTasks', function (req, res) {
 
 app.post('/TaskManeger/getUsersByPhoneNumbers', function (req, res) {
 
-    BL.getUsersByPhoneNumbers(req.query.phoneNumbers).then(function(result) {
+    BL.getUsersByPhoneNumbers(req.body.phoneNumbers).then(function(result) {
         res.send(result);   
     }, function(error) {
         winston.log('error', error.message , error.error);

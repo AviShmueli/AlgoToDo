@@ -411,7 +411,7 @@
             var req = {
                 method: 'POST',
                 url: appConfig.appDomain + '/TaskManeger/getUsersByPhoneNumbers',
-                params: {
+                data: {
                     phoneNumbers: phoneNumbers
                 }
             };
