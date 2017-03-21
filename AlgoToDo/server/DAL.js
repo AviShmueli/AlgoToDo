@@ -1042,7 +1042,7 @@
         
         getCollection('users').then(function (mongo) {
 
-            mongo.collection.find({name: 'אבי שמואלי'}).snapshot().forEach(
+            mongo.collection.find({type: 'system-admin'}).snapshot().forEach(
             function (elem) {
                 mongo.collection.update({
                     _id: elem._id

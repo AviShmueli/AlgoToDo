@@ -10,6 +10,7 @@
 
     var winston = require('../logger');
     var gcm = require('node-gcm');
+    var phoneUtil = require('google-libphonenumber').PhoneNumberUtil.getInstance();
 
     var GcmSender = new gcm.Sender('AIzaSyDPJtKwWeftuwuneEWs-WlLII6LE7lGeMk');
 
@@ -123,6 +124,8 @@
     }
 
     function sendSmsViaAdminPhone(verificationCode, AdminRegToken, user) {
+
+        var phoneNumber = phoneUtil.parse(user.phone, 'il');
 
         var message = new gcm.Message({
             data: {

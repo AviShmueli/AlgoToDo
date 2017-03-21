@@ -309,6 +309,8 @@
             delete user._id;
         }
 
+        user.number = phoneUtil.format(phoneUtil.parse(user.number, 'il'), 1);
+
         DAL.registerUser(user).then(function (result) {
             var newUser = result.ops[0];
 
@@ -341,7 +343,7 @@
             if (user === null) {
                 d.resolve('');
             } else {
-                if (user.type !== 'apple-tester' && user.type.indexOf('admin') === -1 && user.type !== 'tester') {
+                if (user.type === undefined || (user.type !== undefined && user.type !== 'apple-tester' && user.type.indexOf('admin') === -1 && user.type !== 'tester')) {
                     setTimeout(function () {
                         sendVerificationCodeToUser(user);
                     }, 0);
