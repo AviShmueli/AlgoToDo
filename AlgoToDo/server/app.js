@@ -49,10 +49,10 @@ var jobs = require('./cron-jobs');
     // *********
     // IMPORTANT: uncomment this if deploy to production!!!
     // *********
-    setTimeout(function(){
+    /*setTimeout(function(){
         jobs.startAllJobs();
         console.log("*** start all cron jobs! ***");
-    },0);
+    },0);*/
 
 
 
