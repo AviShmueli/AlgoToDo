@@ -1,4 +1,4 @@
-﻿(function() {
+﻿(function () {
     'use strict';
 
     angular
@@ -9,12 +9,12 @@
 
     function DAL($http, $q, datacontext, appConfig, logger) {
 
-        
+
         var self = this;
         self.admin = 1;
 
         var saveNewTasks = function (tasks) {
-            
+
             var req = {
                 method: 'POST',
                 url: appConfig.appDomain + '/TaskManeger/newTask',
@@ -62,11 +62,11 @@
 
             return $http(req);
         };
-        
+
         var reloadAllTasks = function () {
-            if (datacontext.getUserFromLocalStorage() !== undefined) {                
+            if (datacontext.getUserFromLocalStorage() !== undefined) {
                 getTasksInProgress().then(function (response) {
-                    
+
                     datacontext.setTaskList(response.data);
                     datacontext.setMyTaskCount();
 
@@ -146,7 +146,7 @@
         };
 
         var checkIfUserExist = function (user) {
-            
+
             var req = {
                 method: 'GET',
                 url: appConfig.appDomain + '/TaskManeger/isUserExist',
@@ -407,6 +407,18 @@
             return $http(req);
         }
 
+        var getUsersByPhoneNumbers = function (phoneNumbers) {
+            var req = {
+                method: 'GET',
+                url: appConfig.appDomain + '/TaskManeger/getUsersByPhoneNumbers',
+                params: {
+                    phoneNumbers: phoneNumbers
+                }
+            };
+
+            return $http(req);
+        }
+
         var service = {
             saveNewTasks: saveNewTasks,
             getTasks: getTasks,
@@ -436,7 +448,8 @@
             createNewCliqa: createNewCliqa,
             reSendVerificationCodeToUser: reSendVerificationCodeToUser,
             sendBroadcastUpdateAlert: sendBroadcastUpdateAlert,
-            sendReminderForTasks: sendReminderForTasks
+            sendReminderForTasks: sendReminderForTasks,
+            getUsersByPhoneNumbers: getUsersByPhoneNumbers
         };
 
         return service;

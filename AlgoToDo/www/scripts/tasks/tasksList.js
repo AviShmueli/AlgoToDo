@@ -325,7 +325,7 @@
 
         var region = 'IL';
         device.getContacts('').then(function (allContacts) {
-            var phone_contactId_map = {};
+            var phone_contactId_map = {}, phoneNumbers = [];
             for (var i = 0; i < allContacts.length; i++) {
                 var contact = allContacts[i];
                 if (contact.phoneNumbers != null && contact.phoneNumbers.length > 0) {
@@ -334,14 +334,21 @@
                         if (phoneUtils.getNumberType(phoneNumber, region) === 'MOBILE') {
                             var internatianalFormat = phoneUtils.formatInternational(phoneNumber, region);
                             phone_contactId_map[internatianalFormat] = contact.id;
-                        }
-                        else {
-                            var b = 2;
+                            phoneNumbers.push(internatianalFormat);
                         }
                     }
                 }
             }
-            var a = 1;
+            DAL.getUsersByPhoneNumbers(phoneNumbers).then(function (result) {
+                for (var i = 0; i < result.data.length; i++) {
+                    var user = result.data[i];
+                }
+            }, function (error) {
+                if (error.status === -1) {
+                    error.data = "App lost connection to the server";
+                }
+                logger.error('Error while trying to get Users By PhoneNumbers: ', error.data || error);
+            });
         });
     }
 

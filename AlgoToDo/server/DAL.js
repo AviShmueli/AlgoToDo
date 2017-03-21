@@ -33,6 +33,7 @@
     DAL.createNewCliqa = createNewCliqa;
     DAL.addNewCliqaToAdmins = addNewCliqaToAdmins;
     DAL.getAllOldVersionUsers = getAllOldVersionUsers;
+    DAL.getUsersByPhoneNumbers = getUsersByPhoneNumbers;
 
     var deferred = require('deferred');
     var mongodb = require('mongodb').MongoClient;
@@ -1038,26 +1039,38 @@
         return d.promise;
     }
 
-    function changeAllPhoneNumbersToIntelFormat() {
-        
+    function getUsersByPhoneNumbers(phoneNumbers) {
+        var d = deferred();
+
         getCollection('users').then(function (mongo) {
 
-            mongo.collection.find({type: 'system-admin'}).snapshot().forEach(
-            function (elem) {
-                mongo.collection.update({
-                    _id: elem._id
-                }, {
-                    $set: {
-                        phone: phoneUtil.format(phoneUtil.parse(elem.phone, 'il'), 1)
+            mongo.collection.find({
+                'phone': {
+                    $in: phoneNumbers
+                }
+            }, {
+                '_id': true,
+                'name': true,
+                'phone': true,
+                'avatarUrl': true
+            }).toArray(
+            function (err, result) {
+                    if (err) {
+                        var errorObj = {
+                            message: "error while trying to get Users By Phone Numbers ",
+                            error: err
+                        };
+                        mongo.db.close();
+                        d.reject(errorObj);
                     }
+
+                    mongo.db.close();
+                    d.resolve(result);
                 });
-            }
-        );
         });
 
+        return d.promise;
     }
-
-    //changeAllPhoneNumbersToIntelFormat();
 
 
 })(module.exports);

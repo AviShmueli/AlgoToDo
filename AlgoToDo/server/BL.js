@@ -29,12 +29,14 @@
     BL.reSendVerificationCodeToUser = reSendVerificationCodeToUser;
     BL.sendBroadcastUpdateAlert = sendBroadcastUpdateAlert;
     BL.sendReminderForTasks = sendReminderForTasks;
+    BL.getUsersByPhoneNumbers = getUsersByPhoneNumbers;
+
 
     var ObjectID = require('mongodb').ObjectID;
     var deferred = require('deferred');
-    var PNF = require('google-libphonenumber').PhoneNumberFormat; 
+    var PNF = require('google-libphonenumber').PhoneNumberFormat;
     var phoneUtil = require('google-libphonenumber').PhoneNumberUtil.getInstance();
- 
+
     var DAL = require('./DAL');
     var winston = require('./logger');
     var pushNotifications = require('./push-notifications/push-notifications');
@@ -270,7 +272,7 @@
                     }
                 }
                 if (task.type === 'group-sub') {
-                    checkIfGroupMainTaskIsDone(task.groupMainTaskId);               
+                    checkIfGroupMainTaskIsDone(task.groupMainTaskId);
                 }
             }
             d.resolve();
@@ -309,7 +311,7 @@
             delete user._id;
         }
 
-        user.number = phoneUtil.format(phoneUtil.parse(user.number, 'il'), 1);
+        user.number = phoneUtil.format(phoneUtil.parse(user.phone, 'il'), 1);
 
         DAL.registerUser(user).then(function (result) {
             var newUser = result.ops[0];
@@ -853,6 +855,19 @@
         }, function (error) {
             winston.log('error', error.message, error.err);
         });
+    }
+
+    function getUsersByPhoneNumbers(phoneNumbers) {
+
+        var d = deferred();
+
+        DAL.getUsersByPhoneNumbers(phoneNumbers).then(function (result) {
+            d.resolve(result);
+        }, function (error) {
+            d.deferred(error);
+        });
+
+        return d.promise;
     }
 
 })(module.exports);

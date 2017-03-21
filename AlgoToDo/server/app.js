@@ -375,3 +375,14 @@ app.post('/TaskManeger/sendReminderForTasks', function (req, res) {
     });
 
 });
+
+app.get('/TaskManeger/getUsersByPhoneNumbers', function (req, res) {
+
+    BL.getUsersByPhoneNumbers(req.query.phoneNumbers).then(function(result) {
+        res.send(result);   
+    }, function(error) {
+        winston.log('error', error.message , error.error);
+        res.status(500).send(error); 
+    });
+
+});
