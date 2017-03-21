@@ -219,6 +219,13 @@
                 deferred.resolve();
             });
         };
+
+        vm.getLocalPhoneFormat = function (phone) {
+            if (phone !== undefined) {
+                return phoneUtils.formatNational(phone, 'il')
+            }
+            return '';
+        }
     }
 
 })();

@@ -7,11 +7,11 @@
 
     device.$inject = ['$rootScope', 'datacontext', '$cordovaDevice', '$log', '$q',
                               '$cordovaNetwork', '$cordovaAppVersion', '$cordovaVibration'/*,
-                               '$cordovaStatusbar'*/];
+                               '$cordovaStatusbar'*/, '$cordovaContacts'];
 
     function device($rootScope, datacontext, $cordovaDevice, $log, $q,
                             $cordovaNetwork, $cordovaAppVersion, $cordovaVibration/*,
-                            $cordovaStatusbar*/) {
+                            $cordovaStatusbar*/, $cordovaContacts) {
 
         var self = this;
         self.appState = 'foreground';
@@ -70,12 +70,13 @@
         }
 
         var getContacts = function (searchTerm) {
-            /*var deferred = $q.defer();
+            var deferred = $q.defer();
 
             var opts = {
                 filter: searchTerm,
                 multiple: true,
-                fields: ['displayName', 'photos']
+                hasPhoneNumber : true,
+                fields: ['displayName', 'name']
             };
 
             document.addEventListener("deviceready", function () {
@@ -84,7 +85,7 @@
                 });
             }, false);
 
-            return deferred.promise;*/
+            return deferred.promise;
         }
 
         var recordAudio = function () {

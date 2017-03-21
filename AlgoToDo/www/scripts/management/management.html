@@ -191,7 +191,7 @@
                             <tbody md-body>
                                 <tr md-row md-select="task" md-select-id="name" md-auto-select ng-repeat="user in vm.users">
                                     <td md-cell>{{user.name}}</td>
-                                    <td md-cell>{{user.phone}}</td>
+                                    <td md-cell>{{vm.getLocalPhoneFormat(user.phone)}}</td>
                                     <td md-cell>
                                         <ng-md-icon ng-if="user.device.platform === 'Android'" icon="android" class="android-color"></ng-md-icon>
                                         <ng-md-icon ng-if="user.device.platform === 'iOS'" icon="apple"></ng-md-icon>

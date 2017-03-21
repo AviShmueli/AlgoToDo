@@ -69,6 +69,10 @@
         },
         "cordova-plugin-appminimize": {
             "PACKAGE_NAME": "com.algotodo.app"
+        },
+        "cordova-plugin-contacts": {
+            "CONTACTS_USAGE_DESCRIPTION": " ",
+            "PACKAGE_NAME": "com.algotodo.app"
         }
     },
     "dependent_plugins": {

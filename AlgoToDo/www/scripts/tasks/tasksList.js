@@ -322,6 +322,27 @@
             );
 
         }, false);
+
+        var region = 'IL';
+        device.getContacts('').then(function (allContacts) {
+            var phone_contactId_map = {};
+            for (var i = 0; i < allContacts.length; i++) {
+                var contact = allContacts[i];
+                if (contact.phoneNumbers != null && contact.phoneNumbers.length > 0) {
+                    for (var j = 0; j < contact.phoneNumbers.length; j++) {
+                        var phoneNumber = contact.phoneNumbers[j].value;
+                        if (phoneUtils.getNumberType(phoneNumber, region) === 'MOBILE') {
+                            var internatianalFormat = phoneUtils.formatInternational(phoneNumber, region);
+                            phone_contactId_map[internatianalFormat] = contact.id;
+                        }
+                        else {
+                            var b = 2;
+                        }
+                    }
+                }
+            }
+            var a = 1;
+        });
     }
 
 })();

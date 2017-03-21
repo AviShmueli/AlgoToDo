@@ -40,6 +40,7 @@
     var mongoUrl = 'mongodb://admin:avi3011algo@ds127059-a0.mlab.com:27059/algotodo_db_01';
     //var mongoUrl = 'mongodb://admin:avi3011algo@ds033996.mlab.com:33996/algotodo_db_01';
     //var mongoUrl = 'mongodb://localhost:27017/TaskManeger';
+    var phoneUtil = require('google-libphonenumber').PhoneNumberUtil.getInstance();
 
     function getCollection(collectionName) {
 
@@ -941,7 +942,10 @@
                     }
 
                     mongo.db.close();
-                    d.resolve({count: result, id: mainTaskId});
+                    d.resolve({
+                        count: result,
+                        id: mainTaskId
+                    });
                 });
         });
 
@@ -1033,6 +1037,28 @@
 
         return d.promise;
     }
+
+    function changeAllPhoneNumbersToIntelFormat() {
+        
+        getCollection('users').then(function (mongo) {
+
+            mongo.collection.find({name: 'אבי שמואלי'}).snapshot().forEach(
+            function (elem) {
+                mongo.collection.update({
+                    _id: elem._id
+                }, {
+                    $set: {
+                        phone: phoneUtil.format(phoneUtil.parse(elem.phone, 'il'), 1)
+                    }
+                });
+            }
+        );
+        });
+
+    }
+
+    //changeAllPhoneNumbersToIntelFormat();
+
 
 })(module.exports);
 

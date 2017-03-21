@@ -146,6 +146,7 @@
         };
 
         var checkIfUserExist = function (user) {
+            
             var req = {
                 method: 'GET',
                 url: appConfig.appDomain + '/TaskManeger/isUserExist',

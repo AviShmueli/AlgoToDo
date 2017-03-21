@@ -32,6 +32,9 @@
 
     var ObjectID = require('mongodb').ObjectID;
     var deferred = require('deferred');
+    var PNF = require('google-libphonenumber').PhoneNumberFormat; 
+    var phoneUtil = require('google-libphonenumber').PhoneNumberUtil.getInstance();
+ 
     var DAL = require('./DAL');
     var winston = require('./logger');
     var pushNotifications = require('./push-notifications/push-notifications');
@@ -328,8 +331,10 @@
     function checkIfUserExist(userPhone) {
         var d = deferred();
 
+        var phoneNumber = phoneUtil.format(phoneUtil.parse(userPhone, 'il'), 1);
+
         var query = {
-            'phone': userPhone
+            'phone': phoneNumber
         };
 
         DAL.checkIfUserExist(query).then(function (user) {
@@ -847,7 +852,6 @@
             winston.log('error', error.message, error.err);
         });
     }
-
 
 })(module.exports);
 
