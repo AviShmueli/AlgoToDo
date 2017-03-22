@@ -54,6 +54,11 @@
                 if (cachedUsers[i].name.indexOf(query) !== -1) {
                     matchesUsersFromCache.push(cachedUsers[i]);
                 }
+                else {
+                    if (cachedUsers[i].displayName !== undefined && cachedUsers[i].displayName.indexOf(query) !== -1) {
+                        matchesUsersFromCache.push(cachedUsers[i]);
+                    }
+                }
             }
             
             // if found, return it
@@ -66,7 +71,8 @@
             DAL.searchUsers(query).then(function (response) {
                 var usersList = response.data;
                 for (var i = 0; i < usersList.length; i++) {
-                    usersList[i]['avatarFullUrl'] = vm.imagesPath + usersList[i].avatarUrl;
+                    usersList[i]['photo'] = vm.imagesPath + usersList[i].avatarUrl;
+                    usersList[i]['displayName'] = usersList[i].name;
                 }
                 datacontext.addUsersToUsersCache(usersList);
                 deferred.resolve(usersList);
@@ -120,7 +126,7 @@
                     var taskListToAdd = createTasksList(vm.task, vm.selectedRecipients);
                     var groupMainTask;
 
-                    var isTaskFromMeToMe = (taskListToAdd.length === 1 && taskListToAdd[0].from._id === taskListToAdd[0].to._id)
+                    var isTaskFromMeToMe = (taskListToAdd.length === 1 && taskListToAdd[0].from._id === taskListToAdd[0].to._id);
                     if (vm.taskHasImage === true && !isTaskFromMeToMe) {
                         //cordovaPlugins.showToast("שולח, מעלה תמונה...", 100000);
                         var splitedPath = vm.newImage.nativeUrl.split('/');               
@@ -207,7 +213,7 @@
             // clean the form
             vm.task = {};
             vm.submitInProcess = false;
-        }
+        };
 
         var markTaskAsOfflineMode = function (tasks, groupMainTask) {
             if (groupMainTask !== undefined) {
@@ -216,7 +222,7 @@
             }
             for (var i = 0; i < tasks.length; i++) {
                 tasks[i].offlineMode = true;
-                if (groupMainTask !== undefined ) {
+                if (groupMainTask !== undefined) {
                     if (tasks[i].type !== 'group-main') {
                         tasks[i]._id = 'tempId' + Math.floor(Math.random() * 90000) + 10000;
                         tasks[i].groupMainTaskId = groupMainTask._id;
@@ -226,7 +232,7 @@
                     tasks[i]._id = 'tempId' + Math.floor(Math.random() * 90000) + 10000;
                 }
             }
-        }
+        };
 
         var createTasksList = function (task, recipients) {
             var listToReturn = [];
@@ -265,7 +271,7 @@
                 camera.takePicture(sourceType).then(function (fileUrl) {
 
                     handelNewImage(fileUrl);
-                    
+
                 }, function (err) {
                     vm.taskHasImage = false;
                     vm.takeingPic = false;
@@ -273,7 +279,7 @@
                 });
                 device.setStatusbarOverlays();
             }, false);
-        }
+        };
 
         var handelNewImage = function (fileUrl) {
 
@@ -306,7 +312,7 @@
 
                 vm.task.comments.push(comment);
             });
-        }
+        };
 
         if (imageURI !== undefined && imageURI !== '') {
             $timeout(function () {

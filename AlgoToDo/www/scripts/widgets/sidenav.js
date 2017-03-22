@@ -19,7 +19,9 @@
             }
         };
 
-        function sidenavController($scope, device, cordovaPlugins, $location, $mdSidenav, $mdDialog, DAL, logger) {
+        function sidenavController($scope, device, cordovaPlugins, $location,
+                                   $mdSidenav, $mdDialog, DAL, logger,
+                                   contactsSync, $interval) {
             var vm = this;
 
             vm.imagesPath = $scope.imagesPath;
@@ -38,23 +40,23 @@
             vm.goToManagementPage = function () {
                 //window.location = '#/management'
                 $location.path('/management');
-            }
+            };
 
             vm.goToRepeatTasksPage = function () {
                 $location.path('/repeatsTasks');
-            }
+            };
 
             vm.shareApp = function () {
                 cordovaPlugins.shareApp();
-            }
+            };
 
             vm.rateApp = function () {
                 cordovaPlugins.rateApp();
-            }
+            };
 
             vm.closeSidenav = function () {
                 $mdSidenav("left").close();
-            }
+            };
 
             vm.showAddCliqaDialog = function () {
                 var confirm = $mdDialog.prompt()
@@ -65,7 +67,7 @@
                   .ok('הוסף');
 
                 $mdDialog.show(confirm).then(function (cliqaName) {
-                    if (cliqaName !== undefined && cliqaName !== '') {                  
+                    if (cliqaName !== undefined && cliqaName !== '') {
                         DAL.createNewCliqa(cliqaName).then(function () {
                             cordovaPlugins.showToast("הקליקה נוצרה בהצלחה!", 2000);
                         }, function (error) {
@@ -73,7 +75,7 @@
                         });
                     }
                 });
-            }
+            };
 
             vm.sendBroadcastUpdateAlert = function (paltform) {
                 $mdDialog.show(
@@ -98,7 +100,7 @@
                         logger.error(error);
                     });
                 });
-            }
+            };
 
             vm.admin = [{
                 link: '',
@@ -109,6 +111,23 @@
                 title: 'הגדרות',
                 icon: 'settings'
             }];
+
+            vm.syncContactsIcon = 'sync';
+            vm.inProgressTimer;
+            vm.syncContacts = function () {
+                vm.inProgressTimer = $interval(function () {
+                    vm.syncContactsIcon = (vm.syncContactsIcon === 'sync') ?
+                        vm.syncContactsIcon = 'loop' :
+                        vm.syncContactsIcon = 'sync';
+                }, 1000);
+                contactsSync.syncPhoneContactsWithServer().then(function (contactSyncCount) {
+                    $interval.cancel(vm.inProgressTimer);
+                    cordovaPlugins.showToast(contactSyncCount + " אנשי קשר סונכרנו בהצלחה", 2000);
+                }, function (error) {
+                    $interval.cancel(vm.inProgressTimer);
+                    cordovaPlugins.showToast("אירעה שגיאה בסנכרון אנשי השר שלך, אנא נסה שנית", 2000);
+                });
+            };
         }
 
         return directive;

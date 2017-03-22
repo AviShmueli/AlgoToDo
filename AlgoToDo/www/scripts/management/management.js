@@ -7,12 +7,12 @@
 
     managementCtrl.$inject = ['$rootScope', '$scope', 'logger', '$q',
                              'datacontext', 'moment', '$mdMedia', 'DAL',
-                             '$location', '$timeout'
+                             '$location', '$timeout', 'appConfig'
     ];
 
     function managementCtrl($rootScope, $scope, logger, $q,
                             datacontext, moment, $mdMedia, DAL,
-                            $location, $timeout) {
+                            $location, $timeout, appConfig) {
 
         var vm = this;
 
@@ -222,7 +222,7 @@
 
         vm.getLocalPhoneFormat = function (phone) {
             if (phone !== undefined) {
-                return phoneUtils.formatNational(phone, 'il')
+                return phoneUtils.formatNational(phone, appConfig.region)
             }
             return '';
         }

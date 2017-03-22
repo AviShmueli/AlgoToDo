@@ -36,7 +36,8 @@
         'app.cordova',
         'app.tasks',
         'app.management',
-        'app.directives'
+        'app.directives',
+        'app.contacts'
         /*
          * Feature areas
          */

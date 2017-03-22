@@ -44,6 +44,26 @@
         <md-divider></md-divider>
         <md-subheader dir="rtl">
             <span flex></span>
+            <span>אנשי קשר</span>
+        </md-subheader>
+        <md-item>
+            <a class="cursor-pointer" ng-click="vm.syncContacts()">
+                <md-item-content md-ink-ripple layout="row" layout-align="start center">
+                    <div class="inset">
+                        <ng-md-icon icon="{{vm.syncContactsIcon}}" 
+                                    options='{"rotation": "counterclock"}'>
+                        </ng-md-icon>
+                    </div>
+                    <span flex></span>
+                    <div class="inset">
+                        סנכרן אנשי קשר
+                    </div>
+                </md-item-content>
+            </a>
+        </md-item>
+        <md-divider></md-divider>
+        <md-subheader dir="rtl">
+            <span flex></span>
             <span>ניהול</span>
         </md-subheader>
         <md-item>

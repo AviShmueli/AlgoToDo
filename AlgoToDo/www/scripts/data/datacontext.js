@@ -64,14 +64,20 @@
             delete self.$storage.user;
         };
 
-        var addUsersToUsersCache = function (usersList) {
+        var addUsersToUsersCache = function (usersList, replace) {
 
             //self.$storage.usersCache = self.$storage.usersCache.concat(usersList);
 
-            var usersCache = self.$storage.usersCache;
+            var usersCache = self.$storage.usersCache, index;
             for (var i = 0; i < usersList.length; i++) {
-                if (arrayObjectIndexOf(usersCache, '_id', usersList[i]._id) === -1) {
+                index = arrayObjectIndexOf(usersCache, '_id', usersList[i]._id);
+                if (index === -1) {
                     usersCache.push(usersList[i]);
+                }
+                else {
+                    if (replace) {
+                        usersCache[index] = usersList[i];
+                    }
                 }
             }
 
@@ -84,6 +90,10 @@
         
         var getAllCachedUsers = function () {
             return self.$storage.usersCache;
+        };
+
+        var deleteAllCachedUsers = function () {
+            delete self.$storage.usersCache;
         };
         
         var addCommentToTask = function (taskId, comment) {
@@ -224,7 +234,8 @@
             getRepeatsTasksList: getRepeatsTasksList,
             setRepeatsTasksList: setRepeatsTasksList,
             deleteRepeatsTask: deleteRepeatsTask,
-            replaceRepeatsTasks: replaceRepeatsTasks
+            replaceRepeatsTasks: replaceRepeatsTasks,
+            deleteAllCachedUsers: deleteAllCachedUsers
         };
 
         return service;

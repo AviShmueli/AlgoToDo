@@ -433,7 +433,7 @@
                 DAL.sendReminderForTasks([vm.task]);
             }, function () {
             });
-        }
+        };
     }
 
 })();

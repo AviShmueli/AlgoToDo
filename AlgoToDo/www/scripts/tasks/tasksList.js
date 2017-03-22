@@ -54,6 +54,7 @@
                 DAL.saveUsersNewRegistrationId('', vm.user);
             }
             datacontext.deleteUserFromLocalStorage();
+            datacontext.deleteAllCachedUsers();
             datacontext.deleteTaskListFromLocalStorage();           
             vm.toggleSidenav('left');
             cordovaPlugins.clearAppBadge();
@@ -323,33 +324,7 @@
 
         }, false);
 
-        var region = 'IL';
-        device.getContacts('').then(function (allContacts) {
-            var phone_contactId_map = {}, phoneNumbers = [];
-            for (var i = 0; i < allContacts.length; i++) {
-                var contact = allContacts[i];
-                if (contact.phoneNumbers != null && contact.phoneNumbers.length > 0) {
-                    for (var j = 0; j < contact.phoneNumbers.length; j++) {
-                        var phoneNumber = contact.phoneNumbers[j].value;
-                        if (phoneUtils.getNumberType(phoneNumber, region) === 'MOBILE') {
-                            var internatianalFormat = phoneUtils.formatInternational(phoneNumber, region);
-                            phone_contactId_map[internatianalFormat] = contact.id;
-                            phoneNumbers.push(internatianalFormat);
-                        }
-                    }
-                }
-            }
-            DAL.getUsersByPhoneNumbers(phoneNumbers).then(function (result) {
-                for (var i = 0; i < result.data.length; i++) {
-                    var user = result.data[i];
-                }
-            }, function (error) {
-                if (error.status === -1) {
-                    error.data = "App lost connection to the server";
-                }
-                logger.error('Error while trying to get Users By PhoneNumbers: ', error.data || error);
-            });
-        });
+        
     }
 
 })();

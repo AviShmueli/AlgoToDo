@@ -23,7 +23,7 @@
                 }
             };
 
-            return $http(req)
+            return $http(req);
         };
 
         var getTasks = function () {
@@ -157,7 +157,7 @@
             };
 
             return $http(req);
-        }
+        };
 
         var checkIfVerificationCodeMatch = function (user, verificationCode) {
             var req = {
@@ -170,7 +170,7 @@
             };
 
             return $http(req);
-        }
+        };
 
         var newComment = function (taskId, comment) {
             var req = {
@@ -183,7 +183,7 @@
             };
 
             return $http(req);
-        }
+        };
 
         var AddNewComments = function (comments) {
             var req = {
@@ -195,7 +195,7 @@
             };
 
             return $http(req);
-        }
+        };
 
         var updateUserDetails = function (userId, fieldToUpdate, valueToUpdate) {
             var req = {
@@ -209,7 +209,7 @@
             };
 
             return $http(req);
-        }
+        };
 
         var saveUsersNewRegistrationId = function (registrationId, user) {
             var filedToUpdate = '';
@@ -224,7 +224,7 @@
             if (filedToUpdate !== '') {
                 updateUserDetails(user._id, filedToUpdate, registrationId);
             }
-        }
+        };
 
         var getAllCliqot = function () {
 
@@ -234,25 +234,25 @@
             };
 
             return $http(req);
-        }
+        };
 
         var getAllTasks = function (query, filter) {
             if (datacontext.getUserFromLocalStorage().type.indexOf('admin') !== -1) {
 
                 var req = {
-                    method: 'GET',
-                    url: appConfig.appDomain + '/TaskManeger/getAllTasks',
-                    params: {
-                        order: query.order,
-                        limit: query.limit,
-                        page: query.page,
-                        filter: filter
-                    }
-                };
+                        method: 'GET',
+                        url: appConfig.appDomain + '/TaskManeger/getAllTasks',
+                        params: {
+                                order: query.order,
+                                limit: query.limit,
+                                page: query.page,
+                                filter: filter
+                }
+            };
 
                 return $http(req);
-            }
         }
+    };
 
         var getAllTasksCount = function (filter) {
             var req = {
@@ -264,7 +264,7 @@
             };
 
             return $http(req);
-        }
+        };
 
         var getAllUsers = function (query, filter) {
             if (datacontext.getUserFromLocalStorage().type.indexOf('admin') !== -1) {
@@ -282,7 +282,7 @@
 
                 return $http(req);
             }
-        }
+        };
 
         var getAllUsersCount = function (filter) {
             var req = {
@@ -294,7 +294,7 @@
             };
 
             return $http(req);
-        }
+        };
 
         var getAllVersionInstalled = function () {
             var req = {
@@ -303,7 +303,7 @@
             };
 
             return $http(req);
-        }
+        };
 
         var addNewRepeatsTasks = function (tasks) {
 
@@ -315,7 +315,7 @@
                 }
             };
 
-            return $http(req)
+            return $http(req);
         };
 
         var getUsersRepeatsTasks = function (userId) {
@@ -328,7 +328,7 @@
             };
 
             return $http(req);
-        }
+        };
 
         var updateRepeatsTasks = function (tasks) {
 
@@ -380,7 +380,7 @@
             };
 
             return $http(req);
-        }
+        };
 
         var sendBroadcastUpdateAlert = function (paltform, version) {
             var req = {
@@ -393,7 +393,7 @@
             };
 
             return $http(req);
-        }
+        };
 
         var sendReminderForTasks = function (tasks) {
             var req = {
@@ -405,7 +405,7 @@
             };
 
             return $http(req);
-        }
+        };
 
         var getUsersByPhoneNumbers = function (phoneNumbers) {
             var req = {
@@ -417,7 +417,7 @@
             };
 
             return $http(req);
-        }
+        };
 
         var service = {
             saveNewTasks: saveNewTasks,
