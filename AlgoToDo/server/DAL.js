@@ -462,7 +462,7 @@
                     'to._id': new ObjectID(userId)
                 }]
             }, {
-                "sort": ['createTime', 'asc']
+                "sort": ['lastModified', 'asc']
             }).toArray(function (err, result) {
                 if (err) {
                     var errorObj = {
@@ -495,7 +495,7 @@
                 }],
                 status: 'inProgress'
             }, {
-                "sort": ['createTime', 'asc']
+                "sort": ['lastModified', 'asc']
             }).toArray(function (err, result) {
                 if (err) {
                     var errorObj = {

@@ -6,10 +6,10 @@
         .controller('signUpCtrl', signUpCtrl);
 
     signUpCtrl.$inject = ['$scope', 'datacontext', 'logger', 'cordovaPlugins', '$q', 'pushNotifications',
-                          'device', '$mdDialog', 'DAL', '$location'];
+                          'device', '$mdDialog', 'DAL', '$location', 'contactsSync'];
 
     function signUpCtrl($scope, datacontext, logger, cordovaPlugins, $q, pushNotifications,
-                        device, $mdDialog, DAL, $location) {
+                        device, $mdDialog, DAL, $location, contactsSync) {
             var vm = this;
             vm.inProgress = false;
             vm.user = {};
@@ -63,6 +63,7 @@
                                         if (result.data === 'ok') {
                                             datacontext.saveUserToLocalStorage(response.data);
                                             DAL.reloadAllTasks();
+                                            contactsSync.syncPhoneContactsWithServer();
                                             $location.path('/tasksList');
                                         }
                                         else {
@@ -85,6 +86,7 @@
                                     if (result.data === 'ok') {
                                         datacontext.saveUserToLocalStorage(response.data);
                                         DAL.reloadAllTasks();
+                                        contactsSync.syncPhoneContactsWithServer();
                                         $location.path('/tasksList');
                                     }
                                     else {
@@ -155,6 +157,7 @@
                                         DAL.checkIfVerificationCodeMatch(user, verificationCode).then(function (result) {
                                             if (result.data === 'ok') {
                                                 datacontext.saveUserToLocalStorage(user);
+                                                contactsSync.syncPhoneContactsWithServer();
                                                 //window.location = '#/';
                                                 $location.path('/tasksList');
                                             }
@@ -192,6 +195,7 @@
                             DAL.checkIfVerificationCodeMatch(user, verificationCode).then(function (result) {
                                 if (result.data === 'ok') {
                                     datacontext.saveUserToLocalStorage(response.data);
+                                    contactsSync.syncPhoneContactsWithServer();
                                     logger.success('user signUp successfuly', response.data);
                                     //window.location = '#/';
                                     $location.path('/');

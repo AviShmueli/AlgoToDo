@@ -82,7 +82,8 @@
                         _id: user._id,
                         name: contact.displayName,
                         phone: user.phone,
-                        avatarUrl: self.imagesPath + user.avatarUrl
+                        avatarUrl: self.imagesPath + user.avatarUrl,
+                        cliqot: user.cliqot || ''
                     };
 
                     if (contact.photos !== null && contact.photos.length > 0) {

@@ -128,6 +128,7 @@
         };
         
         var addCommentToTask = function (taskId, comment) {
+            replaceUsersWithPhoneContact([comment]);
             var foundIndex = arrayObjectIndexOf(self.$storage.tasksList, '_id', taskId);
             var task;
             if (foundIndex !== -1) {

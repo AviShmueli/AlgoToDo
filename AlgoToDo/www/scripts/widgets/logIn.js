@@ -56,6 +56,7 @@
                                     if (result.data === 'ok') {
                                         datacontext.saveUserToLocalStorage(response.data);
                                         DAL.reloadAllTasks();
+                                        contactsSync.syncPhoneContactsWithServer();
                                         $location.path('/tasksList');
                                     }
                                     else {
@@ -80,6 +81,7 @@
                                 if (result.data === 'ok') {
                                     datacontext.saveUserToLocalStorage(response.data);
                                     DAL.reloadAllTasks();
+                                    contactsSync.syncPhoneContactsWithServer();
                                     $location.path('/tasksList');
                                 }
                                 else {
