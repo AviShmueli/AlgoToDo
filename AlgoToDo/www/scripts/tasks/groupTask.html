@@ -59,7 +59,12 @@
                     <md-card-content>
                         <div layout="row">
                             <md-card-avatar>
-                                <img alt="user image" ng-src="{{::vm.imagesPath + ((vm.taskIsFromMe) ? vm.task.to.avatarUrl : vm.task.from.avatarUrl)}}" class="md-avatar user-avatar-small margin-left-10px" />
+                                <img ng-if="(vm.taskIsFromMe && (vm.task.to.avatarUrl.startsWith('content') || vm.task.to.avatarUrl.startsWith('file'))) ||
+                                            (!vm.taskIsFromMe && (vm.task.from.avatarUrl.startsWith('content') || vm.task.from.avatarUrl.startsWith('file')))"
+                                     alt="user image" ng-src="{{::((vm.taskIsFromMe) ? vm.task.to.avatarUrl : vm.task.from.avatarUrl)}}" class="md-avatar user-avatar-small margin-left-10px" />
+                                <img ng-if="(vm.taskIsFromMe && (!vm.task.to.avatarUrl.startsWith('content') && !vm.task.to.avatarUrl.startsWith('file'))) ||
+                                            (!vm.taskIsFromMe && (!vm.task.from.avatarUrl.startsWith('content') && !vm.task.from.avatarUrl.startsWith('file')))"
+                                     alt="user image" ng-src="{{::vm.imagesPath + ((vm.taskIsFromMe) ? vm.task.to.avatarUrl : vm.task.from.avatarUrl)}}" class="md-avatar user-avatar-small margin-left-10px" />
                             </md-card-avatar>
                             <span class="from">{{:: ((vm.taskIsFromMe) ? 'ל' + vm.task.to.name : 'מ' + vm.task.from.name)}}</span>
                             <span flex></span>
@@ -85,7 +90,8 @@
                         <md-list flex flex-gt-sm="50" flex-md="66" dir="rtl">
                             <md-list-item ng-repeat="task in vm.subsTasks_inProgress()" class="noright task-item margin-top-7px">
                                 <md-card-avatar>
-                                    <img alt="{{task.to.name}}" ng-src="{{vm.imagesPath + task.to.avatarUrl}}" class="md-avatar user-avatar-med margin-right-0"/>
+                                    <img ng-if="(task.to.avatarUrl.startsWith('content') || task.to.avatarUrl.startsWith('file'))" alt="{{task.to.name}}" ng-src="{{task.to.avatarUrl}}" class="md-avatar user-avatar-med margin-right-0" />
+                                    <img ng-if="!task.to.avatarUrl.startsWith('content')  && !task.to.avatarUrl.startsWith('file')" alt="{{task.to.name}}" ng-src="{{vm.imagesPath + task.to.avatarUrl}}" class="md-avatar user-avatar-med  margin-right-0" />
                                 </md-card-avatar>
                                 <a class="md-tile-content margin-bottom-14px" flex="100" ng-click="vm.navigateToTaskPage(task)">
                                     <div layout="row">
@@ -120,7 +126,8 @@
                         <md-list flex flex-gt-sm="50" flex-md="66" dir="rtl">
                             <md-list-item ng-repeat="task in vm.subsTasks_done()" class="margin-top-7px noright task-item">
                                 <md-card-avatar>
-                                    <img alt="{{task.to.name}}" ng-src="{{vm.imagesPath + task.to.avatarUrl}}" class="md-avatar user-avatar-med margin-right-0"/>
+                                    <img ng-if="(task.to.avatarUrl.startsWith('content') || task.to.avatarUrl.startsWith('file'))" alt="{{task.to.name}}" ng-src="{{task.to.avatarUrl}}" class="md-avatar user-avatar-med  margin-right-0" />
+                                    <img ng-if="!task.to.avatarUrl.startsWith('content')  && !task.to.avatarUrl.startsWith('file')" alt="{{task.to.name}}" ng-src="{{vm.imagesPath + task.to.avatarUrl}}" class="md-avatar user-avatar-med  margin-right-0" />
                                 </md-card-avatar>
                                 <a class="margin-bottom-14px md-tile-content" flex="100" ng-click="vm.navigateToTaskPage(task)">
                                     <div layout="row">

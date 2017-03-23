@@ -72,6 +72,7 @@
                         storage.saveFileToStorage(vm.taskId, fileName, fileEntry.nativeURL).then(function (newFileUrl) {
                             var tempComment = angular.copy(comment);
                             comment.fileLocalPath = newFileUrl;
+                            datacontext.replaceUsersWithPhoneContact([comment]);
                             vm.task.comments.push(comment);
                             addImageToGallery(comment.fileName, comment.fileLocalPath);
 
@@ -115,7 +116,9 @@
                 createTime: new Date(),
                 text: vm.newCommentText
             };
-            vm.task.comments.push(comment);
+            var localCopyOfComment = angular.copy(comment);
+            datacontext.replaceUsersWithPhoneContact([localCopyOfComment]);
+            vm.task.comments.push(localCopyOfComment);
 
             var userIdToNotify = '';
             if (vm.task.to._id !== vm.task.from._id) {

@@ -38,7 +38,6 @@
             }, false);
 
             vm.goToManagementPage = function () {
-                //window.location = '#/management'
                 $location.path('/management');
             };
 

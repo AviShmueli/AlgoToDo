@@ -68,14 +68,20 @@
                     task.from = allCachedUsers[f_index];
                 }
 
-                if (task.from._id !== task.to._id) {
-                    var t_index = arrayObjectIndexOf(allCachedUsers, '_id', task.to._id);
-                    if (t_index !== -1) {
-                        task.to = allCachedUsers[t_index];
+                if (task.to !== undefined) {
+                    if (task.from._id !== task.to._id) {
+                        var t_index = arrayObjectIndexOf(allCachedUsers, '_id', task.to._id);
+                        if (t_index !== -1) {
+                            task.to = allCachedUsers[t_index];
+                        }
+                    }
+                    else {
+                        task.to = allCachedUsers[f_index];
                     }
                 }
-                else {
-                    task.to = allCachedUsers[f_index];
+
+                if (task.comments !== undefined && task.comments.length > 0) {
+                    replaceUsersWithPhoneContact(task.comments);
                 }
             }
         };
@@ -250,7 +256,8 @@
             setRepeatsTasksList: setRepeatsTasksList,
             deleteRepeatsTask: deleteRepeatsTask,
             replaceRepeatsTasks: replaceRepeatsTasks,
-            deleteAllCachedUsers: deleteAllCachedUsers
+            deleteAllCachedUsers: deleteAllCachedUsers,
+            replaceUsersWithPhoneContact: replaceUsersWithPhoneContact
         };
 
         return service;
