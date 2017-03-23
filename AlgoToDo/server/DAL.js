@@ -720,7 +720,7 @@
         return d.promise;
     }
 
-    function getAllVersionInstalled(DDD) {
+    function getAllVersionInstalled() {
 
         var d = deferred();
 
@@ -1053,8 +1053,11 @@
             }, {
                 '_id': true,
                 'name': true,
+                'avatarUrl': true,
+                'type': true,
+                'usersInGroup': true,
                 'phone': true,
-                'avatarUrl': true
+                'cliqot': true
             }).toArray(
             function (err, result) {
                     if (err) {
