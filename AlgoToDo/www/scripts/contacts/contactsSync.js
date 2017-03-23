@@ -18,13 +18,14 @@
         self.phone_contact_map = {};
         self.imagesPath = device.getImagesPath();
         self.deferred = $q.defer();
+        self.currentNumber = '';
 
         var syncPhoneContactsWithServer = function () {
 
             self.deferred = $q.defer();
 
             if (!device.isMobileDevice()) {
-                //self.deferred.reject();
+                self.deferred.reject();
             }
 
             device.getContacts('').then(function (allContacts) {
@@ -34,16 +35,28 @@
                 for (var i = 0; i < allContacts.length; i++) {
 
                     contact = allContacts[i];
-
+                    /*if (contact.displayName === 'אריאל חוברה') {
+                        var aa = 11;
+                    }*/
                     if (contact.phoneNumbers !== null && contact.phoneNumbers.length > 0) {
                         for (var j = 0; j < contact.phoneNumbers.length; j++) {
                             var phoneNumber = contact.phoneNumbers[j].value;
-
-                            if (phoneUtils.getNumberType(phoneNumber, self.region) === 'MOBILE') {
-                                var internatianalFormat = phoneUtils.formatInternational(phoneNumber, self.region);
-                                self.phone_contact_map[internatianalFormat] = contact;
-                                phoneNumbers.push(internatianalFormat);
+                            if (phoneNumber.startsWith('#31#')) {
+                                phoneNumber = phoneNumber.substring(4);
                             }
+                            self.currentNumber = phoneNumber;
+                            try {
+                                
+                                if (isNumberValid(phoneNumber)) {
+                                    var internatianalFormat = phoneUtils.formatInternational(phoneNumber, self.region);
+                                    self.phone_contact_map[internatianalFormat] = contact;
+                                    phoneNumbers.push(internatianalFormat);
+                                }
+                            }
+                            catch (err) {
+                                logger.error('Error while trying to get Number Type: ' + self.currentNumber, err.data || err);
+                                self.deferred.reject(err);
+                            }                            
                         }
                     }
                 }
@@ -67,22 +80,20 @@
                     var contact = self.phone_contact_map[user.phone];
                     var crossUser = {
                         _id: user._id,
-                        name: user.name,
+                        name: contact.displayName,
                         phone: user.phone,
-                        avatarUrl: user.avatarUrl,
-                        displayName: contact.displayName,
-                        photo: self.imagesPath + user.avatarUrl
+                        avatarUrl: self.imagesPath + user.avatarUrl
                     };
 
                     if (contact.photos !== null && contact.photos.length > 0) {
-                        crossUser.photo = contact.photos[0].value;
+                        crossUser.avatarUrl = contact.photos[0].value;
                     }
                     appUsers.push(crossUser);
                 }
                 if (appUsers.length > 0) {
-                    datacontext.addUsersToUsersCache(appUsers, true);
-                    self.deferred.resolve(appUsers.length);                 
+                    datacontext.addUsersToUsersCache(appUsers, true);                                
                 }
+                self.deferred.resolve(appUsers.length);
             }, function (error) {
                 if (error.status === -1) {
                     error.data = "App lost connection to the server";
@@ -90,6 +101,23 @@
                 logger.error('Error while trying to get Users By PhoneNumbers: ', error.data || error);
                 self.deferred.reject(error);
             });
+        }
+
+        var isNumberValid = function (phoneNumber) {
+             
+            if (phoneNumber.length < 8) {
+                return false;
+            }
+            if (!phoneNumber.startsWith('+') && phoneNumber.length > 10) {
+                return false;
+            }
+            if (!phoneUtils.isValidNumber(phoneNumber, self.region)) {
+                return false;
+            }
+            if (phoneUtils.getNumberType(phoneNumber, self.region) !== 'MOBILE') {
+                return false;
+            }
+            return true;
         }
 
         var service = {

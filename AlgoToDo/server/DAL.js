@@ -566,7 +566,8 @@
                 'name': true,
                 'avatarUrl': true,
                 'type': true,
-                'usersInGroup': true
+                'usersInGroup': true,
+                'phone': true
             }).toArray(function (err, result) {
 
                 if (err) {

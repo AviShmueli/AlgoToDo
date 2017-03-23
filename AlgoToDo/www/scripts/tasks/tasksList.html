@@ -80,7 +80,8 @@
                         <md-list-item ng-repeat="item in vm.allTasks() | tasksInProgress: vm.user._id | filter:vm.search" class="noright task-item margin-top-7px">
                             <md-card-avatar>
                                 <img ng-if="item.type === 'group-main'" alt="avatar" ng-src="{{vm.imagesPath + '/images/group-1.svg'}}" class="md-avatar user-avatar margin-right-0" />
-                                <img ng-if="item.type !== 'group-main'" alt="{{item.to.name}}" ng-src="{{vm.imagesPath + item.to.avatarUrl}}" class="md-avatar user-avatar margin-right-0" />
+                                <img ng-if="item.type !== 'group-main' && (item.to.avatarUrl.startsWith('content') || item.to.avatarUrl.startsWith('file'))" alt="{{item.to.name}}" ng-src="{{item.to.avatarUrl}}" class="md-avatar user-avatar margin-right-0" />
+                                <img ng-if="item.type !== 'group-main' && !item.to.avatarUrl.startsWith('content')  && !item.to.avatarUrl.startsWith('file')" alt="{{item.to.name}}" ng-src="{{vm.imagesPath + item.to.avatarUrl}}" class="md-avatar user-avatar margin-right-0" />
                             </md-card-avatar>
                             <a class="md-tile-content margin-bottom-4px" flex="100" ng-click="vm.navigateToTaskPage(item)">
                                 <div layout="row">
@@ -127,7 +128,8 @@
                         <md-list-item ng-repeat="item in vm.allTasks() | myTasks: vm.user._id | filter:vm.search"
                                       class="noright task-item md-no-proxy margin-top-7px">
                             <md-card-avatar>
-                                <img alt="{{item.from.name}}" ng-src="{{vm.imagesPath + item.from.avatarUrl}}" class="md-avatar user-avatar margin-right-0" />
+                                <img ng-if="item.from.avatarUrl.startsWith('content') || item.from.avatarUrl.startsWith('file')" alt="{{item.from.name}}" ng-src="{{item.from.avatarUrl}}" class="md-avatar user-avatar margin-right-0" />
+                                <img ng-if="!item.from.avatarUrl.startsWith('content')  && !item.from.avatarUrl.startsWith('file')" alt="{{item.from.name}}" ng-src="{{vm.imagesPath + item.from.avatarUrl}}" class="md-avatar user-avatar margin-right-0" />
                             </md-card-avatar>
                             <a class="md-tile-content margin-bottom-14px" flex="100" ng-click="vm.navigateToTaskPage(item)">
                                 <div layout="row">

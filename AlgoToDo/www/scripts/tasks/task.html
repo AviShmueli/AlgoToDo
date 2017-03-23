@@ -62,7 +62,7 @@
                     <md-card-content>
                         <div layout="row">
                             <md-card-avatar>
-                                <img alt="user image" ng-src="{{::vm.imagesPath + ((vm.taskIsFromMe) ? vm.task.to.avatarUrl : vm.task.from.avatarUrl)}}" class="md-avatar user-avatar-small margin-left-10px" />
+                                <img alt="user image" ng-src="{{::((vm.taskIsFromMe) ? vm.task.to.avatarUrl : vm.task.from.avatarUrl)}}" class="md-avatar user-avatar-small margin-left-10px" />
                             </md-card-avatar>
                             <span class="from">{{ ((vm.taskIsFromMe) ? 'ל' + vm.task.to.name : 'מ' + vm.task.from.name)}}</span>
                             <span flex></span>
@@ -98,7 +98,7 @@
                     <md-card-content>
                         <div layout="row">
                             <md-card-avatar>
-                                <img alt="{{::comment.from.name}}" ng-src="{{::vm.imagesPath + comment.from.avatarUrl}}" class="md-avatar user-avatar-small margin-left-10px" />
+                                <img alt="{{::comment.from.name}}" ng-src="{{::comment.from.avatarUrl}}" class="md-avatar user-avatar-small margin-left-10px" />
                             </md-card-avatar>
                             <span class="from">{{::comment.from.name}}</span>
                             <span flex></span>

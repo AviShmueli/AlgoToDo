@@ -16,47 +16,14 @@
     </md-toolbar>
     <md-list layout="column" layout-fill>
         <md-item>
-            <a class="cursor-pointer" ng-click="vm.shareApp()">
+            <a class="cursor-pointer" ng-click="vm.goToContactsListPage()">
                 <md-item-content md-ink-ripple layout="row" layout-align="start center">
                     <div class="inset">
-                        <ng-md-icon icon="share"></ng-md-icon>
+                        <ng-md-icon icon="contacts"></ng-md-icon>
                     </div>
                     <span flex></span>
                     <div class="inset">
-                        שתף את האפליקציה
-                    </div>
-                </md-item-content>
-            </a>
-        </md-item>
-        <md-item>
-            <a class="cursor-pointer" ng-click="vm.rateApp()">
-                <md-item-content md-ink-ripple layout="row" layout-align="start center">
-                    <div class="inset">
-                        <ng-md-icon icon="star"></ng-md-icon>
-                    </div>
-                    <span flex></span>
-                    <div class="inset">
-                        דרג אותנו
-                    </div>
-                </md-item-content>
-            </a>
-        </md-item>
-        <md-divider></md-divider>
-        <md-subheader dir="rtl">
-            <span flex></span>
-            <span>אנשי קשר</span>
-        </md-subheader>
-        <md-item>
-            <a class="cursor-pointer" ng-click="vm.syncContacts()">
-                <md-item-content md-ink-ripple layout="row" layout-align="start center">
-                    <div class="inset">
-                        <ng-md-icon icon="{{vm.syncContactsIcon}}" 
-                                    options='{"rotation": "counterclock"}'>
-                        </ng-md-icon>
-                    </div>
-                    <span flex></span>
-                    <div class="inset">
-                        סנכרן אנשי קשר
+                        אנשי קשר
                     </div>
                 </md-item-content>
             </a>
@@ -166,6 +133,38 @@
                 </md-item-content>
             </a>
         </md-item>
+        <md-divider></md-divider>
+        <md-subheader dir="rtl">
+            <span flex></span>
+            <span>משוב ועזרה</span>
+        </md-subheader>
+        <md-item>
+            <a class="cursor-pointer" ng-click="vm.shareApp()">
+                <md-item-content md-ink-ripple layout="row" layout-align="start center">
+                    <div class="inset">
+                        <ng-md-icon icon="share"></ng-md-icon>
+                    </div>
+                    <span flex></span>
+                    <div class="inset">
+                        שתף את האפליקציה
+                    </div>
+                </md-item-content>
+            </a>
+        </md-item>
+        <md-item>
+            <a class="cursor-pointer" ng-click="vm.rateApp()">
+                <md-item-content md-ink-ripple layout="row" layout-align="start center">
+                    <div class="inset">
+                        <ng-md-icon icon="star"></ng-md-icon>
+                    </div>
+                    <span flex></span>
+                    <div class="inset">
+                        דרג אותנו
+                    </div>
+                </md-item-content>
+            </a>
+        </md-item>
+
         <span flex></span>
         <md-item>
             <md-item-content md-ink-ripple layout="row" layout-align="start center">

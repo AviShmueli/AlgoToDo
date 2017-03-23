@@ -64,7 +64,7 @@
         vm.toggleSidenav = function(menuId) {
             $mdSidenav(menuId).toggle();
         };
-
+        
         vm.showListBottomSheet = function($event) {
             vm.alert = '';
             $mdBottomSheet.show({

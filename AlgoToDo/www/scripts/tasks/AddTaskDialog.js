@@ -71,8 +71,7 @@
             DAL.searchUsers(query).then(function (response) {
                 var usersList = response.data;
                 for (var i = 0; i < usersList.length; i++) {
-                    usersList[i]['photo'] = vm.imagesPath + usersList[i].avatarUrl;
-                    usersList[i]['displayName'] = usersList[i].name;
+                    usersList[i]['avatarUrl'] = vm.imagesPath + usersList[i].avatarUrl;
                 }
                 datacontext.addUsersToUsersCache(usersList);
                 deferred.resolve(usersList);
@@ -127,6 +126,7 @@
                     var groupMainTask;
 
                     var isTaskFromMeToMe = (taskListToAdd.length === 1 && taskListToAdd[0].from._id === taskListToAdd[0].to._id);
+
                     if (vm.taskHasImage === true && !isTaskFromMeToMe) {
                         //cordovaPlugins.showToast("שולח, מעלה תמונה...", 100000);
                         var splitedPath = vm.newImage.nativeUrl.split('/');               
@@ -156,7 +156,6 @@
                     }
 
                     saveNewTask(taskListToAdd, groupMainTask);
-
                 }
                 else {
                     vm.showNoRecipientsSelectedError = true;

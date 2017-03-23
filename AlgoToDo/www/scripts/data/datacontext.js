@@ -22,10 +22,6 @@
             return self.$storage.tasksList !== undefined ? self.$storage.tasksList: [];
         };
 
-        var setTaskList = function (newList) {
-            self.$storage.tasksList = newList;
-        };
-
         var deleteTaskListFromLocalStorage = function () {
             delete self.$storage.tasksList;
         };
@@ -34,16 +30,24 @@
             var count = self.$storage.tasksList.filter(function (t) { return t._id === task._id; });
             // prevent pushing the same task
             if (count.length === 0) {
+                replaceUsersWithPhoneContact([task]);
                 self.$storage.tasksList.push(task);
             }            
         };
 
+        var setTaskList = function (newList) {
+            replaceUsersWithPhoneContact(newList);
+            self.$storage.tasksList = newList;
+        };
+
         var pushTasksToTasksList = function (tasks) {
+            replaceUsersWithPhoneContact(tasks);
             self.$storage.tasksList = getTaskList().concat(tasks);
         };
         
         var replaceTask = function (task) {
-            var index = arrayObjectIndexOf(self.$storage.tasksList, '_id', task._id);
+            replaceUsersWithPhoneContact([task]);
+            var index = arrayObjectIndexOf(getTaskList(), '_id', task._id);
             if (index !== -1) {
                 self.$storage.tasksList[index] = task;
             }
@@ -52,6 +56,30 @@
             }
         };      
         
+        var replaceUsersWithPhoneContact = function (tasks) {
+            var allCachedUsers = getAllCachedUsers();
+            if (allCachedUsers.length === 0 ) {
+                return;
+            }
+            for (var i = 0; i < tasks.length; i++) {
+                var task = tasks[i];
+                var f_index = arrayObjectIndexOf(allCachedUsers, '_id', task.from._id);
+                if (f_index !== -1) {
+                    task.from = allCachedUsers[f_index];
+                }
+
+                if (task.from._id !== task.to._id) {
+                    var t_index = arrayObjectIndexOf(allCachedUsers, '_id', task.to._id);
+                    if (t_index !== -1) {
+                        task.to = allCachedUsers[t_index];
+                    }
+                }
+                else {
+                    task.to = allCachedUsers[f_index];
+                }
+            }
+        };
+
         var saveUserToLocalStorage = function (user) {
             self.$storage.user = user;
         };
@@ -68,7 +96,7 @@
 
             //self.$storage.usersCache = self.$storage.usersCache.concat(usersList);
 
-            var usersCache = self.$storage.usersCache, index;
+            var usersCache = getAllCachedUsers(), index;
             for (var i = 0; i < usersList.length; i++) {
                 index = arrayObjectIndexOf(usersCache, '_id', usersList[i]._id);
                 if (index === -1) {
@@ -80,15 +108,12 @@
                     }
                 }
             }
-
-            /* _.each(usersList, function (user) {
-                 if (!self.$storage.usersCache.has(user._id)) {
-                     self.$storage.usersCache.set(user._id, user);
-                 }
-             })*/
         };
         
         var getAllCachedUsers = function () {
+            if (self.$storage.usersCache === undefined) {
+                self.$storage.usersCache = [];
+            }
             return self.$storage.usersCache;
         };
 
@@ -114,16 +139,6 @@
                     updateUnSeenResponse(task);
                 }
             }
-
-
-            /*if (comment.fileThumbnail) {
-                dropbox.getThumbnail(imageUrl, 'w128h128').then(function (response) {
-                    comment.fileThumbnail = URL.createObjectURL(response.fileBlob);
-                })
-                .catch(function (error) {
-                    logger.error("error while trying to get file Thumbnail", error);
-                });
-            }*/
         };
 
         function updateUnSeenResponse(task) {

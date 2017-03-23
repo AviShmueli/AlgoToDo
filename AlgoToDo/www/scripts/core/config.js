@@ -55,6 +55,9 @@
               .when('/repeatsTasks', {
                   templateUrl: 'scripts/tasks/repeatsTasks.html'
               })
+              .when('/contactsList', {
+                  templateUrl: 'scripts/contacts/contactsList.html'
+              })
               .when('/groupTask/:taskId', {
                   templateUrl: 'scripts/tasks/groupTask.html'
               })
