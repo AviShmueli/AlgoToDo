@@ -6,10 +6,10 @@
         .controller('logInCtrl', logInCtrl);
 
     logInCtrl.$inject = ['$scope', 'datacontext', 'logger', 'cordovaPlugins', '$q', 'pushNotifications',
-                          'device', '$mdDialog', 'DAL', '$location'];
+                          'device', '$mdDialog', 'DAL', '$location', 'contactsSync'];
 
     function logInCtrl($scope, datacontext, logger, cordovaPlugins, $q, pushNotifications,
-                        device, $mdDialog, DAL, $location) {
+                        device, $mdDialog, DAL, $location, contactsSync) {
 
         angular.element(document.querySelectorAll('html')).removeClass("hight-auto");
 
@@ -55,8 +55,9 @@
                                 DAL.checkIfVerificationCodeMatch(user, verificationCode).then(function (result) {
                                     if (result.data === 'ok') {
                                         datacontext.saveUserToLocalStorage(response.data);
-                                        DAL.reloadAllTasks();
-                                        contactsSync.syncPhoneContactsWithServer();
+                                        contactsSync.syncPhoneContactsWithServer().then(function myfunction() {
+                                            DAL.reloadAllTasks();
+                                        });
                                         $location.path('/tasksList');
                                     }
                                     else {
@@ -80,8 +81,9 @@
                             DAL.checkIfVerificationCodeMatch(user, verificationCode).then(function (result) {
                                 if (result.data === 'ok') {
                                     datacontext.saveUserToLocalStorage(response.data);
-                                    DAL.reloadAllTasks();
-                                    contactsSync.syncPhoneContactsWithServer();
+                                    contactsSync.syncPhoneContactsWithServer().then(function myfunction() {
+                                        DAL.reloadAllTasks();
+                                    });
                                     $location.path('/tasksList');
                                 }
                                 else {

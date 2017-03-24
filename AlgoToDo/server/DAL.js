@@ -567,8 +567,8 @@
                 'avatarUrl': true,
                 'type': true,
                 'usersInGroup': true,
-                'phone': true,
-                'cliqot': true
+                'phone': true
+                //'cliqot': true
             }).toArray(function (err, result) {
 
                 if (err) {
@@ -1056,8 +1056,8 @@
                 'avatarUrl': true,
                 'type': true,
                 'usersInGroup': true,
-                'phone': true,
-                'cliqot': true
+                'phone': true
+                //'cliqot': true
             }).toArray(
             function (err, result) {
                     if (err) {

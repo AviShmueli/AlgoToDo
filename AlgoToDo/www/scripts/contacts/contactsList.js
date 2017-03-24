@@ -57,6 +57,17 @@
             return '';
         }
 
+        vm.getCliqotNamesAsString = function (cliqot) {
+            if (cliqot === undefined) {
+                return '';
+            }
+            var cliqotString = '';
+            for (var i = 0; i < cliqot.length; i++) {
+                cliqotString += cliqot[i].name + ', ';
+            }
+            return cliqotString.substring(0, cliqotString.length - 2);
+        }
+
         /*
         vm.showAdd = function (ev) {
             vm.isDialogOpen = true;

@@ -62,8 +62,10 @@
                                     DAL.checkIfVerificationCodeMatch(user, verificationCode).then(function (result) {
                                         if (result.data === 'ok') {
                                             datacontext.saveUserToLocalStorage(response.data);
-                                            DAL.reloadAllTasks();
-                                            contactsSync.syncPhoneContactsWithServer();
+                                            
+                                            contactsSync.syncPhoneContactsWithServer().then(function myfunction() {
+                                                DAL.reloadAllTasks();
+                                            });
                                             $location.path('/tasksList');
                                         }
                                         else {
@@ -85,8 +87,9 @@
                                 DAL.checkIfVerificationCodeMatch(user, verificationCode).then(function (result) {
                                     if (result.data === 'ok') {
                                         datacontext.saveUserToLocalStorage(response.data);
-                                        DAL.reloadAllTasks();
-                                        contactsSync.syncPhoneContactsWithServer();
+                                        contactsSync.syncPhoneContactsWithServer().then(function myfunction() {
+                                            DAL.reloadAllTasks();
+                                        });
                                         $location.path('/tasksList');
                                     }
                                     else {

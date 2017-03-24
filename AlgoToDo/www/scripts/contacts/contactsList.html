@@ -43,10 +43,7 @@
 
                                 <div layout="row">
                                     <div layout="row" flex="90" class="font-14px margin-left-15px margin-top-7px">
-                                        <span>{{vm.getLocalPhoneFormat(contact.phone)}}</span>
-                                    </div>
-                                    <div layout="row" flex="90" class="font-14px margin-left-15px margin-top-7px">
-                                        <span>{{vm.getCliqotAsString(contact.cliqot)}}</span>
+                                        <span>{{::vm.getLocalPhoneFormat(contact.phone)}}</span>
                                     </div>
                                     <!--<div layout="column" flex="10" layout-align="center end">
                                         <md-badge class="new-responses-badge-inProcess" ng-if="task.unSeenResponses > 0">{{item.unSeenResponses}}</md-badge>
@@ -56,6 +53,9 @@
                                         </md-button>
                                     </div>-->
                                 </div>
+                                <!--<div layout="row" flex="90" class="font-14px margin-left-15px margin-top-7px">
+                                    <span>{{::vm.getCliqotNamesAsString(contact.cliqot)}}</span>
+                                </div>-->
                             </a>
                             <md-divider md-inset ng-if="!$last"></md-divider>
                         </md-list-item>

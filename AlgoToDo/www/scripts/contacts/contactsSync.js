@@ -82,8 +82,8 @@
                         _id: user._id,
                         name: contact.displayName,
                         phone: user.phone,
-                        avatarUrl: self.imagesPath + user.avatarUrl,
-                        cliqot: user.cliqot || ''
+                        avatarUrl: self.imagesPath + user.avatarUrl
+                        //cliqot: user.cliqot || ''
                     };
 
                     if (contact.photos !== null && contact.photos.length > 0) {
@@ -92,7 +92,8 @@
                     appUsers.push(crossUser);
                 }
                 if (appUsers.length > 0) {
-                    datacontext.addUsersToUsersCache(appUsers, true);                                
+                    datacontext.addUsersToUsersCache(appUsers, true);
+                    updateUsersPhoto();
                 }
                 self.deferred.resolve(appUsers.length);
             }, function (error) {
@@ -120,6 +121,28 @@
             }
             return true;
         }
+
+        var updateUsersPhoto = function () {
+            var localUser = datacontext.getUserFromLocalStorage();
+            var allCachedUsers = datacontext.getAllCachedUsers();
+            var user;
+            var index = arrayObjectIndexOf(allCachedUsers, '_id', localUser._id);
+            if (index !== -1) {
+                user = allCachedUsers[index];
+            }
+            if (user !== undefined && user.avatarUrl !== undefined) {
+                localUser.avatarUrl = user.avatarUrl;
+                datacontext.saveUserToLocalStorage(localUser);
+            }
+        }
+
+        function arrayObjectIndexOf(myArray, property, searchTerm) {
+            for (var i = 0, len = myArray.length; i < len; i++) {
+                if (myArray[i][property] === searchTerm) return i;
+            }
+            return -1;
+        }
+
 
         var service = {
             syncPhoneContactsWithServer: syncPhoneContactsWithServer

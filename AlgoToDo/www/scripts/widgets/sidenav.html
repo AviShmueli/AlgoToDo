@@ -8,7 +8,8 @@
         <span flex></span>
         <div layout="column" layout-align="end start" class="md-toolbar-tools-bottom inset">
             <md-card-avatar>
-                <img class="md-user-avatar user-avatar-big" ng-src="{{::vm.imagesPath + user.avatarUrl}}">
+                <img class="md-user-avatar user-avatar-big" ng-if="!user.avatarUrl.startsWith('content')  && !user.avatarUrl.startsWith('file')" ng-src="{{::vm.imagesPath + user.avatarUrl}}">
+                <img class="md-user-avatar user-avatar-big" ng-if="user.avatarUrl.startsWith('content')  || user.avatarUrl.startsWith('file')" ng-src="{{::user.avatarUrl}}">
             </md-card-avatar>
             <div class="username">{{::user.name}}</div>
             <div>{{::user.cliqot[0].name}}</div>
