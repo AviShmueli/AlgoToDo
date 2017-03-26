@@ -30,7 +30,7 @@
             dateTime.setMinutes(task.minutes);
 
             var tz = moment().tz(task.zone);
-            console.log("***dateTime BEFOR***", dateTime.toString());
+            console.log("***dateTime BEFOR***", dateTime.getTimezoneOffset());
             dateTime = new Date(moment(dateTime).add(-tz._offset, 'm')._d);
             //dateTime.setMinutes(tz._offset);
             //var dateTime = new Date();
