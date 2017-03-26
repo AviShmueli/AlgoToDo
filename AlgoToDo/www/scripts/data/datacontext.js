@@ -80,7 +80,7 @@
                     }
                 }
                 else {
-                    if (task.to.length === 1) {
+                    if (Array.isArray(task.to) && task.to.length === 1) {
                         if (task.from._id !== task.to[0]._id) {
                             var t_index = arrayObjectIndexOf(allCachedUsers, '_id', task.to[0]._id);
                             if (t_index !== -1) {
