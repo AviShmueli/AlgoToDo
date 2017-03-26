@@ -41,37 +41,40 @@
 
     function startRepeatsTasks( tasks ) {
         
-        for (var i = 0; i < 2/*tasks.length*/; i++) {
+        for (var i = 0; i < tasks.length; i++) {
             var task = tasks[i];
             
-            var time = new Date(task.startTime);//setTime(task);//
-            var hour = time.getHours();
-            var minutes = time.getMinutes();
-            var days = task.daysRepeat.toString();
+            if (task.hour !== undefined) {       
+            
+                var time = setTime(task);//new Date(task.startTime);//
+                var hour = time.getHours();
+                var minutes = time.getMinutes();
+                var days = task.daysRepeat.toString();
 
-            if (taskJobMap[task._id] !== undefined) {
-                taskJobMap[task._id].stop();
+                if (taskJobMap[task._id] !== undefined) {
+                    taskJobMap[task._id].stop();
+                }
+
+                logger.log('info', "start repeates task: " + '00 ' + minutes + ' ' + hour +  ' * * ' + days , task);
+
+                var job = new CronJob({
+                    cronTime: '00 ' + minutes + ' ' + hour +  ' * * ' + days, // Seconds(0-59) Minutes(0-59) Hours(0-23) Day of Month(1-31) Months(0-11) Day of Week:(0-6)
+                    context: task,
+                    onTick: function() {
+                        var _task = this;
+                        
+                        var tasksToSend = preperTaskToSend(_task);
+                        logger.log("info","sending repeats task :", tasksToSend);
+                        BL.addNewTasks(tasksToSend, true).then(function(result){
+                            console.log("successfuly send repeate tasks");
+                        }, function(error){
+                            logger.log('error', error.message , error.error);                       
+                        });
+                    },
+                    start: true 
+                });
+                taskJobMap[task._id] = job;
             }
-
-            logger.log('info', "start repeates task: " + '00 ' + minutes + ' ' + hour +  ' * * ' + days , task);
-
-            var job = new CronJob({
-                cronTime: '00 ' + minutes + ' ' + hour +  ' * * ' + days, // Seconds(0-59) Minutes(0-59) Hours(0-23) Day of Month(1-31) Months(0-11) Day of Week:(0-6)
-                context: task,
-                onTick: function() {
-                    var _task = this;
-                    
-                    var tasksToSend = preperTaskToSend(_task);
-                    logger.log("info","sending repeats task :", tasksToSend);
-                    BL.addNewTasks(tasksToSend, true).then(function(result){
-                        console.log("successfuly send repeate tasks");
-                    }, function(error){
-                        logger.log('error', error.message , error.error);                       
-                    });
-                },
-                start: true 
-            });
-            taskJobMap[task._id] = job;
         }
         
     }
