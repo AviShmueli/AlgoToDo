@@ -30,12 +30,11 @@
             dateTime.setMinutes(task.minutes);
 
             var tz = moment().tz(task.zone);
-            console.log("***dateTime BEFOR***", dateTime.getTimezoneOffset());
-            dateTime = new Date(moment(dateTime).add(-tz._offset, 'm')._d);
-            //dateTime.setMinutes(tz._offset);
-            //var dateTime = new Date();
+            if(dateTime.getTimezoneOffset() !== -tz._offset){
+                dateTime = new Date(moment(dateTime).add(-tz._offset, 'm')._d);
+            }
 
-            console.log("***dateTime AFTER***", dateTime.toString());
+            console.log("***dateTime***", dateTime.toString());
             return dateTime;
         };
 
@@ -46,8 +45,8 @@
             var task = tasks[i];
             
             var time = setTime(task);//new Date(task.startTime);
-            var hour = time.getUTCHours();
-            var minutes = time.getUTCMinutes();
+            var hour = time.getHours();
+            var minutes = time.getMinutes();
             var days = task.daysRepeat.toString();
 
             if (taskJobMap[task._id] !== undefined) {
@@ -82,7 +81,7 @@
         for (var i = 0; i < tasks.length; i++) {
             var task = tasks[i];
             
-            var time = new Date(task.startTime);
+            var time = setTime(task);//new Date(task.startTime);
             var hour = time.getHours();
             var minutes = time.getMinutes();
             var days = task.daysRepeat.toString();
