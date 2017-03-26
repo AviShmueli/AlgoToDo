@@ -41,10 +41,10 @@
 
     function startRepeatsTasks( tasks ) {
         
-        for (var i = 0; i < tasks.length; i++) {
+        for (var i = 0; i < 2/*tasks.length*/; i++) {
             var task = tasks[i];
             
-            var time = setTime(task);//new Date(task.startTime);
+            var time = new Date(task.startTime);//setTime(task);//
             var hour = time.getHours();
             var minutes = time.getMinutes();
             var days = task.daysRepeat.toString();

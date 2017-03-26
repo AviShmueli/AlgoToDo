@@ -34,7 +34,7 @@
             var daysRepeat = task.daysRepeat.sort();
 
             var days = '';
-            var time = moment(task.startTime).format("LT");
+            var time = task.hour + ':' + task.minutes;//moment(task.startTime).format("LT");
 
             if (daysRepeat.length === 7) {
                 return 'כל יום בשעה ' + time;
