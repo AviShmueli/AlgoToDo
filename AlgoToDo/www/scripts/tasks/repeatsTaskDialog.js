@@ -21,6 +21,7 @@
         vm.showNoRecipientsSelectedError = false;
         vm.submitInProcess = false;
         vm.isEditMode = false;
+        
 
         if (!angular.equals({},taskToEdit)) {
             vm.isEditMode = true;
@@ -31,6 +32,7 @@
             vm.task.to = [];
             vm.task.daysRepeat = [];
         }
+        vm.task.zone = jstz.determine().name();
 
         function setTime() {
             var dateTime = new Date();

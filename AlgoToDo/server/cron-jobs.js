@@ -11,6 +11,7 @@
     var BL = require('./BL');
     var DAL = require('./DAL');
     var logger = require('./logger');
+    var moment = require('moment-timezone');
     
     var taskJobMap = {};
 
@@ -23,12 +24,17 @@
     }
 
     function setTime(task) {
-            var dateTime = new Date();
+            
+            var dateTime = moment().tz(task.zone);
+            //var dateTime = new Date();
             dateTime.setHours(task.hour);
             dateTime.setMinutes(task.minutes);
             console.log("***dateTime***", dateTime);
             return dateTime;
         };
+
+      var a = moment().tz("America/Los_Angeles").format();
+      var b= a;  
 
     function startRepeatsTasks( tasks ) {
         
