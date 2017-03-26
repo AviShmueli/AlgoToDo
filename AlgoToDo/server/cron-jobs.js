@@ -25,16 +25,19 @@
 
     function setTime(task) {
             
-            var dateTime = moment().tz(task.zone);
-            //var dateTime = new Date();
+            var dateTime = new Date();
             dateTime.setHours(task.hour);
             dateTime.setMinutes(task.minutes);
+
+            var tz = moment().tz(task.zone);
+            dateTime = new Date(moment(dateTime).add(tz._offset, 'm')._d);
+            //dateTime.setMinutes(tz._offset);
+            //var dateTime = new Date();
+
             console.log("***dateTime***", dateTime);
             return dateTime;
         };
 
-      var a = moment().tz("America/Los_Angeles").format();
-      var b= a;  
 
     function startRepeatsTasks( tasks ) {
         
@@ -42,15 +45,15 @@
             var task = tasks[i];
             
             var time = setTime(task);//new Date(task.startTime);
-            var hour = time.getHours();
-            var minutes = time.getMinutes();
+            var hour = time.getUTCHours();
+            var minutes = time.getUTCMinutes();
             var days = task.daysRepeat.toString();
 
             if (taskJobMap[task._id] !== undefined) {
                 taskJobMap[task._id].stop();
             }
 
-            //logger.log('info', "start repeates task: " + '00 ' + minutes + ' ' + hour +  ' * * ' + days , task);
+            logger.log('info', "start repeates task: " + '00 ' + minutes + ' ' + hour +  ' * * ' + days , task);
 
             var job = new CronJob({
                 cronTime: '00 ' + minutes + ' ' + hour +  ' * * ' + days, // Seconds(0-59) Minutes(0-59) Hours(0-23) Day of Month(1-31) Months(0-11) Day of Week:(0-6)
