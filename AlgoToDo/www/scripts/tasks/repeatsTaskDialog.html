@@ -31,7 +31,7 @@
                                   ng-model="vm.task.to"
                                   md-contacts="vm.querySearch($query)"
                                   md-contact-name="name"
-                                  md-contact-image="avatarFullUrl"
+                                  md-contact-image="avatarUrl"
                                   md-require-match="true"
                                   md-highlight-flags="i"
                                   placeholder="נמען"
@@ -71,7 +71,7 @@
                     <label>שעה</label>
                     <section layout="row" layout-sm="column" layout-align="center center" layout-wrap>
                         <input mdc-datetime-picker="" date="false" time="true" type="text" show-todays-date
-                               format="HH:mm a" ng-model="vm.task.startTime" class="md-input" md-no-asterisk="true"
+                               format="HH:mm a" ng-model="vm.time" class="md-input" md-no-asterisk="true"
                                readonly="readonly" lang="he" ok-text='שמור' am-text='בוקר' pm-text='ערב' 
                                cancel-text='ביטול' today-text="" required>
                     </section>

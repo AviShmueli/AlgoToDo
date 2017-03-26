@@ -68,7 +68,7 @@
                     task.from = allCachedUsers[f_index];
                 }
 
-                if (task.to !== undefined) {
+                if (task.to !== undefined && !Array.isArray(task.to)) {
                     if (task.from._id !== task.to._id) {
                         var t_index = arrayObjectIndexOf(allCachedUsers, '_id', task.to._id);
                         if (t_index !== -1) {
@@ -77,6 +77,19 @@
                     }
                     else {
                         task.to = allCachedUsers[f_index];
+                    }
+                }
+                else {
+                    if (task.to.length === 1) {
+                        if (task.from._id !== task.to[0]._id) {
+                            var t_index = arrayObjectIndexOf(allCachedUsers, '_id', task.to[0]._id);
+                            if (t_index !== -1) {
+                                task.to[0] = allCachedUsers[t_index];
+                            }
+                        }
+                        else {
+                            task.to[0] = allCachedUsers[f_index];
+                        }
                     }
                 }
 
@@ -201,6 +214,7 @@
         };
 
         var setRepeatsTasksList = function (newTasks) {
+            replaceUsersWithPhoneContact(newTasks);
             self.$storage.repeatsTasksList = newTasks;
         };
 

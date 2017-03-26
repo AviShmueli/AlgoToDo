@@ -25,13 +25,19 @@
         if (!angular.equals({},taskToEdit)) {
             vm.isEditMode = true;
             vm.task = taskToEdit;
-            vm.task.startTime = new Date(vm.task.startTime);
+            vm.time = setTime();
         } else {
             vm.task = {};
             vm.task.to = [];
             vm.task.daysRepeat = [];
         }
 
+        function setTime() {
+            var dateTime = new Date();
+            dateTime.setHours(vm.task.hour);
+            dateTime.setMinutes(vm.task.minutes);
+            return dateTime;
+        };
         
         function querySearch(query) {
             vm.showNoRecipientsSelectedError = false;
@@ -97,7 +103,8 @@
                     vm.task.from = { '_id': vm.user._id, 'name': vm.user.name, 'avatarUrl': vm.user.avatarUrl };
                     vm.task.cliqaId = vm.user.cliqot[0]._id;
                     vm.task.creatorId = vm.user._id;
-
+                    vm.task.hour = vm.time.getHours();
+                    vm.task.minutes = vm.time.getMinutes();
                     saveNewTask(vm.task);
                 }
                 else {

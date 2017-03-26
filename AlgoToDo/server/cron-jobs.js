@@ -28,8 +28,8 @@
             var task = tasks[i];
             
             var time = new Date(task.startTime);
-            var hour = time.getHours();
-            var minutes = time.getMinutes();
+            var hour = task.hour;//time.getHours();
+            var minutes = task.minutes;//time.getMinutes();
             var days = task.daysRepeat.toString();
 
             if (taskJobMap[task._id] !== undefined) {

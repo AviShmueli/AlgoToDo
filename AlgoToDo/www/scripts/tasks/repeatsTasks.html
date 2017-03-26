@@ -41,7 +41,12 @@
                     <md-list flex flex-gt-sm="50" flex-md="66" dir="rtl" ng-show="vm.repeatsTasks.length > 0">
                         <md-list-item ng-repeat="task in vm.repeatsTasks" class="noright task-item margin margin-top-7px">
                             <md-card-avatar>
-                                <img alt="avatar" ng-src="{{vm.imagesPath + (task.to.length === 1 ? task.to[0].avatarUrl : '/images/group-1.svg')}}" class="md-avatar user-avatar marg margin-right-10px" />
+                                <!--<img alt="avatar" ng-src="{{vm.imagesPath + (task.to.length === 1 ? task.to[0].avatarUrl : '/images/group-1.svg')}}" class="md-avatar user-avatar marg margin-right-10px" />-->
+                            
+                                <img ng-if="task.to.length > 1" alt="avatar" ng-src="{{vm.imagesPath + '/images/group-1.svg'}}" class="md-avatar user-avatar marg margin-right-10px" />
+                                <img ng-if="task.to.length === 1 && (task.to[0].avatarUrl.startsWith('content') || task.to[0].avatarUrl.startsWith('file'))" alt="{{task.to[0].name}}" ng-src="{{task.to[0].avatarUrl}}" class="md-avatar user-avatar marg margin-right-10px" />
+                                <img ng-if="task.to.length === 1 && !task.to[0].avatarUrl.startsWith('content')  && !task.to[0].avatarUrl.startsWith('file')" alt="{{task.to[0].name}}" ng-src="{{vm.imagesPath + task.to[0].avatarUrl}}" class="md-avatar user-avatar marg margin-right-10px" />
+
                             </md-card-avatar>
                             <a class="md-tile-content margin-bottom-14px" flex="100" ng-click="vm.navigateToTaskPage(item._id)">
                                 <div layout="row">

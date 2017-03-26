@@ -187,7 +187,6 @@
             $mdDialog.hide();
 
             if (vm.taskHasImage === true) {
-                logger.error("vm.newImage.nativeUrl", vm.newImage.nativeUrl);
                 storage.saveFileToStorage(tasks[0]._id, vm.newImage.fileName, vm.newImage.nativeUrl).
                     then(function () {
                         camera.cleanupAfterPictureTaken();

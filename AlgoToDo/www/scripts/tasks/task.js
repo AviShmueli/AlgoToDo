@@ -137,6 +137,7 @@
                     }
                     logger.error('Error while trying to add new comment: ', error.data || error);
                     comment.offlineMode = true;
+                    localCopyOfComment.offlineMode = true;
                     if (vm.task._id.indexOf('tempId') === -1) {
                         $offlineHandler.addCommentToCachedNewCommentsList(vm.task._id, comment, userIdToNotify);
                     }
