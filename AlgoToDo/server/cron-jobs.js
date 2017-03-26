@@ -22,14 +22,22 @@
         });
     }
 
+    function setTime(task) {
+            var dateTime = new Date();
+            dateTime.setHours(task.hour);
+            dateTime.setMinutes(task.minutes);
+            console.log("***dateTime***", dateTime);
+            return dateTime;
+        };
+
     function startRepeatsTasks( tasks ) {
         
         for (var i = 0; i < tasks.length; i++) {
             var task = tasks[i];
             
-            var time = new Date(task.startTime);
-            var hour = task.hour;//time.getHours();
-            var minutes = task.minutes;//time.getMinutes();
+            var time = setTime(task);//new Date(task.startTime);
+            var hour = time.getHours();
+            var minutes = time.getMinutes();
             var days = task.daysRepeat.toString();
 
             if (taskJobMap[task._id] !== undefined) {
