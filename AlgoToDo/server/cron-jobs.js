@@ -13,6 +13,7 @@
     var logger = require('./logger');
     var moment = require('moment-timezone');
     
+    
     var taskJobMap = {};
 
     function startAllJobs(){
