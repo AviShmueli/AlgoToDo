@@ -759,6 +759,7 @@ md-tabs.md-primary > md-tabs-wrapper > md-tabs-canvas > md-pagination-wrapper > 
 .font-14px{ font-size: 14px; }
 .font-18px{ font-size: 18px; }
 .font-size-x-small{ font-size: x-small }
+.font-size-xx-large { font-size: xx-large}
 .z-index-21{ z-index: 21; }
 .fill-black { fill: black; }
 .offline-icon-fill { fill: rgb(126, 79, 79); }
@@ -785,6 +786,7 @@ md-tabs.md-primary > md-tabs-wrapper > md-tabs-canvas > md-pagination-wrapper > 
 .comment-description { font-size: 18px;margin-top: 10px; }
 .new-comment-text { padding-bottom: 8px;padding-top: 8px; }
 .float-right { float: right }
+.float-left { float: left !important}
 .padding-16px { padding:16px!important }
 .padding-top-0 { padding-top: 0; }
 .management-filter-card-title { padding: 0px 18px 0px 0px; }
@@ -808,3 +810,4 @@ md-tabs.md-primary > md-tabs-wrapper > md-tabs-canvas > md-pagination-wrapper > 
 }
 .logo{ width: 40px}
 .timer-text{ color:rgb(186, 195, 196) ;bottom: 7px; position: relative;}
+.time-points{    top: 33px;    position: relative;    font-size: xx-large;}

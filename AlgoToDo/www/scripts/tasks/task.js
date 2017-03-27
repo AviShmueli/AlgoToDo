@@ -31,7 +31,7 @@
 
         if (vm.task.unSeenResponses > 0) {
             $timeout(function () {
-                pushNotifications.clearAllNotifications();
+                //pushNotifications.clearAllNotifications();
             }, 0);
         }
         vm.task.unSeenResponses = 0;

@@ -66,14 +66,29 @@
                 <div class="input-message-validate"><b>חובה</b> לבחור יום אחד לפחות</div>
             </div>
 
-            <div layout layout-sm="column">
+            <div layout layout-sm="row">
+                
                 <md-input-container flex class="md-block">
                     <label>שעה</label>
-                    <section layout="row" layout-sm="column" layout-align="center center" layout-wrap>
+                    
+                    <section class="float-left" layout="row" flex="30" layout-align="start center" layout-wrap>
+                        <input class="font-size-xx-large" type="number" ng-model="vm.task.minutes" min="0" max="59" />
+                    </section>
+                </md-input-container>
+
+                <div class="md-block" layout="column" layout-align="start center">
+                    <span class="time-points">:</span>
+                </div>
+
+                <md-input-container flex class="md-block">
+                    <!--<section layout="row" layout-sm="column" layout-align="center center" layout-wrap>
                         <input mdc-datetime-picker="" date="false" time="true" type="text" show-todays-date
                                format="HH:mm a" ng-model="vm.time" class="md-input" md-no-asterisk="true"
                                readonly="readonly" lang="he" ok-text='שמור' am-text='בוקר' pm-text='ערב' 
                                cancel-text='ביטול' today-text="" required>
+                    </section>-->
+                    <section layout="row" flex="30" layout-sm="column" layout-align="center center" layout-wrap>
+                        <input class="font-size-xx-large" type="number" ng-model="vm.task.hour" min="0" max="23"/>
                     </section>
                 </md-input-container>
             </div>
