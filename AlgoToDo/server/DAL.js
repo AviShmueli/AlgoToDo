@@ -106,7 +106,9 @@
                 '_id': true,
                 'name': true,
                 'GcmRegistrationId': true,
-                'ApnRegistrationId': true
+                'ApnRegistrationId': true,
+                'usersInGroup': true,
+                'avtarUrl': true
             }).toArray(function (err, result) {
 
                 if (err) {

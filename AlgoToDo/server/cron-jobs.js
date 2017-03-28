@@ -1,6 +1,6 @@
 /*jshint esversion: 6 */
 
-(function(jobs){
+(function (jobs) {
 
     jobs.startAllJobs = startAllJobs;
     jobs.startRepeatsTasks = startRepeatsTasks;
@@ -12,42 +12,44 @@
     var DAL = require('./DAL');
     var logger = require('./logger');
     var moment = require('moment-timezone');
-    
-    
+    var deferred = require('deferred');
+    var ObjectID = require('mongodb').ObjectID;
+
     var taskJobMap = {};
 
-    function startAllJobs(){
-        DAL.getAllRepeatsTasks().then(function(tasks){
-            startRepeatsTasks( tasks );
-        }, function (error){
-            logger.log('error', error.message , error.error);
+    function startAllJobs() {
+        DAL.getAllRepeatsTasks().then(function (tasks) {
+            startRepeatsTasks(tasks);
+        }, function (error) {
+            logger.log('error', error.message, error.error);
         });
     }
 
     function setTime(task) {
-            
-            var dateTime = new Date();
-            dateTime.setHours(task.hour);
-            dateTime.setMinutes(task.minutes);
 
-            var tz = moment().tz(task.zone);
-            if(dateTime.getTimezoneOffset() !== -tz._offset){
-                dateTime = new Date(moment(dateTime).add(-tz._offset, 'm')._d);
-            }
+        var dateTime = new Date();
+        dateTime.setHours(task.hour);
+        dateTime.setMinutes(task.minutes);
 
-            console.log("***dateTime***", dateTime.toString());
-            return dateTime;
-        };
+        var tz = moment().tz(task.zone);
+        if (dateTime.getTimezoneOffset() !== -tz._offset) {
+            dateTime = new Date(moment(dateTime).add(-tz._offset, 'm')._d);
+        }
+
+        console.log("***dateTime***", dateTime.toString());
+        return dateTime;
+    };
 
 
-    function startRepeatsTasks( tasks ) {
-        
+
+    function startRepeatsTasks(tasks) {
+
         for (var i = 0; i < tasks.length; i++) {
             var task = tasks[i];
-            
-            if (task.hour !== undefined) {       
-            
-                var time = setTime(task);//new Date(task.startTime);//
+
+            if (task.hour !== undefined) {
+
+                var time = setTime(task); //new Date(task.startTime);//
                 var hour = time.getHours();
                 var minutes = time.getMinutes();
                 var days = task.daysRepeat.toString();
@@ -56,78 +58,86 @@
                     taskJobMap[task._id].stop();
                 }
 
-                logger.log('info', "start repeates task: " + '00 ' + minutes + ' ' + hour +  ' * * ' + days , task);
+                logger.log('info', "start repeates task: " + '00 ' + minutes + ' ' + hour + ' * * ' + days, task);
 
                 var job = new CronJob({
-                    cronTime: '00 ' + minutes + ' ' + hour +  ' * * ' + days, // Seconds(0-59) Minutes(0-59) Hours(0-23) Day of Month(1-31) Months(0-11) Day of Week:(0-6)
+                    cronTime: '00 ' + minutes + ' ' + hour + ' * * ' + days, // Seconds(0-59) Minutes(0-59) Hours(0-23) Day of Month(1-31) Months(0-11) Day of Week:(0-6)
                     context: task,
-                    onTick: function() {
+                    onTick: function () {
                         var _task = this;
-                        
-                        var tasksToSend = preperTaskToSend(_task);
-                        logger.log("info","sending repeats task :", tasksToSend);
-                        BL.addNewTasks(tasksToSend, true).then(function(result){
-                            console.log("successfuly send repeate tasks");
-                        }, function(error){
-                            logger.log('error', error.message , error.error);                       
+
+                        preperTaskToSend(_task).then(function (tasksToSend) {
+                            logger.log("info", "sending repeats task :", tasksToSend);
+                            BL.addNewTasks(tasksToSend, true).then(function (result) {
+                                console.log("successfuly send repeate tasks");
+                            }, function (error) {
+                                logger.log('error', error.message, error.error);
+                            });
                         });
                     },
-                    start: true 
+                    start: true
                 });
                 taskJobMap[task._id] = job;
             }
         }
-        
+
     }
 
-    function restartRepeatsTasks( tasks ) {
-        
+    function restartRepeatsTasks(tasks) {
+
         for (var i = 0; i < tasks.length; i++) {
             var task = tasks[i];
-            
-            var time = setTime(task);//new Date(task.startTime);
+
+            var time = setTime(task); //new Date(task.startTime);
             var hour = time.getHours();
             var minutes = time.getMinutes();
             var days = task.daysRepeat.toString();
-            
+
             if (taskJobMap[task._id] !== undefined) {
                 taskJobMap[task._id].stop();
             }
 
             var job = new CronJob({
-                cronTime: '00 ' + minutes + ' ' + hour +  ' * * ' + days, // Seconds(0-59) Minutes(0-59) Hours(0-23) Day of Month(1-31) Months(0-11) Day of Week:(0-6)
-                
-                onTick: function() {
+                cronTime: '00 ' + minutes + ' ' + hour + ' * * ' + days, // Seconds(0-59) Minutes(0-59) Hours(0-23) Day of Month(1-31) Months(0-11) Day of Week:(0-6)
+
+                onTick: function () {
                     console.log(task);
 
-                    var tasksToSend = preperTaskToSend(task);
-                    
-                    BL.addNewTasks(tasksToSend, true).then(function(result){
-                        console.log("successfuly send repeate task");
-                    }, function(error){
-                        logger.log('error', error.message , error.error);                       
+                    preperTaskToSend(task).then(function (tasksToSend) {
+                        BL.addNewTasks(tasksToSend, true).then(function (result) {
+                            console.log("successfuly send repeate task");
+                        }, function (error) {
+                            logger.log('error', error.message, error.error);
+                        });
                     });
                 },
-                start: true 
+                start: true
             });
             taskJobMap[task._id] = job;
         }
-        
+
     }
 
-    function stopRepeatsTasks(tasksIds){
-        for (var i = 0; i < tasksIds.length; i++) {        
+    function stopRepeatsTasks(tasksIds) {
+        for (var i = 0; i < tasksIds.length; i++) {
             if (taskJobMap[tasksIds[i]] !== undefined) {
                 taskJobMap[tasksIds[i]].stop();
             }
         }
     }
 
-    function preperTaskToSend(repeatsTask){
+    function preperTaskToSend(repeatsTask) {
+
+        var d = deferred();
+
         var task = {};
-        task.from = { '_id': repeatsTask.from._id, 'name': repeatsTask.from.name, 'avatarUrl': repeatsTask.from.avatarUrl };
+        task.from = {
+            '_id': repeatsTask.from._id,
+            'name': repeatsTask.from.name,
+            'avatarUrl': repeatsTask.from.avatarUrl
+        };
         task.status = 'inProgress';
-        task.createTime = new Date();                    
+        task.createTime = new Date();
         task.cliqaId = repeatsTask.cliqaId;
         task.description = repeatsTask.description;
         task.comments = [];
@@ -137,47 +147,79 @@
             task.type = 'group-sub';
         }
 
-        taskListToreturn = createTasksList(task, repeatsTask.to);
+        createTasksList(task, repeatsTask.to).then(function (taskListToreturn) {
+            if (taskListToreturn.length > 1) {
+                taskListToreturn.push(createGroupMainTask(task, repeatsTask.to));
+            }
 
-        if (taskListToreturn.length > 1) {
-            taskListToreturn.push(createGroupMainTask(task,repeatsTask.to));
-        }
+            d.resolve(taskListToreturn);
+        });
 
-        return taskListToreturn;
+        return d.promise;
     }
 
     function createTasksList(task, recipients) {
-            var listToReturn = [];
-            var tempTask;
-            for (var i = 0; i < recipients.length; i++) {
-                var recipient = recipients[i];
-                // if the user select group, 
-                // loop over the users in the group and create for each user his task
-                if (recipient.type === 'group') {
-                    for (var j = 0; j < recipient.usersInGroup.length; j++) {
-                        var user = recipient.usersInGroup[j];
+
+        var d = deferred();
+
+        var groupsIds = [];
+        var listToReturn = [];
+        var tempTask;
+        for (var i = 0; i < recipients.length; i++) {
+            var recipient = recipients[i];
+            // if the user select group, 
+            // loop over the users in the group and create for each user his task
+            if (recipient.type === 'group') {
+                groupsIds.push(new ObjectID(recipient._id));
+            } else {
+                tempTask = JSON.parse(JSON.stringify(task));
+                tempTask.to = {
+                    'name': recipient.name,
+                    '_id': recipient._id,
+                    'avatarUrl': recipient.avatarUrl
+                };
+                listToReturn.push(tempTask);
+            }
+        }
+
+        if (groupsIds.length > 0) {
+            DAL.getUsersByUsersId(groupsIds).then(function (result) {
+
+                var groups = result;
+
+                for (var i = 0; i < groups.length; i++) {
+                    var group = groups[i];
+
+                    for (var j = 0; j < group.usersInGroup.length; j++) {
+                        var user = group.usersInGroup[j];
                         tempTask = JSON.parse(JSON.stringify(task));
-                        tempTask.to = { 'name': user.name, '_id': user._id, 'avatarUrl': user.avatarUrl };
+                        tempTask.to = {
+                            'name': user.name,
+                            '_id': user._id,
+                            'avatarUrl': user.avatarUrl
+                        };
                         tempTask.type = 'group-sub';
                         listToReturn.push(tempTask);
                     }
                 }
-                else {
-                    
-                    tempTask = JSON.parse(JSON.stringify(task));
-                    tempTask.to = { 'name': recipient.name, '_id': recipient._id, 'avatarUrl': recipient.avatarUrl };
-                    listToReturn.push(tempTask);
-                }
-            }
-            return listToReturn;
+
+                d.resolve(listToReturn);
+            });
+        } else {
+            setTimeout(function () {
+                d.resolve(listToReturn);
+            }, 0);
         }
 
-        var createGroupMainTask = function (task, recipients) {
-            var groupTask = JSON.parse(JSON.stringify(task));
-            groupTask.type = 'group-main';
-            groupTask.to = recipients;
-            return groupTask;
-        };
+        return d.promise;
+    }
+
+    var createGroupMainTask = function (task, recipients) {
+        var groupTask = JSON.parse(JSON.stringify(task));
+        groupTask.type = 'group-main';
+        groupTask.to = recipients;
+        return groupTask;
+    };
 
 
 
