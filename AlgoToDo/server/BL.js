@@ -311,7 +311,7 @@
             delete user._id;
         }
 
-        user.number = phoneUtil.format(phoneUtil.parse(user.phone, 'il'), 1);
+        user.phone = phoneUtil.format(phoneUtil.parse(user.phone, 'il'), 1);
 
         DAL.registerUser(user).then(function (result) {
             var newUser = result.ops[0];
