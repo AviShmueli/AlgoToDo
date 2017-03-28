@@ -6,10 +6,10 @@
         .service('contactsSync', contactsSync);
 
     contactsSync.$inject = ['device', 'datacontext', 'appConfig', 'logger', '$q',
-                            'DAL'];
+                            'DAL', 'common', '$timeout'];
 
     function contactsSync(device, datacontext, appConfig, logger, $q,
-                          DAL) {
+                          DAL, common, $timeout) {
 
 
         var self = this;
@@ -19,54 +19,60 @@
         self.imagesPath = device.getImagesPath();
         self.deferred = $q.defer();
         self.currentNumber = '';
+        
 
         var syncPhoneContactsWithServer = function () {
 
             self.deferred = $q.defer();
 
-            if (!device.isMobileDevice()) {
-                self.deferred.reject();
-            }
+            getAllUserCliqotContacts().then(function () {
 
-            device.getContacts('').then(function (allContacts) {
+                if (!device.isMobileDevice()) {
+                    $timeout(function () {
+                        self.deferred.resolve();
+                    }, 0); 
+                }
+                else{
+                    device.getContacts('').then(function (allContacts) {
 
-                var phoneNumbers = [], contact;
+                        var phoneNumbers = [], contact;
 
-                for (var i = 0; i < allContacts.length; i++) {
+                        for (var i = 0; i < allContacts.length; i++) {
 
-                    contact = allContacts[i];
-                    /*if (contact.displayName === 'אריאל חוברה') {
-                        var aa = 11;
-                    }*/
-                    if (contact.phoneNumbers !== null && contact.phoneNumbers.length > 0) {
-                        for (var j = 0; j < contact.phoneNumbers.length; j++) {
-                            var phoneNumber = contact.phoneNumbers[j].value;
-                            if (phoneNumber.startsWith('#31#')) {
-                                phoneNumber = phoneNumber.substring(4);
-                            }
-                            self.currentNumber = phoneNumber;
-                            try {
+                            contact = allContacts[i];
+                            /*if (contact.displayName === 'אריאל חוברה') {
+                                var aa = 11;
+                            }*/
+                            if (contact.phoneNumbers !== null && contact.phoneNumbers.length > 0) {
+                                for (var j = 0; j < contact.phoneNumbers.length; j++) {
+                                    var phoneNumber = contact.phoneNumbers[j].value;
+                                    if (phoneNumber.startsWith('#31#')) {
+                                        phoneNumber = phoneNumber.substring(4);
+                                    }
+                                    self.currentNumber = phoneNumber;
+                                    try {
                                 
-                                if (isNumberValid(phoneNumber)) {
-                                    var internatianalFormat = phoneUtils.formatInternational(phoneNumber, self.region);
-                                    self.phone_contact_map[internatianalFormat] = contact;
-                                    phoneNumbers.push(internatianalFormat);
+                                        if (isNumberValid(phoneNumber)) {
+                                            var internatianalFormat = phoneUtils.formatInternational(phoneNumber, self.region);
+                                            self.phone_contact_map[internatianalFormat] = contact;
+                                            phoneNumbers.push(internatianalFormat);
+                                        }
+                                    }
+                                    catch (err) {
+                                        logger.error('Error while trying to get Number Type: ' + self.currentNumber, err.data || err);
+                                        self.deferred.reject(err);
+                                    }                            
                                 }
                             }
-                            catch (err) {
-                                logger.error('Error while trying to get Number Type: ' + self.currentNumber, err.data || err);
-                                self.deferred.reject(err);
-                            }                            
                         }
-                    }
+
+                        crossContacts(phoneNumbers);
+                    }, function (error) {
+                        logger.error('Error while trying to get contacts list: ', error.data || error);
+                        self.deferred.reject(error);
+                    });
                 }
-
-                crossContacts(phoneNumbers);
-            }, function (error) {
-                logger.error('Error while trying to get contacts list: ', error.data || error);
-                self.deferred.reject(error);
             });
-
             return self.deferred.promise;
         };
 
@@ -126,7 +132,7 @@
             var localUser = datacontext.getUserFromLocalStorage();
             var allCachedUsers = datacontext.getAllCachedUsers();
             var user;
-            var index = arrayObjectIndexOf(allCachedUsers, '_id', localUser._id);
+            var index = common.arrayObjectIndexOf(allCachedUsers, '_id', localUser._id);
             if (index !== -1) {
                 user = allCachedUsers[index];
             }
@@ -136,13 +142,29 @@
             }
         }
 
-        function arrayObjectIndexOf(myArray, property, searchTerm) {
-            for (var i = 0, len = myArray.length; i < len; i++) {
-                if (myArray[i][property] === searchTerm) return i;
-            }
-            return -1;
-        }
+        var getAllUserCliqotContacts = function () {
 
+            var deferred = $q.defer();
+
+            var user = datacontext.getUserFromLocalStorage();
+
+            DAL.searchUsers('', user).then(function (response) {
+                var usersList = response.data;
+                for (var i = 0; i < usersList.length; i++) {
+                    usersList[i]['avatarUrl'] = self.imagesPath + usersList[i].avatarUrl;
+                }
+                datacontext.addUsersToUsersCache(usersList);
+                deferred.resolve();
+            }, function (error) {
+                if (error.status === -1) {
+                    error.data = "App lost connection to the server";
+                }
+                logger.error('Error while trying to search Users: ', error.data || error);
+                deferred.resolve();
+            });
+
+            return deferred.promise;
+        }
 
         var service = {
             syncPhoneContactsWithServer: syncPhoneContactsWithServer

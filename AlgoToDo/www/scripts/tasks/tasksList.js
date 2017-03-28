@@ -43,21 +43,18 @@
             cordovaPlugins.setBadge(count);
 
             if (!device.isMobileDevice()) {
-                DAL.reloadAllTasks();
+                datacontext.reloadAllTasks();
             }
         }, 0);
 
-        vm.logOff = function () {
-            angular.element(document.querySelectorAll('html')).addClass("hight-auto");
-
-            if (device.isMobileDevice()) {
-                DAL.saveUsersNewRegistrationId('', vm.user);
-            }
+        vm.logOff = function () {      
             datacontext.deleteUserFromLocalStorage();
             datacontext.deleteAllCachedUsers();
             datacontext.deleteTaskListFromLocalStorage();           
-            vm.toggleSidenav('left');
             cordovaPlugins.clearAppBadge();
+            if (device.isMobileDevice()) {
+                DAL.saveUsersNewRegistrationId('', vm.user);
+            }
             $location.path('/logIn');
         };
 
@@ -270,7 +267,7 @@
 
                 if (this.toLoad_ < index && this.stopLoadData === false) {
                     this.toLoad_ += 20;
-                    DAL.getDoneTasks(this.toLoad_).then(angular.bind(this, function (response) {
+                    DAL.getDoneTasks(this.toLoad_, vm.user).then(angular.bind(this, function (response) {
                         if (response.data.length === 0) {
                             this.stopLoadData = true;
                         }
@@ -298,7 +295,7 @@
 
         vm.loadMoreDoneTasks = function () {
             vm.loadedDoneTask += 20;
-            DAL.getDoneTasks(vm.loadedDoneTask).then(function (response) {
+            DAL.getDoneTasks(vm.loadedDoneTask, vm.user).then(function (response) {
                 datacontext.pushTasksToTasksList(response.data);
             });
         };*/

@@ -7,11 +7,11 @@
 
     offlineHandler.$inject = ['$http', 'logger', 'lodash', 'appConfig', '$rootScope',
                               '$localStorage', '$q', 'DAL', 'datacontext', '$cordovaNetwork',
-                              'cordovaPlugins', 'dropbox'];
+                              'cordovaPlugins', 'dropbox', 'common'];
 
     function offlineHandler($http, logger, lodash, appConfig, $rootScope,
                             $localStorage, $q, DAL, datacontext, $cordovaNetwork,
-                            cordovaPlugins, dropbox) {
+                            cordovaPlugins, dropbox, common) {
 
         
         var self = this;
@@ -68,7 +68,7 @@
 
                     dropbox.uploadNewImageToDropbox(path, fileName, image.fileName)
                         .then(function (fileName) {
-                            var index = arrayObjectIndexOf(self.$storage.cachedImagesList, 'fileName', fileName);
+                            var index = common.arrayObjectIndexOf(self.$storage.cachedImagesList, 'fileName', fileName);
                             self.$storage.cachedImagesList.splice(index, 1);
                     });
                 }
@@ -96,18 +96,11 @@
         var replaceAllTempTasksInLocalStorage = function (newTasks) {
             var allTasks = self.$storage.tasksList;
             for (var i = 0; i < newTasks.length; i++) {
-                var index = arrayObjectIndexOf(allTasks, '_id', newTasks[i].offlineId);
+                var index = common.arrayObjectIndexOf(allTasks, '_id', newTasks[i].offlineId);
                 if (index !== -1) {
                     self.$storage.tasksList[index] = newTasks[i];
                 }
             }
-        }
-
-        function arrayObjectIndexOf(myArray, property, searchTerm) {
-            for (var i = 0, len = myArray.length; i < len; i++) {
-                if (myArray[i][property] === searchTerm) return i;
-            }
-            return -1;
         }
 
         var addTaskToCachedTasksToUpdateList = function (task) {

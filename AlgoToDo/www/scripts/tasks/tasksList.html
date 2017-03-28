@@ -25,7 +25,9 @@
                          layout-align="center center">
                     <md-tab id="tab1" aria-controls="tab1-content">
                         <ng-md-icon icon="assignment"></ng-md-icon>
-                        <br /><span class="font-12px">בתהליך</span>
+                        <br />
+                        <md-badge ng-if="$root.newCommentsInTasksInProcessCount > 0">{{$root.newCommentsInTasksInProcessCount}}</md-badge>
+                        <span class="font-12px">בתהליך</span>
                     </md-tab>
                     <md-tab id="tab2" aria-controls="tab2-content">
                         <ng-md-icon icon="assignment_ind"></ng-md-icon>

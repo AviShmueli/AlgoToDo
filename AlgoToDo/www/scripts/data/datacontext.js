@@ -7,11 +7,11 @@
 
     datacontext.$inject = ['$http', 'logger', 'lodash', 'appConfig', '$rootScope',
                            '$localStorage', '$mdToast', 'socket', '$filter', 'dropbox',
-                           '$q', '$location', '$timeout'];
+                           '$q', '$location', '$timeout', 'DAL', 'common'];
 
     function datacontext($http, logger, lodash, appConfig, $rootScope,
                          $localStorage, $mdToast, socket, $filter, dropbox,
-                         $q, $location, $timeout) {
+                         $q, $location, $timeout, DAL, common) {
 
         
         var self = this;
@@ -47,7 +47,7 @@
         
         var replaceTask = function (task) {
             replaceUsersWithPhoneContact([task]);
-            var index = arrayObjectIndexOf(getTaskList(), '_id', task._id);
+            var index = common.arrayObjectIndexOf(getTaskList(), '_id', task._id);
             if (index !== -1) {
                 self.$storage.tasksList[index] = task;
             }
@@ -63,14 +63,14 @@
             }
             for (var i = 0; i < tasks.length; i++) {
                 var task = tasks[i];
-                var f_index = arrayObjectIndexOf(allCachedUsers, '_id', task.from._id);
+                var f_index = common.arrayObjectIndexOf(allCachedUsers, '_id', task.from._id);
                 if (f_index !== -1) {
                     task.from = allCachedUsers[f_index];
                 }
 
                 if (task.to !== undefined && !Array.isArray(task.to)) {
                     if (task.from._id !== task.to._id) {
-                        var t_index = arrayObjectIndexOf(allCachedUsers, '_id', task.to._id);
+                        var t_index = common.arrayObjectIndexOf(allCachedUsers, '_id', task.to._id);
                         if (t_index !== -1) {
                             task.to = allCachedUsers[t_index];
                         }
@@ -82,7 +82,7 @@
                 else {
                     if (Array.isArray(task.to) && task.to.length === 1) {
                         if (task.from._id !== task.to[0]._id) {
-                            var t_index = arrayObjectIndexOf(allCachedUsers, '_id', task.to[0]._id);
+                            var t_index = common.arrayObjectIndexOf(allCachedUsers, '_id', task.to[0]._id);
                             if (t_index !== -1) {
                                 task.to[0] = allCachedUsers[t_index];
                             }
@@ -117,7 +117,7 @@
 
             var usersCache = getAllCachedUsers(), index;
             for (var i = 0; i < usersList.length; i++) {
-                index = arrayObjectIndexOf(usersCache, '_id', usersList[i]._id);
+                index = common.arrayObjectIndexOf(usersCache, '_id', usersList[i]._id);
                 if (index === -1) {
                     usersCache.push(usersList[i]);
                 }
@@ -142,7 +142,7 @@
         
         var addCommentToTask = function (taskId, comment) {
             replaceUsersWithPhoneContact([comment]);
-            var foundIndex = arrayObjectIndexOf(self.$storage.tasksList, '_id', taskId);
+            var foundIndex = common.arrayObjectIndexOf(self.$storage.tasksList, '_id', taskId);
             var task;
             if (foundIndex !== -1) {
                 task = self.$storage.tasksList[foundIndex];
@@ -153,7 +153,7 @@
                 updateUnSeenResponse(task);
             }
             else {
-                var newCommentIndex_IfExist = arrayObjectIndexOf(task.comments, '_id', comment._id);
+                var newCommentIndex_IfExist = common.arrayObjectIndexOf(task.comments, '_id', comment._id);
                 if (newCommentIndex_IfExist === -1) {
                     task.comments.push(comment);
                     updateUnSeenResponse(task);
@@ -165,13 +165,16 @@
             if ($location.path().indexOf(task._id) === -1) {
                 task.unSeenResponses = task.unSeenResponses === undefined || task.unSeenResponses === '' ? 1 : task.unSeenResponses + 1;
             }
-        }
-        
-        function arrayObjectIndexOf(myArray, property, searchTerm) {
-            for (var i = 0, len = myArray.length; i < len; i++) {
-                if (myArray[i][property] === searchTerm) return i;
+            var user = getUserFromLocalStorage();
+            if (task.status === 'inProgress' &&
+                    task.from._id === user._id &&
+                    task.to._id !== user._id /*&&
+                    task.type !== 'group-sub'*/) {
+                $rootScope.newCommentsInTasksInProcessCount = 
+                    $rootScope.newCommentsInTasksInProcessCount !== undefined ?
+                    $rootScope.newCommentsInTasksInProcessCount + 1 :
+                    1;
             }
-            return -1;
         }
 
         var getTaskByTaskId = function (taskId) {
@@ -219,7 +222,7 @@
         };
 
         var deleteRepeatsTask = function (taskId) {
-            var index = arrayObjectIndexOf(self.$storage.repeatsTasksList, '_id', taskId);
+            var index = common.arrayObjectIndexOf(self.$storage.repeatsTasksList, '_id', taskId);
             if (index !== -1) {
                 self.$storage.repeatsTasksList.splice(index, 1);
             }
@@ -228,7 +231,7 @@
         var replaceRepeatsTasks = function (newTasks) {
             var index;
             for (var i = 0; i < newTasks.length; i++) {
-                index = arrayObjectIndexOf(self.$storage.repeatsTasksList, '_id', newTasks[i]._id);
+                index = common.arrayObjectIndexOf(self.$storage.repeatsTasksList, '_id', newTasks[i]._id);
                 if (index !== -1) {
                     self.$storage.repeatsTasksList[index] = newTasks[i];
                 }
@@ -238,7 +241,28 @@
         var isMobileDevice = function () {
             return document.URL.indexOf('http://') === -1 && document.URL.indexOf('https://') === -1;
         };
-      
+
+        var reloadAllTasks = function () {
+
+            var deferred = $q.defer();
+
+            var user = getUserFromLocalStorage();
+            if (user !== undefined) {
+                DAL.getTasksInProgress(user).then(function (response) {
+
+                    setTaskList(response.data);
+                    setMyTaskCount();
+
+                    DAL.getDoneTasks(0, user).then(function (_response) {
+                        pushTasksToTasksList(_response.data);
+                        deferred.resolve();
+                    });
+                });
+            }
+
+            return deferred.promise;
+        };
+
         (function(){
             var user = getUserFromLocalStorage();
             if (user !== undefined) {           
@@ -272,7 +296,8 @@
             deleteRepeatsTask: deleteRepeatsTask,
             replaceRepeatsTasks: replaceRepeatsTasks,
             deleteAllCachedUsers: deleteAllCachedUsers,
-            replaceUsersWithPhoneContact: replaceUsersWithPhoneContact
+            replaceUsersWithPhoneContact: replaceUsersWithPhoneContact,
+            reloadAllTasks: reloadAllTasks
         };
 
         return service;

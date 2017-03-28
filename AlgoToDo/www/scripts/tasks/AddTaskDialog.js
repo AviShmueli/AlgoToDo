@@ -42,22 +42,10 @@
 
             // get all users stored in the cache
             var cachedUsers = datacontext.getAllCachedUsers();
-            
-            // search for match user
-            //for (var user of cachedUsers) {
-                //if (user.name.includes(query)) {
-                    //matchesUsersFromCache.push(user);
-                //}
-            //}
 
             for (var i = 0; i < cachedUsers.length; i++) {
                 if (cachedUsers[i].name.indexOf(query) !== -1) {
                     matchesUsersFromCache.push(cachedUsers[i]);
-                }
-                else {
-                    if (cachedUsers[i].displayName !== undefined && cachedUsers[i].displayName.indexOf(query) !== -1) {
-                        matchesUsersFromCache.push(cachedUsers[i]);
-                    }
                 }
             }
             
@@ -68,7 +56,7 @@
             
             // if no users found in the cache, search in DB
             var deferred = $q.defer();
-            DAL.searchUsers(query).then(function (response) {
+            DAL.searchUsers(query, vm.user).then(function (response) {
                 var usersList = response.data;
                 for (var i = 0; i < usersList.length; i++) {
                     usersList[i]['avatarUrl'] = vm.imagesPath + usersList[i].avatarUrl;

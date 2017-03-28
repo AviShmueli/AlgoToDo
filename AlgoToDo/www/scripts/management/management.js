@@ -98,7 +98,7 @@
 
             var deferred = $q.defer();
             vm.promise = deferred.promise;
-            DAL.getAllTasks(vm.query, vm.tasksFilter).then(function (tasks) {
+            DAL.getAllTasks(vm.query, vm.tasksFilter, vm.user).then(function (tasks) {
                 vm.tasks = tasks.data;
                 deferred.resolve();
             });
@@ -214,7 +214,7 @@
 
             var deferred = $q.defer();
             vm.promise = deferred.promise;
-            DAL.getAllUsers(vm.query, vm.usersFilter).then(function (users) {
+            DAL.getAllUsers(vm.query, vm.usersFilter, vm.user).then(function (users) {
                 vm.users = users.data;
                 deferred.resolve();
             });

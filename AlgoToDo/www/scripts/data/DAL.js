@@ -5,9 +5,9 @@
         .module('app.data')
         .service('DAL', DAL);
 
-    DAL.$inject = ['$http', '$q', 'datacontext', 'appConfig', 'logger'];
+    DAL.$inject = ['$http', '$q', 'appConfig', 'logger'];
 
-    function DAL($http, $q, datacontext, appConfig, logger) {
+    function DAL($http, $q, appConfig, logger) {
 
 
         var self = this;
@@ -26,36 +26,36 @@
             return $http(req);
         };
 
-        var getTasks = function () {
+        var getTasks = function (user) {
             var req = {
                 method: 'GET',
                 url: appConfig.appDomain + '/TaskManeger/getTasks',
                 params: {
-                    userId: datacontext.getUserFromLocalStorage()._id
+                    userId: user._id
                 }
             };
 
             return $http(req);
         };
 
-        var getTasksInProgress = function () {
+        var getTasksInProgress = function (user) {
             var req = {
                 method: 'GET',
                 url: appConfig.appDomain + '/TaskManeger/getTasksInProgress',
                 params: {
-                    userId: datacontext.getUserFromLocalStorage()._id
+                    userId: user._id
                 }
             };
 
             return $http(req);
         };
 
-        var getDoneTasks = function (page) {
+        var getDoneTasks = function (page, user) {
             var req = {
                 method: 'GET',
                 url: appConfig.appDomain + '/TaskManeger/getDoneTasks',
                 params: {
-                    userId: datacontext.getUserFromLocalStorage()._id,
+                    userId: user._id,
                     page: page
                 }
             };
@@ -63,19 +63,7 @@
             return $http(req);
         };
 
-        var reloadAllTasks = function () {
-            if (datacontext.getUserFromLocalStorage() !== undefined) {
-                getTasksInProgress().then(function (response) {
-
-                    datacontext.setTaskList(response.data);
-                    datacontext.setMyTaskCount();
-
-                    getDoneTasks().then(function (_response) {
-                        datacontext.pushTasksToTasksList(_response.data);
-                    });
-                });
-            }
-        };
+        
 
         var updateTask = function (task) {
 
@@ -115,8 +103,7 @@
             return $http(req);
         };
 
-        var searchUsers = function (string) {
-            var user = datacontext.getUserFromLocalStorage();
+        var searchUsers = function (string, user) {
             var params = {};
             if (user.type !== undefined && user.type === 'system-admin') {
                 params = {
@@ -236,8 +223,8 @@
             return $http(req);
         };
 
-        var getAllTasks = function (query, filter) {
-            if (datacontext.getUserFromLocalStorage().type.indexOf('admin') !== -1) {
+        var getAllTasks = function (query, filter, user) {
+            if (user.type.indexOf('admin') !== -1) {
 
                 var req = {
                         method: 'GET',
@@ -266,8 +253,8 @@
             return $http(req);
         };
 
-        var getAllUsers = function (query, filter) {
-            if (datacontext.getUserFromLocalStorage().type.indexOf('admin') !== -1) {
+        var getAllUsers = function (query, filter, user) {
+            if (user.type.indexOf('admin') !== -1) {
 
                 var req = {
                     method: 'GET',
@@ -422,7 +409,6 @@
         var service = {
             saveNewTasks: saveNewTasks,
             getTasks: getTasks,
-            reloadAllTasks: reloadAllTasks,
             registerUser: registerUser,
             updateTask: updateTask,
             updateTasks: updateTasks,

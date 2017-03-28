@@ -1,91 +1,109 @@
 ﻿<div layout="column" ng-controller="signUpCtrl as vm" layout-padding="" dir="rtl" class="login-form" ng-cloak="">
-    <div layout-align="center center" class="login-text">
-        <h1>הרשמה למערכת</h1>
-        <h3>ברוכים הבאים ל ™Asiti</h3>
-        <h3>לפניך טופס הרשמה קצר</h3>
-    </div>
-    <form name="signUpForm" layout="column" layout-align="center center" flex flex-gt-sm="50" flex-md="66">
-        <md-content class="md-no-momentum" layout-padding  > 
-            <md-input-container class="md-block">
-                <md-icon ng-md-icon icon="person"></md-icon>
-                <input md-no-asterisk name="name" ng-model="vm.user.name" type="text" placeholder="שם פרטי ומשפחה" ng-required="true">
-                <div ng-messages="signUpForm.name.$error">
-                    <div ng-message="required">שם הוא שדה חובה</div>
-                </div>
-            </md-input-container>
+    <div ng-if="!vm.showCube">
+        <div layout-align="center center" class="login-text">
+            <h1>הרשמה למערכת</h1>
+            <h3>ברוכים הבאים ל ™Asiti</h3>
+            <h3>לפניך טופס הרשמה קצר</h3>
+        </div>
+        <form name="signUpForm" layout="column" layout-align="center center" flex flex-gt-sm="50" flex-md="66">
+            <md-content class="md-no-momentum" layout-padding>
+                <md-input-container class="md-block">
+                    <md-icon ng-md-icon icon="person"></md-icon>
+                    <input md-no-asterisk name="name" ng-model="vm.user.name" type="text" placeholder="שם פרטי ומשפחה" ng-required="true">
+                    <div ng-messages="signUpForm.name.$error">
+                        <div ng-message="required">שם הוא שדה חובה</div>
+                    </div>
+                </md-input-container>
 
-            <md-input-container class="md-block">
-                <md-icon ng-md-icon icon="phone"></md-icon>
-                <input md-no-asterisk name="phone" ng-model="vm.user.phone" type="tel"
-                       ng-pattern="/^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/"
-                       placeholder="מספר טלפון" ng-required="true">
-                <div ng-messages="signUpForm.phone.$error">
-                    <div ng-message="required">טלפון הוא שדה חובה</div>
-                    <div ng-message="pattern">נא להכניס מספר טלפון חוקי</div>
-                </div>
-            </md-input-container>
+                <md-input-container class="md-block">
+                    <md-icon ng-md-icon icon="phone"></md-icon>
+                    <input md-no-asterisk name="phone" ng-model="vm.user.phone" type="tel"
+                           ng-pattern="/^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/"
+                           placeholder="מספר טלפון" ng-required="true">
+                    <div ng-messages="signUpForm.phone.$error">
+                        <div ng-message="required">טלפון הוא שדה חובה</div>
+                        <div ng-message="pattern">נא להכניס מספר טלפון חוקי</div>
+                    </div>
+                </md-input-container>
 
-            <md-input-container class="md-icon-float md-icon-right md-block margin-bottom-0" dir="rtl">
-                
-                <md-icon ng-md-icon icon="group"></md-icon>               
-                <label>קליקה</label>
-                <md-select md-no-asterisk ng-required="true" ng-model="vm.selectedCliqa" name="cliqa">
-                    <md-option ng-repeat="cliqa in vm.AllCliqot" value="{{cliqa}}" dir="rtl">
-                        {{cliqa.name}}
-                    </md-option>
-                </md-select>
-                <div ng-messages="signUpForm.cliqa.$error">
-                    <div ng-message="required">אנא בחר קליקה אליה אתה שייך </div>
-                </div>
-                <!--<md-button class="md-icon-button" aria-label="help" ng-click="vm.showAlert($event)">-->
+                <md-input-container class="md-icon-float md-icon-right md-block margin-bottom-0" dir="rtl">
+
+                    <md-icon ng-md-icon icon="group"></md-icon>
+                    <label>קליקה</label>
+                    <md-select md-no-asterisk ng-required="true" ng-model="vm.selectedCliqa" name="cliqa">
+                        <md-option ng-repeat="cliqa in vm.AllCliqot" value="{{cliqa}}" dir="rtl">
+                            {{cliqa.name}}
+                        </md-option>
+                    </md-select>
+                    <div ng-messages="signUpForm.cliqa.$error">
+                        <div ng-message="required">אנא בחר קליקה אליה אתה שייך </div>
+                    </div>
+                    <!--<md-button class="md-icon-button" aria-label="help" ng-click="vm.showAlert($event)">-->
                     <md-icon ng-md-icon icon="info_outline" size="20" ng-click="vm.showCliqaAlert($event)"></md-icon>
-                <!--</md-button>-->
-            </md-input-container>
+                    <!--</md-button>-->
+                </md-input-container>
 
-             <md-input-container class="margin-0">
-                <label>בחר תמונת פרופיל</label>
-                <br/>
-                <br/>
-                 <div layout="row">
-                     <md-radio-group ng-model="vm.user.sex" layout="row" ng-if="vm.user.avatarUrl === undefined">
-                         <md-radio-button value="man" class="md-primary" aria-label="man">
-                             <md-card-avatar>
-                                 <img alt="user image" ng-src="{{::vm.imagesPath + vm.manAvatar}}" class="margin-left-10px md-avatar user-avatar-med"/>
-                             </md-card-avatar>
-                         </md-radio-button>
-                         <md-radio-button value="woman" aria-label="woman">
-                             <md-card-avatar>
-                                 <img alt="user image" ng-src="{{::vm.imagesPath + vm.womanAvatar}}" class="margin-left-10px md-avatar user-avatar-med"/>
-                             </md-card-avatar>
-                         </md-radio-button>
+                <md-input-container class="margin-0">
+                    <label>בחר תמונת פרופיל</label>
+                    <br />
+                    <br />
+                    <div layout="row">
+                        <md-radio-group ng-model="vm.user.sex" layout="row" ng-if="vm.user.avatarUrl === undefined">
+                            <md-radio-button value="man" class="md-primary" aria-label="man">
+                                <md-card-avatar>
+                                    <img alt="user image" ng-src="{{::vm.imagesPath + vm.manAvatar}}" class="margin-left-10px md-avatar user-avatar-med" />
+                                </md-card-avatar>
+                            </md-radio-button>
+                            <md-radio-button value="woman" aria-label="woman">
+                                <md-card-avatar>
+                                    <img alt="user image" ng-src="{{::vm.imagesPath + vm.womanAvatar}}" class="margin-left-10px md-avatar user-avatar-med" />
+                                </md-card-avatar>
+                            </md-radio-button>
 
-                     </md-radio-group>
-                     <md-card-avatar ng-if="vm.user.avatarUrl !== undefined">
-                         <img alt="user image" ng-src="{{vm.imagesPath + vm.user.avatarUrl}}" class="margin-left-10px md-avatar user-avatar-med"/>
-                     </md-card-avatar>
-                     <md-button class="md-accent" ng-click="vm.showMoreAvatars($event)">עוד תמונות</md-button>
-                 </div>
+                        </md-radio-group>
+                        <md-card-avatar ng-if="vm.user.avatarUrl !== undefined">
+                            <img alt="user image" ng-src="{{vm.imagesPath + vm.user.avatarUrl}}" class="margin-left-10px md-avatar user-avatar-med" />
+                        </md-card-avatar>
+                        <md-button class="md-accent" ng-click="vm.showMoreAvatars($event)">עוד תמונות</md-button>
+                    </div>
+                </md-input-container>
+            </md-content>
+            <md-input-container>
+
+                <md-checkbox md-no-asterisk ng-required="true" aria-label="acceptTerms" ng-model="vm.user.acceptTerms">
+                    <span calss="font-size-x-small">
+                        אנא קרא בקפידה את <a class="href-class" ng-click="vm.showTermsOfServiceAlert($event)">תנאי השירות</a>.
+                        השימוש בשירותי ™Asiti, באתר או במערכת של חברת ™Asiti מותנה בהסכמה מלאה לתנאים אלה.
+                    </span>
+                    <!--<br />
+                    <span calss="font-size-x-small">
+                        <b>שים לב! </b>
+                        האפליקציה נמצאת בגירסת אלפא ומיועדת לבדיקות בלבד.
+                    </span> -->
+                </md-checkbox>
             </md-input-container>
-        </md-content>
-        <md-input-container>
-            
-            <md-checkbox md-no-asterisk ng-required="true" aria-label="acceptTerms" ng-model="vm.user.acceptTerms">                
-                <span calss="font-size-x-small">
-                    אנא קרא בקפידה את <a class="href-class" ng-click="vm.showTermsOfServiceAlert($event)">תנאי השירות</a>.
-                    השימוש בשירותי ™Asiti, באתר או במערכת של חברת ™Asiti מותנה בהסכמה מלאה לתנאים אלה.
-                </span>
-                <!--<br />
-                <span calss="font-size-x-small">
-                    <b>שים לב! </b>
-                    האפליקציה נמצאת בגירסת אלפא ומיועדת לבדיקות בלבד.
-                </span> -->
-            </md-checkbox>
-        </md-input-container>
-        <section layout="row" layout-align="center center" layout-wrap>
-            <md-button class="md-raised md-primary circular-progress-button" ng-click="vm.signMeUp()" ng-disabled="signUpForm.$invalid">
-                <span ng-show="!vm.inProgress">הירשם</span>
-                <md-progress-circular md-mode="indeterminate" ng-show="vm.inProgress" md-diameter="20px" class="md-accent md-hue-2"></md-progress-circular>
-            </md-button>
-        </section>
-    </form>
+            <section layout="row" layout-align="center center" layout-wrap>
+                <md-button class="md-raised md-primary circular-progress-button" ng-click="vm.signMeUp()" ng-disabled="signUpForm.$invalid">
+                    <span ng-show="!vm.inProgress">הירשם</span>
+                    <md-progress-circular md-mode="indeterminate" ng-show="vm.inProgress" md-diameter="20px" class="md-accent md-hue-2"></md-progress-circular>
+                </md-button>
+            </section>
+        </form>
+    </div>
+    
+    <div ng-if="vm.showCube">
+        <div class='Cube panelLoad' id="Cube_loadder">
+            <div class='cube-face cube-face-front'>A</div>
+            <div class='cube-face cube-face-back'>✔</div>
+            <div class='cube-face cube-face-left'>s</div>
+            <div class='cube-face cube-face-right'>i</div>
+            <div class='cube-face cube-face-bottom'>t</div>
+            <div class='cube-face cube-face-top'>✔</div>
+        </div>
+
+        <div class="syncing-text" layout="row" layout-align="center center">
+            <div ng-if="vm.loadingMode === 'syncing'"> מסנכרן את אנשי הקשר שלך ... </div>
+            <div ng-if="vm.loadingMode === 'loading'"> טוען נתונים ... </div>
+        </div>
+    </div>
 </div>

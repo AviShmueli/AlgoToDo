@@ -27,14 +27,17 @@
                             DAL.updateUserDetails(vm.user._id, 'versionInstalled', version);
                             vm.user.versionInstalled = version;
                             datacontext.saveUserToLocalStorage(vm.user);
-                            contactsSync.syncPhoneContactsWithServer().then(function myfunction() {
-                                DAL.reloadAllTasks();
+                            contactsSync.syncPhoneContactsWithServer().then(function () {
+                                datacontext.reloadAllTasks();
+                                $location.path('/tasksList');
+                            }, function () {
+                                datacontext.reloadAllTasks();
                                 $location.path('/tasksList');
                             });
                         }
                         else {
                             $timeout(function () {
-                                DAL.reloadAllTasks();
+                                datacontext.reloadAllTasks();
                             }, 100);
                             $location.path('/tasksList');
                         }
@@ -43,7 +46,7 @@
             }
             else {
                 $timeout(function () {
-                    DAL.reloadAllTasks();
+                    datacontext.reloadAllTasks();
                 }, 100);
                 $location.path('/tasksList');
             }           

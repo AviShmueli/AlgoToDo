@@ -10,12 +10,16 @@
 
     function signUpCtrl($scope, datacontext, logger, cordovaPlugins, $q, pushNotifications,
                         device, $mdDialog, DAL, $location, contactsSync) {
+
+            angular.element(document.querySelectorAll('html')).addClass("hight-auto");
+
             var vm = this;
             vm.inProgress = false;
             vm.user = {};
             vm.AllCliqot = [];
             vm.selectedCliqa;
-            
+            vm.showCube = false;
+            vm.loadingMode = 'syncing';
 
             DAL.getAllCliqot().then(function (allCliqot) {
                 vm.AllCliqot = allCliqot.data;
@@ -39,7 +43,7 @@
 
             var user = datacontext.getUserFromLocalStorage();
             if (user !== undefined) {
-                DAL.reloadAllTasks();
+                datacontext.reloadAllTasks();
                 $location.path('/tasksList');
             }
 
@@ -63,10 +67,18 @@
                                         if (result.data === 'ok') {
                                             datacontext.saveUserToLocalStorage(response.data);
                                             
-                                            contactsSync.syncPhoneContactsWithServer().then(function myfunction() {
-                                                DAL.reloadAllTasks();
+                                            showCube();
+                                            contactsSync.syncPhoneContactsWithServer().then(function () {
+                                                vm.loadingMode = 'loading';
+                                                datacontext.reloadAllTasks().then(function () {
+                                                    $location.path('/tasksList');
+                                                });
+                                            }, function () {
+                                                vm.loadingMode = 'loading';
+                                                datacontext.reloadAllTasks().then(function () {
+                                                    $location.path('/tasksList');
+                                                });
                                             });
-                                            $location.path('/tasksList');
                                         }
                                         else {
                                             showVerificationFailedAlert();
@@ -87,10 +99,19 @@
                                 DAL.checkIfVerificationCodeMatch(user, verificationCode).then(function (result) {
                                     if (result.data === 'ok') {
                                         datacontext.saveUserToLocalStorage(response.data);
-                                        contactsSync.syncPhoneContactsWithServer().then(function myfunction() {
-                                            DAL.reloadAllTasks();
+
+                                        showCube();
+                                        contactsSync.syncPhoneContactsWithServer().then(function () {
+                                            vm.loadingMode = 'loading';
+                                            datacontext.reloadAllTasks().then(function () {
+                                                $location.path('/tasksList');
+                                            });
+                                        }, function () {
+                                            vm.loadingMode = 'loading';
+                                            datacontext.reloadAllTasks().then(function () {
+                                                $location.path('/tasksList');
+                                            });
                                         });
-                                        $location.path('/tasksList');
                                     }
                                     else {
                                         showVerificationFailedAlert();
@@ -335,7 +356,13 @@
                 });
 
             };
-
+            
+            var showCube = function () {
+                vm.showCube = true;
+                vm.loadingMode = 'syncing';
+                angular.element(document.querySelectorAll('html')).removeClass("hight-auto");
+            };
+            
             function pickAvatarCtrl($scope, $mdDialog, imagesPath) {
                 $scope.imagesPath = imagesPath;
                 $scope.manAvatars = [];
@@ -361,7 +388,7 @@
                     $mdDialog.hide(answer);
                 };
             }
- 
+        
         }
 
 })();

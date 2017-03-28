@@ -11,17 +11,18 @@
     function logInCtrl($scope, datacontext, logger, cordovaPlugins, $q, pushNotifications,
                         device, $mdDialog, DAL, $location, contactsSync) {
 
-        angular.element(document.querySelectorAll('html')).removeClass("hight-auto");
+        angular.element(document.querySelectorAll('html')).addClass("hight-auto");
 
         var vm = this;
-
+        vm.showCube = false;
         vm.imagesPath = device.getImagesPath();
         vm.inProgress = false;
         vm.user = {};
+        vm.loadingMode = 'syncing';
 
         var user = datacontext.getUserFromLocalStorage();
         if (user !== undefined) {
-            DAL.reloadAllTasks();
+            datacontext.reloadAllTasks();
             $location.path('/tasksList');
         }
 
@@ -55,10 +56,19 @@
                                 DAL.checkIfVerificationCodeMatch(user, verificationCode).then(function (result) {
                                     if (result.data === 'ok') {
                                         datacontext.saveUserToLocalStorage(response.data);
-                                        contactsSync.syncPhoneContactsWithServer().then(function myfunction() {
-                                            DAL.reloadAllTasks();
+                                        
+                                        showCube();
+                                        contactsSync.syncPhoneContactsWithServer().then(function () {
+                                            vm.loadingMode = 'loading';
+                                            datacontext.reloadAllTasks().then(function () {
+                                                $location.path('/tasksList');
+                                            });
+                                        }, function () {
+                                            vm.loadingMode = 'loading';
+                                            datacontext.reloadAllTasks().then(function () {
+                                                $location.path('/tasksList');
+                                            });
                                         });
-                                        $location.path('/tasksList');
                                     }
                                     else {
                                         showVerificationFailedAlert();
@@ -81,10 +91,19 @@
                             DAL.checkIfVerificationCodeMatch(user, verificationCode).then(function (result) {
                                 if (result.data === 'ok') {
                                     datacontext.saveUserToLocalStorage(response.data);
-                                    contactsSync.syncPhoneContactsWithServer().then(function myfunction() {
-                                        DAL.reloadAllTasks();
+                                    
+                                    showCube();
+                                    contactsSync.syncPhoneContactsWithServer().then(function () {
+                                        vm.loadingMode = 'loading';
+                                        datacontext.reloadAllTasks().then(function () {
+                                            $location.path('/tasksList');
+                                        });
+                                    }, function () {
+                                        vm.loadingMode = 'loading';
+                                        datacontext.reloadAllTasks().then(function () {
+                                            $location.path('/tasksList');
+                                        });
                                     });
-                                    $location.path('/tasksList');
                                 }
                                 else {
                                     showVerificationFailedAlert();
@@ -188,6 +207,12 @@
                     userId: userId
                 }
             });
+        };
+        
+        var showCube = function () {
+            vm.showCube = true;
+            vm.loadingMode = 'syncing';
+            angular.element(document.querySelectorAll('html')).removeClass("hight-auto");
         };
 
     }

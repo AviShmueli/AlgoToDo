@@ -17,6 +17,7 @@
 
         var self = this;
         self.push = {};
+        self.downloadTryCount = 0;
 
         var PushOptions = {
             android: {
@@ -122,6 +123,7 @@
                 comment.fileLocalPath = device.getImagesPath() + "/images/upload-empty.png";
                 downloadImage(task._id, comment);
                 datacontext.addTaskToTaskList(task);
+
                 $rootScope.taskcount = taskCount;
                 cordovaPlugins.setBadge(taskCount);
                 showNewTaskToast(task._id, task.from.name);
@@ -148,28 +150,39 @@
 
         var downloadImage = function (taskId, comment) {
             dropbox.getThumbnail(comment.fileName, 'w128h128')
-                    .then(function (response) {
-                        var url = URL.createObjectURL(response.fileBlob);
-                        comment.fileLocalPath = url;
-                    })
-                    .catch(function (error) {
-                        $log.error("error while trying to get file Thumbnail", error);
-                    });
-            dropbox.downloadFile(comment.fileName).then(function (response) {
+            .then(function (response) {
+                var url = URL.createObjectURL(response.fileBlob);
+                comment.fileLocalPath = url;
+                comment.errorDownloadFile = false;
+            })
+            .catch(function (error) {
+                $log.error("error while trying to get file Thumbnail", error);
+                comment.errorDownloadFile = true;
+            });
+
+            self.downloadTryCount++;
+            dropbox.downloadFile(comment.fileName)
+            .then(function (response) {
                 storage.saveFileToStorage(taskId, comment.fileName, response.url).then(function (storageFilePath) {
                     comment.fileLocalPath = storageFilePath;
-                    dropbox.deleteFile(comment.fileName);
+                    comment.errorDownloadFile = false;
+                    //dropbox.deleteFile(comment.fileName);
                 });
             })
             .catch(function (error) {
-                $log.error("error while trying to download file from dropbox", error);
+                if (error.error.toString().indexOf('path/not_found/') !== -1 && self.downloadTryCount < 4) {
+                    downloadImage(taskId, comment);                   
+                }
+                else {
+                    logger.error("error while trying to download file from dropbox", error);
+                    comment.errorDownloadFile = true;
+                }
             });
         }
 
         var navigateToTaskPage = function (taskId, task) {
             if (self.appState === 'background') {
-                //window.location = '#/task/' + taskId;
-                $location.path('/task/' + taskId);
+                //$location.path('/task/' + taskId);
             }
             else {
                 if ($location.path().indexOf(taskId) === -1) {
@@ -183,7 +196,6 @@
 
         var handelTaskReminderRecived = function (taskId, task) {
             if (self.appState === 'background') {
-                //window.location = '#/task/' + taskId;
                 $location.path('/task/' + taskId);
             }
             else {

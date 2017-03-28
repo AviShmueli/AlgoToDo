@@ -72,7 +72,7 @@
             
             // if no users found in the cache, search in DB
             var deferred = $q.defer();
-            DAL.searchUsers(query).then(function (response) {
+            DAL.searchUsers(query, vm.user).then(function (response) {
                 var usersList = response.data;
                 for (var i = 0; i < usersList.length; i++) {
                     usersList[i]['avatarFullUrl'] = vm.imagesPath + usersList[i].avatarUrl;
