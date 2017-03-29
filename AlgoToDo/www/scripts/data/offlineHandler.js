@@ -120,10 +120,23 @@
                 self.$storage.cachedNewCommentsList = [];
             }
 
-            self.$storage.cachedNewCommentsList.push({ taskId: taskId, comment: comment, userIdToNotify: userIdToNotify });
+            // prevent pushing the same comment twice
+            var index = common.arrayObjectIndexOf(self.$storage.cachedNewCommentsList, 'taskId', taskId);
+            if (index !== -1) {
+                if (self.$storage.cachedNewCommentsList[index].comment.createTime.getTime() !== comment.createTime.getTime()) {
+                    self.$storage.cachedNewCommentsList.push({ taskId: taskId, comment: comment, userIdToNotify: userIdToNotify });
 
-            if (self.networkState === 'offline') {
-                cordovaPlugins.showToast('אתה במצב לא מקוון, התגובה תשלח כשתתחבר לרשת', 2000);
+                    if (self.networkState === 'offline') {
+                        cordovaPlugins.showToast('אתה במצב לא מקוון, התגובה תשלח כשתתחבר לרשת', 2000);
+                    }
+                }
+            }
+            else {
+                self.$storage.cachedNewCommentsList.push({ taskId: taskId, comment: comment, userIdToNotify: userIdToNotify });
+
+                if (self.networkState === 'offline') {
+                    cordovaPlugins.showToast('אתה במצב לא מקוון, התגובה תשלח כשתתחבר לרשת', 2000);
+                }
             }
         }
 

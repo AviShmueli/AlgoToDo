@@ -1,10 +1,10 @@
 ﻿<div id="management-div" ng-controller="managementCtrl as vm" layout="column" class="relative" layout-fill role="main" dir="rtl" ng-cloak>
 
     <md-toolbar class="md-table-toolbar" md-scroll-shrink ng-if="true">
-        <div class="md-toolbar-tools padding-16px">   
+        <div class="md-toolbar-tools padding-16px">
             <md-button class="md-icon-button" ng-click="vm.goBack()" aria-label="back">
                 <ng-md-icon icon="arrow_forward"></ng-md-icon>
-            </md-button>        
+            </md-button>
             <h2 hide-xs class="margin-right-15px">
                 <span class="color-white">ממשק ניהול</span>
             </h2>
@@ -40,7 +40,7 @@
                             <ng-md-icon id="expand_more_icon" icon="{{vm.expand_icon}}" options='{"rotation": "counterclock"}'></ng-md-icon>
                         </md-button>
                     </md-card-title>
-                    <div layout-gt-xs="column" flex 
+                    <div layout-gt-xs="column" flex
                          layout-padding
                          ng-show="vm.showTasksFilter">
                         <div layout-gt-xs="row" layout="column">
@@ -64,10 +64,10 @@
                                 <md-checkbox ng-model="vm.tasksFilterStatusDone">בוצע</md-checkbox>
                             </div>
 
-                                <div class="md-secondary md-block" flex layout="row" layout-align="end center">
-                                    <md-button ng-click="vm.getTasks()" class="md-warn md-raised md-hue-1">סנן</md-button>
-                                </div>
-</div>
+                            <div class="md-secondary md-block" flex layout="row" layout-align="end center">
+                                <md-button ng-click="vm.getTasks()" class="md-warn md-raised md-hue-1">סנן</md-button>
+                            </div>
+                        </div>
                     </div>
                 </md-card>
 
@@ -94,9 +94,9 @@
                                     <td md-cell><span ng-bind-html="(task.createTime | amCalendar)"></span></td>
                                     <td md-cell>
                                         {{task.description.substring(0, 10) + '...'}}
-                                        <md-tooltip dir="rtl">
+                                        <!--<md-tooltip dir="rtl">
                                             {{task.description}}
-                                        </md-tooltip>
+                                        </md-tooltip>-->
                                     </td>
                                     <td md-cell>
                                         {{task.status === 'done' ? 'בוצע' : 'בתהליך'}}
@@ -117,7 +117,7 @@
             <ui-view layout="column" layout-fill ng-if="vm.activeTab === 'users'">
 
                 <md-card layout="column">
-                    
+
                     <md-card-title class="management-filter-card-title" hide-gt-md>
                         <md-card-title-text>
                             <h3>סינון</h3>
@@ -126,8 +126,8 @@
                             <ng-md-icon id="expand_more_icon" icon="{{vm.expand_icon}}" options='{"rotation": "counterclock"}'></ng-md-icon>
                         </md-button>
                     </md-card-title>
-                    
-                    <div layout-gt-xs="column" 
+
+                    <div layout-gt-xs="column"
                          layout-padding flex
                          ng-show="vm.showTasksFilter">
                         <div layout-gt-xs="row" layout="column">
@@ -165,7 +165,7 @@
                                 <label>שם</label>
                                 <input ng-model="vm.usersFilterName" name="name">
                             </md-input-container>
-                        
+
                             <div class="md-secondary md-block" flex layout="row" layout-align="end center">
                                 <md-button ng-click="vm.getUsers()" class="md-warn md-raised md-hue-1">סנן</md-button>
                             </div>
@@ -198,11 +198,10 @@
                                     </td>
                                     <td md-cell>{{user.device.manufacturer + ' ' + user.device.model}}</td>
                                     <td md-cell>
-                                        {{vm.getCliqotNamesAsString(user.cliqot).substr}}
                                         {{vm.getCliqotNamesAsString(user.cliqot).substring(0, 10) + '...'}}
-                                        <md-tooltip dir="rtl">
+                                        <!--<md-tooltip dir="rtl">
                                             {{vm.getCliqotNamesAsString(user.cliqot)}}
-                                        </md-tooltip>
+                                        </md-tooltip>-->
                                     </td>
                                     <td md-cell>{{user.versionInstalled}}</td>
                                     <td md-cell>{{user.verificationCode}}</td>
@@ -290,6 +289,6 @@
                 </md-card>
 
             </ui-view>-->
-         </main>
-     </md-content>
+        </main>
+    </md-content>
 </div>

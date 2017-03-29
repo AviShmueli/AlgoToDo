@@ -75,7 +75,7 @@
                             <span class="font-bold" ng-bind-html="(vm.task.createTime | amCalendar)"></span>
                         </div>
                         <div layout="row" class="comment-description">
-                            {{::vm.task.description}}
+                            <pre class="comment-description">{{::vm.task.description}}</pre>
                         </div>
                     </md-card-content>
                     <md-divider></md-divider>

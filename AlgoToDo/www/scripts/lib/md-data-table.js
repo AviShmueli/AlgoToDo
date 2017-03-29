@@ -33,7 +33,7 @@
           '\n' +
           '  <md-button class="md-icon-button" type="button" ng-click="$pagination.previous()" ng-disabled="$pagination.disabled || !$pagination.hasPrevious()" aria-label="PreviousNext">\n' +
           '    <md-icon md-svg-icon="navigate-next.svg"></md-icon>\n' +
-              '<md-tooltip md-direction="right">הקודם</md-tooltip>' +
+              //'<md-tooltip md-direction="right">הקודם</md-tooltip>' +
           '  </md-button>\n' +
           '  <div class="label">{{$pagination.min()}} - {{$pagination.max()}} {{$pagination.label.of}} {{$pagination.total}}</div>\n' +
           '\n' +
@@ -43,7 +43,7 @@
           '\n' +
           '  <md-button class="md-icon-button" type="button" ng-click="$pagination.next()" ng-disabled="$pagination.disabled || !$pagination.hasNext()" aria-label="Next">\n' +
           '    <md-icon md-svg-icon="navigate-before.svg"></md-icon>\n' +
-          '<md-tooltip md-direction="left">הבא</md-tooltip>' +
+          //'<md-tooltip md-direction="left">הבא</md-tooltip>' +
           '  </md-button>\n' +
           '\n' +
           '  <md-button class="md-icon-button" type="button" ng-if="$pagination.showBoundaryLinks()" ng-click="$pagination.last()" ng-disabled="$pagination.disabled || !$pagination.hasNext()" aria-label="Last">\n' +

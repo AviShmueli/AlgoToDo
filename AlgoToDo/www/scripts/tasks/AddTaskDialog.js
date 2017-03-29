@@ -273,7 +273,7 @@
             image.src = fileUrl;
 
             window.resolveLocalFileSystemURL(fileUrl, function success(fileEntry) {
-
+                
                 vm.takeingPic = false;
 
                 var fileName = new Date().toISOString().replace(/:/g, "_") + '.jpg';

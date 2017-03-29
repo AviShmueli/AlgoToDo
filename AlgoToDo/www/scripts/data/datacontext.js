@@ -82,7 +82,7 @@
                 else {
                     if (Array.isArray(task.to) && task.to.length === 1) {
                         if (task.from._id !== task.to[0]._id) {
-                            var t_index = common.arrayObjectIndexOf(allCachedUsers, '_id', task.to[0]._id);
+                            t_index = common.arrayObjectIndexOf(allCachedUsers, '_id', task.to[0]._id);
                             if (t_index !== -1) {
                                 task.to[0] = allCachedUsers[t_index];
                             }

@@ -211,7 +211,7 @@
             }
         };
 
-        var downloadTryCount = 0;
+        self.downloadTryCount = 0;
 
         var downloadFileFromDropbox = function (comment) {
             dropbox.getThumbnail(comment.fileName, 'w128h128')
@@ -253,7 +253,7 @@
                 }
             })
             .catch(function (error) {               
-                if (error.error.toString().indexOf('path/not_found/') !== -1 && downloadTryCount < 4) {
+                if (error.error.toString().indexOf('path/not_found/') !== -1 && self.downloadTryCount < 4) {
                     downloadFileFromDropbox(comment)
                 }
                 else {
