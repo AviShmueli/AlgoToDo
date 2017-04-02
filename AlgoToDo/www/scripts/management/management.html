@@ -83,7 +83,7 @@
                                     <th md-column>תיאור</th>
                                     <th md-column>סטטוס</th>
                                     <th md-column>זמן ביצוע</th>
-                                    <th md-column md-numeric>תגובות</th>
+                                    <!--<th md-column md-numeric>תגובות</th>-->
                                 </tr>
                             </thead>
                             <tbody md-body>
@@ -93,7 +93,8 @@
                                     <td md-cell>{{vm.getCliqaName(task.cliqaId)}}</td>
                                     <td md-cell><span ng-bind-html="(task.createTime | amCalendar)"></span></td>
                                     <td md-cell>
-                                        {{task.description.substring(0, 10) + '...'}}
+                                        <!--{{task.description.substring(0, 10) + '...'}}-->
+                                        {{task.description}}
                                         <!--<md-tooltip dir="rtl">
                                             {{task.description}}
                                         </md-tooltip>-->
@@ -102,7 +103,7 @@
                                         {{task.status === 'done' ? 'בוצע' : 'בתהליך'}}
                                     </td>
                                     <td md-cell>{{vm.getTotalTaskTime(task)}}</td>
-                                    <td md-cell>{{task.comments.length}}</td>
+                                    <!--<td md-cell>{{task.comments.length}}</td>-->
                                 </tr>
                             </tbody>
                         </table>

@@ -49,10 +49,10 @@ var jobs = require('./cron-jobs');
     // *********
     // IMPORTANT: uncomment this if deploy to production!!!
     // *********
-    /*setTimeout(function(){
+    setTimeout(function(){
         jobs.startAllJobs();
         console.log("*** start all cron jobs! ***");
-    },0);*/
+    },0);
 
 
 
@@ -379,6 +379,17 @@ app.post('/TaskManeger/sendReminderForTasks', function (req, res) {
 app.post('/TaskManeger/getUsersByPhoneNumbers', function (req, res) {
 
     BL.getUsersByPhoneNumbers(req.body.phoneNumbers).then(function(result) {
+        res.send(result);   
+    }, function(error) {
+        winston.log('error', error.message , error.error);
+        res.status(500).send(error); 
+    });
+
+});
+
+app.post('/TaskManeger/addNewGroup', function (req, res) {
+
+    BL.addNewGroup(req.body.group).then(function(result) {
         res.send(result);   
     }, function(error) {
         winston.log('error', error.message , error.error);
