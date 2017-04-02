@@ -34,6 +34,9 @@
     DAL.addNewCliqaToAdmins = addNewCliqaToAdmins;
     DAL.getAllOldVersionUsers = getAllOldVersionUsers;
     DAL.getUsersByPhoneNumbers = getUsersByPhoneNumbers;
+    DAL.addNewGroup = addNewGroup;
+    DAL.deleteGroups = deleteGroups;
+
 
     var deferred = require('deferred');
     var mongodb = require('mongodb').MongoClient;
@@ -569,7 +572,8 @@
                 'avatarUrl': true,
                 'type': true,
                 'usersInGroup': true,
-                'phone': true
+                'phone': true,
+                'creatorId': true
                 //'cliqot': true
             }).toArray(function (err, result) {
 
@@ -1073,6 +1077,58 @@
 
                     mongo.db.close();
                     d.resolve(result);
+                });
+        });
+
+        return d.promise;
+    }
+
+    function addNewGroup(group) {
+        var d = deferred();
+
+        getCollection('users').then(function (mongo) {
+
+            mongo.collection.save(group, 
+            function (err, result) {
+                    if (err) {
+                        var errorObj = {
+                            message: "error while trying to add new Group ",
+                            error: err
+                        };
+                        mongo.db.close();
+                        d.reject(errorObj);
+                    }
+
+                    mongo.db.close();
+                    d.resolve(result.ops);
+                });
+        });
+
+        return d.promise;
+    }
+
+    function deleteGroups(groupIds) {
+        var d = deferred();
+
+        getCollection('users').then(function (mongo) {
+
+            mongo.collection.remove({
+                '_id': {
+                    $in: groupIds
+                }
+            }, 
+            function (err, result) {
+                    if (err) {
+                        var errorObj = {
+                            message: "error while trying to remove Group ",
+                            error: err
+                        };
+                        mongo.db.close();
+                        d.reject(errorObj);
+                    }
+
+                    mongo.db.close();
+                    d.resolve(result.ops);
                 });
         });
 

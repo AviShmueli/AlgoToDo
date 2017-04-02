@@ -68,6 +68,56 @@
             return cliqotString.substring(0, cliqotString.length - 2);
         }
 
+        vm.addGroup = function (ev) {
+            $mdDialog.show({
+                controller: 'addGroupDialogCtrl',
+                controllerAs: 'vm',
+                templateUrl: 'scripts/contacts/addGroupDialog.html',
+                targetEvent: ev,
+                fullscreen: true,
+                clickOutsideToClose: true,
+                locals: {
+                    contact: null,
+                    updateList: function () { }
+                //    calledFromIntent: calledFromIntent
+                }
+            }).then(function () {
+                
+            });
+        }
+
+        vm.editGroup = function (contact, ev) {
+            $mdDialog.show({
+                controller: 'addGroupDialogCtrl',
+                controllerAs: 'vm',
+                templateUrl: 'scripts/contacts/addGroupDialog.html',
+                targetEvent: ev,
+                fullscreen: true,
+                clickOutsideToClose: true,
+                locals: {
+                    contact: contact,
+                    updateList: vm.updateList,
+                //    calledFromIntent: calledFromIntent
+                }
+            }).then(function () {
+
+            });
+        }
+
+        vm.getUsersInGroupAsString = function (usersInGroup) {
+            if (usersInGroup === undefined) {
+                return '';
+            }
+            var usersInGroupString = '', userFirstName, splitedName;
+            for (var i = 0; i < usersInGroup.length; i++) {
+                splitedName = usersInGroup[i].name.split(" ");
+                userFirstName = splitedName !== undefined && splitedName.length > 0 ?
+                                splitedName[0] : usersInGroup[i].name;
+                usersInGroupString += userFirstName  + ', ';
+            }
+            return usersInGroupString.substring(0, usersInGroupString.length - 2);
+        }
+            
         /*
         vm.showAdd = function (ev) {
             vm.isDialogOpen = true;

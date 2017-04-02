@@ -61,15 +61,16 @@
             if (device.isMobileDevice()) {
                 document.addEventListener("deviceready", function () {
 
-                    if (angular.equals({}, datacontext.getDeviceDetailes())) {
-                        datacontext.setDeviceDetailes(device.getDeviceDetails(), cordova.file.applicationDirectory);                      
+                    var deviceDetailes = datacontext.getDeviceDetailes();
+                    var appDirectory = cordova.file.applicationDirectory;
+
+                    if (angular.equals({}, deviceDetailes)) {
+                        datacontext.setDeviceDetailes(deviceDetailes, appDirectory);
                     }
 
-                    // set applicationDirectory
-                    var a = datacontext.getDeviceDetailes().applicationDirectory;
-                    var b = cordova.file.applicationDirectory;
-                    if (a !== b) {
-                        datacontext.setDeviceDetailes(device.getDeviceDetails(), cordova.file.applicationDirectory);
+                    // set applicationDirectory               
+                    if (deviceDetailes.applicationDirectory !== appDirectory) {
+                        datacontext.setDeviceDetailes(deviceDetailes, appDirectory);
                     }
                     deferred.resolve();
                 });
@@ -90,22 +91,8 @@
                     setApplicationDirectory();
                 }, 0);
 
-                // todo: remove this if in the next releas
-                /*if (user.cliqot === undefined) {
-                    DAL.checkIfUserExist(user).then(function (response) {
-                        var newUser = response.data;
-
-                        datacontext.saveUserToLocalStorage(newUser);
-                        vm.user = newUser;
-                        vm.login();
-                    }, function (error) {
-                        logger.error("error while trying to check If User Exist", error);
-                    });
-                }*/
-                //else {
                 vm.user = user;
                 login();
-                //}
             }
             else {
 

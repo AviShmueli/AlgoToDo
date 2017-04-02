@@ -30,6 +30,8 @@
     BL.sendBroadcastUpdateAlert = sendBroadcastUpdateAlert;
     BL.sendReminderForTasks = sendReminderForTasks;
     BL.getUsersByPhoneNumbers = getUsersByPhoneNumbers;
+    BL.addNewGroup = addNewGroup;
+    BL.deleteGroups = deleteGroups;
 
 
     var ObjectID = require('mongodb').ObjectID;
@@ -715,6 +717,54 @@
         return d.promise;
     }
 
+    function getUsersByPhoneNumbers(phoneNumbers) {
+
+        var d = deferred();
+
+        DAL.getUsersByPhoneNumbers(phoneNumbers).then(function (result) {
+            d.resolve(result);
+        }, function (error) {
+            d.deferred(error);
+        });
+
+        return d.promise;
+    }
+
+    function addNewGroup(group) {
+
+        var d = deferred();
+
+        group['type'] = 'group';
+        if (group._id !== undefined) {
+            group._id = new ObjectID(group._id);
+        }
+        DAL.addNewGroup(group).then(function (result) {
+            d.resolve(result);
+        }, function (error) {
+            d.deferred(error);
+        });
+
+        return d.promise;
+    }
+
+    function deleteGroups(groupIds) {
+
+        var d = deferred();
+
+        var newGroupIds = [];
+        for (var i = 0; i < groupIds.length; i++) {
+            var groupId = groupIds[i];
+            newGroupIds.push(new ObjectID(groupId));
+        }
+
+        DAL.deleteGroups(newGroupIds).then(function (result) {
+            d.resolve(result);
+        }, function (error) {
+            d.deferred(error);
+        });
+
+        return d.promise;
+    }
 
 
 
@@ -857,18 +907,7 @@
         });
     }
 
-    function getUsersByPhoneNumbers(phoneNumbers) {
 
-        var d = deferred();
-
-        DAL.getUsersByPhoneNumbers(phoneNumbers).then(function (result) {
-            d.resolve(result);
-        }, function (error) {
-            d.deferred(error);
-        });
-
-        return d.promise;
-    }
 
 })(module.exports);
 

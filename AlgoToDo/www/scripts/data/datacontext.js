@@ -128,6 +128,15 @@
                 }
             }
         };
+
+        var removeUsersFromUsersCache = function (userId) {
+            var usersCache = getAllCachedUsers(), index;
+
+            index = common.arrayObjectIndexOf(usersCache, '_id', userId);
+            if (index !== -1) {
+                usersCache.splice(index, 1);
+            }
+        };
         
         var getAllCachedUsers = function () {
             if (self.$storage.usersCache === undefined) {
@@ -297,7 +306,8 @@
             replaceRepeatsTasks: replaceRepeatsTasks,
             deleteAllCachedUsers: deleteAllCachedUsers,
             replaceUsersWithPhoneContact: replaceUsersWithPhoneContact,
-            reloadAllTasks: reloadAllTasks
+            reloadAllTasks: reloadAllTasks,
+            removeUsersFromUsersCache: removeUsersFromUsersCache
         };
 
         return service;

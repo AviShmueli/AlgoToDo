@@ -397,3 +397,14 @@ app.post('/TaskManeger/addNewGroup', function (req, res) {
     });
 
 });
+
+app.post('/TaskManeger/deleteGroups', function (req, res) {
+
+    BL.deleteGroups(req.body.groupIds).then(function(result) {
+        res.send('ok');   
+    }, function(error) {
+        winston.log('error', error.message , error.error);
+        res.status(500).send(error); 
+    });
+
+});

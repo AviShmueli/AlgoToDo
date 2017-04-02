@@ -153,7 +153,7 @@
                 for (var i = 0; i < usersList.length; i++) {
                     usersList[i]['avatarUrl'] = self.imagesPath + usersList[i].avatarUrl;
                 }
-                datacontext.addUsersToUsersCache(usersList);
+                datacontext.addUsersToUsersCache(usersList, true);
                 deferred.resolve();
             }, function (error) {
                 if (error.status === -1) {

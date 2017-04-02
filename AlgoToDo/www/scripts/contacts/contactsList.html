@@ -6,6 +6,10 @@
                             options='{"rotation": "counterclock"}'>
                 </ng-md-icon>
             </md-button>
+            <!--<md-button class="md-icon-button" ng-click="vm.addGroup($event)" aria-label="Menu">
+                <ng-md-icon icon="group_add">
+                </ng-md-icon>
+            </md-button>-->
             <span flex></span>
             <h2>
                 <span class="color-white">אנשי קשר</span>
@@ -16,11 +20,11 @@
         </div>
     </md-toolbar>
 
-    <!--<md-fab-trigger>
-        <md-button class="md-fab md-fab-bottom-right z-index-21" aria-label="Add" ng-click="vm.showAdd($event)" md-no-ink="true">
-            <ng-md-icon class="add-icon" icon="add"></ng-md-icon>
+    <md-fab-trigger>
+        <md-button class="md-fab md-fab-bottom-left z-index-21" aria-label="Add" ng-click="vm.addGroup($event)" md-no-ink="true">
+            <ng-md-icon class="add-icon" icon="group_add"></ng-md-icon>
         </md-button>
-    </md-fab-trigger>-->
+    </md-fab-trigger>
 
     <md-content flex md-scroll-y class="height-100P">
         <main flex>
@@ -31,27 +35,30 @@
                         <md-list-item ng-repeat="contact in vm.contactsList | orderBy : 'name'" class="noright task-item margin margin-top-7px">
 
                             <md-card-avatar>
-                                <img alt="avatar" ng-src="{{contact.avatarUrl}}" class="md-avatar user-avatar marg margin-right-10px" />
+                                <img alt="avatar" ng-src="{{contact.avatarUrl}}" class="md-avatar user-avatar margin-right-10px" />
                             </md-card-avatar>
                             <a class="md-tile-content margin-bottom-14px" flex="100">
                                 <div layout="row">
                                     <span class="from">{{contact.name}}</span>
                                     <!--<ng-md-icon class="head-icon fill-black" icon="send" size="10"></ng-md-icon>-->
-                                    <span flex></span>
+                                    <!--<span flex></span>-->
                                     <!--<span class="font-bold">{{vm.getRepeatedTime(task)}}</span>-->
                                 </div>
 
                                 <div layout="row">
                                     <div layout="row" flex="90" class="font-14px margin-left-15px margin-top-7px">
-                                        <span>{{::vm.getLocalPhoneFormat(contact.phone)}}</span>
+                                        <span ng-if="contact.phone !== undefined">{{vm.getLocalPhoneFormat(contact.phone)}}</span>
+                                        <span ng-if="contact.type === 'group'">{{vm.getUsersInGroupAsString(contact.usersInGroup)}}</span>      
                                     </div>
-                                    <!--<div layout="column" flex="10" layout-align="center end">
-                                        <md-badge class="new-responses-badge-inProcess" ng-if="task.unSeenResponses > 0">{{item.unSeenResponses}}</md-badge>
+                                    <div layout="column" flex="10" layout-align="center end">
+                                        <!--<md-badge class="new-responses-badge-inProcess" ng-if="task.unSeenResponses > 0">{{item.unSeenResponses}}</md-badge>-->
 
-                                        <md-button class="md-fab md-mini md-icon-button background-color-orange-hard" ng-click="vm.editTask(task, $event)" aria-label="done">
+                                        <md-button ng-if="contact.creatorId !== undefined && contact.creatorId === vm.user._id" 
+                                                   class="md-fab md-mini md-icon-button background-color-orange-hard" 
+                                                   ng-click="vm.editGroup(contact, $event)" aria-label="done">
                                             <ng-md-icon icon="edit"></ng-md-icon>
                                         </md-button>
-                                    </div>-->
+                                    </div>
                                 </div>
                                 <!--<div layout="row" flex="90" class="font-14px margin-left-15px margin-top-7px">
                                     <span>{{::vm.getCliqotNamesAsString(contact.cliqot)}}</span>

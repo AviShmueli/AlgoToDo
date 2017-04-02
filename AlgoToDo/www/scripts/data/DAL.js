@@ -63,8 +63,6 @@
             return $http(req);
         };
 
-        
-
         var updateTask = function (task) {
 
             var req = {
@@ -224,7 +222,7 @@
         };
 
         var getAllTasks = function (query, filter, user) {
-            if (user.type.indexOf('admin') !== -1) {
+            if (user.type !== undefined && user.type.indexOf('admin') !== -1) {
 
                 var req = {
                         method: 'GET',
@@ -254,7 +252,7 @@
         };
 
         var getAllUsers = function (query, filter, user) {
-            if (user.type.indexOf('admin') !== -1) {
+            if (user.type !== undefined && user.type.indexOf('admin') !== -1) {
 
                 var req = {
                     method: 'GET',
@@ -406,6 +404,30 @@
             return $http(req);
         };
 
+        var addNewGroup = function (group) {
+            var req = {
+                method: 'POST',
+                url: appConfig.appDomain + '/TaskManeger/addNewGroup',
+                data: {
+                    group: group
+                }
+            };
+
+            return $http(req);
+        };
+
+        var deleteGroups = function (groupIds) {
+            var req = {
+                method: 'POST',
+                url: appConfig.appDomain + '/TaskManeger/deleteGroups',
+                data: {
+                    groupIds: groupIds
+                }
+            };
+
+            return $http(req);
+        };
+
         var service = {
             saveNewTasks: saveNewTasks,
             getTasks: getTasks,
@@ -435,7 +457,10 @@
             reSendVerificationCodeToUser: reSendVerificationCodeToUser,
             sendBroadcastUpdateAlert: sendBroadcastUpdateAlert,
             sendReminderForTasks: sendReminderForTasks,
-            getUsersByPhoneNumbers: getUsersByPhoneNumbers
+            getUsersByPhoneNumbers: getUsersByPhoneNumbers,
+            addNewGroup: addNewGroup,
+            deleteGroups: deleteGroups
+      
         };
 
         return service;

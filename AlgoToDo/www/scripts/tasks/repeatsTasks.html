@@ -43,9 +43,9 @@
                             <md-card-avatar>
                                 <!--<img alt="avatar" ng-src="{{vm.imagesPath + (task.to.length === 1 ? task.to[0].avatarUrl : '/images/group-1.svg')}}" class="md-avatar user-avatar marg margin-right-10px" />-->
                             
-                                <img ng-if="task.to.length > 1" alt="avatar" ng-src="{{vm.imagesPath + '/images/group-1.svg'}}" class="md-avatar user-avatar marg margin-right-10px" />
-                                <img ng-if="task.to.length === 1 && (task.to[0].avatarUrl.startsWith('content') || task.to[0].avatarUrl.startsWith('file'))" alt="{{task.to[0].name}}" ng-src="{{task.to[0].avatarUrl}}" class="md-avatar user-avatar marg margin-right-10px" />
-                                <img ng-if="task.to.length === 1 && !task.to[0].avatarUrl.startsWith('content')  && !task.to[0].avatarUrl.startsWith('file')" alt="{{task.to[0].name}}" ng-src="{{vm.imagesPath + task.to[0].avatarUrl}}" class="md-avatar user-avatar marg margin-right-10px" />
+                                <img ng-if="task.to.length > 1" alt="avatar" ng-src="{{vm.imagesPath + '/images/group-1.svg'}}" class="md-avatar user-avatar margin-right-10px" />
+                                <img ng-if="task.to.length === 1 && (task.to[0].avatarUrl.startsWith('content') || task.to[0].avatarUrl.startsWith('file'))" alt="{{task.to[0].name}}" ng-src="{{task.to[0].avatarUrl}}" class="md-avatar user-avatar margin-right-10px" />
+                                <img ng-if="task.to.length === 1 && !task.to[0].avatarUrl.startsWith('content')  && !task.to[0].avatarUrl.startsWith('file')" alt="{{task.to[0].name}}" ng-src="{{vm.imagesPath + task.to[0].avatarUrl}}" class="md-avatar user-avatar margin-right-10px" />
 
                             </md-card-avatar>
                             <a class="md-tile-content margin-bottom-14px" flex="100" ng-click="vm.navigateToTaskPage(item._id)">

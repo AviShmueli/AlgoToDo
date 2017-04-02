@@ -1,0 +1,72 @@
+﻿<md-dialog aria-label="Mango (Fruit)" dir="rtl" layout="column" ng-class="{'fullscreen-dialog': vm.isSmallScrean}" ng-cloak>
+    <md-toolbar>
+        <div class="md-toolbar-tools">
+            <md-button class="md-icon-button" ng-click="vm.cancel()">
+                <ng-md-icon icon="arrow_forward" aria-label="Close dialog"></ng-md-icon>
+            </md-button>
+            <h3 class="color-white">קבוצה חדשה</h3>
+            <span flex></span>
+            <md-menu md-position-mode="target-left target" ng-if="vm.isEditMode">
+                <md-button aria-label="Open phone interactions" class="md-icon-button" ng-click="$mdOpenMenu($event)">
+                    <ng-md-icon icon="more_vert"></ng-md-icon>
+                </md-button>
+                <md-menu-content width="4">
+                    <md-menu-item>
+                        <md-button class="no-line-height" ng-click="vm.deleteGroup()">
+                            <div layout="row" flex>
+                                <ng-md-icon class="icon-fill" md-menu-align-target icon="delete"></ng-md-icon>
+                                <p flex class="text-align-right">מחק קבוצה</p>
+                            </div>
+                        </md-button>
+                    </md-menu-item>
+                </md-menu-content>
+            </md-menu>  
+        </div>
+    </md-toolbar>
+    <md-dialog-content flex md-scroll-y class="md-padding" layout-margin>
+        <form name="newTaskForm" novalidate>
+            <div layout layout-sm="column">
+                <md-contact-chips flex md-input-name="autocompleteField"
+                                  md-autofocus="true" ng-required="true"
+                                  ng-model="vm.selectedRecipients"
+                                  md-contacts="vm.querySearch($query)"
+                                  md-contact-name="name"
+                                  md-contact-image="avatarUrl"
+                                  md-require-match="true"
+                                  md-highlight-flags="i"
+                                  placeholder="משתתפים"
+                                  secondary-placeholder="הוסף משתתפים">
+                </md-contact-chips>
+
+            </div>
+            <div ng-show="vm.showNoRecipientsSelectedError">
+                <div class="input-message-validate"><b>חובה</b> לבחור לפחות 2 משתתפים</div>
+            </div>
+            <div layout layout-sm="column">
+                <md-input-container flex class="md-block">
+                    <!--<label>שם הקוצה</label>-->
+                    <!--<textarea class="texterea-font-size new-task-text" name="description" ng-model="vm.task.description" md-maxlength="20" rows="2" max-rows="7" required md-no-asterisk="true"></textarea>-->
+                    <input md-no-asterisk ng-model="vm.group.name" name="name" 
+                           type="text" placeholder="שם הקבוצה" 
+                           ng-minlength="5" ng-maxlength="25" ng-required="true"/>
+                    <div ng-messages="newTaskForm.name.$error" ng-if="newTaskForm.name.$touched">
+                        <div ng-message="required">נא לתת שם לקבוצה</div>
+                        <div ng-message="minlength">השם קצר מידי (בין 5 ל25 תווים)</div>
+                        <div ng-message="maxlength">השם ארוך מידי (עד 25 תווים)</div>
+                    </div>
+                </md-input-container>
+            </div>
+
+        </form>
+
+    </md-dialog-content>
+    <md-dialog-actions>
+        <md-button flex class="md-raised md-accent" type="submit" ng-click="vm.save()" ng-disabled="newTaskForm.$invalid">
+            <span ng-hide="vm.submitInProcess">שמור</span>
+            <md-progress-circular md-mode="indeterminate" ng-show="vm.submitInProcess" md-diameter="20px" class="md-accent md-hue-2"></md-progress-circular>
+        </md-button>
+        <md-button flex class="md-raised md-accent" type="submit" ng-click="vm.cancel()">
+            <span>בטל</span>
+        </md-button>
+    </md-dialog-actions>
+</md-dialog>

@@ -127,7 +127,7 @@
                      ng-switch-when="1"
                      layout="row" layout-align="center center">
                     <md-list flex-gt-sm="50" flex-md="66" flex dir="rtl" ng-show="$root.taskcount > 0">
-                        <md-list-item ng-repeat="item in vm.allTasks() | myTasks: vm.user._id | filter:vm.search"
+                        <md-list-item ng-repeat="item in vm.allTasks() | myTasks: vm.user._id | filter:vm.search | orderBy: 'createTime'"
                                       class="noright task-item md-no-proxy margin-top-7px">
                             <md-card-avatar>
                                 <img ng-if="item.from.avatarUrl.startsWith('content') || item.from.avatarUrl.startsWith('file')" alt="{{item.from.name}}" ng-src="{{item.from.avatarUrl}}" class="md-avatar user-avatar margin-right-0" />

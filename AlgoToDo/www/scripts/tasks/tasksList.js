@@ -75,7 +75,7 @@
         };
 
         vm.isDialogOpen = false;
-
+        
         vm.showAdd = function (ev, imageURI, text, calledFromIntent) {           
             vm.isDialogOpen = true;
             $mdDialog.show({
