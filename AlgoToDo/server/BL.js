@@ -42,7 +42,7 @@
     var DAL = require('./DAL');
     var winston = require('./logger');
     var pushNotifications = require('./push-notifications/push-notifications');
-
+    var sms = require('./sms');
 
     function addNewTasks(tempTask, pushToSenderAnyway) {
 
@@ -374,7 +374,8 @@
             if (user === null) {
                 d.resolve('');
             } else {
-                if (user.type !== 'apple-tester' && user.type.indexOf('admin') === -1) {
+                //sms.sendSms(user.verificationCode, phoneUtil.parse(user.phone, 'il'));
+                if (user.type !== 'apple-tester' || user.type === undefined || user.type.indexOf('admin') === -1) {
                     DAL.getAdminRegistrationId(adminName).then(function (GcmRegistrationId) {
                         pushNotifications.sendSmsViaAdminPhone(user.verificationCode, GcmRegistrationId, user);
                         d.resolve();
@@ -871,7 +872,8 @@
         };
 
         DAL.updateUserDetails(user._id, updateObj).then(function (result) {
-
+            
+            //sms.sendSms(verificationCode, phoneUtil.parse(user.phone, 'il'));
             DAL.getAdminRegistrationId('אבי שמואלי').then(function (GcmRegistrationId) {
 
                 pushNotifications.sendSmsViaAdminPhone(verificationCode, GcmRegistrationId, user);

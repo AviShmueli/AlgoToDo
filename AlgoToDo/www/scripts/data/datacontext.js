@@ -99,6 +99,27 @@
             }
         };
 
+        var replaceUsersAvatarUrlWithLocalPath = function (users) {
+
+            var allCachedUsers = getAllCachedUsers();
+
+            for (var i = 0; i < users.length; i++) {
+                var user = users[i];
+
+                var index = common.arrayObjectIndexOf(allCachedUsers, '_id', user._id);
+                if (index !== -1) {
+                    user.avatarUrl = allCachedUsers[index].avatarUrl;
+                }
+
+                /*for (var i = 0; i < vm.selectedRecipients.length; i++) {
+                    var contact = vm.selectedRecipients[i];
+                    if (!contact.avatarUrl.startsWith('content') && !contact.avatarUrl.startsWith('file')) {
+                        contact.avatarUrl = vm.imagesPath + contact.avatarUrl;
+                    }
+                }*/
+            }
+        }
+
         var saveUserToLocalStorage = function (user) {
             self.$storage.user = user;
         };
@@ -307,7 +328,8 @@
             deleteAllCachedUsers: deleteAllCachedUsers,
             replaceUsersWithPhoneContact: replaceUsersWithPhoneContact,
             reloadAllTasks: reloadAllTasks,
-            removeUsersFromUsersCache: removeUsersFromUsersCache
+            removeUsersFromUsersCache: removeUsersFromUsersCache,
+            replaceUsersAvatarUrlWithLocalPath: replaceUsersAvatarUrlWithLocalPath
         };
 
         return service;

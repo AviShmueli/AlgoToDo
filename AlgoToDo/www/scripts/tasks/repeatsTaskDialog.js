@@ -26,6 +26,7 @@
         if (!angular.equals({},taskToEdit)) {
             vm.isEditMode = true;
             vm.task = taskToEdit;
+            datacontext.replaceUsersAvatarUrlWithLocalPath(vm.task.to);
             //vm.time = setTime();
         } else {
             vm.task = {};

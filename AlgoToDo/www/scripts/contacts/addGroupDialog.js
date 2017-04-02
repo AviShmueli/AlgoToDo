@@ -11,11 +11,13 @@
         var vm = this;
 
         vm.isSmallScrean = $mdMedia('sm');
+        vm.imagesPath = device.getImagesPath();
         vm.isEditMode = false;
         vm.group = {};
         if (contact !== null) {
             vm.group = contact;
-            vm.selectedRecipients = vm.group.usersInGroup;
+            vm.selectedRecipients = angular.copy(vm.group.usersInGroup);
+            datacontext.replaceUsersAvatarUrlWithLocalPath(vm.selectedRecipients);
             vm.isEditMode = true;
         }
         else {
@@ -27,10 +29,10 @@
         vm.selectedItem = null;
         vm.searchText = null;
         vm.querySearch = querySearch;
-        
+
         vm.showNoRecipientsSelectedError = false;
         vm.submitInProcess = false;
-        vm.imagesPath = device.getImagesPath();
+        
 
         function querySearch(query) {
             vm.showNoRecipientsSelectedError = false;
@@ -92,7 +94,7 @@
                     vm.group.creatorId = vm.user._id;
                     vm.group.cliqaId = vm.user.cliqot[0]._id;
                     vm.group.usersInGroup = vm.selectedRecipients;
-                    
+
                     saveNewGroup(vm.group);
                 }
                 else {

@@ -60,12 +60,14 @@
         </form>
 
     </md-dialog-content>
-    <md-dialog-actions>
-        <md-button flex class="md-raised md-accent" type="submit" ng-click="vm.save()" ng-disabled="newTaskForm.$invalid">
+    <md-dialog-actions layout="row" layout-align="center center">
+        <md-button flex flex-gt-sm="20" class="md-raised md-accent"
+                   type="submit" ng-click="vm.save()" ng-disabled="newTaskForm.$invalid">
             <span ng-hide="vm.submitInProcess">שמור</span>
-            <md-progress-circular md-mode="indeterminate" ng-show="vm.submitInProcess" md-diameter="20px" class="md-accent md-hue-2"></md-progress-circular>
+            <md-progress-circular md-mode="indeterminate" ng-show="vm.submitInProcess" 
+                                  md-diameter="20px" class="md-accent md-hue-2"></md-progress-circular>
         </md-button>
-        <md-button flex class="md-raised md-accent" type="submit" ng-click="vm.cancel()">
+        <md-button flex flex-gt-sm="20" class="md-raised md-accent" type="submit" ng-click="vm.cancel()">
             <span>בטל</span>
         </md-button>
     </md-dialog-actions>
