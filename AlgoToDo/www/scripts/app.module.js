@@ -13,7 +13,6 @@
         'ngMdIcons',
         'ngCookies',
         'ngStorage',
-        'ngLodash',
         'ngCordova',
         'ngMessages',
         'ngAnimate',
