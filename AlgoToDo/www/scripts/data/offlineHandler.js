@@ -5,11 +5,11 @@
         .module('app.data')
         .service('$offlineHandler', offlineHandler);
 
-    offlineHandler.$inject = ['$http', 'logger', 'lodash', 'appConfig', '$rootScope',
+    offlineHandler.$inject = ['$http', 'logger', 'appConfig', '$rootScope',
                               '$localStorage', '$q', 'DAL', 'datacontext', '$cordovaNetwork',
                               'cordovaPlugins', 'dropbox', 'common'];
 
-    function offlineHandler($http, logger, lodash, appConfig, $rootScope,
+    function offlineHandler($http, logger, appConfig, $rootScope,
                             $localStorage, $q, DAL, datacontext, $cordovaNetwork,
                             cordovaPlugins, dropbox, common) {
 
