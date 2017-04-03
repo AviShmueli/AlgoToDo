@@ -8,37 +8,39 @@
         <div layout-align="center center" class="login-text">
             <h1>ברוכים הבאים ל- Asiti</h1>
         </div>
-        <form name="signUpForm" layout="column" layout-align="center center" flex flex-gt-sm="50" flex-md="66">
-            <md-content class="md-no-momentum" layout-padding>
+        <div layout="row" layout-align="center center" class="padding-top-10">
+            <form name="signUpForm" layout="column" layout-align="center center" flex flex-gt-sm="50" flex-md="66">
+                <md-content class="md-no-momentum" layout-padding>
 
-                <md-input-container class="md-block">
-                    <md-icon ng-md-icon icon="phone"></md-icon>
-                    <input md-no-asterisk name="phone" ng-model="vm.user.phone" type="tel"
-                           ng-pattern="/^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/"
-                           placeholder="מספר טלפון" ng-required="true"
-                           class="login-phone">
-                    <div ng-messages="signUpForm.phone.$error">
-                        <div ng-message="required">טלפון הוא שדה חובה</div>
-                        <div ng-message="pattern">נא להכניס מספר טלפון חוקי</div>
-                    </div>
-                </md-input-container>
+                    <md-input-container class="md-block">
+                        <md-icon ng-md-icon icon="phone"></md-icon>
+                        <input md-no-asterisk name="phone" ng-model="vm.user.phone" type="tel"
+                               ng-pattern="/^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/"
+                               placeholder="מספר טלפון" ng-required="true"
+                               class="login-phone">
+                        <div ng-messages="signUpForm.phone.$error">
+                            <div ng-message="required">טלפון הוא שדה חובה</div>
+                            <div ng-message="pattern">נא להכניס מספר טלפון חוקי</div>
+                        </div>
+                    </md-input-container>
+                    <section layout="row" layout-align="center center" layout-wrap>
+                        <md-button class="md-raised md-primary circular-progress-button" ng-click="vm.signMeUp()" ng-disabled="signUpForm.$invalid">
+                            <span ng-show="!vm.inProgress">כניסה</span>
+                            <md-progress-circular md-mode="indeterminate" ng-show="vm.inProgress" md-diameter="20px" class="md-accent md-hue-2"></md-progress-circular>
+                        </md-button>
+                    </section>
+                </md-content>
+
+
+
+                <h3>עוד לא רשום?</h3>
                 <section layout="row" layout-align="center center" layout-wrap>
-                    <md-button class="md-raised md-primary circular-progress-button" ng-click="vm.signMeUp()" ng-disabled="signUpForm.$invalid">
-                        <span ng-show="!vm.inProgress">כניסה</span>
-                        <md-progress-circular md-mode="indeterminate" ng-show="vm.inProgress" md-diameter="20px" class="md-accent md-hue-2"></md-progress-circular>
+                    <md-button class="md-raised md-primary circular-progress-button" ng-click="vm.goToSignUp()">
+                        <span>הירשם עכשיו</span>
                     </md-button>
                 </section>
-            </md-content>
-
-
-
-            <h3>עוד לא רשום?</h3>
-            <section layout="row" layout-align="center center" layout-wrap>
-                <md-button class="md-raised md-primary circular-progress-button" ng-click="vm.goToSignUp()">
-                    <span>הירשם עכשיו</span>
-                </md-button>
-            </section>
-        </form>
+            </form>
+        </div>
     </div>
 
     <div ng-if="vm.showCube">
