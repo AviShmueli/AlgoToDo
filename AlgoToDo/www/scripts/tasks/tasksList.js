@@ -8,7 +8,7 @@
     TasksListCtrl.$inject = [ 
         '$rootScope', '$scope', 'logger', '$location', 'cordovaPlugins',
         '$mdBottomSheet','$filter', '$timeout',
-        '$mdSidenav', '$mdDialog', 'datacontext', 'lodash',
+        '$mdSidenav', '$mdDialog', 'datacontext',
         'socket', '$mdToast', 'moment', '$q',
         'pushNotifications', 'localNotifications', 'device',
         'DAL', '$offlineHandler'
@@ -16,7 +16,7 @@
 
     function TasksListCtrl($rootScope, $scope, logger, $location, cordovaPlugins,
                             $mdBottomSheet,$filter, $timeout,
-                            $mdSidenav, $mdDialog, datacontext, lodash,
+                            $mdSidenav, $mdDialog, datacontext,
                             socket, $mdToast, moment, $q,
                             pushNotifications, localNotifications, device,
                             DAL, $offlineHandler) {
