@@ -5,34 +5,43 @@
         .module('app.data')
         .service('datacontext', datacontext);
 
-    datacontext.$inject = ['$http', 'logger', 'lodash', 'appConfig', '$rootScope',
-                           '$localStorage', '$mdToast', 'socket', '$filter', 'dropbox',
-                           '$q', '$location', '$timeout', 'DAL', 'common'];
+    datacontext.$inject = ['logger', '$rootScope', '$localStorage', '$filter',
+                           '$q', '$location', 'DAL', 'common'];
 
-    function datacontext($http, logger, lodash, appConfig, $rootScope,
-                         $localStorage, $mdToast, socket, $filter, dropbox,
-                         $q, $location, $timeout, DAL, common) {
+    function datacontext(logger, $rootScope, $localStorage, $filter,
+                         $q, $location, DAL, common) {
 
         
         var self = this;
         self.$storage = $localStorage;
         self.$storage.usersCache = self.$storage.usersCache === undefined ? [] : self.$storage.usersCache;//new Map();
 
-        var getTaskList = function () {
-            return self.$storage.tasksList !== undefined ? self.$storage.tasksList: [];
-        };
+        /* ----- Tasks ----- */
 
-        var deleteTaskListFromLocalStorage = function () {
-            delete self.$storage.tasksList;
-        };
-        
-        var addTaskToTaskList = function (task) {
-            var count = self.$storage.tasksList.filter(function (t) { return t._id === task._id; });
-            // prevent pushing the same task
-            if (count.length === 0) {
-                replaceUsersWithPhoneContact([task]);
-                self.$storage.tasksList.push(task);
-            }            
+        var reloadAllTasks = function () {
+
+            var deferred = $q.defer();
+
+            var user = getUserFromLocalStorage(), tempDate = new Date();
+            user.lastServerSync = new Date(user.lastServerSync);
+            if (user !== undefined) {
+                DAL.getTasksInProgress(user).then(function (response) {
+
+                    setTaskList(response.data);
+                    //updateLocalTasks(response.data);
+                    setMyTaskCount();
+
+                    DAL.getDoneTasks(0, user).then(function (_response) {
+                        pushTasksToTasksList(_response.data);
+                        //updateLocalTasks(response.data);
+                        deferred.resolve();
+                    });
+                    user.lastServerSync = tempDate;
+                });
+
+            }
+
+            return deferred.promise;
         };
 
         var setTaskList = function (newList) {
@@ -40,6 +49,27 @@
             self.$storage.tasksList = newList;
         };
 
+        var getTaskList = function () {
+            return self.$storage.tasksList !== undefined ? self.$storage.tasksList: [];
+        };
+
+        var getTaskByTaskId = function (taskId) {
+            var result = getTaskList().filter(function (t) { return t._id === taskId; });
+            if (result.length === 1) {
+                return result[0];
+            }
+            return {};
+        };
+
+        var addTaskToTaskList = function (task) {
+            var count = self.$storage.tasksList.filter(function (t) { return t._id === task._id; });
+            // prevent pushing the same task
+            if (count.length === 0) {
+                replaceUsersWithPhoneContact([task]);
+                self.$storage.tasksList.push(task);
+            }
+        };
+                       
         var pushTasksToTasksList = function (tasks) {
             replaceUsersWithPhoneContact(tasks);
             self.$storage.tasksList = getTaskList().concat(tasks);
@@ -97,7 +127,144 @@
                     replaceUsersWithPhoneContact(task.comments);
                 }
             }
+        };        
+
+        var deleteTaskListFromLocalStorage = function () {
+            delete self.$storage.tasksList;
         };
+
+        var setMyTaskCount = function () {
+            var userId = self.$storage.user._id;
+            var count = $filter('myTasks')(getTaskList(), userId).length;           
+            $rootScope.taskcount = count;
+
+            return count;
+        };
+
+        var updateLocalTasks = function (newTasks) {
+            var tasksList = getTaskList();
+            if (tasksList === []) {
+                setTaskList(newTasks);
+            }
+            for (var i = 0; i < newTasks.length; i++) {
+                var newTask = newTasks[i];
+                var localTaskIndex = common.arrayObjectIndexOf(tasksList, '_id', newTask._id);
+                if (localTaskIndex === -1) {
+                    pushTasksToTasksList([newTask]);
+                    // todo: if browser, notify user for new task !!
+                }
+                else {
+                    var localTask = tasksList[localTaskIndex];
+                    if (localTask.status !== newTask.status) {
+                        localTask.status = newTask.status;
+                    }
+                    if (localTask.comments.length !== newTask.comments.length) {
+                        var diffCount = newTask.comments.length - localTask.comments.length;                 
+                        var filterdNewTasksComments = $filter('orderBy')(newTask.comments, 'createTime', true);
+
+                        for (var i = 0; i < diffCount; i++) {
+                            var newComment = filterdNewTasksComments[i];
+                            addCommentToTask(newTask._id, newComment);
+                            // todo: if browser, notify user for new comment !!
+                        }
+                    }
+                }
+            }
+        }
+
+        /* ----- Comments ----- */
+
+        var addCommentToTask = function (taskId, comment) {
+            replaceUsersWithPhoneContact([comment]);
+            var foundIndex = common.arrayObjectIndexOf(self.$storage.tasksList, '_id', taskId);
+            var task;
+            if (foundIndex !== -1) {
+                task = self.$storage.tasksList[foundIndex];
+            }
+
+            if (task.comments === undefined) {
+                task.comments = [comment];
+                updateUnSeenResponse(task);
+            }
+            else {
+                var newCommentIndex_IfExist = common.arrayObjectIndexOf(task.comments, '_id', comment._id);
+                if (newCommentIndex_IfExist === -1) {
+                    task.comments.push(comment);
+                    updateUnSeenResponse(task);
+                }
+            }
+        };
+
+        var updateUnSeenResponse = function (task) {
+            if ($location.path().indexOf(task._id) === -1) {
+                task.unSeenResponses = task.unSeenResponses === undefined || task.unSeenResponses === '' ? 1 : task.unSeenResponses + 1;
+            }
+            var user = getUserFromLocalStorage();
+            if (task.status === 'inProgress' &&
+                    task.from._id === user._id &&
+                    task.to._id !== user._id /*&&
+                    task.type !== 'group-sub'*/) {
+                $rootScope.newCommentsInTasksInProcessCount =
+                    $rootScope.newCommentsInTasksInProcessCount !== undefined ?
+                    $rootScope.newCommentsInTasksInProcessCount + 1 :
+                    1;
+            }
+        }
+        
+        /* ---- Device ----- */
+
+        var setDeviceDetailes = function (device, applicationDirectory) {
+            self.$storage.deviceDetailes = device;
+            self.$storage.deviceDetailes.applicationDirectory = applicationDirectory;
+        };
+
+        var getDeviceDetailes = function () {
+
+            return (self.$storage.deviceDetailes !== undefined &&
+                    self.$storage.deviceDetailes.applicationDirectory !== undefined) ?
+                    self.$storage.deviceDetailes : {};
+        };
+
+        var isMobileDevice = function () {
+            return document.URL.indexOf('http://') === -1 && document.URL.indexOf('https://') === -1;
+        };
+        
+        /* ---- Repeats Tasks ----- */
+
+        var addTasksToRepeatsTasksList = function (tasks) {
+            if (self.$storage.repeatsTasksList === undefined) {
+                self.$storage.repeatsTasksList = [];
+            }
+            self.$storage.repeatsTasksList = self.$storage.repeatsTasksList.concat(tasks);
+        };
+
+        var getRepeatsTasksList = function () {
+            return self.$storage.repeatsTasksList || [];
+        };
+
+        var setRepeatsTasksList = function (newTasks) {
+            replaceUsersWithPhoneContact(newTasks);
+            self.$storage.repeatsTasksList = newTasks;
+        };
+
+        var deleteRepeatsTask = function (taskId) {
+            var index = common.arrayObjectIndexOf(self.$storage.repeatsTasksList, '_id', taskId);
+            if (index !== -1) {
+                self.$storage.repeatsTasksList.splice(index, 1);
+            }
+        };
+        
+        var replaceRepeatsTasks = function (newTasks) {
+            var index;
+            for (var i = 0; i < newTasks.length; i++) {
+                index = common.arrayObjectIndexOf(self.$storage.repeatsTasksList, '_id', newTasks[i]._id);
+                if (index !== -1) {
+                    self.$storage.repeatsTasksList[index] = newTasks[i];
+                }
+            }
+        };       
+
+        /* ----- Users ----- */
 
         var replaceUsersAvatarUrlWithLocalPath = function (users) {
 
@@ -110,13 +277,6 @@
                 if (index !== -1) {
                     user.avatarUrl = allCachedUsers[index].avatarUrl;
                 }
-
-                /*for (var i = 0; i < vm.selectedRecipients.length; i++) {
-                    var contact = vm.selectedRecipients[i];
-                    if (!contact.avatarUrl.startsWith('content') && !contact.avatarUrl.startsWith('file')) {
-                        contact.avatarUrl = vm.imagesPath + contact.avatarUrl;
-                    }
-                }*/
             }
         }
 
@@ -158,7 +318,7 @@
                 usersCache.splice(index, 1);
             }
         };
-        
+
         var getAllCachedUsers = function () {
             if (self.$storage.usersCache === undefined) {
                 self.$storage.usersCache = [];
@@ -168,129 +328,6 @@
 
         var deleteAllCachedUsers = function () {
             delete self.$storage.usersCache;
-        };
-        
-        var addCommentToTask = function (taskId, comment) {
-            replaceUsersWithPhoneContact([comment]);
-            var foundIndex = common.arrayObjectIndexOf(self.$storage.tasksList, '_id', taskId);
-            var task;
-            if (foundIndex !== -1) {
-                task = self.$storage.tasksList[foundIndex];
-            }
-
-            if (task.comments === undefined) {
-                task.comments = [comment];
-                updateUnSeenResponse(task);
-            }
-            else {
-                var newCommentIndex_IfExist = common.arrayObjectIndexOf(task.comments, '_id', comment._id);
-                if (newCommentIndex_IfExist === -1) {
-                    task.comments.push(comment);
-                    updateUnSeenResponse(task);
-                }
-            }
-        };
-
-        function updateUnSeenResponse(task) {
-            if ($location.path().indexOf(task._id) === -1) {
-                task.unSeenResponses = task.unSeenResponses === undefined || task.unSeenResponses === '' ? 1 : task.unSeenResponses + 1;
-            }
-            var user = getUserFromLocalStorage();
-            if (task.status === 'inProgress' &&
-                    task.from._id === user._id &&
-                    task.to._id !== user._id /*&&
-                    task.type !== 'group-sub'*/) {
-                $rootScope.newCommentsInTasksInProcessCount = 
-                    $rootScope.newCommentsInTasksInProcessCount !== undefined ?
-                    $rootScope.newCommentsInTasksInProcessCount + 1 :
-                    1;
-            }
-        }
-
-        var getTaskByTaskId = function (taskId) {
-            var result = getTaskList().filter(function (t) { return t._id === taskId; });
-            if (result.length === 1) {
-                return result[0];
-            }
-            return {};
-        };
-
-        var setMyTaskCount = function () {
-            var userId = self.$storage.user._id;
-            var count = $filter('myTasks')(getTaskList(), userId).length;           
-            $rootScope.taskcount = count;
-
-            return count;
-        };
-        
-        var setDeviceDetailes = function (device, applicationDirectory) {
-            self.$storage.deviceDetailes = device;
-            self.$storage.deviceDetailes.applicationDirectory = applicationDirectory;
-        };
-
-        var getDeviceDetailes = function () {
-
-            return (self.$storage.deviceDetailes !== undefined &&
-                    self.$storage.deviceDetailes.applicationDirectory !== undefined) ?
-                    self.$storage.deviceDetailes : {};
-        };
-        
-        var addTasksToRepeatsTasksList = function (tasks) {
-            if (self.$storage.repeatsTasksList === undefined) {
-                self.$storage.repeatsTasksList = [];
-            }
-            self.$storage.repeatsTasksList = self.$storage.repeatsTasksList.concat(tasks);
-        };
-
-        var getRepeatsTasksList = function () {
-            return self.$storage.repeatsTasksList || [];
-        };
-
-        var setRepeatsTasksList = function (newTasks) {
-            replaceUsersWithPhoneContact(newTasks);
-            self.$storage.repeatsTasksList = newTasks;
-        };
-
-        var deleteRepeatsTask = function (taskId) {
-            var index = common.arrayObjectIndexOf(self.$storage.repeatsTasksList, '_id', taskId);
-            if (index !== -1) {
-                self.$storage.repeatsTasksList.splice(index, 1);
-            }
-        };
-        
-        var replaceRepeatsTasks = function (newTasks) {
-            var index;
-            for (var i = 0; i < newTasks.length; i++) {
-                index = common.arrayObjectIndexOf(self.$storage.repeatsTasksList, '_id', newTasks[i]._id);
-                if (index !== -1) {
-                    self.$storage.repeatsTasksList[index] = newTasks[i];
-                }
-            }
-        };
-
-        var isMobileDevice = function () {
-            return document.URL.indexOf('http://') === -1 && document.URL.indexOf('https://') === -1;
-        };
-
-        var reloadAllTasks = function () {
-
-            var deferred = $q.defer();
-
-            var user = getUserFromLocalStorage();
-            if (user !== undefined) {
-                DAL.getTasksInProgress(user).then(function (response) {
-
-                    setTaskList(response.data);
-                    setMyTaskCount();
-
-                    DAL.getDoneTasks(0, user).then(function (_response) {
-                        pushTasksToTasksList(_response.data);
-                        deferred.resolve();
-                    });
-                });
-            }
-
-            return deferred.promise;
         };
 
         (function(){
@@ -329,7 +366,8 @@
             replaceUsersWithPhoneContact: replaceUsersWithPhoneContact,
             reloadAllTasks: reloadAllTasks,
             removeUsersFromUsersCache: removeUsersFromUsersCache,
-            replaceUsersAvatarUrlWithLocalPath: replaceUsersAvatarUrlWithLocalPath
+            replaceUsersAvatarUrlWithLocalPath: replaceUsersAvatarUrlWithLocalPath,
+            updateLocalTasks: updateLocalTasks
         };
 
         return service;
