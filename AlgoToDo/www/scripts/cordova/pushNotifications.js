@@ -99,8 +99,8 @@
                 handelNewTaskRecived(dataFromServer.object, data.count);
             }
             if (dataFromServer.type === "task-update") {
-                datacontext.replaceTask(dataFromServer.object);
-                $rootScope.$apply();
+                datacontext.updateLocalTasks([dataFromServer.object]);
+                //$rootScope.$apply();
             }
             if (dataFromServer.type === "comment") {
                 handelNewCommentRecived(taskId, dataFromServer.object);

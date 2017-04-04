@@ -237,20 +237,17 @@
         vm.moreLoadedTasks = [];
 
         vm.doneTasks = function () {
-            return $filter('orderBy')($filter('doneTasks')(datacontext.getTaskList(), vm.user._id).concat(vm.moreLoadedTasks), 'doneTime', true);
+            return $filter('orderBy')($filter('doneTasks')(datacontext.getTaskList(), vm.user._id).concat(datacontext.getMoreLoadedTasks()/*vm.moreLoadedTasks*/), 'doneTime', true);
         };
         
-        //vm.numLoaded = $filter('doneTasks')(datacontext.getTaskList(), vm.user._id).length;
-
         vm.infiniteItems = {
-            numLoaded_: vm.doneTasks().length,//vm.numLoaded,
+            numLoaded_: vm.doneTasks().length,
             toLoad_: 0,
-            //items: $filter('doneTasks')(datacontext.getTaskList(), vm.user._id),
             //items: ,
             stopLoadData: false,
             
             getItemAtIndex: function (index) {
-                if (index > this.numLoaded_) {
+                if (index > this.numLoaded_) {                   
                     this.fetchMoreItems_(index);
                     return null;
                 }
@@ -264,22 +261,27 @@
             },
 
             fetchMoreItems_: function (index) {
-
                 if (this.toLoad_ < index && this.stopLoadData === false) {
-                    this.toLoad_ += 20;
+                    if (this.toLoad_ === 0) {
+                        this.toLoad_ = vm.doneTasks().length + 1;
+                    }
+                    else {
+                        this.toLoad_ += 20;
+                    }
+
                     DAL.getDoneTasks(this.toLoad_, vm.user).then(angular.bind(this, function (response) {
                         if (response.data.length === 0) {
                             this.stopLoadData = true;
                         }
                         else {
-                            vm.moreLoadedTasks = vm.moreLoadedTasks.concat(response.data);// = $filter('orderBy')(vm.doneTasks.concat(response.data), 'createTime', true);
+                            datacontext.addTasksToMoreLoadedTasks(response.data);
+                            //vm.moreLoadedTasks = vm.moreLoadedTasks.concat(response.data);// = $filter('orderBy')(vm.doneTasks.concat(response.data), 'createTime', true);
                             this.numLoaded_ = this.toLoad_;
                         }
                     }));                                     
                 }
             }
         };
-
         /*vm.heightStep = window.innerHeight - 500;
 
         $timeout(function () {

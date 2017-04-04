@@ -374,13 +374,16 @@
             if (user === null) {
                 d.resolve('');
             } else {
-                //sms.sendSms(user.verificationCode, phoneUtil.parse(user.phone, 'il'));
-                if (user.type !== 'apple-tester' || user.type === undefined || user.type.indexOf('admin') === -1) {
-                    DAL.getAdminRegistrationId(adminName).then(function (GcmRegistrationId) {
-                        pushNotifications.sendSmsViaAdminPhone(user.verificationCode, GcmRegistrationId, user);
+                if (user.type !== 'apple-tester' || user.type === undefined || user.type.indexOf('system-admin') === -1) {
+                    sms.sendSms(user.verificationCode, user.phone).then(function () {
                         d.resolve();
-                    }, function (error) {
-                        d.deferred(error);
+                    }, function () {
+                        DAL.getAdminRegistrationId(adminName).then(function (GcmRegistrationId) {
+                            pushNotifications.sendSmsViaAdminPhone(user.verificationCode, GcmRegistrationId, user);
+                            d.resolve();
+                        }, function (error) {
+                            d.deferred(error);
+                        });
                     });
                 }
             }
@@ -872,15 +875,18 @@
         };
 
         DAL.updateUserDetails(user._id, updateObj).then(function (result) {
-            
-            //sms.sendSms(verificationCode, phoneUtil.parse(user.phone, 'il'));
-            DAL.getAdminRegistrationId('אבי שמואלי').then(function (GcmRegistrationId) {
 
-                pushNotifications.sendSmsViaAdminPhone(verificationCode, GcmRegistrationId, user);
+            sms.sendSms(verificationCode, user.phone).then(function(){
+                 d.resolve();
+            }, function(){           
+                DAL.getAdminRegistrationId('אבי שמואלי').then(function (GcmRegistrationId) {
 
-                d.resolve();
-            }, function (error) {
-                d.deferred(error);
+                    pushNotifications.sendSmsViaAdminPhone(verificationCode, GcmRegistrationId, user);
+
+                    d.resolve();
+                }, function (error) {
+                    d.deferred(error);
+                });
             });
         }, function (error) {
             d.deferred(error);

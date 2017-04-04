@@ -23,17 +23,20 @@
             var deferred = $q.defer();
 
             var user = getUserFromLocalStorage(), tempDate = new Date();
-            user.lastServerSync = new Date(user.lastServerSync);
+            if (user.lastServerSync !== undefined) {
+                user.lastServerSync = new Date(user.lastServerSync);
+            }        
             if (user !== undefined) {
                 DAL.getTasksInProgress(user).then(function (response) {
 
                     //setTaskList(response.data);
                     updateLocalTasks(response.data);
-                    setMyTaskCount();
+                    
 
                     DAL.getDoneTasks(0, user).then(function (_response) {
                         //pushTasksToTasksList(_response.data);
                         updateLocalTasks(_response.data);
+                        setMyTaskCount();
                         deferred.resolve();
                     });
                     user.lastServerSync = tempDate;
@@ -58,6 +61,12 @@
             if (result.length === 1) {
                 return result[0];
             }
+            else {
+                result = getMoreLoadedTasks().filter(function (t) { return t._id === taskId; });
+                if (result.length === 1) {
+                    return result[0];
+                }
+            }
             return {};
         };
 
@@ -73,18 +82,7 @@
         var pushTasksToTasksList = function (tasks) {
             replaceUsersWithPhoneContact(tasks);
             self.$storage.tasksList = getTaskList().concat(tasks);
-        };
-        
-        var replaceTask = function (task) {
-            replaceUsersWithPhoneContact([task]);
-            var index = common.arrayObjectIndexOf(getTaskList(), '_id', task._id);
-            if (index !== -1) {
-                self.$storage.tasksList[index] = task;
-            }
-            else {
-                addTaskToTaskList(task);
-            }
-        };      
+        };    
         
         var replaceUsersWithPhoneContact = function (tasks) {
             var allCachedUsers = getAllCachedUsers();
@@ -168,8 +166,23 @@
                             // todo: if browser, notify user for new comment !!
                         }
                     }
+                    if (localTask.doneTime !== newTask.doneTime) {
+                        localTask.doneTime = newTask.doneTime;
+                    }
+                    if (localTask.lastModified !== newTask.lastModified) {
+                        localTask.lastModified = newTask.lastModified;
+                    }
                 }
             }
+        }
+
+        var getMoreLoadedTasks = function () {
+            return self.moreLoadedTasks !== undefined ? self.moreLoadedTasks : [];
+        }
+
+        var addTasksToMoreLoadedTasks = function (tasks) {
+            replaceUsersWithPhoneContact(tasks);
+            self.moreLoadedTasks = getMoreLoadedTasks().concat(tasks);
         }
 
         /* ----- Comments ----- */
@@ -344,7 +357,6 @@
             getTaskList: getTaskList,
             setTaskList: setTaskList,
             addTaskToTaskList: addTaskToTaskList,
-            replaceTask: replaceTask,
             saveUserToLocalStorage: saveUserToLocalStorage,
             getUserFromLocalStorage: getUserFromLocalStorage,
             deleteUserFromLocalStorage: deleteUserFromLocalStorage,
@@ -367,7 +379,9 @@
             reloadAllTasks: reloadAllTasks,
             removeUsersFromUsersCache: removeUsersFromUsersCache,
             replaceUsersAvatarUrlWithLocalPath: replaceUsersAvatarUrlWithLocalPath,
-            updateLocalTasks: updateLocalTasks
+            updateLocalTasks: updateLocalTasks,
+            getMoreLoadedTasks: getMoreLoadedTasks,
+            addTasksToMoreLoadedTasks: addTasksToMoreLoadedTasks
         };
 
         return service;
