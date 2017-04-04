@@ -27,13 +27,13 @@
             if (user !== undefined) {
                 DAL.getTasksInProgress(user).then(function (response) {
 
-                    setTaskList(response.data);
-                    //updateLocalTasks(response.data);
+                    //setTaskList(response.data);
+                    updateLocalTasks(response.data);
                     setMyTaskCount();
 
                     DAL.getDoneTasks(0, user).then(function (_response) {
-                        pushTasksToTasksList(_response.data);
-                        //updateLocalTasks(response.data);
+                        //pushTasksToTasksList(_response.data);
+                        updateLocalTasks(_response.data);
                         deferred.resolve();
                     });
                     user.lastServerSync = tempDate;

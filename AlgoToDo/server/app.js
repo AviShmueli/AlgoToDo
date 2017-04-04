@@ -168,7 +168,7 @@ app.get('/TaskManeger/getTasks', function (req, res) {
 
 app.get('/TaskManeger/getTasksInProgress', function (req, res) {
 
-    BL.getTasksInProgress(req.query.userId).then(function(result) {
+    BL.getTasksInProgress(req.query.userId, req.query.lastServerSync).then(function(result) {
         res.send(result);   
     }, function(error) {
         winston.log('error', error.message , error.error);
@@ -180,8 +180,9 @@ app.get('/TaskManeger/getTasksInProgress', function (req, res) {
 app.get('/TaskManeger/getDoneTasks', function (req, res) {
     var userId = req.query.userId;
     var page = req.query.page || 0;
+    var lastServerSync = req.query.lastServerSync;
 
-    BL.getDoneTasks(userId, page).then(function(result) {
+    BL.getDoneTasks(userId, page, lastServerSync).then(function(result) {
         res.send(result);   
     }, function(error) {
         winston.log('error', error.message , error.error);

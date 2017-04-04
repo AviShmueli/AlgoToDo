@@ -43,7 +43,8 @@
                 method: 'GET',
                 url: appConfig.appDomain + '/TaskManeger/getTasksInProgress',
                 params: {
-                    userId: user._id
+                    userId: user._id,
+                    lastServerSync: user.lastServerSync
                 }
             };
 
@@ -56,7 +57,8 @@
                 url: appConfig.appDomain + '/TaskManeger/getDoneTasks',
                 params: {
                     userId: user._id,
-                    page: page
+                    page: page,
+                    lastServerSync: user.lastServerSync
                 }
             };
 

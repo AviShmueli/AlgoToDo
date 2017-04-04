@@ -30,9 +30,11 @@
         vm.taskIsFromMe = (vm.task.from._id === vm.user._id);
 
         if (vm.task.unSeenResponses > 0) {
-            $timeout(function () {
-                pushNotifications.clearAllNotifications();
-            }, 0);
+            if (device.isMobileDevice()) {           
+                $timeout(function () {
+                    pushNotifications.clearAllNotifications();
+                }, 0);
+            }
             $rootScope.newCommentsInTasksInProcessCount =
                 $rootScope.newCommentsInTasksInProcessCount !== undefined ?
                 $rootScope.newCommentsInTasksInProcessCount - vm.task.unSeenResponses :

@@ -404,11 +404,11 @@
         return d.promise;
     }
 
-    function getDoneTasks(userId, page) {
+    function getDoneTasks(userId, page, lastServerSync) {
 
         var d = deferred();
 
-        DAL.getDoneTasks(userId, page).then(function (result) {
+        DAL.getDoneTasks(userId, page, lastServerSync).then(function (result) {
             d.resolve(result);
         }, function (error) {
             d.deferred(error);
@@ -417,11 +417,11 @@
         return d.promise;
     }
 
-    function getTasksInProgress(userId) {
+    function getTasksInProgress(userId, lastServerSync) {
 
         var d = deferred();
 
-        DAL.getTasksInProgress(userId).then(function (result) {
+        DAL.getTasksInProgress(userId, lastServerSync).then(function (result) {
             d.resolve(result);
         }, function (error) {
             d.deferred(error);

@@ -178,7 +178,7 @@
 
                         <md-virtual-repeat-container id="vertical-container" class="height-100P">
                             <!--<div md-virtual-repeat="item in vm.allTasks() | doneTasks: vm.user._id | filter:vm.search | orderBy: 'createTime':true" class="noright task-item repeated-item infinit-repeat-container" flex>-->
-                            <div md-on-demand md-virtual-repeat="item in vm.infiniteItems" class="noright task-item repeated-item infinit-repeat-container" flex>
+                            <md-list-item md-on-demand md-virtual-repeat="item in vm.infiniteItems" class="noright task-item repeated-item infinit-repeat-container" flex>
                                 <!--<div md-virtual-repeat="item in vm.allTasks() | doneTasks: vm.user._id | filter:vm.search | orderBy: 'createTime':true" class="noright task-item repeated-item infinit-repeat-container" flex>-->
                                 <a class="md-tile-content margin-bottom-14px" flex="100" ng-click="vm.navigateToTaskPage(item)">
                                     <div layout="row">
@@ -198,8 +198,11 @@
                                         <!--<ng-md-icon icon="timer_off" size="20"></ng-md-icon>-->
                                     </div>
                                 </a>
+                                <div class="md-secondary">
+                                    <md-badge class="new-responses-badge" ng-if="item.unSeenResponses > 0">{{item.unSeenResponses}}</md-badge>                                   
+                                </div>
                                 <md-divider ng-if="!$last"></md-divider>
-                            </div>
+                            </md-list-item>
                         </md-virtual-repeat-container>
                         <md-divider></md-divider>
                     </md-list>

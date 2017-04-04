@@ -486,20 +486,29 @@
         return d.promise;
     }
 
-    function getTasksInProgress(userId) {
+    function getTasksInProgress(userId, lastServerSync) {
 
         var d = deferred();
 
+        var query = {
+            $or: [{
+                'from._id': new ObjectID(userId)
+            }, {
+                'to._id': new ObjectID(userId)
+            }],
+            status: 'inProgress'
+        };
+
+        if (lastServerSync !== undefined) {
+            var lastServerSyncDate = new Date(lastServerSync);
+            query['lastModified'] = {
+                '$gte': lastServerSyncDate
+            };
+        }
+
         getCollection('tasks').then(function (mongo) {
 
-            mongo.collection.find({
-                $or: [{
-                    'from._id': new ObjectID(userId)
-                }, {
-                    'to._id': new ObjectID(userId)
-                }],
-                status: 'inProgress'
-            }, {
+            mongo.collection.find(query, {
                 "sort": ['lastModified', 'asc']
             }).toArray(function (err, result) {
                 if (err) {
@@ -519,26 +528,36 @@
         return d.promise;
     }
 
-    function getDoneTasks(userId, page) {
+    function getDoneTasks(userId, page, lastServerSync) {
 
         var d = deferred();
 
+        page = parseInt(page)
+        var query = {
+            /*$or: [{
+                'from._id': new ObjectID(userId)
+            }, {
+                'to._id': new ObjectID(userId)
+            }],*/
+            'from._id': new ObjectID(userId),
+            status: 'done'
+            /*,
+                            type: {
+                                '$ne': 'group-sub'
+                            }*/
+        };
+
+        if (page === 0 && lastServerSync !== undefined) {
+            var lastServerSyncDate = new Date(lastServerSync);
+            query['lastModified'] = {
+                '$gte': lastServerSyncDate
+            };
+        }
+
         getCollection('tasks').then(function (mongo) {
 
-            mongo.collection.find({
-                /*$or: [{
-                    'from._id': new ObjectID(userId)
-                }, {
-                    'to._id': new ObjectID(userId)
-                }],*/
-                'from._id': new ObjectID(userId),
-                status: 'done'
-                /*,
-                                type: {
-                                    '$ne': 'group-sub'
-                                }*/
-            }, {
-                skip: parseInt(page),
+            mongo.collection.find(query, {
+                skip: page,
                 limit: 20
             }).sort({
                 doneTime: -1
@@ -1065,7 +1084,7 @@
                 'phone': true
                 //'cliqot': true
             }).toArray(
-            function (err, result) {
+                function (err, result) {
                     if (err) {
                         var errorObj = {
                             message: "error while trying to get Users By Phone Numbers ",
@@ -1088,8 +1107,8 @@
 
         getCollection('users').then(function (mongo) {
 
-            mongo.collection.save(group, 
-            function (err, result) {
+            mongo.collection.save(group,
+                function (err, result) {
                     if (err) {
                         var errorObj = {
                             message: "error while trying to add new Group ",
@@ -1113,11 +1132,11 @@
         getCollection('users').then(function (mongo) {
 
             mongo.collection.remove({
-                '_id': {
-                    $in: groupIds
-                }
-            }, 
-            function (err, result) {
+                    '_id': {
+                        $in: groupIds
+                    }
+                },
+                function (err, result) {
                     if (err) {
                         var errorObj = {
                             message: "error while trying to remove Group ",
