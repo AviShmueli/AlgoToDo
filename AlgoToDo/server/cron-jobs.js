@@ -241,7 +241,7 @@
         var today = new Date();
         var startDate = new Date("4/12/2017");
         var timeDiff = Math.abs(today.getTime() - startDate.getTime());
-        var diffDays = Math.ceil(timeDiff / (1000 * 3600 * 24));
+        var diffDays = Math.ceil(timeDiff / (1000 * 3600 * 24)) + 1;
 
         var s_dayOnWeek = diffDays % 7,
             aweek = Math.floor(diffDays / 7);
