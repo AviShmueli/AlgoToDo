@@ -1,4 +1,4 @@
-(function() {
+﻿(function () {
     'use strict';
 
     angular
@@ -6,36 +6,41 @@
         .service('datacontext', datacontext);
 
     datacontext.$inject = ['logger', '$rootScope', '$localStorage', '$filter',
-                           '$q', '$location', 'DAL', 'common'];
+                           '$q', '$location', 'DAL', 'common', 'browserNotification',
+                           '$interval', '$timeout'];
 
     function datacontext(logger, $rootScope, $localStorage, $filter,
-                         $q, $location, DAL, common) {
+                         $q, $location, DAL, common, browserNotification,
+                         $interval, $timeout) {
 
-        
+
         var self = this;
         self.$storage = $localStorage;
         self.$storage.usersCache = self.$storage.usersCache === undefined ? [] : self.$storage.usersCache;//new Map();
 
         /* ----- Tasks ----- */
 
-        var reloadAllTasks = function () {
+        var reloadAllTasks = function (isFromInterval) {
 
             var deferred = $q.defer();
 
             var user = getUserFromLocalStorage(), tempDate = new Date();
-            if (user.lastServerSync !== undefined) {
-                user.lastServerSync = new Date(user.lastServerSync);
-            }        
+            
             if (user !== undefined) {
+
+                if (user.lastServerSync !== undefined) {
+                    user.lastServerSync = new Date(user.lastServerSync);
+                }
+
                 DAL.getTasksInProgress(user).then(function (response) {
 
                     //setTaskList(response.data);
-                    updateLocalTasks(response.data);
-                    
+                    updateLocalTasks(response.data, isFromInterval);
+
 
                     DAL.getDoneTasks(0, user).then(function (_response) {
                         //pushTasksToTasksList(_response.data);
-                        updateLocalTasks(_response.data);
+                        updateLocalTasks(_response.data, isFromInterval);
                         setMyTaskCount();
                         deferred.resolve();
                     });
@@ -53,7 +58,7 @@
         };
 
         var getTaskList = function () {
-            return self.$storage.tasksList !== undefined ? self.$storage.tasksList: [];
+            return self.$storage.tasksList !== undefined ? self.$storage.tasksList : [];
         };
 
         var getTaskByTaskId = function (taskId) {
@@ -78,15 +83,15 @@
                 self.$storage.tasksList.push(task);
             }
         };
-                       
+
         var pushTasksToTasksList = function (tasks) {
             replaceUsersWithPhoneContact(tasks);
             self.$storage.tasksList = getTaskList().concat(tasks);
-        };    
-        
+        };
+
         var replaceUsersWithPhoneContact = function (tasks) {
             var allCachedUsers = getAllCachedUsers();
-            if (allCachedUsers.length === 0 ) {
+            if (allCachedUsers.length === 0) {
                 return;
             }
             for (var i = 0; i < tasks.length; i++) {
@@ -125,7 +130,7 @@
                     replaceUsersWithPhoneContact(task.comments);
                 }
             }
-        };        
+        };
 
         var deleteTaskListFromLocalStorage = function () {
             delete self.$storage.tasksList;
@@ -133,13 +138,13 @@
 
         var setMyTaskCount = function () {
             var userId = self.$storage.user._id;
-            var count = $filter('myTasks')(getTaskList(), userId).length;           
+            var count = $filter('myTasks')(getTaskList(), userId).length;
             $rootScope.taskcount = count;
 
             return count;
         };
 
-        var updateLocalTasks = function (newTasks) {
+        var updateLocalTasks = function (newTasks, isFromInterval) {
             var tasksList = getTaskList();
             if (tasksList === []) {
                 setTaskList(newTasks);
@@ -149,7 +154,9 @@
                 var localTaskIndex = common.arrayObjectIndexOf(tasksList, '_id', newTask._id);
                 if (localTaskIndex === -1) {
                     pushTasksToTasksList([newTask]);
-                    // todo: if browser, notify user for new task !!
+                    if (!isMobileDevice() && newTask.status === 'inProgress' && isFromInterval) {
+                        browserNotification.showNotification("משימה חדשה", newTask.description, newTask._id);
+                    }
                 }
                 else {
                     var localTask = tasksList[localTaskIndex];
@@ -157,13 +164,15 @@
                         localTask.status = newTask.status;
                     }
                     if (localTask.comments.length !== newTask.comments.length) {
-                        var diffCount = newTask.comments.length - localTask.comments.length;                 
+                        var diffCount = newTask.comments.length - localTask.comments.length;
                         var filterdNewTasksComments = $filter('orderBy')(newTask.comments, 'createTime', true);
 
-                        for (var i = 0; i < diffCount; i++) {
-                            var newComment = filterdNewTasksComments[i];
+                        for (var j = 0; j < diffCount; j++) {
+                            var newComment = filterdNewTasksComments[j];
                             addCommentToTask(newTask._id, newComment);
-                            // todo: if browser, notify user for new comment !!
+                            if (!isMobileDevice() && isFromInterval) {
+                                browserNotification.showNotification("תגובה חדשה", newComment.text, newTask._id);                               
+                            }
                         }
                     }
                     if (localTask.doneTime !== newTask.doneTime) {
@@ -223,7 +232,7 @@
                     1;
             }
         }
-        
+
         /* ---- Device ----- */
 
         var setDeviceDetailes = function (device, applicationDirectory) {
@@ -241,7 +250,7 @@
         var isMobileDevice = function () {
             return document.URL.indexOf('http://') === -1 && document.URL.indexOf('https://') === -1;
         };
-        
+
         /* ---- Repeats Tasks ----- */
 
         var addTasksToRepeatsTasksList = function (tasks) {
@@ -266,7 +275,7 @@
                 self.$storage.repeatsTasksList.splice(index, 1);
             }
         };
-        
+
         var replaceRepeatsTasks = function (newTasks) {
             var index;
             for (var i = 0; i < newTasks.length; i++) {
@@ -275,7 +284,7 @@
                     self.$storage.repeatsTasksList[index] = newTasks[i];
                 }
             }
-        };       
+        };
 
         /* ----- Users ----- */
 
@@ -343,15 +352,21 @@
             delete self.$storage.usersCache;
         };
 
-        (function(){
+        (function () {
             var user = getUserFromLocalStorage();
-            if (user !== undefined) {           
+            if (user !== undefined) {
                 var logUser = { name: user.name, _id: user._id, phone: user.phone, versionInstalled: user.versionInstalled };
-                logUser.device = isMobileDevice() ? user.device.manufacturer + ' ' + user.device.model: 'Browser',
+                logUser.device = isMobileDevice() ? user.device.manufacturer + ' ' + user.device.model : 'Browser',
                 logger.setUser(logUser);
             }
+
+            if (!isMobileDevice()) {
+                $interval(function () {
+                    reloadAllTasks(true);
+                }, 30000);
+            }
         })();
-        
+
 
         var service = {
             getTaskList: getTaskList,

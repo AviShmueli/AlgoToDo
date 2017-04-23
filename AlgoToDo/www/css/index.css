@@ -822,3 +822,4 @@ md-tabs.md-primary > md-tabs-wrapper > md-tabs-canvas > md-pagination-wrapper > 
 .logo{ width: 40px}
 .timer-text{ color:rgb(186, 195, 196) ;bottom: 7px; position: relative;}
 .time-points{    top: 35px;    position: relative;    font-size: xx-large;}
+.md-toast-content { direction: rtl !important;}

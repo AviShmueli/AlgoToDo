@@ -6,10 +6,10 @@
         .controller('landingPageCtrl', landingPageCtrl);
 
     landingPageCtrl.$inject = ['$scope', 'datacontext', 'logger', 'pushNotifications',
-                          'device', 'DAL', '$location', '$timeout', '$q'];
+                          'device', 'DAL', '$location', '$timeout', '$q', 'contactsSync'];
 
     function landingPageCtrl($scope, datacontext, logger, pushNotifications,
-                        device, DAL, $location, $timeout, $q) {
+                        device, DAL, $location, $timeout, $q, contactsSync) {
         var vm = this;
 
         vm.screenHeight = window.innerHeight;
@@ -27,9 +27,13 @@
                             DAL.updateUserDetails(vm.user._id, 'versionInstalled', version);
                             vm.user.versionInstalled = version;
                             datacontext.saveUserToLocalStorage(vm.user);
+                            vm.loadingMode = 'syncing';
                             contactsSync.syncPhoneContactsWithServer().then(function () {
-                                datacontext.reloadAllTasks();
-                                $location.path('/tasksList');
+                                vm.loadingMode = 'loading';
+                                datacontext.deleteTaskListFromLocalStorage();
+                                datacontext.reloadAllTasks().then(function () {
+                                    $location.path('/tasksList');
+                                });
                             }, function () {
                                 datacontext.reloadAllTasks();
                                 $location.path('/tasksList');
