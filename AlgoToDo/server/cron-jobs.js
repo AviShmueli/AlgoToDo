@@ -142,6 +142,19 @@
         task.description = repeatsTask.description;
         task.comments = [];
 
+        if (task.description === 'ספירת העומר') {
+            var comment = {
+                "from": {
+                    '_id': repeatsTask.from._id,
+                    'name': repeatsTask.from.name,
+                    'avatarUrl': repeatsTask.from.avatarUrl
+                },
+                "createTime": task.createTime,
+                "text": getSfirartHaomerString()
+            };
+            task.comments = [comment];
+        }
+
         var taskListToreturn = [];
         if (repeatsTask.to.length > 1) {
             task.type = 'group-sub';
@@ -221,6 +234,44 @@
         return groupTask;
     };
 
+    /* ----  Sfirat Haomer Code ---- */
 
+    var getSfirartHaomerString = function () {
+        var stringToReturn = '';
+        var today = new Date();
+        var startDate = new Date("4/12/2017");
+        var timeDiff = Math.abs(today.getTime() - startDate.getTime());
+        var diffDays = Math.ceil(timeDiff / (1000 * 3600 * 24));
+
+        var s_dayOnWeek = diffDays % 7,
+            aweek = Math.floor(diffDays / 7);
+        var bweek = '';
+
+        if (diffDays < 7) {
+            stringToReturn = "היום " + diffDays + "ימים לעומר ";
+        } else {
+            if (aweek === 1) {
+                bweek = "שבוע אחד";
+            } else if (aweek === 2) {
+                bweek = "שני שבועות";
+            } else if (aweek === 3) {
+                bweek = "שלושה שבועות";
+            } else if (aweek === 4) {
+                bweek = "ארבעה שבועות";
+            } else if (aweek === 4) {
+                bweek = "חמישה שבועות";
+            } else if (aweek === 4) {
+                bweek = "שישה שבועות";
+            }
+        }
+
+        if (s_dayOnWeek === 0) {
+            stringToReturn = " היום" + diffDays + " ימים , שהם " + bweek + " לעומר";
+        } else {
+            stringToReturn = "היום " + diffDays + " ימים , שהם " + bweek + " ו " + s_dayOnWeek + " ימים לעומר ";
+        }
+
+        return '🌾' + ' ' + stringToReturn;
+    }
 
 })(module.exports);
