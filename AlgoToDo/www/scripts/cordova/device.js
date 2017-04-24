@@ -108,7 +108,9 @@
             $cordovaVibration.vibrate(duration);
         }
 
-        
+        var getIOStempDirectory = function () {
+            return cordova.file.tempDirectory;
+        }
 
         var service = {
             getDeviceDetails: getDeviceDetails,
@@ -120,7 +122,8 @@
             getContacts: getContacts,
             recordAudio: recordAudio,
             vibrate: vibrate,
-            setStatusBarStyleBlackTranslucent: setStatusBarStyleBlackTranslucent
+            setStatusBarStyleBlackTranslucent: setStatusBarStyleBlackTranslucent,
+            getIOStempDirectory: getIOStempDirectory
         };
 
         return service;

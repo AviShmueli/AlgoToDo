@@ -35,8 +35,8 @@
                         <md-list-item ng-repeat="contact in vm.contactsList | orderBy : 'name'" class="noright task-item margin margin-top-7px">
 
                             <md-card-avatar>
-                                <img ng-if="(contact.avatarUrl.startsWith('content') || contact.avatarUrl.startsWith('file'))" alt="avatar" ng-src="{{contact.avatarUrl}}" class="md-avatar user-avatar margin-right-10px" />
-                                <img ng-if="!contact.avatarUrl.startsWith('content')  && !contact.avatarUrl.startsWith('file')" alt="avatar" ng-src="{{vm.imagesPath + contact.avatarUrl}}" class="md-avatar user-avatar margin-right-10px" />
+                                <img ng-if="(contact.avatarUrl.startsWith('content') || contact.avatarUrl.startsWith('file'))" alt="" ng-src="{{contact.avatarUrl}}" class="md-avatar user-avatar margin-right-10px" />
+                                <img ng-if="!contact.avatarUrl.startsWith('content')  && !contact.avatarUrl.startsWith('file')" alt="" ng-src="{{vm.imagesPath + contact.avatarUrl}}" class="md-avatar user-avatar margin-right-10px" />
                             </md-card-avatar>
                             <a class="md-tile-content margin-bottom-14px" flex="100">
                                 <div layout="row">

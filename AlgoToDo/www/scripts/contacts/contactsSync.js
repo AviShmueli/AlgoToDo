@@ -6,10 +6,10 @@
         .service('contactsSync', contactsSync);
 
     contactsSync.$inject = ['device', 'datacontext', 'appConfig', 'logger', '$q',
-                            'DAL', 'common', '$timeout'];
+                            'DAL', 'common', '$timeout', 'storage'];
 
     function contactsSync(device, datacontext, appConfig, logger, $q,
-                          DAL, common, $timeout) {
+                          DAL, common, $timeout, storage) {
 
 
         var self = this;
@@ -86,15 +86,35 @@
                     var contact = self.phone_contact_map[user.phone];
                     var crossUser = {
                         _id: user._id,
-                        name: contact.displayName,
+                        name: contact.displayName !== null ? contact.displayName : contact.name.formatted,
                         phone: user.phone,
-                        avatarUrl: self.imagesPath + user.avatarUrl
+                        avatarUrl: user.avatarUrl //self.imagesPath + user.avatarUrl
                         //cliqot: user.cliqot || ''
                     };
+                    
 
                     if (contact.photos !== null && contact.photos.length > 0) {
-                        crossUser.avatarUrl = contact.photos[0].value;
+                        var filePath = contact.photos[0].value;
+                        // in Android - tack the contact photo
+                        if (filePath.startsWith('file://') || filePath.startsWith('content://')) {
+                            crossUser.avatarUrl = contact.photos[0].value ;
+                        }
+                        else{    
+                            // in iOS - do nothing for now
+                            
+                            /*filePath =  "file://" + filePath;            
+                            var splitedPath = filePath.split('/');
+                            var fileName = splitedPath[splitedPath.length - 1]; //cordova.file.tempDirectory + 
+                            var path = filePath.substring(0, filePath.indexOf(fileName));
+
+                            
+                            storage.copyLocalFile(path, fileName, storage.getRootDirectory() + 'Asiti/Asiti Images/contacts/' , fileName).then(function(fileNewPath){
+                                alert(fileNewPath);
+                                //crossUser.avatarUrl = fileNewPath ;
+                            });*/
+                        }
                     }
+                    console.log(crossUser);
                     appUsers.push(crossUser);
                 }
                 if (appUsers.length > 0) {
@@ -151,7 +171,7 @@
             DAL.searchUsers('', user).then(function (response) {
                 var usersList = response.data;
                 for (var i = 0; i < usersList.length; i++) {
-                    usersList[i]['avatarUrl'] = self.imagesPath + usersList[i].avatarUrl;
+                    usersList[i]['avatarUrl'] = usersList[i].avatarUrl; //self.imagesPath + usersList[i].avatarUrl;
                 }
                 datacontext.addUsersToUsersCache(usersList, true);
                 deferred.resolve();

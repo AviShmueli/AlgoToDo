@@ -783,7 +783,7 @@ md-tabs.md-primary > md-tabs-wrapper > md-tabs-canvas > md-pagination-wrapper > 
 .text-align-right{ text-align:right }
 .text-align-left { text-align: left }
 .text-align-center { text-align: center;}
-.comment-description { white-space: pre-wrap; word-wrap: break-word; font-size: 18px;margin-top: 10px; font-family : 'RobotoRegular', 'Droid Sans', 'Segoe UI', Segoe, 'San Francisco', 'Helvetica Neue', Helvetica, Arial, Geneva, sans-serif !important}
+.comment-description { /*white-space: pre-wrap;*/ word-wrap: break-word; font-size: 18px;margin-top: 10px; font-family : 'RobotoRegular', 'Droid Sans', 'Segoe UI', Segoe, 'San Francisco', 'Helvetica Neue', Helvetica, Arial, Geneva, sans-serif !important}
 .new-comment-text { padding-bottom: 8px;padding-top: 8px; }
 .float-right { float: right }
 .float-left { float: left !important}

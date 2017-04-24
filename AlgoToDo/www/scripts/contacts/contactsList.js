@@ -18,6 +18,7 @@
 
         var vm = this;
         vm.imagesPath = device.getImagesPath();
+        vm.IOStempDirectory = device.getIOStempDirectory();
         vm.isDialogOpen = false;
         vm.user = datacontext.getUserFromLocalStorage();
         vm.contactsList = datacontext.getAllCachedUsers();
