@@ -31,8 +31,8 @@
                d.resolve();
             }
             else{
-                logger.log('error', 'Erorr while trying to send SMS via Pvilo: ' , response.error || response);
-                d.deferred();
+                logger.log('error', 'Erorr while trying to send SMS via Pvilo ', null);
+                d.reject();
             }
             
         });

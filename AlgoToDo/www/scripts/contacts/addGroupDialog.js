@@ -130,7 +130,7 @@
 
         vm.deleteGroup = function (ev) {
             var confirm = $mdDialog.confirm()
-                 .title('למחוק את הקבוצה333 לצמיתות?')
+                 .title('למחוק את הקבוצה ' + vm.group.name + ' לצמיתות?')
                  .ariaLabel('delete')
                  .parent(angular.element(document.querySelector('#deleteRepeatsTaskContainer')))
                  .targetEvent(ev)

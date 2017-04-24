@@ -11,7 +11,7 @@
         '$mdSidenav', '$mdDialog', 'datacontext',
         'socket', '$mdToast', 'moment', '$q',
         'pushNotifications', 'localNotifications', 'device',
-        'DAL', '$offlineHandler'
+        'DAL', '$offlineHandler', '$toast'
     ];
 
     function TasksListCtrl($rootScope, $scope, logger, $location, cordovaPlugins,
@@ -19,7 +19,7 @@
                             $mdSidenav, $mdDialog, datacontext,
                             socket, $mdToast, moment, $q,
                             pushNotifications, localNotifications, device,
-                            DAL, $offlineHandler) {
+                            DAL, $offlineHandler, $toast) {
 
         angular.element(document.querySelectorAll('html')).removeClass("hight-auto");
 
@@ -147,6 +147,15 @@
                 task.doneTime = new Date();
                 //datacontext.removeAllTaskImagesFromCache(task);
                 //localNotifications.cancelNotification(task._id);
+                $toast.showActionToast("המשימה סומנה כבוצע", "בטל", 2000).then(function (response) {
+                    if (response == 'ok') {
+                        task.doneTime = null;
+                        if (task.offlineMode === true) {
+                            $offlineHandler.removeTaskFromCachedTasksToUpdateList(task);
+                        }
+                        vm.setTaskStatus(task, 'inProgress');
+                    }
+                });
             }
             if (task.status === 'seen') {
                 task.seenTime = new Date();

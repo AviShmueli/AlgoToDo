@@ -8,4 +8,9 @@
         <div class='cube-face cube-face-bottom'>t</div>
         <div class='cube-face cube-face-top'>✔</div>
     </div>
+
+    <div class="syncing-text" layout="row" layout-align="center center">
+        <div ng-if="vm.loadingMode === 'syncing'"> מסנכרן את אנשי הקשר שלך ... </div>
+        <div ng-if="vm.loadingMode === 'loading'"> טוען נתונים ... </div>
+    </div>
 </div>

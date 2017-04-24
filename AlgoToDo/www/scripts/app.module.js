@@ -22,6 +22,7 @@
         'ngRoute',
         'md.data.table',
         'ngMaterialDatePicker',
+        'angular-web-notification',
 
         /*
          * Everybody has access to these.

@@ -115,6 +115,15 @@
             }
         }
 
+        var removeTaskFromCachedTasksToUpdateList = function (task) {
+            if (self.$storage.cachedTasksToUpdateList !== undefined) {
+                var index = common.arrayObjectIndexOf(self.$storage.cachedTasksToUpdateList, '_id', task._id);
+                if (index !== -1) {
+                    self.$storage.cachedTasksToUpdateList.splice(index, 1);
+                }
+            }
+        }
+
         var addCommentToCachedNewCommentsList = function (taskId, comment, userIdToNotify) {
             if (self.$storage.cachedNewCommentsList === undefined) {
                 self.$storage.cachedNewCommentsList = [];
@@ -217,7 +226,8 @@
             addTasksToCachedNewRepeatsTasksList: addTasksToCachedNewRepeatsTasksList,
             addTasksToCachedUpdateRepeatsTasksList: addTasksToCachedUpdateRepeatsTasksList,
             addTasksToCachedDeleteRepeatsTasksList: addTasksToCachedDeleteRepeatsTasksList,
-            addTasksToCachedImagesList: addTasksToCachedImagesList
+            addTasksToCachedImagesList: addTasksToCachedImagesList,
+            removeTaskFromCachedTasksToUpdateList: removeTaskFromCachedTasksToUpdateList
         };
 
         return service;

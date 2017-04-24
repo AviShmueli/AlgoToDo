@@ -10,7 +10,7 @@
          'socket', 'cordovaPlugins', 'dropbox', 'appConfig',
          'localNotifications', 'camera', 'device', '$mdDialog',
          'DAL', '$offlineHandler', '$location', '$timeout',
-         'pushNotifications'
+         'pushNotifications', '$toast'
     ];
 
     function taskCtrl($rootScope, $scope, logger, $q, storage,
@@ -18,7 +18,7 @@
                       socket, cordovaPlugins, dropbox, appConfig,
                       localNotifications, camera, device, $mdDialog,
                       DAL, $offlineHandler, $location, $timeout,
-                      pushNotifications) {
+                      pushNotifications, $toast) {
 
         var vm = this;
 
@@ -158,6 +158,15 @@
                 task.doneTime = new Date();
                 //datacontext.removeAllTaskImagesFromCache(task);
                 //localNotifications.cancelNotification(task._id);
+                $toast.showActionToast("המשימה סומנה כבוצע", "בטל", 2000).then(function (response) {
+                    if (response == 'ok') {
+                        task.doneTime = null;
+                        if (task.offlineMode === true) {
+                            $offlineHandler.removeTaskFromCachedTasksToUpdateList(task);
+                        }
+                        vm.setTaskStatus(task, 'inProgress');
+                    }
+                });
             }
             if (task.status === 'seen') {
                 task.seenTime = new Date();
