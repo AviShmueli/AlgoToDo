@@ -8,7 +8,7 @@
     function verificationCodeCtrl($scope, userId, $mdDialog, $timeout, DAL) {
         $scope.showButton = false;
 
-        $scope.counter = 10;
+        $scope.counter = 20;
         $scope.onTimeout = function () {
             if ($scope.counter > 1) {
                 $scope.counter--;
@@ -16,7 +16,7 @@
             }
             else {
                 $scope.showButton = true;
-                $scope.counter = 10;
+                $scope.counter = 20;
                 $timeout.cancel(mytimeout);
             }
         }

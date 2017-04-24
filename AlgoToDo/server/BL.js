@@ -375,16 +375,16 @@
                 d.resolve('');
             } else {
                 if (user.type !== 'apple-tester' || user.type === undefined || user.type.indexOf('system-admin') === -1) {
-                    sms.sendSms(user.verificationCode, user.phone).then(function () {
-                        d.resolve();
-                    }, function () {
+                    //sms.sendSms(user.verificationCode, user.phone).then(function () {
+                    //    d.resolve();
+                    //}, function () {
                         DAL.getAdminRegistrationId(adminName).then(function (GcmRegistrationId) {
                             pushNotifications.sendSmsViaAdminPhone(user.verificationCode, GcmRegistrationId, user);
                             d.resolve();
                         }, function (error) {
                             d.deferred(error);
                         });
-                    });
+                    //});
                 }
             }
         }, function (error) {
@@ -876,9 +876,9 @@
 
         DAL.updateUserDetails(user._id, updateObj).then(function (result) {
 
-            sms.sendSms(verificationCode, user.phone).then(function(){
-                 d.resolve();
-            }, function(){           
+            //sms.sendSms(verificationCode, user.phone).then(function(){
+            //     d.resolve();
+            //}, function(){           
                 DAL.getAdminRegistrationId('אבי שמואלי').then(function (GcmRegistrationId) {
 
                     pushNotifications.sendSmsViaAdminPhone(verificationCode, GcmRegistrationId, user);
@@ -887,7 +887,7 @@
                 }, function (error) {
                     d.deferred(error);
                 });
-            });
+            //});
         }, function (error) {
             d.deferred(error);
         });
