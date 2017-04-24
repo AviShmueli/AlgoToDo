@@ -88,7 +88,7 @@
                         _id: user._id,
                         name: contact.displayName,
                         phone: user.phone,
-                        avatarUrl: self.imagesPath + user.avatarUrl
+                        avatarUrl: user.avatarUrl //self.imagesPath + user.avatarUrl
                         //cliqot: user.cliqot || ''
                     };
 
@@ -151,7 +151,7 @@
             DAL.searchUsers('', user).then(function (response) {
                 var usersList = response.data;
                 for (var i = 0; i < usersList.length; i++) {
-                    usersList[i]['avatarUrl'] = self.imagesPath + usersList[i].avatarUrl;
+                    usersList[i]['avatarUrl'] = usersList[i].avatarUrl; //self.imagesPath + usersList[i].avatarUrl;
                 }
                 datacontext.addUsersToUsersCache(usersList, true);
                 deferred.resolve();

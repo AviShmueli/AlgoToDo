@@ -145,6 +145,7 @@
         };
 
         var updateLocalTasks = function (newTasks, isFromInterval) {
+            var user = getUserFromLocalStorage();
             var tasksList = getTaskList();
             if (tasksList === []) {
                 setTaskList(newTasks);
@@ -154,7 +155,7 @@
                 var localTaskIndex = common.arrayObjectIndexOf(tasksList, '_id', newTask._id);
                 if (localTaskIndex === -1) {
                     pushTasksToTasksList([newTask]);
-                    if (!isMobileDevice() && newTask.status === 'inProgress' && isFromInterval) {
+                    if (!isMobileDevice() && newTask.status === 'inProgress' && newTask.from._id !== user._id && isFromInterval) {
                         browserNotification.showNotification("משימה חדשה", newTask.description, newTask._id);
                     }
                 }
