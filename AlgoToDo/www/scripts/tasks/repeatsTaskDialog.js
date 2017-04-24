@@ -62,6 +62,9 @@
 
             for (var i = 0; i < cachedUsers.length; i++) {
                 if (cachedUsers[i].name.indexOf(query) !== -1) {
+                    if (cachedUsers[i]['avatarUrl'].indexOf('file:') === -1) {
+                        cachedUsers[i]['avatarUrl'] = vm.imagesPath + cachedUsers[i].avatarUrl;
+                    } 
                     matchesUsersFromCache.push(cachedUsers[i]);
                 }
             }
@@ -76,7 +79,7 @@
             DAL.searchUsers(query, vm.user).then(function (response) {
                 var usersList = response.data;
                 for (var i = 0; i < usersList.length; i++) {
-                    usersList[i]['avatarFullUrl'] = vm.imagesPath + usersList[i].avatarUrl;
+                    usersList[i]['avatarUrl'] = vm.imagesPath + usersList[i].avatarUrl;
                 }
                 datacontext.addUsersToUsersCache(usersList);
                 deferred.resolve(usersList);

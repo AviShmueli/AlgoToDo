@@ -44,6 +44,9 @@
 
             for (var i = 0; i < cachedUsers.length; i++) {
                 if (cachedUsers[i].name.indexOf(query) !== -1) {
+                    if (cachedUsers[i]['avatarUrl'].indexOf('file:') === -1) {
+                        cachedUsers[i]['avatarUrl'] = vm.imagesPath + cachedUsers[i].avatarUrl;
+                    } 
                     matchesUsersFromCache.push(cachedUsers[i]);
                 }
             }
