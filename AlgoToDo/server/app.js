@@ -410,3 +410,14 @@ app.post('/TaskManeger/deleteGroups', function (req, res) {
     });
 
 });
+
+app.get('/TaskManeger/getUsersInCliqa', function (req, res) {
+
+    BL.getUsersInCliqa(req.query.cliqaId).then(function(result) {
+        res.send(result);   
+    }, function(error) {
+        winston.log('error', error.message , error.error);
+        res.status(500).send(error); 
+    });
+
+});

@@ -36,6 +36,7 @@
     DAL.getUsersByPhoneNumbers = getUsersByPhoneNumbers;
     DAL.addNewGroup = addNewGroup;
     DAL.deleteGroups = deleteGroups;
+    DAL.getUsersInCliqa = getUsersInCliqa;
 
 
     var deferred = require('deferred');
@@ -1154,6 +1155,42 @@
         return d.promise;
     }
 
+    function getUsersInCliqa(cliqaId) {
+
+        var d = deferred();
+
+        getCollection('users').then(function (mongo) {
+
+            mongo.collection.find({
+                'cliqot._id' : new ObjectID(cliqaId),
+                cliqot: { $exists: true }
+            }, {
+                '_id': true,
+                'name': true,
+                'avatarUrl': true,
+                'type': true,
+                'usersInGroup': true,
+                'phone': true,
+                'creatorId': true
+                //'cliqot': true
+            }).toArray(function (err, result) {
+
+                if (err) {
+                    var errorObj = {
+                        message: "error while trying search user: ",
+                        error: err
+                    };
+                    mongo.db.close();
+                    d.reject(errorObj);
+                }
+
+                mongo.db.close();
+                d.resolve(result);
+            });
+        });
+
+        return d.promise;
+    }
 
 })(module.exports);
 
