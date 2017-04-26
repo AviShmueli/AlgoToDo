@@ -61,6 +61,9 @@
               .when('/groupTask/:taskId', {
                   templateUrl: 'scripts/tasks/groupTask.html'
               })
+              .when('/cliqa/:cliqaId', {
+                  templateUrl: 'scripts/cliqot/cliqa.html'
+              })
               .otherwise({
                   templateUrl: 'scripts/widgets/landingPage.html'
               });
@@ -84,8 +87,8 @@
             return {
                 region : 'IL',
                 appDomain:
-                   //'http://app.asiti.net'// 'https://algotodo.herokuapp.com'
-                   'https://algotodo-test.herokuapp.com'
+                   'http://app.asiti.net'// 'https://algotodo.herokuapp.com'
+                   //'https://algotodo-test.herokuapp.com'
                    //'http://localhost:5001'
             };
         })
