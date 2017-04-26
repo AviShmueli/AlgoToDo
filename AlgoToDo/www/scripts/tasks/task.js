@@ -42,6 +42,11 @@
         }
         vm.task.unSeenResponses = 0;
 
+        vm.isIosdDevice = false;
+        if (device.isMobileDevice()) {
+            vm.isIosdDevice = cordova.platformId === 'ios';
+        }
+
         if (vm.task.comments === undefined) {
             vm.task.comments = [];
         }
@@ -82,15 +87,15 @@
                             vm.task.comments.push(comment);
                             addImageToGallery(comment.fileName, comment.fileLocalPath);
 
-                            if (vm.task.from._id !== vm.task.to._id) {
+                            //if (vm.task.from._id !== vm.task.to._id) {
                                 dropbox.uploadNewImageToDropbox(fileEntry.filesystem.root.nativeURL, fileEntry.name, fileName).then(function () {
                                     DAL.newComment(vm.task._id, tempComment);
                                     camera.cleanupAfterPictureTaken();
                                 });
-                            }
-                            else {
-                                DAL.newComment(vm.task._id, tempComment);
-                            }
+                           // }
+                            //else {
+                            //    DAL.newComment(vm.task._id, tempComment);
+                            //}
 
                         }, function (error) {
                             logger.error("error while trying to save File to Storage", error);

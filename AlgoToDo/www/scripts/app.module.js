@@ -23,6 +23,7 @@
         'md.data.table',
         'ngMaterialDatePicker',
         'angular-web-notification',
+        '720kb.tooltips',
 
         /*
          * Everybody has access to these.
@@ -37,7 +38,8 @@
         'app.tasks',
         'app.management',
         'app.directives',
-        'app.contacts'
+        'app.contacts',
+        'app.cliqot'
         /*
          * Feature areas
          */

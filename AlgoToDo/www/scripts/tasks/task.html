@@ -75,7 +75,7 @@
                             <span class="font-bold" ng-bind-html="(vm.task.createTime | amCalendar)"></span>
                         </div>
                         <div layout="row" class="comment-description">
-                            <pre class="comment-description">{{::vm.task.description}}</pre>
+                            <pre class="comment-description" ng-class="{'pre-wrap' : !vm.isIosDevice}">{{::vm.task.description}}</pre>
                         </div>
                     </md-card-content>
                     <md-divider></md-divider>
@@ -112,14 +112,16 @@
                         </div>
                         <div layout="row" class="font-14px" ng-if="comment.text !== ''">
                             <ng-md-icon ng-if="comment.offlineMode" icon="sync_problem" class="offline-icon-fill" size="20"></ng-md-icon>
-                            <pre class="comment-description font-14px">{{::comment.text}}</pre>
+                            <pre class="comment-description font-14px" ng-class="{'pre-wrap' : !vm.isIosDevice}">{{::comment.text}}</pre>
                         </div>
                         <div class="image-wraper" ng-if="comment.fileName !== undefined">
                             <img md-whiteframe="5" id="myImage" class="md-card-image padded"
                                  alt="מוריד תמונה" ng-src="{{comment.fileLocalPath}}"
                                  ng-click="vm.showGalary(comment)">
                             <md-progress-circular md-mode="indeterminate" ng-if="vm.showProgress && comment.fileLocalPath.indexOf('upload-empty') !== -1" md-diameter="40px" class="md-accent md-hue-2"></md-progress-circular>
-                            <ng-md-icon ng-if="comment.errorDownloadFile" icon="error" class="offline-icon-fill" size="40"></ng-md-icon>
+                            <ng-md-icon ng-if="comment.errorDownloadFile" 
+                                        icon="error" class="offline-icon-fill" size="40">
+                            </ng-md-icon>
                         </div>
                     </md-card-content>
                 </md-card>

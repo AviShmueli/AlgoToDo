@@ -430,6 +430,18 @@
             return $http(req);
         };
 
+        var getUsersInCliqa = function (cliqaId) {
+            var req = {
+                method: 'GET',
+                url: appConfig.appDomain + '/TaskManeger/getUsersInCliqa',
+                data: {
+                    cliqaId: cliqaId
+                }
+            };
+
+            return $http(req);
+        }
+
         var service = {
             saveNewTasks: saveNewTasks,
             getTasks: getTasks,
@@ -461,7 +473,8 @@
             sendReminderForTasks: sendReminderForTasks,
             getUsersByPhoneNumbers: getUsersByPhoneNumbers,
             addNewGroup: addNewGroup,
-            deleteGroups: deleteGroups
+            deleteGroups: deleteGroups,
+            getUsersInCliqa: getUsersInCliqa
       
         };
 

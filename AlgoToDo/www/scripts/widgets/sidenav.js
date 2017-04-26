@@ -30,7 +30,8 @@
             vm.cancelAllNotifications = $scope.cancelAllNotifications;
             vm.appVersion = '';
             vm.showLogoffButton = false;
-            
+            vm.expand_icon = 'add_circle';
+
             document.addEventListener("deviceready", function () {
                 device.getAppVersion().then(function (version) {
                     vm.appVersion = version;
@@ -113,6 +114,10 @@
 
             vm.goToContactsListPage = function () {
                 $location.path('/contactsList');
+            }
+
+            vm.goToCliqaPage = function (id) {
+                $location.path('/cliqa/' + id);
             }
         }
 

@@ -30,6 +30,47 @@
             </a>
         </md-item>
         <md-divider></md-divider>
+        <md-subheader dir="rtl">           
+            <span flex></span>
+            <span>קליקות</span>
+        </md-subheader>
+        <md-item ng-if="vm.user.type === 'system-admin'">
+            <a class="cursor-pointer" ng-click="vm.showAddCliqaDialog()">
+                <md-item-content md-ink-ripple layout="row" layout-align="start center">
+                    <div class="inset">
+                        <md-icon md-svg-src="{{::vm.imagesPath + '/images/cliqa.svg'}}"></md-icon>
+                    </div>
+                    <span flex></span>
+                    <div class="inset">
+                        קליקה חדשה
+                    </div>
+                </md-item-content>
+            </a>
+        </md-item>
+        <md-item >
+            <a class="cursor-pointer" ng-click="vm.expand_icon = vm.expand_icon === 'add_circle' ? 'remove_circle' : 'add_circle'">
+                <md-item-content md-ink-ripple layout="row" layout-align="start center">
+                    <div class="inset">
+                        <ng-md-icon icon={{vm.expand_icon}} options='{"rotation": "counterclock", "duration": 375}'></ng-md-icon>
+                    </div>
+                    <span flex></span>
+                    <div class="inset">
+                        הקליקות שלי
+                    </div>
+                </md-item-content>
+            </a>
+        </md-item>
+        <md-item ng-repeat="cliqa in vm.user.cliqot" ng-if="vm.expand_icon === 'remove_circle'">
+            <a class="cursor-pointer" ng-click="vm.goToCliqaPage(cliqa._id)">
+                <md-item-content md-ink-ripple layout="row" layout-align="start center">
+                    <span flex></span>
+                    <div class="inset">
+                        {{cliqa.name}}
+                    </div>
+                </md-item-content>
+            </a>
+        </md-item>
+        <md-divider></md-divider>
         <md-subheader dir="rtl">
             <span flex></span>
             <span>ניהול</span>
@@ -56,19 +97,6 @@
                     <span flex></span>
                     <div class="inset">
                         משימות חוזרות
-                    </div>
-                </md-item-content>
-            </a>
-        </md-item>
-        <md-item ng-if="vm.user.type === 'system-admin'">
-            <a class="cursor-pointer" ng-click="vm.showAddCliqaDialog()">
-                <md-item-content md-ink-ripple layout="row" layout-align="start center">
-                    <div class="inset">
-                        <ng-md-icon icon="group_add"></ng-md-icon>
-                    </div>
-                    <span flex></span>
-                    <div class="inset">
-                        הוסף קליקה
                     </div>
                 </md-item-content>
             </a>

@@ -45,7 +45,7 @@
 
             for (var i = 0; i < cachedUsers.length; i++) {
                 if (cachedUsers[i].name.indexOf(query) !== -1) {
-                    if (cachedUsers[i]['avatarUrl'].indexOf('file:') === -1) {
+                    if (!cachedUsers[i]['avatarUrl'].startsWith('file:') && !cachedUsers[i]['avatarUrl'].startsWith('content:')) {
                         cachedUsers[i]['avatarUrl'] = vm.imagesPath + cachedUsers[i].avatarUrl;
                     }                    
                     matchesUsersFromCache.push(cachedUsers[i]);
@@ -118,7 +118,7 @@
 
                     var isTaskFromMeToMe = (taskListToAdd.length === 1 && taskListToAdd[0].from._id === taskListToAdd[0].to._id);
 
-                    if (vm.taskHasImage === true && !isTaskFromMeToMe) {
+                    if (vm.taskHasImage === true) {
                         //cordovaPlugins.showToast("שולח, מעלה תמונה...", 100000);
                         var splitedPath = vm.newImage.nativeUrl.split('/');               
                         var fileName = splitedPath[splitedPath.length - 1];
@@ -254,11 +254,11 @@
         };
 
         vm.takePic = function (sourceType) {
-            vm.taskHasImage = true;
+            
             vm.takeingPic = true;
             document.addEventListener("deviceready", function () {
                 camera.takePicture(sourceType).then(function (fileUrl) {
-
+                    vm.taskHasImage = true;
                     handelNewImage(fileUrl);
 
                 }, function (err) {
@@ -299,7 +299,7 @@
                     fileName: fileName
                 };
 
-                vm.task.comments.push(comment);
+                vm.task.comments = [comment];
             });
         };
 

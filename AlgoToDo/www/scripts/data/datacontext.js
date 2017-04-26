@@ -76,7 +76,7 @@
         };
 
         var addTaskToTaskList = function (task) {
-            var count = self.$storage.tasksList.filter(function (t) { return t._id === task._id; });
+            var count = getTaskList().filter(function (t) { return t._id === task._id; });
             // prevent pushing the same task
             if (count.length === 0) {
                 replaceUsersWithPhoneContact([task]);

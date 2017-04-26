@@ -1,0 +1,81 @@
+﻿<div ng-controller="cliqaCtrl as vm" layout="column" class="relative" layout-fill role="main">
+    <md-toolbar class="task-toolbar">
+        <div class="md-toolbar-tools">
+            <!--<md-button class="md-icon-button" ng-click="vm.addGroup($event)" aria-label="Menu">
+                <ng-md-icon icon="group_add">
+                </ng-md-icon>
+            </md-button>-->
+            <span flex></span>
+            <h2>
+                <span class="color-white">{{vm.cliqaName}}</span>
+            </h2>
+            <md-button class="md-icon-button" ng-click="vm.goBack()" aria-label="Menu">
+                <ng-md-icon icon="arrow_forward"></ng-md-icon>
+            </md-button>
+        </div>
+    </md-toolbar>
+
+    <md-fab-trigger>
+        <md-button class="md-fab md-fab-bottom-left z-index-21" aria-label="Add" ng-click="vm.addUserToCliqa($event)" md-no-ink="true">
+            <ng-md-icon class="add-icon" icon="person_add"></ng-md-icon>
+        </md-button>
+    </md-fab-trigger>
+
+    <md-content flex md-scroll-y class="height-100P">
+        <main flex>
+            <ui-view layout="column" layout-fill>
+                <div aria-labelledby="all"
+                     layout="row" layout-align="center center">
+                    <md-list flex flex-gt-sm="50" flex-md="66" dir="rtl" ng-show="vm.contactsList.length > 0">
+                        <md-list-item ng-repeat="contact in vm.contactsList | orderBy : 'name'" class="noright task-item margin margin-top-7px">
+
+                            <md-card-avatar>
+                                <img ng-if="(contact.avatarUrl.startsWith('content') || contact.avatarUrl.startsWith('file'))" alt="" ng-src="{{contact.avatarUrl}}" class="md-avatar user-avatar margin-right-10px" />
+                                <img ng-if="!contact.avatarUrl.startsWith('content')  && !contact.avatarUrl.startsWith('file')" alt="" ng-src="{{vm.imagesPath + contact.avatarUrl}}" class="md-avatar user-avatar margin-right-10px" />
+                            </md-card-avatar>
+                            <a class="md-tile-content margin-bottom-14px" flex="100">
+                                <div layout="row">
+                                    <span class="from">{{contact.name}}</span>
+                                    <!--<ng-md-icon class="head-icon fill-black" icon="send" size="10"></ng-md-icon>-->
+                                    <!--<span flex></span>-->
+                                    <!--<span class="font-bold">{{vm.getRepeatedTime(task)}}</span>-->
+                                </div>
+
+                                <div layout="row">
+                                    <div layout="row" flex="90" class="font-14px margin-left-15px margin-top-7px">
+                                        <span ng-if="contact.phone !== undefined">{{vm.getLocalPhoneFormat(contact.phone)}}</span>
+                                        <span ng-if="contact.type === 'group'">{{vm.getUsersInGroupAsString(contact.usersInGroup)}}</span>
+                                    </div>
+                                    <div layout="column" flex="10" layout-align="center end">
+                                        <!--<md-badge class="new-responses-badge-inProcess" ng-if="task.unSeenResponses > 0">{{item.unSeenResponses}}</md-badge>-->
+
+                                        <md-button ng-if="contact.creatorId !== undefined && contact.creatorId === vm.user._id"
+                                                   class="md-fab md-mini md-icon-button background-color-orange-hard"
+                                                   ng-click="vm.editGroup(contact, $event)" aria-label="done">
+                                            <ng-md-icon icon="edit"></ng-md-icon>
+                                        </md-button>
+                                    </div>
+                                </div>
+                                <!--<div layout="row" flex="90" class="font-14px margin-left-15px margin-top-7px">
+                                    <span>{{::vm.getCliqotNamesAsString(contact.cliqot)}}</span>
+                                </div>-->
+                            </a>
+                            <md-divider md-inset ng-if="!$last"></md-divider>
+                        </md-list-item>
+                        <md-divider></md-divider>
+                    </md-list>
+                    <md-list dir="rtl" ng-hide="vm.contactsList.length > 0">
+                        <md-item>
+                            <md-item-content>
+                                <h3 class="text-align-center"> אין אנשי קשר בקליקה </h3>
+                                <h4> לחץ על כפתור + בכדי להוסיף אנשי קשר לקליקה </h4>
+                            </md-item-content>
+                        </md-item>
+                        <md-divider></md-divider>
+                    </md-list>
+                </div>
+            </ui-view>
+        </main>
+    </md-content>
+
+</div>
