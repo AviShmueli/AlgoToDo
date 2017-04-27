@@ -448,8 +448,13 @@
                         "$options": "i"
                     }
                 }, {
-                    'cliqot._id': new ObjectID(cliqaId)
+                    $or: [{
+                        'cliqaId': cliqaId
+                    }, {
+                        'cliqot._id': new ObjectID(cliqaId)
+                    }]
                 }]
+
             };
         } else {
             query = {
