@@ -61,24 +61,26 @@
             return self.$storage.tasksList !== undefined ? self.$storage.tasksList : [];
         };
 
-        var getTaskByTaskId = function (taskId) {
-            var result = getTaskList().filter(function (t) { return t._id === taskId; });
-            if (result.length === 1) {
-                return result[0];
+        var getTaskByTaskId = function (taskId) {           
+            var tasksList = getTaskList();
+            var index = common.arrayObjectIndexOf(tasksList, '_id', taskId);
+            if (index !== -1) {
+                return tasksList[index];
             }
             else {
-                result = getMoreLoadedTasks().filter(function (t) { return t._id === taskId; });
-                if (result.length === 1) {
-                    return result[0];
+                var moreLoadedTasks = getMoreLoadedTasks();
+                index = common.arrayObjectIndexOf(moreLoadedTasks, '_id', taskId);
+                if (index !== -1) {
+                    return moreLoadedTasks[index];
                 }
             }
             return {};
         };
 
         var addTaskToTaskList = function (task) {
-            var count = getTaskList().filter(function (t) { return t._id === task._id; });
-            // prevent pushing the same task
-            if (count.length === 0) {
+            var tasksList = getTaskList();
+            var index = common.arrayObjectIndexOf(tasksList, '_id', task._id);
+            if (index === -1) {
                 replaceUsersWithPhoneContact([task]);
                 self.$storage.tasksList.push(task);
             }

@@ -26,7 +26,7 @@
             <ui-view layout="column" layout-fill>
                 <div aria-labelledby="all"
                      layout="row" layout-align="center center">
-                    <md-list flex flex-gt-sm="50" flex-md="66" dir="rtl" ng-show="vm.contactsList.length > 0">
+                    <md-list flex flex-gt-sm="50" flex-md="66" dir="rtl" ng-if="vm.contactsList.length > 0 && vm.loadingContacts === false">
                         <md-list-item ng-repeat="contact in vm.contactsList | orderBy : 'name'" class="noright task-item margin margin-top-7px">
 
                             <md-card-avatar>
@@ -47,8 +47,8 @@
                                         <span ng-if="contact.type === 'group'">{{vm.getUsersInGroupAsString(contact.usersInGroup)}}</span>
                                     </div>
                                     <div layout="column" flex="10" layout-align="center end">
-                                        <!--<md-badge class="new-responses-badge-inProcess" ng-if="task.unSeenResponses > 0">{{item.unSeenResponses}}</md-badge>-->
-
+                                        <!--<md-badge class="new-responses-badge-inProcess" ng-if="task.unSeenResponses > 0">{{item.unSeenResponses}}</md                                        <!--<md-badge class="new-responses-badge-inProcess" ng-if="task.unSeenResponses > 0">{{item.unSeenResponses}}</md-badge>-->
+                                        
                                         <md-button ng-if="contact.creatorId !== undefined && contact.creatorId === vm.user._id"
                                                    class="md-fab md-mini md-icon-button background-color-orange-hard"
                                                    ng-click="vm.editGroup(contact, $event)" aria-label="done">
@@ -60,15 +60,32 @@
                                     <span>{{::vm.getCliqotNamesAsString(contact.cliqot)}}</span>
                                 </div>-->
                             </a>
+                            <div ng-if="contact.type !== undefined && contact.type.indexOf('admin') !== -1" class="md-item-text md-whiteframe-z1 cliqa-admin-text" flex>
+                                <h3>מנהל/ת הקליקה</h3>
+                            </div>
                             <md-divider md-inset ng-if="!$last"></md-divider>
                         </md-list-item>
                         <md-divider></md-divider>
                     </md-list>
-                    <md-list dir="rtl" ng-hide="vm.contactsList.length > 0">
+                    <md-list dir="rtl" ng-if="vm.contactsList.length < 1 && vm.loadingContacts === false">
                         <md-item>
                             <md-item-content>
                                 <h3 class="text-align-center"> אין אנשי קשר בקליקה </h3>
                                 <h4> לחץ על כפתור + בכדי להוסיף אנשי קשר לקליקה </h4>
+                            </md-item-content>
+                        </md-item>
+                        <md-divider></md-divider>
+                    </md-list>
+                    <md-list dir="rtl" ng-if="vm.loadingContacts === true">
+                        <br/>
+                        <md-item layout="row" layout-align="center center">
+                            <md-item-content>
+                                <md-progress-circular md-mode="indeterminate" md-diameter="20px" class="md-accent md-hue-2"></md-progress-circular>
+                            </md-item-content>
+                        </md-item>
+                        <md-item layout="row" layout-align="center center">
+                            <md-item-content>
+                                <h4 class="text-align-center"> טוען אנשי קשר... </h4>
                             </md-item-content>
                         </md-item>
                         <md-divider></md-divider>

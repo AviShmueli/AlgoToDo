@@ -76,6 +76,9 @@
         },
         "cordova-plugin-filepath": {
             "PACKAGE_NAME": "com.algotodo.app"
+        },
+        "cordova-plugin-actionsheet": {
+            "PACKAGE_NAME": "com.algotodo.app"
         }
     },
     "dependent_plugins": {

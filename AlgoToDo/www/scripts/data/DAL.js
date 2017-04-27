@@ -434,7 +434,7 @@
             var req = {
                 method: 'GET',
                 url: appConfig.appDomain + '/TaskManeger/getUsersInCliqa',
-                data: {
+                params: {
                     cliqaId: cliqaId
                 }
             };

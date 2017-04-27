@@ -7,11 +7,11 @@
 
     cordovaPlugins.$inject = ['$rootScope', '$cordovaToast', '$cordovaBadge', '$log',
                               '$q', '$cordovaDatePicker', '$cordovaSocialSharing',
-                              '$cordovaAppRate'];
+                              '$cordovaAppRate', '$cordovaActionSheet'];
 
     function cordovaPlugins($rootScope, $cordovaToast, $cordovaBadge, $log,
                             $q, $cordovaDatePicker, $cordovaSocialSharing,
-                            $cordovaAppRate) {
+                            $cordovaAppRate, $cordovaActionSheet) {
 
         var self = this;
         self.appState = 'foreground';
@@ -99,12 +99,20 @@
         /* ----- Social Sharing -----*/
         
         var shareApp = function () {
-            var message = 'קישור להורדת האפליקציה Asiti, אפליקצית מסרים מידית מוכוונת משימות אישיות וחברתיות.',
+            
+                                                                                    
+            document.addEventListener("deviceready", function () {
+                var platformName = cordova.platformId === 'android' ? 'Android' : 'iPhone';
+                var message = 'היי,\n\n'+
+                'הורדתי את Asiti למכשיר ה-' + platformName + ' שלי.\n' +
+                'זו תוכנת מסרים מידיים לטלפונים חכמים שמוכוונת לניהול משימות אישיות וחברתיות.  \n\n'+
+                'עם Asiti קל לנהל את המשימות שלך ולשתף משימות עם חברים, מכרים, ועמיתים בצורה מהירה ופשוטה, ולעקוב אחר סטטוס ביצוע המשימה.\n\n'+
+                'האפליקציה Asiti זמינה למכשירי Android, iPhone  ובדפדפן במחשב שלך.\n\n'+
+                'אפשר להוריד את Asiti מהאתר \n',
                 subject = '',
                 file = [],
                 link = 'http://www.asiti.net/download-asiti';
-                                                                                    
-            document.addEventListener("deviceready", function () {
+
                 $cordovaSocialSharing
                    .share(message, subject, file, link) // Share via native share sheet
                    .then(function (result) {
@@ -128,6 +136,29 @@
             }, false);
         }
 
+        /* ----- Action Sheet ------*/
+
+        var showActionSheet = function () {
+            var options = {
+                title: 'What do you want with this image?',
+                buttonLabels: ['Share via Facebook', 'Share via Twitter'],
+                addCancelButtonWithLabel: 'Cancel',
+                androidEnableCancelButton: true,
+                winphoneEnableCancelButton: true,
+                addDestructiveButtonWithLabel: 'Delete it'
+            };
+
+
+            document.addEventListener("deviceready", function () {
+
+                $cordovaActionSheet.show(options)
+                  .then(function (btnIndex) {
+                      var index = btnIndex;
+                  });
+            }, false);
+        }
+
+
         var service = {
             showToast: showToast,
             clearAppBadge: clearAppBadge,
@@ -136,7 +167,8 @@
             shareApp: shareApp,
             rateApp: rateApp,
             minimizeApp: minimizeApp,
-            navigateToAppStore: navigateToAppStore
+            navigateToAppStore: navigateToAppStore,
+            showActionSheet: showActionSheet
         };
 
         return service;

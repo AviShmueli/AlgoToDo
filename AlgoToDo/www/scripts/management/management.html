@@ -198,11 +198,14 @@
                                         <ng-md-icon ng-if="user.device.platform === 'iOS'" icon="apple"></ng-md-icon>
                                     </td>
                                     <td md-cell>{{user.device.manufacturer + ' ' + user.device.model}}</td>
-                                    <td md-cell tooltips tooltip-template="{{vm.getCliqotNamesAsString(user.cliqot)}}">
+                                    <td ng-if="vm.getCliqotNamesAsString(user.cliqot).length > 10" md-cell tooltips tooltip-template="{{vm.getCliqotNamesAsString(user.cliqot)}}">
                                         {{vm.getCliqotNamesAsString(user.cliqot).substring(0, 10) + '...'}}
                                         <!--<md-tooltip dir="rtl">
                                             {{vm.getCliqotNamesAsString(user.cliqot)}}
                                         </md-tooltip>-->
+                                    </td>
+                                    <td ng-if="vm.getCliqotNamesAsString(user.cliqot).length <= 10" md-cell>
+                                        {{vm.getCliqotNamesAsString(user.cliqot)}}
                                     </td>
                                     <td md-cell>{{user.versionInstalled}}</td>
                                     <td md-cell>{{user.verificationCode}}</td>

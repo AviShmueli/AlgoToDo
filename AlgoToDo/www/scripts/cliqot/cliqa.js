@@ -23,8 +23,9 @@
         vm.user = datacontext.getUserFromLocalStorage();
         
         angular.element(document.querySelectorAll('html')).removeClass("hight-auto");
-
+        vm.loadingContacts = true;
         DAL.getUsersInCliqa(cliqaId).then(function (response) {
+            vm.loadingContacts = false;
             vm.contactsList = response.data;
         });
 
@@ -56,9 +57,9 @@
 
         vm.addUserToCliqa = function (ev) {
             $mdDialog.show({
-                controller: 'addGroupDialogCtrl',
+                controller: 'contactsPickerCtrl',
                 controllerAs: 'vm',
-                templateUrl: 'scripts/contacts/addGroupDialog.html',
+                templateUrl: 'scripts/contacts/contactsPicker.tmpl.html',
                 targetEvent: ev,
                 fullscreen: true,
                 clickOutsideToClose: true,
@@ -67,8 +68,8 @@
                     updateList: function () { }
                     //    calledFromIntent: calledFromIntent
                 }
-            }).then(function () {
-
+            }).then(function (selectedContacts) {
+                vm.contactsList = vm.contactsList.concat(selectedContacts);
             });
         }
 

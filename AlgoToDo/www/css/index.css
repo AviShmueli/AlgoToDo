@@ -824,3 +824,7 @@ md-tabs.md-primary > md-tabs-wrapper > md-tabs-canvas > md-pagination-wrapper > 
 .timer-text{ color:rgb(186, 195, 196) ;bottom: 7px; position: relative;}
 .time-points{    top: 35px;    position: relative;    font-size: xx-large;}
 .md-toast-content { direction: rtl !important;}
+.cliqa-admin-text { padding: 0 20px; border: rgb(0,188,212) 1px solid;}
+.cliqa-admin-text > h3{ margin: 3px; }
+.contact-selected {     background-color: #def5f5;}
+.seaech-input-container{ height: 34px; }
