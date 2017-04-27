@@ -58,13 +58,15 @@
                 $mdSidenav("left").close();
             };
 
-            vm.showAddCliqaDialog = function () {
+            vm.showAddCliqaDialog = function (ev) {
                 var confirm = $mdDialog.prompt()
                   .parent(angular.element(document.querySelector('#VerificationCodePromptContainer')))
                   .title('קליקה חדשה')
                   .placeholder('איך תרצה לקרוא לקליקה?')
                   .ariaLabel('cliqaName')
-                  .ok('הוסף');
+                  .targetEvent(ev)
+                  .ok('הוסף')
+                  .cancel('בטל');
 
                 $mdDialog.show(confirm).then(function (cliqaName) {
                     if (cliqaName !== undefined && cliqaName !== '') {

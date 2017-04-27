@@ -35,7 +35,7 @@
             <span>קליקות</span>
         </md-subheader>
         <md-item ng-if="vm.user.type === 'system-admin'">
-            <a class="cursor-pointer" ng-click="vm.showAddCliqaDialog()">
+            <a class="cursor-pointer" ng-click="vm.showAddCliqaDialog($event)">
                 <md-item-content md-ink-ripple layout="row" layout-align="start center">
                     <div class="inset">
                         <md-icon md-svg-src="{{::vm.imagesPath + '/images/cliqa.svg'}}"></md-icon>
@@ -157,7 +157,7 @@
                     </div>
                     <span flex></span>
                     <div class="inset">
-                        התנתק
+                        התנתק/י
                     </div>
                 </md-item-content>
             </a>
@@ -175,7 +175,7 @@
                     </div>
                     <span flex></span>
                     <div class="inset">
-                        שתף את האפליקציה
+                        שתף/י את האפליקציה
                     </div>
                 </md-item-content>
             </a>
@@ -188,7 +188,7 @@
                     </div>
                     <span flex></span>
                     <div class="inset">
-                        דרג אותנו
+                        דרג/י אותנו
                     </div>
                 </md-item-content>
             </a>
