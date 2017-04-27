@@ -313,6 +313,7 @@ console.log("2.3");
             for (var i = 0; i < tasks.length; i++) {
                 console.log("2.4." + i);
                 var task = tasks[i];
+                console.log("2.4." + i + '.1', task);
                 batch.find({
                     _id: new ObjectID(task._id)
                 }).updateOne({
@@ -323,6 +324,7 @@ console.log("2.3");
                         'lastModified': new Date()
                     }
                 });
+                console.log("2.4." + i + '.2');
             }
             console.log("3", batch);
             batch.execute(function (err, result) {
