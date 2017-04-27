@@ -260,8 +260,9 @@
     function updateTasksStatus(tasks) {
 
         var d = deferred();
-
+        console.log("2", tasks);
         DAL.updateTasksStatus(tasks).then(function () {
+            console.log("5", tasks);
             for (var i = 0; i < tasks.length; i++) {
                 var task = tasks[i];
 

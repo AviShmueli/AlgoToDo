@@ -323,7 +323,7 @@
                     }
                 });
             }
-
+            console.log("3", batch);
             batch.execute(function (err, result) {
 
                 if (err) {
@@ -334,7 +334,7 @@
                     mongo.db.close();
                     d.reject(errorObj);
                 }
-
+                console.log("4", result);
                 mongo.db.close();
                 d.resolve();
             });

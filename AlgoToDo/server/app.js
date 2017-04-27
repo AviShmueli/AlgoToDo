@@ -104,12 +104,13 @@ app.post('/TaskManeger/updateTaskStatus', function (req, res) {
     }, function(error) {
         winston.log('error', error.message , error.error);
         res.status(500).send(error); 
-    });
+    }); 
 });
 
 app.post('/TaskManeger/updateTasksStatus', function (req, res) {
-
+    console.log("1", req.body.tasks);
     BL.updateTasksStatus(req.body.tasks).then(function() {
+        console.log("6", 'ok');
         res.send('ok');
     }, function(error) {
         winston.log('error', error.message , error.error);
