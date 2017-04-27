@@ -301,16 +301,17 @@
     }
 
     function updateTasksStatus(tasks) {
-
+        console.log("2.1");
         var d = deferred();
 
         getCollection('tasks').then(function (mongo) {
-
+console.log("2.2");
             var batch = mongo.collection.initializeUnorderedBulkOp({
                 useLegacyOps: true
             });
-
+console.log("2.3");
             for (var i = 0; i < tasks.length; i++) {
+                console.log("2.4." + i);
                 var task = tasks[i];
                 batch.find({
                     _id: new ObjectID(task._id)
