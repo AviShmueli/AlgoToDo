@@ -27,6 +27,7 @@
         vm.searchText = null;
         vm.querySearch = querySearch;
         vm.selectedRecipients = [];
+        vm.selectedRecipientsIds = [];
         vm.showNoRecipientsSelectedError = false;
         vm.submitInProcess = false;
         vm.uploadingImage = false;
@@ -35,7 +36,46 @@
         vm.emptyFileUrl = vm.imagesPath + '/images/upload-empty.png';
         vm.uplodingInProgress = false;
         
-        function querySearch(query) {
+        $timeout(function () {
+            var element = angular.element(document.getElementsByClassName('md-chip-input-container')).find('input');
+            element.attr('readonly', 'readonly');
+            element.on('click', function (evt) {
+                vm.openContactPickerDialog(evt);
+                evt.preventDefault();
+            });
+        }, 200);
+
+        vm.openContactPickerDialog = function (ev) {
+            vm.selectedRecipientsIds = [];
+            for (var i = 0; i < vm.selectedRecipients.length; i++) {
+                vm.selectedRecipientsIds.push(vm.selectedRecipients[i]._id);
+            }
+            $mdDialog.show({
+                controller: 'contactsPickerCtrl',
+                controllerAs: 'dvm',
+                templateUrl: 'scripts/contacts/contactsPicker.tmpl.html',
+                fullscreen: true,
+                targetEvent: ev,
+                skipHide: true,
+                clickOutsideToClose: true,
+                locals: {
+                    existingContacts: vm.selectedRecipientsIds
+                    //updateList: function () { }
+                    //    calledFromIntent: calledFromIntent
+                }
+            }).then(function (selectedContacts) {
+                for (var i = 0; i < selectedContacts.length; i++) {                   
+                    if (!selectedContacts[i].avatarUrl.startsWith('file:') && !selectedContacts[i].avatarUrl.startsWith('content:')) {
+                        selectedContacts[i].avatarUrl = vm.imagesPath + selectedContacts[i].avatarUrl;
+                    }
+                }
+                vm.selectedRecipients = vm.selectedRecipients.concat(selectedContacts);
+            });
+        }
+        //vm.openContactPickerDialog(null);
+
+        function querySearch(query) {            
+
             vm.showNoRecipientsSelectedError = false;
             
             var matchesUsersFromCache = [];

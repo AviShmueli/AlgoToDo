@@ -88,6 +88,12 @@
             return deferred.promise;
         }
 
+        var pickContactUsingNativeUI = function () {
+            if (isMobileDevice()) {            
+                return $cordovaContacts.pickContact();
+            }
+        }
+
         var recordAudio = function () {
             var deferred = $q.defer();
 
@@ -123,7 +129,8 @@
             recordAudio: recordAudio,
             vibrate: vibrate,
             setStatusBarStyleBlackTranslucent: setStatusBarStyleBlackTranslucent,
-            getIOStempDirectory: getIOStempDirectory
+            getIOStempDirectory: getIOStempDirectory,
+            pickContactUsingNativeUI: pickContactUsingNativeUI
         };
 
         return service;

@@ -27,23 +27,23 @@
                             DAL.updateUserDetails(vm.user._id, 'versionInstalled', version);
                             vm.user.versionInstalled = version;
                             datacontext.saveUserToLocalStorage(vm.user);
-                            vm.loadingMode = 'syncing';
+                            /*vm.loadingMode = 'syncing';
                             contactsSync.syncPhoneContactsWithServer().then(function () {
                                 vm.loadingMode = 'loading';
                                 datacontext.deleteTaskListFromLocalStorage();
                                 datacontext.reloadAllTasks().then(function () {
-                                    $location.path('/tasksList');
+                                    //$location.path('/tasksList');
                                 });
                             }, function () {
                                 datacontext.reloadAllTasks();
-                                $location.path('/tasksList');
-                            });
+                                //$location.path('/tasksList');
+                            });*/
                         }
                         else {
                             $timeout(function () {
-                                datacontext.reloadAllTasks();
-                            }, 100);
-                            $location.path('/tasksList');
+                                datacontext.reloadAllTasks(false);
+                            }, 0);
+                            //$location.path('/tasksList');
                         }
                     });
                 }, false);
@@ -51,8 +51,8 @@
             else {
                 $timeout(function () {
                     datacontext.reloadAllTasks();
-                }, 100);
-                $location.path('/tasksList');
+                }, 0);
+                //$location.path('/tasksList');
             }           
 
             logger.info("user is now connected", vm.user);
@@ -96,7 +96,11 @@
                 }, 0);
 
                 vm.user = user;
-                login();
+                
+                $timeout(function () {
+                    login();
+                }, 0);
+                $location.path('/tasksList');
             }
             else {
 

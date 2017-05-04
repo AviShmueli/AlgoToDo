@@ -47,7 +47,7 @@
                 vm.updateList();
             }, function (error) {
                 $interval.cancel(vm.inProgressTimer);
-                cordovaPlugins.showToast("אירעה שגיאה בסנכרון אנשי השר שלך, אנא נסה שנית", 4000);
+                cordovaPlugins.showToast("אירעה שגיאה בסנכרון אנשי הקשר שלך, אנא נסה שנית", 4000);
             });
         };
 
@@ -118,63 +118,31 @@
             }
             return usersInGroupString.substring(0, usersInGroupString.length - 2);
         }
-            
-        /*
-        vm.showAdd = function (ev) {
-            vm.isDialogOpen = true;
+          
+        vm.shareApp = function () {
+            cordovaPlugins.shareApp();
+        };
+
+        vm.openContactsNativeUI = function () {
+            device.pickContactUsingNativeUI();
+        }
+
+        vm.showHelpAlert = function (ev) {
+
             $mdDialog.show({
-                controller: 'repeatsTaskDialog',
-                controllerAs: 'vm',
-                templateUrl: 'scripts/tasks/repeatsTaskDialog.html',
-                targetEvent: ev,
-                fullscreen: true,
-                locals: {
-                    taskToEdit: {},
-                    updateList: function () { }
-                }
-            }).then(function () {
-                vm.isDialogOpen = false;
-                vm.repeatsTasks = datacontext.getRepeatsTasksList();
+                controllerAs: 'dialogCtrl',
+                controller: function ($mdDialog) {
+                    this.hide = function () {
+                        $mdDialog.hide();
+                    }
+                },
+                preserveScope: true,
+                autoWrap: true,
+                skipHide: true,
+                clickOutsideToClose: true,
+                template: '<md-dialog aria-label="Mango (Fruit)" class="confirm"><md-dialog-content dir="rtl"> <div class="md-dialog-content"> <h2>עזרה באנשי קשר</h2> אם אינך רואה אנשי קשר ברשימה לחץ/י על כפתור הסנכרון בכדי לייבא אנשי קשר מספר הטלפונים שלך.<br/><br/> אם עדיין נתקלת בבעיה ניתן לפנות לתמיכה במייל avis@algo.bz <br/><br/> <button class="md-primary md-confirm-button md-button md-default-theme md-ink-ripple float-left" type="button" ng-click="dialogCtrl.hide()" md-autofocus="dialog.$type===\'alert\'"><span>תודה!</span></button> </div> </md-dialog-content></md-dialog>'
             });
-
-            document.addEventListener("deviceready", function () {
-                document.addEventListener("backbutton", backbuttonClick_FromAddRepeatTask_Callback, false);
-            }, false);
         };
-
-        var backbuttonClick_FromAddRepeatTask_Callback = function (e) {
-            e.preventDefault();
-            $mdDialog.cancel();
-            vm.isDialogOpen = false;
-            document.removeEventListener("backbutton", backbuttonClick_FromAddRepeatTask_Callback, false);
-        };
-
-        var backbuttonClick_allways_Callback1 = function (e) {
-            if (vm.isDialogOpen) {
-                e.preventDefault();
-                return;
-                // do nothing - dialog will be closed
-            }
-            if ($location.path() === '/tasksList') {
-                e.preventDefault();
-                if (!vm.exitApp) {
-                    vm.exitApp = true;
-                    cordovaPlugins.showToast("הקש שוב ליציאה", 1000);
-                    $timeout(function () { vm.exitApp = false; }, 1000);
-                } else {
-                    window.plugins.toast.hide();
-                    navigator.app.exitApp();
-                }
-            }
-            else {
-                window.history.back();
-            }
-        };
-
-        document.addEventListener("deviceready", function () {
-            document.addEventListener("backbutton", backbuttonClick_allways_Callback1, false);
-        }, false);
-        */
     }
 
 })();

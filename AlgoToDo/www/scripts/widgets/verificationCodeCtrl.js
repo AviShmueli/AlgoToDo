@@ -8,6 +8,10 @@
     function verificationCodeCtrl($scope, userId, $mdDialog, $timeout, DAL) {
         $scope.showButton = false;
 
+        $timeout(function () {
+            $scope.$broadcast('focusVerificationInput');
+        }, 100);
+
         $scope.counter = 20;
         $scope.onTimeout = function () {
             if ($scope.counter > 1) {

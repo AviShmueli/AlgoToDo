@@ -301,19 +301,14 @@
     }
 
     function updateTasksStatus(tasks) {
-        console.log("2.1");
         var d = deferred();
 
         getCollection('tasks').then(function (mongo) {
-console.log("2.2");
             var batch = mongo.collection.initializeUnorderedBulkOp({
                 useLegacyOps: true
             });
-console.log("2.3");
             for (var i = 0; i < tasks.length; i++) {
-                console.log("2.4." + i);
                 var task = tasks[i];
-                console.log("2.4." + i + '.1', task);
                 batch.find({
                     _id: new ObjectID(task._id)
                 }).updateOne({
@@ -324,9 +319,7 @@ console.log("2.3");
                         'lastModified': new Date()
                     }
                 });
-                console.log("2.4." + i + '.2');
             }
-            console.log("3", batch);
             batch.execute(function (err, result) {
 
                 if (err) {
@@ -337,7 +330,6 @@ console.log("2.3");
                     mongo.db.close();
                     d.reject(errorObj);
                 }
-                console.log("4", result);
                 mongo.db.close();
                 d.resolve();
             });

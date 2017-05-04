@@ -80,6 +80,18 @@
                 $cordovaAppRateProvider.setPreferences(prefs);
 
             }, false);
+
+
+            /*$ionicNativeTransitionsProvider.setDefaultTransition({
+                type: 'slide',
+                direction: 'left'
+            });
+
+            $ionicNativeTransitionsProvider.setDefaultBackTransition({
+                type: 'slide',
+                direction: 'right'
+            });*/
+
          })
         .service('appConfig', function () {
             var self = this;

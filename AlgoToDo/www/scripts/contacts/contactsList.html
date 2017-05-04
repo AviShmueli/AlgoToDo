@@ -1,6 +1,46 @@
 ﻿<div ng-controller="contactsListCtrl as vm" layout="column" class="relative" layout-fill role="main">
     <md-toolbar class="task-toolbar">
         <div class="md-toolbar-tools">
+            <md-menu md-position-mode="target-left target">
+                <md-button aria-label="Open phone interactions menu" class="md-icon-button" ng-click="$mdOpenMenu($event)">
+                    <ng-md-icon icon="more_vert"></ng-md-icon>
+                </md-button>
+                <md-menu-content width="4">
+                    <md-menu-item>
+                        <md-button class="no-line-height" ng-click="vm.shareApp()">
+                            <div layout="row" flex>
+                                <ng-md-icon class="icon-fill" md-menu-align-target icon="share"></ng-md-icon>
+                                <p flex class="text-align-right">ספר/י לחבר/ה</p>
+                            </div>
+                        </md-button>
+                    </md-menu-item>
+                    <md-menu-item>
+                        <md-button class="no-line-height" ng-click="vm.openContactsNativeUI()">
+                            <div layout="row" flex>
+                                <ng-md-icon md-menu-align-target icon="contacts" class="icon-fill"></ng-md-icon>
+                                <p flex class="text-align-right">אנשי קשר</p>
+                            </div>
+                        </md-button>
+                    </md-menu-item>
+                    <!--<md-menu-divider></md-menu-divider>-->
+                    <md-menu-item>
+                        <md-button class="no-line-height" ng-click="vm.syncContacts()">
+                            <div layout="row" flex>
+                                <ng-md-icon md-menu-align-target icon="sync" class="icon-fill"></ng-md-icon>
+                                <p flex class="text-align-right">רענן</p>
+                            </div>
+                        </md-button>
+                    </md-menu-item>
+                    <md-menu-item>
+                        <md-button class="no-line-height" ng-click="vm.showHelpAlert($event)">
+                            <div layout="row" flex>
+                                <ng-md-icon md-menu-align-target icon="help" class="icon-fill"></ng-md-icon>
+                                <p flex class="text-align-right">עזרה</p>
+                            </div>
+                        </md-button>
+                    </md-menu-item>
+                </md-menu-content>
+            </md-menu>
             <md-button class="md-icon-button" ng-click="vm.syncContacts()" aria-label="Menu">
                 <ng-md-icon icon="{{vm.syncContactsIcon}}"
                             options='{"rotation": "counterclock"}'>

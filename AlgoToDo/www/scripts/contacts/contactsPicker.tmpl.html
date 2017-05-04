@@ -1,17 +1,17 @@
-﻿<div ng-controller="contactsPickerCtrl as vm" layout="column" class="relative" layout-fill role="main">
+﻿<md-dialog layout="column" aria-label="Mango (Fruit)" ng-cloak>
     
-    <md-toolbar class="md-hue-1" ng-show="vm.showSearch" dir="rtl">
+    <md-toolbar class="md-hue-1" ng-if="dvm.showSearch" dir="rtl">
         <div class="md-toolbar-tools">
-            <md-button class="md-icon-button" ng-click="vm.showSearch = !vm.showSearch;vm.search = ''" aria-label="Back">
+            <md-button class="md-icon-button" ng-click="dvm.showSearch = !dvm.showSearch;dvm.search = ''" aria-label="Back">
                 <ng-md-icon class="rotate" icon="arrow_back"></ng-md-icon>
             </md-button>
             <md-input-container dir="rtl" flex class="seaech-input-container" md-no-float>
-                <input focus-on="newItemAdded" type="search" ng-model="vm.search" placeholder="חיפוש..." ng-keypress="vm.searchKeypress($event)">
+                <input focus-on="focusSearch" type="search" ng-model="dvm.search" placeholder="חיפוש..." ng-keypress="dvm.searchKeypress($event)">
             </md-input-container>
         </div>
     </md-toolbar>
     
-    <md-toolbar class="task-toolbar" ng-hide="vm.showSearch">
+    <md-toolbar class="task-toolbar" ng-if="!dvm.showSearch">
         <div class="md-toolbar-tools">
             <md-menu md-position-mode="target-left target">
                 <md-button aria-label="Open phone interactions menu" class="md-icon-button" ng-click="$mdOpenMenu($event)">
@@ -19,7 +19,7 @@
                 </md-button>
                 <md-menu-content width="4">
                     <md-menu-item>
-                        <md-button class="no-line-height" ng-click="ctrl.redial($event)">
+                        <md-button class="no-line-height" ng-click="dvm.shareApp()">
                             <div layout="row" flex>
                                 <ng-md-icon class="icon-fill" md-menu-align-target icon="share"></ng-md-icon>
                                 <p flex class="text-align-right">ספר/י לחבר/ה</p>
@@ -27,7 +27,7 @@
                         </md-button>
                     </md-menu-item>
                     <md-menu-item>
-                        <md-button class="no-line-height" ng-click="vm.sendReminder()">
+                        <md-button class="no-line-height" ng-click="dvm.openContactsNativeUI()">
                             <div layout="row" flex>
                                 <ng-md-icon md-menu-align-target icon="contacts" class="icon-fill"></ng-md-icon>
                                 <p flex class="text-align-right">אנשי קשר</p>
@@ -36,7 +36,7 @@
                     </md-menu-item>
                     <!--<md-menu-divider></md-menu-divider>-->
                     <md-menu-item>
-                        <md-button class="no-line-height" ng-click="vm.addAlert()">
+                        <md-button class="no-line-height" ng-click="dvm.syncContacts()">
                             <div layout="row" flex>
                                 <ng-md-icon md-menu-align-target icon="sync" class="icon-fill"></ng-md-icon>
                                 <p flex class="text-align-right">רענן</p>
@@ -44,7 +44,7 @@
                         </md-button>
                     </md-menu-item>
                     <md-menu-item>
-                        <md-button class="no-line-height" ng-click="ctrl.redial($event)">
+                        <md-button class="no-line-height" ng-click="dvm.showHelpAlert($event)">
                             <div layout="row" flex>
                                 <ng-md-icon md-menu-align-target icon="help" class="icon-fill"></ng-md-icon>
                                 <p flex class="text-align-right">עזרה</p>
@@ -53,10 +53,13 @@
                     </md-menu-item>
                 </md-menu-content>
             </md-menu>
-            <md-button class="md-icon-button" aria-label="Menu" ng-click="vm.showSearch = true; vm.focus()">
+            <md-button class="md-icon-button" aria-label="Menu" ng-click="dvm.showSearch = true; dvm.focus()">
                 <ng-md-icon icon="search"></ng-md-icon>
             </md-button>
-            <!--<md-button class="md-icon-button" ng-click="vm.addGroup($event)" aria-label="Menu">
+            <ng-md-icon icon="{{dvm.syncContactsIcon}}"
+                        options='{"rotation": "counterclock"}' ng-if="dvm.syncingContacts">
+            </ng-md-icon>
+            <!--<md-button class="md-icon-button" ng-click="dvm.addGroup($event)" aria-label="Menu">
                 <ng-md-icon icon="group_add">
                 </ng-md-icon>
             </md-button>-->
@@ -65,52 +68,59 @@
                 <h2>
                     <span class="color-white">בחר/י איש קשר</span>
                 </h2>
-                <span ng-if="vm.selectedContactsList.length > 0" class="color-white font-12px">{{vm.selectedContactsList.length}} נבחר<span ng-if="vm.selectedContactsList.length > 1">ו</span></span>
-                <span ng-if="vm.selectedContactsList.length < 1" class="color-white font-12px">לחץ/י והחזק/י לבחירה מרובה</span>
+                <span ng-if="dvm.selectedContactsList.length > 0" class="color-white font-12px">{{dvm.selectedContactsList.length}} נבחר<span ng-if="dvm.selectedContactsList.length > 1">ו</span></span>
+                <span ng-if="dvm.selectedContactsList.length < 1" class="color-white font-12px">לחץ/י והחזק/י לבחירה מרובה</span>
             </div>
-            <md-button class="md-icon-button" ng-click="vm.cancel()" aria-label="Menu">
+            <md-button class="md-icon-button" ng-click="dvm.cancel()" aria-label="Menu">
                 <ng-md-icon icon="arrow_forward"></ng-md-icon>
             </md-button>
         </div>
     </md-toolbar>
 
     <md-fab-trigger>
-        <md-button ng-if="vm.contactsList.length < 1" class="md-fab md-fab-bottom-left z-index-21" aria-label="Add" ng-click="vm.addGroup($event)" md-no-ink="true">
+        <md-button ng-if="dvm.contactsList.length < 1" class="md-fab md-fab-bottom-left z-index-21" aria-label="Add" ng-click="dvm.addGroup($event)" md-no-ink="true">
             <ng-md-icon icon="sync"></ng-md-icon>
         </md-button>
-        <md-button ng-if="vm.selectedContactsList.length > 0" class="md-fab md-fab-bottom-left z-index-21" aria-label="Add" ng-click="vm.save($event)" md-no-ink="true">
+        <md-button ng-if="dvm.selectedContactsList.length > 0" class="md-fab md-fab-bottom-left z-index-21" aria-label="Add" ng-click="dvm.save($event)" md-no-ink="true">
             <ng-md-icon class="add-icon" icon="done"></ng-md-icon>
         </md-button>
     </md-fab-trigger>
 
-    <md-content flex md-scroll-y class="height-100P">
+    <md-dialog-content flex md-scroll-y class="height-100P">
         <main flex>
             <ui-view layout="column" layout-fill>
                 <div aria-labelledby="all"
                      layout="row" layout-align="center center">
-                    <md-list flex flex-gt-sm="50" flex-md="66" dir="rtl" ng-show="vm.contactsList.length > 0">
-                        <md-list-item ng-repeat="contact in vm.contactsList | orderBy : 'name' | filter : vm.search" class="noright task-item margin" ng-class="{'contact-selected' : contact.selected}">
+                    <md-list flex dir="rtl" ng-show="dvm.contactsList.length > 0">
+                        <md-list-item ng-repeat="contact in dvm.contactsList | orderBy : 'name' | orderBy : 'useCount' : false | filter : dvm.search" 
+                                      class="noright task-item margin" ng-class="{'contact-selected' : contact.selected}"
+                                      ng-init="contact.exist = dvm.existingContacts.indexOf(contact._id) !== -1">
                             <md-card-avatar>
                                 <img ng-if="(contact.avatarUrl.startsWith('content') || contact.avatarUrl.startsWith('file'))" alt="" ng-src="{{contact.avatarUrl}}" class="md-avatar user-avatar margin-right-10px" />
-                                <img ng-if="!contact.avatarUrl.startsWith('content')  && !contact.avatarUrl.startsWith('file')" alt="" ng-src="{{vm.imagesPath + contact.avatarUrl}}" class="md-avatar user-avatar margin-right-10px" />
+                                <img ng-if="!contact.avatarUrl.startsWith('content')  && !contact.avatarUrl.startsWith('file')" alt="" ng-src="{{dvm.imagesPath + contact.avatarUrl}}" class="md-avatar user-avatar margin-right-10px" />
                             </md-card-avatar>
-                            <a class="md-tile-content margin-bottom-14px" flex="100" ng-click="vm.addContactToSelectedContactsList(contact)">
+                            <a class="md-tile-content margin-bottom-14px" flex="100"
+                               ng-click="dvm.addContactToSelectedContactsList('click', contact)" 
+                               on-long-press="dvm.addContactToSelectedContactsList('long', contact)"
+                               long-press-duration="400" ng-class="{'contact-exist' : contact.exist}">
                                 <div layout="row">
-                                    <span class="from">{{contact.name}}</span>
+                                    <span ng-if="!contact.exist" class="from">{{contact.name}}</span>
+                                    <span ng-if="contact.exist" class="font-14px">{{contact.name}}</span>
                                 </div>
 
-                                <div layout="row">
+                                <div layout="row" >
                                     <div layout="row" flex="90" class="font-14px margin-left-15px margin-top-7px">
-                                        <span ng-if="contact.phone !== undefined">{{vm.getLocalPhoneFormat(contact.phone)}}</span>
-                                        <span ng-if="contact.type === 'group'">{{vm.getUsersInGroupAsString(contact.usersInGroup)}}</span>
+                                        <span ng-if="!contact.exist && contact.phone !== undefined">{{dvm.getLocalPhoneFormat(contact.phone)}}</span>
+                                        <span ng-if="!contact.exist && contact.type === 'group'">{{dvm.getUsersInGroupAsString(contact.usersInGroup)}}</span>
+                                        <span ng-if="contact.exist">כבר נבחר/ה</span>
                                     </div>
-                                </div>
+                                </div>                               
                             </a>
                             <md-divider md-inset ng-if="!$last"></md-divider>
                         </md-list-item>
                         <md-divider></md-divider>
                     </md-list>
-                    <md-list dir="rtl" ng-if="vm.contactsList.length < 1">
+                    <md-list dir="rtl" ng-if="dvm.contactsList.length < 1">
                         <md-item>
                             <md-item-content>
                                 <h3 class="text-align-center"> עוד לא סנכרנת את אנשי הקשר שלך </h3>
@@ -122,6 +132,6 @@
                 </div>
             </ui-view>
         </main>
-    </md-content>
+    </md-dialog-content>
 
-</div>
+</md-dialog>

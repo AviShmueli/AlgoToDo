@@ -24,6 +24,7 @@
         'ngMaterialDatePicker',
         'angular-web-notification',
         '720kb.tooltips',
+        'pr.longpress',
 
         /*
          * Everybody has access to these.

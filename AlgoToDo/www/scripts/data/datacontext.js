@@ -25,11 +25,11 @@
             var deferred = $q.defer();
 
             var user = getUserFromLocalStorage(), tempDate = new Date();
-            
+
             if (user !== undefined) {
 
                 if (user.lastServerSync !== undefined) {
-                    user.lastServerSync = new Date(user.lastServerSync);
+                    user.lastServerSync = new Date(user.lastServerSync);                    
                 }
 
                 DAL.getTasksInProgress(user).then(function (response) {
@@ -44,6 +44,17 @@
                         setMyTaskCount();
                         deferred.resolve();
                     });
+
+                    // if calld from sync contacts or login
+                    if (isFromInterval === undefined) {
+                        sortUsersByfrequencyOfUse();
+                    }
+
+                    // a trik to do somthing every day
+                    if (user.lastServerSync !== undefined &&
+                        user.lastServerSync.getUTCDate() !== tempDate.getUTCDate()) {
+                        sortUsersByfrequencyOfUse();
+                    }
                     user.lastServerSync = tempDate;
                 });
 
@@ -61,7 +72,7 @@
             return self.$storage.tasksList !== undefined ? self.$storage.tasksList : [];
         };
 
-        var getTaskByTaskId = function (taskId) {           
+        var getTaskByTaskId = function (taskId) {
             var tasksList = getTaskList();
             var index = common.arrayObjectIndexOf(tasksList, '_id', taskId);
             if (index !== -1) {
@@ -174,7 +185,7 @@
                             var newComment = filterdNewTasksComments[j];
                             addCommentToTask(newTask._id, newComment);
                             if (!isMobileDevice() && isFromInterval) {
-                                browserNotification.showNotification("תגובה חדשה", newComment.text, newTask._id);                               
+                                browserNotification.showNotification("תגובה חדשה", newComment.text, newTask._id);
                             }
                         }
                     }
@@ -355,6 +366,63 @@
             delete self.$storage.usersCache;
         };
 
+        var sortUsersByfrequencyOfUse = function () {
+            var user = getUserFromLocalStorage();
+            var allUsers = getAllCachedUsers();
+            var allTasks = getTaskList();
+
+            self.userId_useCount_map = {};
+
+            var task, taskFromId, taskToId;
+            for (var i = 0; i < allTasks.length; i++) {
+                task = allTasks[i];
+                taskFromId = task.from._id;
+                taskToId = task.to._id;
+
+                if (taskToId !== undefined) {
+                    buildMap(taskFromId, taskToId, user._id);
+                }
+                else {
+                    // if this is a group task
+                    for (var j = 0; j < task.to.length; j++) {
+                        buildMap(taskFromId, task.to[j]._id, user._id);
+                    }
+                }
+            }
+
+            Object.keys(self.userId_useCount_map).forEach(function (key, index) {
+
+                for (var i = 0, len = allUsers.length; i < len; i++) {
+
+                    if (allUsers[i]._id === key) {
+                        allUsers[i]['useCount'] = self.userId_useCount_map[key] * -1;
+                    }
+                    if (allUsers[i]['useCount'] === undefined) {
+                        //allUsers[i]['useCount'] = 0;
+                    }
+                }
+            });
+        };
+
+        var buildMap = function (taskFromId, taskToId, userId) {
+            if (taskToId === userId) {
+                if (self.userId_useCount_map[taskFromId] !== undefined) {
+                    self.userId_useCount_map[taskFromId]++;
+                }
+                else {
+                    self.userId_useCount_map[taskFromId] = 1;
+                }
+            }
+            else {
+                if (self.userId_useCount_map[taskToId] !== undefined) {
+                    self.userId_useCount_map[taskToId]++;
+                }
+                else {
+                    self.userId_useCount_map[taskToId] = 1;
+                }
+            }
+        };
+
         (function () {
             var user = getUserFromLocalStorage();
             if (user !== undefined) {
@@ -399,7 +467,8 @@
             replaceUsersAvatarUrlWithLocalPath: replaceUsersAvatarUrlWithLocalPath,
             updateLocalTasks: updateLocalTasks,
             getMoreLoadedTasks: getMoreLoadedTasks,
-            addTasksToMoreLoadedTasks: addTasksToMoreLoadedTasks
+            addTasksToMoreLoadedTasks: addTasksToMoreLoadedTasks,
+            sortUsersByfrequencyOfUse: sortUsersByfrequencyOfUse
         };
 
         return service;

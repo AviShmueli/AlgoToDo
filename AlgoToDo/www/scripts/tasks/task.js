@@ -10,7 +10,7 @@
          'socket', 'cordovaPlugins', 'dropbox', 'appConfig',
          'localNotifications', 'camera', 'device', '$mdDialog',
          'DAL', '$offlineHandler', '$location', '$timeout',
-         'pushNotifications', '$toast'
+         'pushNotifications', '$toast', '$transitions'
     ];
 
     function taskCtrl($rootScope, $scope, logger, $q, storage,
@@ -18,7 +18,7 @@
                       socket, cordovaPlugins, dropbox, appConfig,
                       localNotifications, camera, device, $mdDialog,
                       DAL, $offlineHandler, $location, $timeout,
-                      pushNotifications, $toast) {
+                      pushNotifications, $toast, $transitions) {
 
         var vm = this;
 
@@ -56,8 +56,13 @@
         vm.newCommentText = '';
 
         vm.goBack = function () {
-            window.history.back();
-            //$location.path('/tasksList');
+            //window.history.back();
+
+            $timeout(function () {
+                $transitions.slide("left");
+            }, 100);
+            
+            $location.path('/tasksList');
         };
 
         vm.takePic = function (sourceType) {
@@ -211,12 +216,12 @@
                 downloadFileFromDropbox(comment);
             }
 
-            if (comment.fileLocalPath === undefined) { // && 
-                // if this is file you uploaded - the file will be in the cache
-                var dataDirectory = storage.getRootDirectory();
-                var newPath = 'Asiti/Asiti Images/' + vm.taskId + '/';
-                var src = dataDirectory + newPath + comment.fileName;
+            // if this is file you uploaded - the file will be in the cache
+            var dataDirectory = storage.getRootDirectory();
+            var newPath = 'Asiti/Asiti Images/' + vm.taskId + '/';
+            var src = dataDirectory + newPath + comment.fileName;
 
+            if (comment.fileLocalPath === undefined) { // &&                 
                 storage.checkIfFileExists(dataDirectory + newPath, comment.fileName).then(function (success) {
                     comment.fileLocalPath = src;
                     addImageToGallery(comment.fileName, src);
@@ -224,6 +229,12 @@
                     comment.fileLocalPath = device.getImagesPath() + "/images/upload-empty.png";
                     downloadFileFromDropbox(comment);
                 });
+            }
+            else {
+                // just in case user dont give premition to storage yet - this will prompt the premition dialog
+                $timeout(function () {
+                    storage.getFileFromStorage(dataDirectory + newPath, comment.fileName);
+                }, 0);
             }
         };
 

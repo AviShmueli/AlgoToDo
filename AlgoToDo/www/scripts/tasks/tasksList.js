@@ -11,7 +11,7 @@
         '$mdSidenav', '$mdDialog', 'datacontext',
         'socket', '$mdToast', 'moment', '$q',
         'pushNotifications', 'localNotifications', 'device',
-        'DAL', '$offlineHandler', '$toast'
+        'DAL', '$offlineHandler', '$toast', '$transitions'
     ];
 
     function TasksListCtrl($rootScope, $scope, logger, $location, cordovaPlugins,
@@ -19,7 +19,7 @@
                             $mdSidenav, $mdDialog, datacontext,
                             socket, $mdToast, moment, $q,
                             pushNotifications, localNotifications, device,
-                            DAL, $offlineHandler, $toast) {
+                            DAL, $offlineHandler, $toast, $transitions) {
 
         angular.element(document.querySelectorAll('html')).removeClass("hight-auto");
 
@@ -43,7 +43,7 @@
             cordovaPlugins.setBadge(count);
 
             if (!device.isMobileDevice()) {
-                datacontext.reloadAllTasks();
+                datacontext.reloadAllTasks(false);
             }
         }, 0);
 
@@ -84,6 +84,8 @@
                 templateUrl: 'scripts/tasks/AddTaskDialog.html',
                 targetEvent: ev,
                 fullscreen: true,
+                multiple: true,
+                skipHide: true,
                 clickOutsideToClose: true,
                 locals: {
                     imageURI: imageURI,
@@ -194,6 +196,9 @@
         };
 
         vm.navigateToTaskPage = function (task) {
+            
+            $transitions.slide("left");
+
             if (task.type === 'group-main') {
                 $location.path('/groupTask/' + task._id);
             }

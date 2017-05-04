@@ -108,7 +108,15 @@
                 self.$storage.cachedTasksToUpdateList = [];
             }
 
-            self.$storage.cachedTasksToUpdateList.push(task);
+            if (self.$storage.cachedNewTasksList !== undefined) {       
+                var index = common.arrayObjectIndexOf(self.$storage.cachedNewTasksList, '_id', task._id);
+                if (index !== -1) {
+                    self.$storage.cachedNewTasksList[index] = task;
+                }
+            }
+            else {
+                self.$storage.cachedTasksToUpdateList.push(task);
+            }
 
             if (self.networkState === 'offline') {
                 cordovaPlugins.showToast('אתה במצב לא מקוון, המשימה תתעדכן כשתתחבר לרשת', 2000);

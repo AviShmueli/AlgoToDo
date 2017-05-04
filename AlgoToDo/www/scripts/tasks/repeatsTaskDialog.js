@@ -7,7 +7,7 @@
 
     function repeatsTaskDialog($scope, taskToEdit, updateList, $mdDialog, datacontext, $mdMedia, $q, logger,
                                      cordovaPlugins, storage, dropbox, camera, device, DAL,
-                                     $offlineHandler) {
+                                     $offlineHandler, $timeout) {
 
         var vm = this;
         
@@ -44,6 +44,43 @@
             dateTime.setMinutes(vm.task.minutes);
             return dateTime;
         };
+
+        $timeout(function () {
+            var element = angular.element(document.getElementsByClassName('md-chip-input-container')).find('input');
+            element.attr('readonly', 'readonly');
+            element.on('click', function (evt) {
+                evt.preventDefault();
+                vm.openContactPickerDialog(evt);
+            });
+        }, 200);
+
+        vm.openContactPickerDialog = function (ev) {
+            vm.selectedRecipientsIds = [];
+            for (var i = 0; i < vm.task.to.length; i++) {
+                vm.selectedRecipientsIds.push(vm.task.to[i]._id);
+            }
+            $mdDialog.show({
+                controller: 'contactsPickerCtrl',
+                controllerAs: 'dvm',
+                templateUrl: 'scripts/contacts/contactsPicker.tmpl.html',
+                fullscreen: true,
+                targetEvent: ev,
+                skipHide: true,
+                clickOutsideToClose: true,
+                locals: {
+                    existingContacts: vm.selectedRecipientsIds
+                    //updateList: function () { }
+                    //    calledFromIntent: calledFromIntent
+                }
+            }).then(function (selectedContacts) {
+                for (var i = 0; i < selectedContacts.length; i++) {
+                    if (!selectedContacts[i].avatarUrl.startsWith('file:') && !selectedContacts[i].avatarUrl.startsWith('content:')) {
+                        selectedContacts[i].avatarUrl = vm.imagesPath + selectedContacts[i].avatarUrl;
+                    }
+                }
+                vm.task.to = vm.task.to.concat(selectedContacts);
+            });
+        }
         
         function querySearch(query) {
             vm.showNoRecipientsSelectedError = false;

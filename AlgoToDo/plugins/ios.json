@@ -79,6 +79,9 @@
         },
         "cordova-plugin-actionsheet": {
             "PACKAGE_NAME": "com.algotodo.app"
+        },
+        "com.telerik.plugins.nativepagetransitions": {
+            "PACKAGE_NAME": "com.algotodo.app"
         }
     },
     "dependent_plugins": {
