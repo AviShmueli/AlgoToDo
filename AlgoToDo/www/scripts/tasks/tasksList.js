@@ -32,6 +32,8 @@
         vm.user = datacontext.getUserFromLocalStorage();
         vm.imagesPath = device.getImagesPath();
         vm.progressActivated = false;
+        vm.showSearch = false;
+        vm.search = '';
         $rootScope.taskcount = 0;
         vm.doneTasks = [];
         vm.descriptionTextLength = function () { return Math.floor((window.innerWidth - 70 - 16 - 40 - 16 - 8) / 4); };
@@ -149,8 +151,8 @@
                 task.doneTime = new Date();
                 //datacontext.removeAllTaskImagesFromCache(task);
                 //localNotifications.cancelNotification(task._id);
-                $toast.showActionToast("המשימה סומנה כבוצע", "בטל", 2000).then(function (response) {
-                    if (response == 'ok') {
+                $toast.showActionToast("המשימה סומנה כבוצע", "בטל", 3000).then(function (response) {
+                    if (response === 'ok') {
                         task.doneTime = null;
                         if (task.offlineMode === true) {
                             $offlineHandler.removeTaskFromCachedTasksToUpdateList(task);

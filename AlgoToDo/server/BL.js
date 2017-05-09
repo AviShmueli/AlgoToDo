@@ -219,7 +219,7 @@
         if (users[task.from._id] !== undefined) {
             from = users[task.from._id].id;
         }*/
-        if (task.status === 'done') {
+        if (task.status === 'done' || task.status === 'closed') {
             task.doneTime = new Date();
             //localNotifications.cancelNotification(task._id);
         }
@@ -238,6 +238,11 @@
                 if (task.status === 'done') {
                     setTimeout(function () {
                         pushUpdatetdTaskToUsersDevice(result, task.from._id);
+                    }, 0);
+                }
+                if (task.status === 'closed') {
+                    setTimeout(function () {
+                        pushUpdatetdTaskToUsersDevice(result, task.to._id);
                     }, 0);
                 }
                 /*if (task.status === 'inProgress') {
@@ -270,6 +275,9 @@
                 if (task.to._id !== task.from._id) {
                     if (task.status === 'done') {
                         pushUpdatetdTaskToUsersDevice(task, task.from._id);
+                    }
+                    if (task.status === 'closed') {
+                        pushUpdatetdTaskToUsersDevice(task, task.to._id);
                     }
                     if (task.status === 'inProgress') {
                         pushTasksToUsersDevice([task], [task.to._id], false);

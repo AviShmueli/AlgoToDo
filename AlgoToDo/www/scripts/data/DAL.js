@@ -12,12 +12,12 @@
 
         var self = this;
         self.admin = 1;
-
+        
         var saveNewTasks = function (tasks) {
 
             var req = {
                 method: 'POST',
-                url: appConfig.appDomain + '/TaskManeger/newTask',
+                url: appConfig.appDomain() + '/TaskManeger/newTask',
                 data: {
                     task: tasks
                 }
@@ -29,7 +29,7 @@
         var getTasks = function (user) {
             var req = {
                 method: 'GET',
-                url: appConfig.appDomain + '/TaskManeger/getTasks',
+                url: appConfig.appDomain() + '/TaskManeger/getTasks',
                 params: {
                     userId: user._id
                 }
@@ -39,9 +39,10 @@
         };
 
         var getTasksInProgress = function (user) {
+
             var req = {
                 method: 'GET',
-                url: appConfig.appDomain + '/TaskManeger/getTasksInProgress',
+                url: appConfig.appDomain() + '/TaskManeger/getTasksInProgress',
                 params: {
                     userId: user._id,
                     lastServerSync: user.lastServerSync
@@ -52,9 +53,10 @@
         };
 
         var getDoneTasks = function (page, user) {
+
             var req = {
                 method: 'GET',
-                url: appConfig.appDomain + '/TaskManeger/getDoneTasks',
+                url: appConfig.appDomain() + '/TaskManeger/getDoneTasks',
                 params: {
                     userId: user._id,
                     page: page,
@@ -69,7 +71,7 @@
 
             var req = {
                 method: 'POST',
-                url: appConfig.appDomain + '/TaskManeger/updateTaskStatus',
+                url: appConfig.appDomain() + '/TaskManeger/updateTaskStatus',
                 data: {
                     task: task
                 }
@@ -82,7 +84,7 @@
 
             var req = {
                 method: 'POST',
-                url: appConfig.appDomain + '/TaskManeger/updateTasksStatus',
+                url: appConfig.appDomain() + '/TaskManeger/updateTasksStatus',
                 data: {
                     tasks: tasks
                 }
@@ -94,7 +96,7 @@
         var registerUser = function (user) {
             var req = {
                 method: 'POST',
-                url: appConfig.appDomain + '/TaskManeger/registerUser',
+                url: appConfig.appDomain() + '/TaskManeger/registerUser',
                 data: {
                     user: user
                 }
@@ -125,7 +127,7 @@
             }
             var req = {
                 method: 'GET',
-                url: appConfig.appDomain + '/TaskManeger/searchUsers',
+                url: appConfig.appDomain() + '/TaskManeger/searchUsers',
                 params: params
             };
 
@@ -136,7 +138,7 @@
 
             var req = {
                 method: 'GET',
-                url: appConfig.appDomain + '/TaskManeger/isUserExist',
+                url: appConfig.appDomain() + '/TaskManeger/isUserExist',
                 params: {
                     userName: user.name,
                     userPhone: user.phone
@@ -149,7 +151,7 @@
         var checkIfVerificationCodeMatch = function (user, verificationCode) {
             var req = {
                 method: 'GET',
-                url: appConfig.appDomain + '/TaskManeger/checkIfVerificationCodeMatch',
+                url: appConfig.appDomain() + '/TaskManeger/checkIfVerificationCodeMatch',
                 params: {
                     userId: user._id,
                     verificationCode: verificationCode
@@ -162,7 +164,7 @@
         var newComment = function (taskId, comment) {
             var req = {
                 method: 'POST',
-                url: appConfig.appDomain + '/TaskManeger/newComment',
+                url: appConfig.appDomain() + '/TaskManeger/newComment',
                 data: {
                     taskId: taskId,
                     comment: comment
@@ -175,7 +177,7 @@
         var AddNewComments = function (comments) {
             var req = {
                 method: 'POST',
-                url: appConfig.appDomain + '/TaskManeger/AddNewComments',
+                url: appConfig.appDomain() + '/TaskManeger/AddNewComments',
                 data: {
                     comments: comments
                 }
@@ -187,7 +189,7 @@
         var updateUserDetails = function (userId, fieldToUpdate, valueToUpdate) {
             var req = {
                 method: 'POST',
-                url: appConfig.appDomain + '/TaskManeger/updateUserDetails',
+                url: appConfig.appDomain() + '/TaskManeger/updateUserDetails',
                 data: {
                     userId: userId,
                     fieldToUpdate: fieldToUpdate,
@@ -217,7 +219,7 @@
 
             var req = {
                 method: 'GET',
-                url: appConfig.appDomain + '/TaskManeger/getAllCliqot'
+                url: appConfig.appDomain() + '/TaskManeger/getAllCliqot'
             };
 
             return $http(req);
@@ -228,7 +230,7 @@
 
                 var req = {
                         method: 'GET',
-                        url: appConfig.appDomain + '/TaskManeger/getAllTasks',
+                        url: appConfig.appDomain() + '/TaskManeger/getAllTasks',
                         params: {
                                 order: query.order,
                                 limit: query.limit,
@@ -244,7 +246,7 @@
         var getAllTasksCount = function (filter) {
             var req = {
                 method: 'GET',
-                url: appConfig.appDomain + '/TaskManeger/getAllTasksCount',
+                url: appConfig.appDomain() + '/TaskManeger/getAllTasksCount',
                 params: {
                     filter: filter
                 }
@@ -258,7 +260,7 @@
 
                 var req = {
                     method: 'GET',
-                    url: appConfig.appDomain + '/TaskManeger/getAllUsers',
+                    url: appConfig.appDomain() + '/TaskManeger/getAllUsers',
                     params: {
                         order: query.order,
                         limit: query.limit,
@@ -274,7 +276,7 @@
         var getAllUsersCount = function (filter) {
             var req = {
                 method: 'GET',
-                url: appConfig.appDomain + '/TaskManeger/getAllUsersCount',
+                url: appConfig.appDomain() + '/TaskManeger/getAllUsersCount',
                 params: {
                     filter: filter
                 }
@@ -286,7 +288,7 @@
         var getAllVersionInstalled = function () {
             var req = {
                 method: 'GET',
-                url: appConfig.appDomain + '/TaskManeger/getAllVersionInstalled'
+                url: appConfig.appDomain() + '/TaskManeger/getAllVersionInstalled'
             };
 
             return $http(req);
@@ -296,7 +298,7 @@
 
             var req = {
                 method: 'POST',
-                url: appConfig.appDomain + '/TaskManeger/addNewRepeatsTasks',
+                url: appConfig.appDomain() + '/TaskManeger/addNewRepeatsTasks',
                 data: {
                     tasks: tasks
                 }
@@ -308,7 +310,7 @@
         var getUsersRepeatsTasks = function (userId) {
             var req = {
                 method: 'GET',
-                url: appConfig.appDomain + '/TaskManeger/getUsersRepeatsTasks',
+                url: appConfig.appDomain() + '/TaskManeger/getUsersRepeatsTasks',
                 params: {
                     userId: userId
                 }
@@ -321,7 +323,7 @@
 
             var req = {
                 method: 'POST',
-                url: appConfig.appDomain + '/TaskManeger/updateRepeatsTasks',
+                url: appConfig.appDomain() + '/TaskManeger/updateRepeatsTasks',
                 data: {
                     tasks: tasks
                 }
@@ -334,7 +336,7 @@
 
             var req = {
                 method: 'POST',
-                url: appConfig.appDomain + '/TaskManeger/deleteRepeatsTasks',
+                url: appConfig.appDomain() + '/TaskManeger/deleteRepeatsTasks',
                 data: {
                     tasks: tasks
                 }
@@ -346,7 +348,7 @@
         var createNewCliqa = function (cliqaName) {
             var req = {
                 method: 'POST',
-                url: appConfig.appDomain + '/TaskManeger/createNewCliqa',
+                url: appConfig.appDomain() + '/TaskManeger/createNewCliqa',
                 data: {
                     cliqaName: cliqaName
                 }
@@ -359,7 +361,7 @@
             self.admin = self.admin === 1 ? 2 : 1;
             var req = {
                 method: 'POST',
-                url: appConfig.appDomain + '/TaskManeger/reSendVerificationCodeToUser',
+                url: appConfig.appDomain() + '/TaskManeger/reSendVerificationCodeToUser',
                 data: {
                     userId: userId,
                     admin: self.admin
@@ -372,7 +374,7 @@
         var sendBroadcastUpdateAlert = function (paltform, version) {
             var req = {
                 method: 'POST',
-                url: appConfig.appDomain + '/TaskManeger/sendBroadcastUpdateAlert',
+                url: appConfig.appDomain() + '/TaskManeger/sendBroadcastUpdateAlert',
                 data: {
                     paltform: paltform,
                     version: version
@@ -385,7 +387,7 @@
         var sendReminderForTasks = function (tasks) {
             var req = {
                 method: 'POST',
-                url: appConfig.appDomain + '/TaskManeger/sendReminderForTasks',
+                url: appConfig.appDomain() + '/TaskManeger/sendReminderForTasks',
                 data: {
                     tasks: tasks
                 }
@@ -397,7 +399,7 @@
         var getUsersByPhoneNumbers = function (phoneNumbers) {
             var req = {
                 method: 'POST',
-                url: appConfig.appDomain + '/TaskManeger/getUsersByPhoneNumbers',
+                url: appConfig.appDomain() + '/TaskManeger/getUsersByPhoneNumbers',
                 data: {
                     phoneNumbers: phoneNumbers
                 }
@@ -409,7 +411,7 @@
         var addNewGroup = function (group) {
             var req = {
                 method: 'POST',
-                url: appConfig.appDomain + '/TaskManeger/addNewGroup',
+                url: appConfig.appDomain() + '/TaskManeger/addNewGroup',
                 data: {
                     group: group
                 }
@@ -421,7 +423,7 @@
         var deleteGroups = function (groupIds) {
             var req = {
                 method: 'POST',
-                url: appConfig.appDomain + '/TaskManeger/deleteGroups',
+                url: appConfig.appDomain() + '/TaskManeger/deleteGroups',
                 data: {
                     groupIds: groupIds
                 }
@@ -433,7 +435,7 @@
         var getUsersInCliqa = function (cliqaId) {
             var req = {
                 method: 'GET',
-                url: appConfig.appDomain + '/TaskManeger/getUsersInCliqa',
+                url: appConfig.appDomain() + '/TaskManeger/getUsersInCliqa',
                 params: {
                     cliqaId: cliqaId
                 }

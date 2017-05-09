@@ -8,6 +8,14 @@
                 </md-button>
                 <md-menu-content width="4">
                     <md-menu-item>
+                        <md-button class="no-line-height" ng-disabled="!vm.taskIsFromMe" ng-click="vm.closeTask($event)">
+                            <div layout="row" flex>
+                                <ng-md-icon class="rotate icon-fill-disabled" ng-class="{'icon-fill': vm.taskIsFromMe}" md-menu-align-target icon="cancel"></ng-md-icon>
+                                <p flex class="text-align-right">סגור משימה</p>
+                            </div>
+                        </md-button>
+                    </md-menu-item>
+                    <md-menu-item>
                         <md-button class="no-line-height" ng-disabled="!vm.taskIsFromMe" ng-click="ctrl.redial($event)">
                             <div layout="row" flex>
                                 <ng-md-icon class="rotate icon-fill-disabled" ng-class="{'icon-fill': vm.taskIsFromMe}" md-menu-align-target icon="forward"></ng-md-icon>

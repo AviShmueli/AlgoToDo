@@ -31,6 +31,7 @@
         vm.activeTab = 'tasks';
         vm.tasksFilterStatusInProgress = true;
         vm.tasksFilterStatusDone = true;
+        vm.tasksFilterStatusClosed = true;
         //
 
         vm.user = datacontext.getUserFromLocalStorage();
@@ -82,12 +83,16 @@
             if (vm.tasksFilterStatusDone) {
                 vm.tasksFilter.status = 'done';
             }
-            if (vm.tasksFilterStatusDone && vm.tasksFilterStatusInProgress) {
+            if (vm.tasksFilterStatusClosed) {
+                vm.tasksFilter.status = 'closed';
+            }
+            if (vm.tasksFilterStatusDone && vm.tasksFilterStatusInProgress && vm.tasksFilterStatusClosed) {
                 delete vm.tasksFilter.status;
             }
-            if (!vm.tasksFilterStatusDone && !vm.tasksFilterStatusInProgress) {
+            if (!vm.tasksFilterStatusDone && !vm.tasksFilterStatusInProgress && !vm.tasksFilterStatusClosed) {
                 delete vm.tasksFilter.status;
                 vm.tasksFilterStatusDone = true;
+                vm.tasksFilterStatusClosed = true;
                 vm.tasksFilterStatusInProgress = true;
             }
 

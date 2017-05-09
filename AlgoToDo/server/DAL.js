@@ -530,13 +530,12 @@
 
         page = parseInt(page)
         var query = {
-            /*$or: [{
-                'from._id': new ObjectID(userId)
+            $or: [{
+                status: 'done'
             }, {
-                'to._id': new ObjectID(userId)
-            }],*/
-            'from._id': new ObjectID(userId),
-            status: 'done'
+                status: 'closed'
+            }],
+            'from._id': new ObjectID(userId)
             /*,
                             type: {
                                 '$ne': 'group-sub'

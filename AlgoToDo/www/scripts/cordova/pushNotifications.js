@@ -8,12 +8,12 @@
     pushNotifications.$inject = ['$rootScope', 'datacontext', '$cordovaPushV5',
                               '$log', '$mdToast', '$cordovaVibration', '$q',
                               'dropbox', 'storage', 'device', '$cordovaSms',
-                              '$location', 'cordovaPlugins', '$mdDialog'];
+                              '$location', 'cordovaPlugins', '$mdDialog', '$toast'];
 
     function pushNotifications($rootScope, datacontext, $cordovaPushV5,
                              $log, $mdToast, $cordovaVibration, $q,
                              dropbox, storage, device, $cordovaSms,
-                             $location, cordovaPlugins, $mdDialog) {
+                             $location, cordovaPlugins, $mdDialog, $toast) {
 
         var self = this;
         self.push = {};
@@ -210,7 +210,7 @@
 
         var showNewCommentToast = function (taskId, name) {
 
-            var NewCommentToast = $mdToast.build({
+            /*var NewCommentToast = $mdToast.build({
                 hideDelay: 2500,
                 position: 'top',
                 template: '<md-toast class="md-capsule" id="message-toast" md-swipe-left="$root.hideToast(\'message-toast\')" md-swipe-right="$root.hideToast(\'message-toast\')">' +
@@ -225,7 +225,13 @@
                              '</div>' +
                           '</md-toast>'
             });
-            $mdToast.show(NewCommentToast);
+            $mdToast.show(NewCommentToast);*/
+
+            $toast.showActionToast("התקבלה תגובה חדשה", "הצג", 3000).then(function (response) {
+                if (response === 'ok') {
+                    $location.path('/task/' + taskId);
+                }
+            });
         };
 
         var showTaskReminderToast = function (taskId, name) {
@@ -254,7 +260,7 @@
                 $cordovaVibration.vibrate(300);
             }, false);
 
-            var NewCommentToast = $mdToast.build({
+            /*var NewCommentToast = $mdToast.build({
                 hideDelay: 2500,
                 position: 'top',
                 template: '<md-toast class="md-capsule" id="message-toast" md-swipe-left="$root.hideToast(\'message-toast\')" md-swipe-right="$root.hideToast(\'message-toast\')">' +
@@ -269,7 +275,13 @@
                              '</div>' +
                           '</md-toast>'
             });
-            $mdToast.show(NewCommentToast);
+            $mdToast.show(NewCommentToast);*/
+
+            $toast.showActionToast("התקבלה משימה חדשה", "הצג", 3000).then(function (response) {
+                if (response === 'ok') {
+                    $location.path('/task/' + taskId);
+                }
+            });
         };
 
         var handleErrorOcurred = function (event, e) {

@@ -62,6 +62,7 @@
                             <div layout="row" layout-gt-xs="column">
                                 <md-checkbox ng-model="vm.tasksFilterStatusInProgress">בתהליך</md-checkbox>
                                 <md-checkbox ng-model="vm.tasksFilterStatusDone">בוצע</md-checkbox>
+                                <md-checkbox ng-model="vm.tasksFilterStatusClosed">נסגר</md-checkbox>
                             </div>
 
                             <div class="md-secondary md-block" flex layout="row" layout-align="end center">
@@ -100,8 +101,10 @@
                                         </md-tooltip>-->
                                     </td>
                                     <td md-cell>
-                                        {{task.status === 'done' ? 'בוצע' : 'בתהליך'}}
-                                    </td>
+                                        <span ng-if="::task.status === 'done'">בוצע</span>
+                                        <span ng-if="::task.status === 'closed'">נסגר</span>
+                                        <span ng-if="::task.status === 'inProgress'">בתהליך</span>
+</td>
                                     <td md-cell>{{vm.getTotalTaskTime(task)}}</td>
                                     <!--<td md-cell>{{task.comments.length}}</td>-->
                                 </tr>

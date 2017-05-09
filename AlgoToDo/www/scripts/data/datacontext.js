@@ -197,6 +197,8 @@
                     }
                 }
             }
+
+            setMyTaskCount();
         }
 
         var getMoreLoadedTasks = function () {

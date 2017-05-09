@@ -168,8 +168,8 @@
                 task.doneTime = new Date();
                 //datacontext.removeAllTaskImagesFromCache(task);
                 //localNotifications.cancelNotification(task._id);
-                $toast.showActionToast("המשימה סומנה כבוצע", "בטל", 2000).then(function (response) {
-                    if (response == 'ok') {
+                $toast.showActionToast("המשימה סומנה כבוצע", "בטל", 3000).then(function (response) {
+                    if (response === 'ok') {
                         task.doneTime = null;
                         if (task.offlineMode === true) {
                             $offlineHandler.removeTaskFromCachedTasksToUpdateList(task);
@@ -216,25 +216,27 @@
                 downloadFileFromDropbox(comment);
             }
 
-            // if this is file you uploaded - the file will be in the cache
-            var dataDirectory = storage.getRootDirectory();
-            var newPath = 'Asiti/Asiti Images/' + vm.taskId + '/';
-            var src = dataDirectory + newPath + comment.fileName;
-
-            if (comment.fileLocalPath === undefined) { // &&                 
-                storage.checkIfFileExists(dataDirectory + newPath, comment.fileName).then(function (success) {
-                    comment.fileLocalPath = src;
-                    addImageToGallery(comment.fileName, src);
-                }, function (error) {
-                    comment.fileLocalPath = device.getImagesPath() + "/images/upload-empty.png";
-                    downloadFileFromDropbox(comment);
-                });
-            }
-            else {
-                // just in case user dont give premition to storage yet - this will prompt the premition dialog
-                $timeout(function () {
-                    storage.getFileFromStorage(dataDirectory + newPath, comment.fileName);
-                }, 0);
+            if (device.isMobileDevice()) {
+                // if this is file you uploaded - the file will be in the cache
+                var dataDirectory = storage.getRootDirectory();
+                var newPath = 'Asiti/Asiti Images/' + vm.taskId + '/';
+                var src = dataDirectory + newPath + comment.fileName;
+            
+                if (comment.fileLocalPath === undefined) { // &&                 
+                    storage.checkIfFileExists(dataDirectory + newPath, comment.fileName).then(function (success) {
+                        comment.fileLocalPath = src;
+                        addImageToGallery(comment.fileName, src);
+                    }, function (error) {
+                        comment.fileLocalPath = device.getImagesPath() + "/images/upload-empty.png";
+                        downloadFileFromDropbox(comment);
+                    });
+                }
+                else {
+                    // just in case user dont give premition to storage yet - this will prompt the premition dialog
+                    $timeout(function () {
+                        storage.getFileFromStorage(dataDirectory + newPath, comment.fileName);
+                    }, 0);
+                }
             }
         };
 
@@ -474,6 +476,49 @@
             }, function () {
             });
         };
+
+        vm.closeTask = function (ev) {
+            var confirm = $mdDialog.confirm()
+               .parent(angular.element(document.querySelector('#deleteRepeatsTaskContainer')))
+               .title('לסגור את המשימה ?')
+               .ariaLabel('closeTask')
+               .ok('אישור')
+               .cancel('בטל');
+
+            $mdDialog.show(confirm).then(function () {
+                closeTask(vm.task);
+            }, function () {
+            });
+        }
+
+        var closeTask = function (task) {
+            task.status = 'closed';
+
+            task.doneTime = new Date();
+
+            $toast.showActionToast("המשימה נסגרה", "בטל", 3000).then(function (response) {
+                if (response === 'ok') {
+                    task.doneTime = null;
+                    if (task.offlineMode === true) {
+                        $offlineHandler.removeTaskFromCachedTasksToUpdateList(task);
+                    }
+                    vm.setTaskStatus(task, 'inProgress');
+                }
+            });
+
+            DAL.updateTask(task).then(function (response) {
+
+            }, function (error) {
+                if (error.status === -1) {
+                    error.data = "App lost connection to the server";
+                }
+                logger.error('Error while trying to update task: ', error.data || error);
+                task.offlineMode = true;
+                $offlineHandler.addTaskToCachedTasksToUpdateList(task);
+            });
+
+            vm.goBack();
+        }
     }
 
 })();

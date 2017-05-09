@@ -95,13 +95,38 @@
          })
         .service('appConfig', function () {
             var self = this;
+            self.appDomain = '';
+
+            var setAppDomain = function () {
+
+                if (document.URL.indexOf('http://') !== -1) {
+                    self.appDomain = '';//document.origin;
+                }
+                else {
+                    document.addEventListener("deviceready", function () {
+                        cordova.plugins.IsDebug.getIsDebug(function (isDebug) {
+
+                            if (isDebug) {
+                                self.appDomain = 'https://algotodo-test.herokuapp.com';
+                            }
+                            else {
+                                self.appDomain = 'http://app.asiti.net';
+                            }
+
+                        }, function (err) {
+                            console.error(err);
+                        });
+                    }, false);      
+                }
+
+                //self.appDomain = //'http://app.asiti.net'
+                 //        'https://algotodo-test.herokuapp.com'
+                //'http://localhost:5001'
+            }();
 
             return {
                 region : 'IL',
-                appDomain:
-                   //'http://app.asiti.net'// 'https://algotodo.herokuapp.com'
-                   'https://algotodo-test.herokuapp.com'
-                   //'http://localhost:5001'
+                appDomain: function () { return self.appDomain }
             };
         })
         .run(function (amMoment, $offlineHandler) {
