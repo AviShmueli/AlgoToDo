@@ -265,13 +265,12 @@
             }
         }
 
-        if (s_dayOnWeek === 0) {
-            stringToReturn = " היום " + diffDays + " יום , שהם " + bweek + " לעומר ";
-        }
+        stringToReturn = "היום " + diffDays + " יום , שהם " + bweek + " ו " + s_dayOnWeek + " ימים לעומר ";
         if (s_dayOnWeek === 1) {
             stringToReturn = "היום " + diffDays + " יום , שהם " + bweek + " ויום אחד לעומר ";
-        } else {
-            stringToReturn = "היום " + diffDays + " יום , שהם " + bweek + " ו " + s_dayOnWeek + " ימים לעומר ";
+        }
+        if (s_dayOnWeek === 0) {
+            stringToReturn = " היום " + diffDays + " יום , שהם " + bweek + " לעומר ";
         }
 
         return '🌾' + ' ' + stringToReturn;

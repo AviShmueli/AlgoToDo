@@ -158,7 +158,7 @@ app.get('/TaskManeger/isUserExist', function (req, res) {
 
 app.get('/TaskManeger/getTasks', function (req, res) {
 
-    BL.getAllUserTasks(req.query.userId).then(function(result) {
+    BL.getAllUserTasks(req.query.userId, req.query.lastServerSync).then(function(result) {
         res.send(result);   
     }, function(error) {
         winston.log('error', error.message , error.error);

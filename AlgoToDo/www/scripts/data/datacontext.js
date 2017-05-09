@@ -32,18 +32,19 @@
                     user.lastServerSync = new Date(user.lastServerSync);                    
                 }
 
-                DAL.getTasksInProgress(user).then(function (response) {
+                //DAL.getTasksInProgress(user).then(function (response) {
+                DAL.getTasks(user).then(function (response) {
 
                     //setTaskList(response.data);
                     updateLocalTasks(response.data, isFromInterval);
 
 
-                    DAL.getDoneTasks(0, user).then(function (_response) {
+                    //DAL.getDoneTasks(0, user).then(function (_response) {
                         //pushTasksToTasksList(_response.data);
-                        updateLocalTasks(_response.data, isFromInterval);
+                    //    updateLocalTasks(_response.data, isFromInterval);
                         setMyTaskCount();
                         deferred.resolve();
-                    });
+                    //});
 
                     // if calld from sync contacts or login
                     if (isFromInterval === undefined) {

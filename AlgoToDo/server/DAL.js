@@ -450,19 +450,28 @@
         return d.promise;
     }
 
-    function getAllUserTasks(userId) {
+    function getAllUserTasks(userId, lastServerSync) {
 
         var d = deferred();
 
         getCollection('tasks').then(function (mongo) {
 
-            mongo.collection.find({
+            var query = {
                 $or: [{
                     'from._id': new ObjectID(userId)
                 }, {
                     'to._id': new ObjectID(userId)
                 }]
-            }, {
+            };
+
+            if (lastServerSync !== undefined) {
+                var lastServerSyncDate = new Date(lastServerSync);
+                query['lastModified'] = {
+                    '$gte': lastServerSyncDate
+                };
+            }
+
+            mongo.collection.find(query, {
                 "sort": ['lastModified', 'asc']
             }).toArray(function (err, result) {
                 if (err) {
@@ -535,11 +544,11 @@
             }, {
                 status: 'closed'
             }],
-            'from._id': new ObjectID(userId)
-            /*,
-                            type: {
-                                '$ne': 'group-sub'
-                            }*/
+            $or: [{
+                'from._id': new ObjectID(userId)
+            }, {
+                'to._id': new ObjectID(userId)
+            }]
         };
 
         if (page === 0 && lastServerSync !== undefined) {
@@ -1156,8 +1165,10 @@
         getCollection('users').then(function (mongo) {
 
             mongo.collection.find({
-                'cliqot._id' : new ObjectID(cliqaId),
-                cliqot: { $exists: true }
+                'cliqot._id': new ObjectID(cliqaId),
+                cliqot: {
+                    $exists: true
+                }
             }, {
                 '_id': true,
                 'name': true,

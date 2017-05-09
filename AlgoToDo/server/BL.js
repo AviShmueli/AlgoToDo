@@ -404,11 +404,11 @@
         return d.promise;
     }
 
-    function getAllUserTasks(userId) {
+    function getAllUserTasks(userId, lastServerSync) {
 
         var d = deferred();
 
-        DAL.getAllUserTasks(userId).then(function (result) {
+        DAL.getAllUserTasks(userId, lastServerSync).then(function (result) {
             d.resolve(result);
         }, function (error) {
             d.deferred(error);

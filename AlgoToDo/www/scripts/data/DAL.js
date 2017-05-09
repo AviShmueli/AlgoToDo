@@ -31,7 +31,8 @@
                 method: 'GET',
                 url: appConfig.appDomain() + '/TaskManeger/getTasks',
                 params: {
-                    userId: user._id
+                    userId: user._id,
+                    lastServerSync: user.lastServerSync
                 }
             };
 
