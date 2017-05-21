@@ -8,20 +8,24 @@
     contactsListCtrl.$inject = ['$rootScope', '$scope', 'logger', '$q', 'storage',
                                 'datacontext', 'moment', 'device', '$mdDialog',
                                 'contactsSync', '$offlineHandler', '$location', 'cordovaPlugins',
-                                '$interval', 'appConfig'
+                                '$interval', 'appConfig', '$timeout'
     ];
 
     function contactsListCtrl($rootScope, $scope, logger, $q, storage,
                         datacontext, moment, device, $mdDialog,
                         contactsSync, $offlineHandler, $location, cordovaPlugins,
-                        $interval, appConfig) {
+                        $interval, appConfig, $timeout) {
 
         var vm = this;
-        vm.imagesPath = device.getImagesPath();
+        
         vm.isDialogOpen = false;
 
-        vm.user = datacontext.getUserFromLocalStorage();
-        vm.contactsList = datacontext.getAllCachedUsers();
+        $timeout(function () {
+            vm.imagesPath = device.getImagesPath();
+            vm.user = datacontext.getUserFromLocalStorage();
+            vm.contactsList = datacontext.getAllCachedUsers();
+        }, 0);
+
 
         angular.element(document.querySelectorAll('html')).removeClass("hight-auto");
 

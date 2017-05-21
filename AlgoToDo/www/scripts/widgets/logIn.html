@@ -14,10 +14,10 @@
 
                     <md-input-container class="md-block">
                         <md-icon ng-md-icon icon="phone"></md-icon>
-                        <input md-no-asterisk name="phone" ng-model="vm.user.phone" type="tel"
+                        <input md-no-asterisk name="phone" ng-model="vm.userPhone" type="tel"
                                ng-pattern="/^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/"
                                placeholder="מספר טלפון" ng-required="true"
-                               class="login-phone">
+                               class="login-phone" md-autofocus ng-keypress="vm.submitOnEnter($event)">
                         <div ng-messages="signUpForm.phone.$error">
                             <div ng-message="required">טלפון הוא שדה חובה</div>
                             <div ng-message="pattern">נא להכניס מספר טלפון חוקי</div>

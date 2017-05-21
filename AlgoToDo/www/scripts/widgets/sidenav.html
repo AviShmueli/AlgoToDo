@@ -1,6 +1,6 @@
-﻿<md-sidenav layout="column" class="md-sidenav-right md-whiteframe-z2" md-component-id="left">
+﻿<md-sidenav ng-if="vm.showSideNav()" layout="column" class="md-sidenav-right md-whiteframe-z2 height-100P" md-component-id="left" md-is-locked-open="$mdMedia('gt-sm')">
     <md-toolbar class="md-tall md-hue-2 toolBar" dir="rtl">
-        <div class="text-align-left">
+        <div class="text-align-left" hide-gt-sm>
             <md-button aria-label="Open phone interactions menu" class="md-icon-button" ng-click="vm.closeSidenav()">
                 <ng-md-icon icon="close"></ng-md-icon>
             </md-button>
@@ -8,11 +8,11 @@
         <span flex></span>
         <div layout="column" layout-align="end start" class="md-toolbar-tools-bottom inset">
             <md-card-avatar>
-                <img class="md-user-avatar user-avatar-big" ng-if="!user.avatarUrl.startsWith('content')  && !user.avatarUrl.startsWith('file')" ng-src="{{::vm.imagesPath + user.avatarUrl}}">
-                <img class="md-user-avatar user-avatar-big" ng-if="user.avatarUrl.startsWith('content')  || user.avatarUrl.startsWith('file')" ng-src="{{::user.avatarUrl}}">
+                <img class="md-user-avatar user-avatar-big" ng-if="!vm.user.avatarUrl.startsWith('content')  && !vm.user.avatarUrl.startsWith('file')" ng-src="{{vm.imagesPath + vm.user.avatarUrl}}">
+                <img class="md-user-avatar user-avatar-big" ng-if="vm.user.avatarUrl.startsWith('content')  || vm.user.avatarUrl.startsWith('file')" ng-src="{{vm.user.avatarUrl}}">
             </md-card-avatar>
-            <div class="username">{{::user.name}}</div>
-            <div>{{::user.cliqot[0].name}}</div>
+            <div class="username">{{vm.user.name}}</div>
+            <div>{{vm.user.cliqot[0].name}}</div>
         </div>
     </md-toolbar>
     <md-list layout="column" layout-fill>
@@ -38,7 +38,7 @@
             <a class="cursor-pointer" ng-click="vm.showAddCliqaDialog($event)">
                 <md-item-content md-ink-ripple layout="row" layout-align="start center">
                     <div class="inset">
-                        <md-icon md-svg-src="{{::vm.imagesPath + '/images/cliqa.svg'}}"></md-icon>
+                        <md-icon md-svg-src="{{vm.imagesPath + '/images/cliqa.svg'}}"></md-icon>
                     </div>
                     <span flex></span>
                     <div class="inset">

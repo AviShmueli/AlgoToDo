@@ -26,6 +26,29 @@
 
         var showDatePicker = function () {
             var deferred = $q.defer();
+
+            document.addEventListener("deviceready", function () {
+                cordova.plugins.DateTimePicker.show({
+                    mode: "datetime",
+                    date: new Date(),
+                    allowOldDates: false,
+                    allowFutureDates: true,
+                    minuteInterval: 15,
+                    locale: "IL",
+                    okText: "אישור",
+                    cancelText: "ביטול"
+                }, function(newDate) {
+                    deferred.resolve(newDate);
+                }, function (err) {
+                    // Handle error.
+                    console.error(err);
+                });
+            }, false);
+
+
+
+
+            /*
             var options = {
                 date: new Date(),
                 minDate: new Date(),
@@ -49,7 +72,7 @@
                 });
 
             }, false);
-
+            */
             return deferred.promise;
         }
 

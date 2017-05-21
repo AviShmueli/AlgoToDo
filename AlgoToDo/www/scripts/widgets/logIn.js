@@ -5,11 +5,11 @@
         .module('app.widgets')
         .controller('logInCtrl', logInCtrl);
 
-    logInCtrl.$inject = ['$scope', 'datacontext', 'logger', 'cordovaPlugins', '$q', 'pushNotifications',
-                          'device', '$mdDialog', 'DAL', '$location', 'contactsSync'];
+    logInCtrl.$inject = ['$rootScope', '$scope', 'datacontext', 'logger', 'cordovaPlugins', '$q', 'pushNotifications',
+                          'device', '$mdDialog', 'DAL', '$location', 'contactsSync', '$timeout'];
 
-    function logInCtrl($scope, datacontext, logger, cordovaPlugins, $q, pushNotifications,
-                        device, $mdDialog, DAL, $location, contactsSync) {
+    function logInCtrl($rootScope, $scope, datacontext, logger, cordovaPlugins, $q, pushNotifications,
+                        device, $mdDialog, DAL, $location, contactsSync, $timeout) {
 
         angular.element(document.querySelectorAll('html')).addClass("hight-auto");
 
@@ -20,14 +20,20 @@
         vm.user = {};
         vm.loadingMode = 'syncing';
 
-        var user = datacontext.getUserFromLocalStorage();
-        if (user !== undefined) {
+        vm.user = datacontext.getUserFromLocalStorage();
+        if (vm.user !== undefined) {
             datacontext.reloadAllTasks();
             $location.path('/tasksList');
         }
 
         vm.goToSignUp = function () {
             $location.path('/signUp');
+        }
+
+        vm.submitOnEnter = function (ev) {
+            if (ev.keyCode == 13) {
+                vm.signMeUp();
+            }
         }
 
         vm.signMeUp = function () {
@@ -38,85 +44,20 @@
         };
 
         var signUp = function () {
-            DAL.checkIfUserExist(vm.user).then(function (response) {
+            DAL.checkIfUserExist(vm.userPhone).then(function (response) {
                 if (response.data !== null && response.data !== '') {
 
-                    var user = response.data;
+                    vm.user = response.data;
 
-                    // if this is mobile and the user not registerd to GCM or APN
-                    if ((device.isMobileDevice() && device.getDeviceDetails().platform === 'Android' &&
-                     (user.GcmRegistrationId === '' || user.GcmRegistrationId === undefined)) ||
-                     (device.isMobileDevice() && device.getDeviceDetails().platform === 'iOS' &&
-                     (user.ApnRegistrationId === '' || user.ApnRegistrationId === undefined))) {
+                    if (device.isMobileDevice()) {
                         registerUserForPushService().then(function (registrationId) {
-                            DAL.saveUsersNewRegistrationId(registrationId, user);
-                            // check here if reg-code recived by sms match reg-code in server
-                            showVerificationCodePrompt(user._id).then(function (verificationCode) {
-
-                                DAL.checkIfVerificationCodeMatch(user, verificationCode).then(function (result) {
-                                    if (result.data === 'ok') {
-                                        datacontext.saveUserToLocalStorage(response.data);
-                                        
-                                        showCube();
-                                        contactsSync.syncPhoneContactsWithServer().then(function () {
-                                            vm.loadingMode = 'loading';
-                                            datacontext.reloadAllTasks().then(function () {
-                                                $location.path('/tasksList');
-                                            });
-                                        }, function () {
-                                            vm.loadingMode = 'loading';
-                                            datacontext.reloadAllTasks().then(function () {
-                                                $location.path('/tasksList');
-                                            });
-                                        });
-                                    }
-                                    else {
-                                        showVerificationFailedAlert();
-                                        vm.inProgress = false;
-                                    }
-                                }, function (error) {
-                                    vm.inProgress = false;
-                                    logger.error("error while trying to check If VerificationCode Match", error);
-                                    showRegistrationFailedAlert();
-                                });
-                            }, function () {
-                                DAL.reSendVerificationCodeToUser(user._id);
-                            });
+                            DAL.saveUsersNewRegistrationId(registrationId, vm.user);
+                            
+                            verifyUser();
                         });
                     }
                     else {
-                        // check here if reg-code recived by sms match reg-code in server
-                        showVerificationCodePrompt(user._id).then(function (verificationCode) {
-
-                            DAL.checkIfVerificationCodeMatch(user, verificationCode).then(function (result) {
-                                if (result.data === 'ok') {
-                                    datacontext.saveUserToLocalStorage(response.data);
-                                    
-                                    showCube();
-                                    contactsSync.syncPhoneContactsWithServer().then(function () {
-                                        vm.loadingMode = 'loading';
-                                        datacontext.reloadAllTasks().then(function () {
-                                            $location.path('/tasksList');
-                                        });
-                                    }, function () {
-                                        vm.loadingMode = 'loading';
-                                        datacontext.reloadAllTasks().then(function () {
-                                            $location.path('/tasksList');
-                                        });
-                                    });
-                                }
-                                else {
-                                    showVerificationFailedAlert();
-                                    vm.inProgress = false;
-                                }
-                            }, function (error) {
-                                vm.inProgress = false;
-                                logger.error("error while trying to check If VerificationCode Match", error);
-                                showRegistrationFailedAlert();
-                            });
-                        }, function () {
-                            DAL.reSendVerificationCodeToUser(user._id);
-                        });
+                        verifyUser();
                     }
                 }
                 else {
@@ -132,6 +73,41 @@
 
         };
 
+        var verifyUser = function () {
+            // check here if reg-code recived by sms match reg-code in server
+            showVerificationCodePrompt(vm.user._id).then(function (verificationCode) {
+
+                DAL.checkIfVerificationCodeMatch(vm.user, verificationCode).then(function (result) {
+                    if (result.data === 'ok') {
+                        datacontext.saveUserToLocalStorage(vm.user);
+
+                        showCube();
+                        contactsSync.syncPhoneContactsWithServer().then(function () {
+                            vm.loadingMode = 'loading';
+                            datacontext.reloadAllTasks().then(function () {
+                                $location.path('/tasksList');
+                            });
+                        }, function () {
+                            vm.loadingMode = 'loading';
+                            datacontext.reloadAllTasks().then(function () {
+                                $location.path('/tasksList');
+                            });
+                        });
+                    }
+                    else {
+                        showVerificationFailedAlert();
+                        vm.inProgress = false;
+                    }
+                }, function (error) {
+                    vm.inProgress = false;
+                    logger.error("error while trying to check If VerificationCode Match", error);
+                    showRegistrationFailedAlert();
+                });
+            }, function () {
+                DAL.reSendVerificationCodeToUser(vm.user._id);
+            });
+        }
+
         var registerUserForPushService = function () {
             var deferred = $q.defer();
 
@@ -145,21 +121,6 @@
 
             return deferred.promise;
         };
-
-        /*var showVerificationCodePrompt = function () {
-            var confirm = $mdDialog.prompt()
-              .parent(angular.element(document.querySelector('#VerificationCodePromptContainer')))
-              .title('קוד אימות')
-              .htmlContent('<div>אנא הכנס את קוד האימות שנלשח למכשירך</div>' +
-                           '<br/>' +
-                           '<a>שלח שוב</a>')
-              .placeholder('קוד אימות')
-              .ariaLabel('verificationCode')
-              .ok('המשך');
-
-            return $mdDialog.show(confirm);
-
-        };*/
 
         var showVerificationFailedAlert = function () {
             $mdDialog.show(
@@ -214,6 +175,27 @@
             vm.loadingMode = 'syncing';
             angular.element(document.querySelectorAll('html')).removeClass("hight-auto");
         };
+
+        vm.exitApp = false;
+
+        var backbuttonClick_allways_Callback = function (e) {
+
+            if ($location.path() === '/logIn') {
+                e.preventDefault();
+                if (!vm.exitApp) {
+                    vm.exitApp = true;
+                    cordovaPlugins.showToast("הקש שוב ליציאה", 1000);
+                    $timeout(function () { vm.exitApp = false; }, 1000);
+                } else {
+                    window.plugins.toast.hide();
+                    navigator.app.exitApp();
+                }
+            }
+        };
+
+        document.addEventListener("deviceready", function () {
+            document.addEventListener("backbutton", backbuttonClick_allways_Callback, false);
+        }, false);
 
     }
 

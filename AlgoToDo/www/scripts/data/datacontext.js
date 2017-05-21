@@ -32,19 +32,18 @@
                     user.lastServerSync = new Date(user.lastServerSync);                    
                 }
 
-                //DAL.getTasksInProgress(user).then(function (response) {
-                DAL.getTasks(user).then(function (response) {
+                DAL.getTasksInProgress(user).then(function (response) {
 
                     //setTaskList(response.data);
                     updateLocalTasks(response.data, isFromInterval);
 
 
-                    //DAL.getDoneTasks(0, user).then(function (_response) {
+                    DAL.getDoneTasks(0, user).then(function (_response) {
                         //pushTasksToTasksList(_response.data);
-                    //    updateLocalTasks(_response.data, isFromInterval);
+                        updateLocalTasks(_response.data, isFromInterval);
                         setMyTaskCount();
                         deferred.resolve();
-                    //});
+                    });
 
                     // if calld from sync contacts or login
                     if (isFromInterval === undefined) {
@@ -185,7 +184,7 @@
                         for (var j = 0; j < diffCount; j++) {
                             var newComment = filterdNewTasksComments[j];
                             addCommentToTask(newTask._id, newComment);
-                            if (!isMobileDevice() && isFromInterval) {
+                            if (!isMobileDevice() && isFromInterval && newComment.from._id !== user._id) {
                                 browserNotification.showNotification("תגובה חדשה", newComment.text, newTask._id);
                             }
                         }
@@ -237,6 +236,10 @@
         var updateUnSeenResponse = function (task) {
             if ($location.path().indexOf(task._id) === -1) {
                 task.unSeenResponses = task.unSeenResponses === undefined || task.unSeenResponses === '' ? 1 : task.unSeenResponses + 1;
+                if (task.type === 'group-sub') {
+                    var groupTask = getTaskByTaskId(task.groupMainTaskId);
+                    groupTask.unSeenResponses = groupTask.unSeenResponses === undefined || groupTask.unSeenResponses === '' ? 1 : groupTask.unSeenResponses +1;
+                }
             }
             var user = getUserFromLocalStorage();
             if (task.status === 'inProgress' &&
@@ -303,6 +306,10 @@
             }
         };
 
+        var deleteRepeatsTaskListFromLocalStorage = function () {
+            delete self.$storage.repeatsTasksList;
+        }
+
         /* ----- Users ----- */
 
         var replaceUsersAvatarUrlWithLocalPath = function (users) {
@@ -320,7 +327,7 @@
         }
 
         var saveUserToLocalStorage = function (user) {
-            self.$storage.user = user;
+            self.$storage.user = user;           
         };
 
         var getUserFromLocalStorage = function () {
@@ -471,7 +478,8 @@
             updateLocalTasks: updateLocalTasks,
             getMoreLoadedTasks: getMoreLoadedTasks,
             addTasksToMoreLoadedTasks: addTasksToMoreLoadedTasks,
-            sortUsersByfrequencyOfUse: sortUsersByfrequencyOfUse
+            sortUsersByfrequencyOfUse: sortUsersByfrequencyOfUse,
+            deleteRepeatsTaskListFromLocalStorage: deleteRepeatsTaskListFromLocalStorage
         };
 
         return service;

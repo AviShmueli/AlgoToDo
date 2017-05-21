@@ -10,7 +10,7 @@
 
         $timeout(function () {
             $scope.$broadcast('focusVerificationInput');
-        }, 100);
+        }, 300);
 
         $scope.counter = 20;
         $scope.onTimeout = function () {
@@ -43,6 +43,12 @@
         $scope.answer = function (answer) {
             $mdDialog.hide(answer);
         };
+
+        $scope.submitOnEnter = function (ev) {
+            if (ev.keyCode == 13) {
+                $scope.answer($scope.verificationCode);
+            }
+        }
 
     }
 

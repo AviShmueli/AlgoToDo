@@ -235,7 +235,7 @@
 
             // if this task is not from me to me, send notification to the user
             if (task.to._id !== task.from._id) {
-                if (task.status === 'done') {
+                if (task.status === 'done' || task.status === 'inProgress') {
                     setTimeout(function () {
                         pushUpdatetdTaskToUsersDevice(result, task.from._id);
                     }, 0);
@@ -314,8 +314,14 @@
     function registerUser(user) {
 
         var d = deferred();
+        
+        var cliqa;
+        try {
+            cliqa = JSON.parse(user.cliqot[0]);
+        } catch (error) {
+            cliqa = user.cliqot[0];
+        }
 
-        var cliqa = JSON.parse(user.cliqot[0]);
         cliqa._id = new ObjectID(cliqa._id);
         user.cliqot = [cliqa];
 
@@ -384,7 +390,7 @@
             if (user === null) {
                 d.resolve('');
             } else {
-                if (user.type !== 'apple-tester' || user.type === undefined || user.type.indexOf('system-admin') === -1) {
+                if (user.type === undefined || (user.type !== undefined && user.type !== 'apple-tester' && user.type.indexOf('admin') === -1 && user.type !== 'tester')) {
                     sms.sendSms(user.verificationCode, user.phone).then(function () {
                         d.resolve();
                     }, function () {

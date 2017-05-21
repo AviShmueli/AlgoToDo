@@ -135,14 +135,13 @@
             return $http(req);
         };
 
-        var checkIfUserExist = function (user) {
+        var checkIfUserExist = function (userPhone) {
 
             var req = {
                 method: 'GET',
                 url: appConfig.appDomain() + '/TaskManeger/isUserExist',
                 params: {
-                    userName: user.name,
-                    userPhone: user.phone
+                    userPhone: userPhone
                 }
             };
 

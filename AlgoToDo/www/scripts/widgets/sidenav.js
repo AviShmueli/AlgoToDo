@@ -10,28 +10,44 @@
             controller: sidenavController,
             controllerAs: 'vm',
             templateUrl: 'scripts/widgets/sidenav.html',
-            restrict: 'A',
-            scope: {
-                'user': '=',
-                'imagesPath': '=',
-                'logOff': '&',
-                'cancelAllNotifications': '&'
-            }
+            restrict: 'AE'
         };
 
-        function sidenavController($scope, device, cordovaPlugins, $location,
+        function sidenavController($rootScope, $scope, device, cordovaPlugins, $location,
                                    $mdSidenav, $mdDialog, DAL, logger,
-                                   contactsSync, $interval) {
+                                   contactsSync, $interval, datacontext,
+                                   appConfig, $timeout) {
             var vm = this;
 
-            vm.imagesPath = $scope.imagesPath;
-            vm.user = $scope.user;
-            vm.logOff = $scope.logOff;
-            vm.cancelAllNotifications = $scope.cancelAllNotifications;
+            vm.imagesPath = device.getImagesPath();
+
+            $scope.$watch(function () { return datacontext.getUserFromLocalStorage() }, function (oldVal, newVal) {
+                vm.user = newVal;
+            },true);
+            
             vm.appVersion = '';
             vm.showLogoffButton = false;
             vm.expand_icon = 'add_circle';
 
+            vm.showSideNav = function () {
+                return $location.path() !== '/signUp' && $location.path() !== '/logIn';
+            }
+
+            vm.logOff = function () {
+                vm.closeSidenav();
+                datacontext.deleteUserFromLocalStorage();
+                datacontext.deleteAllCachedUsers();
+                datacontext.deleteTaskListFromLocalStorage();
+                datacontext.deleteRepeatsTaskListFromLocalStorage();
+                cordovaPlugins.clearAppBadge();
+                if(device.isMobileDevice()) {
+                    DAL.saveUsersNewRegistrationId('', vm.user);
+                }
+                $location.path('/logIn');
+                vm.user = undefined;          
+            };
+
+            vm.appVersion = appConfig.appVersion;
             document.addEventListener("deviceready", function () {
                 device.getAppVersion().then(function (version) {
                     vm.appVersion = version;
@@ -39,10 +55,14 @@
             }, false);
 
             vm.goToManagementPage = function () {
-                $location.path('/management');
+                vm.closeSidenav();
+                $timeout(function() {
+                    $location.path('/management');
+                }, 0);
             };
 
             vm.goToRepeatTasksPage = function () {
+                vm.closeSidenav();
                 $location.path('/repeatsTasks');
             };
 
@@ -102,23 +122,17 @@
                         logger.error(error);
                     });
                 });
-            };
-
-            vm.admin = [{
-                link: '',
-                title: 'רוקן משימות',
-                icon: 'delete'
-            }, {
-                link: 'vm.showListBottomSheet($event)',
-                title: 'הגדרות',
-                icon: 'settings'
-            }];           
+            }       
 
             vm.goToContactsListPage = function () {
-                $location.path('/contactsList');
+                vm.closeSidenav();
+                $timeout(function () {
+                    $location.path('/contactsList');
+                }, 0);
             }
 
             vm.goToCliqaPage = function (id) {
+                vm.closeSidenav();
                 $location.path('/cliqa/' + id);
             }
         }

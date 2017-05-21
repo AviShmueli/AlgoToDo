@@ -176,11 +176,6 @@ md-card-content .from {
 /*md-autocomplete > md-autocomplete-wrap > button {
     right: 90% !important;
 }*/
-.add-icon{
-    position: absolute;
-    top: 6px;
-    left: 16px;
-}
 
 .md-autocomplete-suggestions {
     text-align: right;
@@ -363,7 +358,7 @@ md-sidenav ng-md-icon {
 }
 
 .main-tabs md-tab-item{
-    line-height: 16px;
+    line-height: 80%;
     padding: 0;
 }
 
@@ -760,7 +755,7 @@ md-tabs.md-primary > md-tabs-wrapper > md-tabs-canvas > md-pagination-wrapper > 
 .font-18px{ font-size: 18px; }
 .font-size-x-small{ font-size: x-small }
 .font-size-xx-large { font-size: xx-large}
-.z-index-21{ z-index: 21; }
+.z-index-21{ z-index: 21 !important; }
 .fill-black { fill: black; }
 .offline-icon-fill { fill: rgb(126, 79, 79); }
 .margin-0 { margin: 0;}
@@ -821,11 +816,15 @@ md-tabs.md-primary > md-tabs-wrapper > md-tabs-canvas > md-pagination-wrapper > 
   padding-top: 10%;
 }
 .logo{ width: 40px}
-.timer-text{ color:rgb(186, 195, 196) ;bottom: 7px; position: relative;}
+.timer-text{ color:rgb(186, 195, 196) ; position: relative;}
 .time-points{    top: 35px;    position: relative;    font-size: xx-large;}
-.md-toast-content { direction: rtl !important;}
+.direction-rtl { direction: rtl !important;}
 .cliqa-admin-text { padding: 0 20px; border: rgb(0,188,212) 1px solid;}
 .cliqa-admin-text > h3{ margin: 3px; }
 .contact-selected {     background-color: #def5f5;}
 .seaech-input-container{ height: 34px; }
 .contact-exist { font-weight: 100 !important; }
+.task-content-web-view {width: 50%; margin-left: 25%;}
+.toast-container {  position: fixed;  bottom: 0;  z-index: 999;  overflow: visible !important;}
+.md-icon-button{line-height: 0 !important; }
+.font-width-100{ font-weight: 100 !important; }

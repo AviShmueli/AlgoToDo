@@ -10,7 +10,7 @@
          'socket', 'cordovaPlugins', 'dropbox', 'appConfig',
          'localNotifications', 'camera', 'device', '$mdDialog',
          'DAL', '$offlineHandler', '$location', '$timeout',
-         'pushNotifications', '$toast', '$transitions'
+         'pushNotifications', '$toast', '$transitions', '$mdMedia'
     ];
 
     function taskCtrl($rootScope, $scope, logger, $q, storage,
@@ -18,7 +18,7 @@
                       socket, cordovaPlugins, dropbox, appConfig,
                       localNotifications, camera, device, $mdDialog,
                       DAL, $offlineHandler, $location, $timeout,
-                      pushNotifications, $toast, $transitions) {
+                      pushNotifications, $toast, $transitions, $mdMedia) {
 
         var vm = this;
 
@@ -35,6 +35,10 @@
                     pushNotifications.clearAllNotifications();
                 }, 0);
             }
+            if (vm.task.type === 'group-sub') {
+                var groupTask = datacontext.getTaskByTaskId(vm.task.groupMainTaskId);
+                groupTask.unSeenResponses = groupTask.unSeenResponses !== undefined && groupTask.unSeenResponses !== '' ? groupTask.unSeenResponses - vm.task.unSeenResponses : 0;
+            }
             $rootScope.newCommentsInTasksInProcessCount =
                 $rootScope.newCommentsInTasksInProcessCount !== undefined ?
                 $rootScope.newCommentsInTasksInProcessCount - vm.task.unSeenResponses :
@@ -43,6 +47,7 @@
         vm.task.unSeenResponses = 0;
 
         vm.isIosdDevice = false;
+        vm.isGTSMScreen = function () { return $mdMedia('gt-sm') };
         if (device.isMobileDevice()) {
             vm.isIosdDevice = cordova.platformId === 'ios';
         }
@@ -56,13 +61,13 @@
         vm.newCommentText = '';
 
         vm.goBack = function () {
-            //window.history.back();
+            window.history.back();
 
-            $timeout(function () {
-                $transitions.slide("left");
-            }, 100);
+            //$timeout(function () {
+                //$transitions.slide("left");
+            //}, 100);
             
-            $location.path('/tasksList');
+            //$location.path('/tasksList');
         };
 
         vm.takePic = function (sourceType) {
@@ -168,7 +173,7 @@
                 task.doneTime = new Date();
                 //datacontext.removeAllTaskImagesFromCache(task);
                 //localNotifications.cancelNotification(task._id);
-                $toast.showActionToast("המשימה סומנה כבוצע", "בטל", 3000).then(function (response) {
+                $toast.showActionToast("המשימה סומנה כבוצע", "בטל", 4000).then(function (response) {
                     if (response === 'ok') {
                         task.doneTime = null;
                         if (task.offlineMode === true) {

@@ -41,7 +41,7 @@
                 <md-input-container flex class="md-block">
                     <label>תיאור המשימה</label>
                     <textarea class="texterea-font-size new-task-text" name="description" 
-                              ng-model="vm.task.description" md-maxlength="220" ng-maxlength="220" 
+                              ng-model="vm.task.description" md-maxlength="220" ng-maxlength="220" maxlength="220" 
                               rows="2" max-rows="7" required md-no-asterisk="true"></textarea>
                     <div ng-messages="newTaskForm.description.$error" ng-if="newTaskForm.description.$touched">
                         <div ng-message="required">נא להכניס תיאור למשימה</div>

@@ -35,7 +35,8 @@
                 if (vm.inProgress === false) {
                     vm.inProgress = true;
 
-                    vm.user.cliqot = [vm.selectedCliqa] || vm.allCliqot[1] || {};
+                    vm.user.cliqot = vm.selectedCliqa || vm.AllCliqot[1] || {};
+                    vm.user.cliqot = [vm.user.cliqot];
 
                     signUp();
                 }
@@ -48,7 +49,7 @@
             }
 
             var signUp = function () {
-                DAL.checkIfUserExist(vm.user).then(function (response) {
+                DAL.checkIfUserExist(vm.user.phone).then(function (response) {
                     if (response.data !== null && response.data !== '') {
                         
                         var user = response.data;

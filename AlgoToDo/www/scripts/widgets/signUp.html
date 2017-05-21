@@ -1,11 +1,11 @@
 ﻿<div layout="column" ng-controller="signUpCtrl as vm" layout-padding="" dir="rtl" class="login-form" ng-cloak="">
     <div ng-if="!vm.showCube">
         <div layout-align="center center" class="login-text">
-            <h1>הרשמה למערכת</h1>
+            <h1>הרשמה לאפליקציה</h1>
             <h3>ברוכים הבאים ל ™Asiti</h3>
             <h3>לפניך טופס הרשמה קצר</h3>
         </div>
-        <form name="signUpForm" layout="column" layout-align="center center" flex flex-gt-sm="50" flex-md="66">
+        <form name="signUpForm" layout="column" layout-align="center center" flex>
             <md-content class="md-no-momentum" layout-padding>
                 <md-input-container class="md-block">
                     <md-icon ng-md-icon icon="person"></md-icon>
@@ -26,7 +26,7 @@
                     </div>
                 </md-input-container>
 
-                <md-input-container class="md-icon-float md-icon-right md-block margin-bottom-0" dir="rtl">
+                <!--<md-input-container class="md-icon-float md-icon-right md-block margin-bottom-0" dir="rtl">
 
                     <md-icon ng-md-icon icon="group"></md-icon>
                     <label>קליקה</label>
@@ -38,10 +38,8 @@
                     <div ng-messages="signUpForm.cliqa.$error">
                         <div ng-message="required">אנא בחר קליקה אליה אתה שייך </div>
                     </div>
-                    <!--<md-button class="md-icon-button" aria-label="help" ng-click="vm.showAlert($event)">-->
                     <md-icon ng-md-icon icon="info_outline" size="20" ng-click="vm.showCliqaAlert($event)"></md-icon>
-                    <!--</md-button>-->
-                </md-input-container>
+                </md-input-container>-->
 
                 <md-input-container class="margin-0">
                     <label>בחר תמונת פרופיל</label>
@@ -69,11 +67,16 @@
                 </md-input-container>
             </md-content>
             <md-input-container>
+                <span calss="font-size-x-small font-width-100">
+                    * אנו נשתמש במספר הטלפון שלך רק כדי לזהות אותך
+                </span>
+            </md-input-container>
+            <md-input-container>
 
                 <md-checkbox md-no-asterisk ng-required="true" aria-label="acceptTerms" ng-model="vm.user.acceptTerms">
                     <span calss="font-size-x-small">
                         אנא קרא בקפידה את <a class="href-class" ng-click="vm.showTermsOfServiceAlert($event)">תנאי השירות</a>.
-                        השימוש בשירותי ™Asiti, באתר או במערכת של חברת ™Asiti מותנה בהסכמה מלאה לתנאים אלה.
+                        השימוש בשירותי ™Asiti, באתר או באפליקציה של חברת ™Asiti מותנה בהסכמה מלאה לתנאים אלה.
                     </span>
                     <!--<br />
                     <span calss="font-size-x-small">

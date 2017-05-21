@@ -258,9 +258,9 @@
                 bweek = "שלושה שבועות";
             } else if (aweek === 4) {
                 bweek = "ארבעה שבועות";
-            } else if (aweek === 4) {
+            } else if (aweek === 5) {
                 bweek = "חמישה שבועות";
-            } else if (aweek === 4) {
+            } else if (aweek === 6) {
                 bweek = "שישה שבועות";
             }
         }

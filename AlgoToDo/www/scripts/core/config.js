@@ -106,7 +106,7 @@
                     document.addEventListener("deviceready", function () {
                         cordova.plugins.IsDebug.getIsDebug(function (isDebug) {
 
-                            if (isDebug) {
+                            if (true || isDebug) {
                                 self.appDomain = 'https://algotodo-test.herokuapp.com';
                             }
                             else {
@@ -126,7 +126,8 @@
 
             return {
                 region : 'IL',
-                appDomain: function () { return self.appDomain }
+                appDomain: function () { return self.appDomain },
+                appVersion: '0.3.5'
             };
         })
         .run(function (amMoment, $offlineHandler) {

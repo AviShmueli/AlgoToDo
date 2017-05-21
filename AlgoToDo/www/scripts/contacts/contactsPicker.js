@@ -23,9 +23,9 @@
         var dvm = this;
         
         dvm.isSmallScrean = $mdMedia('sm');
-        dvm.imagesPath = device.getImagesPath();
-        dvm.user = datacontext.getUserFromLocalStorage();
         $timeout(function () {
+            dvm.imagesPath = device.getImagesPath();
+            dvm.user = datacontext.getUserFromLocalStorage();
             dvm.contactsList = angular.copy(datacontext.getAllCachedUsers());
         }, 0)
         dvm.selectedContactsList = [];
@@ -148,6 +148,10 @@
         dvm.save = function () {
             $mdDialog.hide(dvm.selectedContactsList);
         };
+
+        dvm.searchKeypress = function ($event) {
+            var a = dvm.search + $event.key;
+        }
     }
 
 })();

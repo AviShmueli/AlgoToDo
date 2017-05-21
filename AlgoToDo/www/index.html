@@ -32,9 +32,7 @@
 
 </head>
 <body layout="row">
-
-    <div ng-view layout-fill ng-cloak></div>
-
+    
     <div id="CliqaAlertContainer" dir="rtl"></div>
     <div id="VerificationCodePromptContainer" dir="rtl"></div>
     <div id="TermsOfServiceAlertContainer" dir="rtl"></div>
@@ -42,6 +40,12 @@
     <div id="VerificationFailedAlertContainer" dir="rtl"></div>
     <div id="RegistrationFailedAlertContainer" dir="rtl"></div>
     <div id="deleteRepeatsTaskContainer" dir="rtl"></div>
+    <div class="toast-container"></div>
+
+    <div ng-view layout-fill ng-cloak></div>
+    <tm-sidenav/>
+
+    
 
 
     <script src="scripts/lib/angular.js"></script>

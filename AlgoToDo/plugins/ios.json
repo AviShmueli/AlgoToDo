@@ -85,6 +85,9 @@
         },
         "cordova-plugin-is-debug": {
             "PACKAGE_NAME": "com.algotodo.app"
+        },
+        "skwas-cordova-plugin-datetimepicker": {
+            "PACKAGE_NAME": "com.algotodo.app"
         }
     },
     "dependent_plugins": {

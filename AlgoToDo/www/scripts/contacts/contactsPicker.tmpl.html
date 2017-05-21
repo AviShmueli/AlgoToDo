@@ -78,11 +78,11 @@
     </md-toolbar>
 
     <md-fab-trigger>
-        <md-button ng-if="dvm.contactsList.length < 1" class="md-fab md-fab-bottom-left z-index-21" aria-label="Add" ng-click="dvm.addGroup($event)" md-no-ink="true">
+        <md-button ng-if="dvm.contactsList.length < 1" class="md-fab md-icon-button md-fab-bottom-left z-index-21" aria-label="Add" ng-click="dvm.addGroup($event)" md-no-ink="true">
             <ng-md-icon icon="sync"></ng-md-icon>
         </md-button>
-        <md-button ng-if="dvm.selectedContactsList.length > 0" class="md-fab md-fab-bottom-left z-index-21" aria-label="Add" ng-click="dvm.save($event)" md-no-ink="true">
-            <ng-md-icon class="add-icon" icon="done"></ng-md-icon>
+        <md-button ng-if="dvm.selectedContactsList.length > 0" class="md-fab md-icon-button md-fab-bottom-left z-index-21" aria-label="Add" ng-click="dvm.save($event)" md-no-ink="true">
+            <ng-md-icon icon="done"></ng-md-icon>
         </md-button>
     </md-fab-trigger>
 
@@ -92,34 +92,32 @@
                 <div aria-labelledby="all"
                      layout="row" layout-align="center center">
                     <md-list flex dir="rtl" ng-if="dvm.contactsList.length > 0">
-                        <!--<md-virtual-repeat-container id="vertical-container" class="height-100P">-->
-                            <md-list-item flex ng-repeat="contact in dvm.contactsList | orderBy : 'name' | orderBy : 'useCount' : false | filter : dvm.search"
-                                          class="noright task-item margin" ng-class="{'contact-selected' : contact.selected}"
-                                          ng-init="contact.exist = dvm.existingContacts.indexOf(contact._id) !== -1">
-                                <md-card-avatar>
-                                    <img ng-if="::(contact.avatarUrl.startsWith('content') || contact.avatarUrl.startsWith('file'))" alt="" ng-src="{{::contact.avatarUrl}}" class="md-avatar user-avatar margin-right-10px" />
-                                    <img ng-if="::!contact.avatarUrl.startsWith('content')  && !contact.avatarUrl.startsWith('file')" alt="" ng-src="{{::dvm.imagesPath + contact.avatarUrl}}" class="md-avatar user-avatar margin-right-10px" />
-                                </md-card-avatar>
-                                <a class="md-tile-content margin-bottom-14px" flex="100"
-                                   ng-click="dvm.addContactToSelectedContactsList('click', contact)"
-                                   on-long-press="dvm.addContactToSelectedContactsList('long', contact)"
-                                   long-press-duration="400" ng-class="{'contact-exist' : contact.exist}">
-                                    <div layout="row">
-                                        <span ng-if="::!contact.exist" class="from">{{::contact.name}}</span>
-                                        <span ng-if="::contact.exist" class="font-14px">{{::contact.name}}</span>
-                                    </div>
+                        <md-list-item ng-repeat="contact in dvm.contactsList | orderBy : 'name' | orderBy : 'useCount' : false | filter : dvm.search" 
+                                      class="noright task-item margin" ng-class="{'contact-selected' : contact.selected}"
+                                      ng-init="contact.exist = dvm.existingContacts.indexOf(contact._id) !== -1">
+                            <md-card-avatar>
+                                <img ng-if="::(contact.avatarUrl.startsWith('content') || contact.avatarUrl.startsWith('file'))" alt="" ng-src="{{::contact.avatarUrl}}" class="md-avatar user-avatar margin-right-10px" />
+                                <img ng-if="::!contact.avatarUrl.startsWith('content')  && !contact.avatarUrl.startsWith('file')" alt="" ng-src="{{::dvm.imagesPath + contact.avatarUrl}}" class="md-avatar user-avatar margin-right-10px" />
+                            </md-card-avatar>
+                            <a class="md-tile-content margin-bottom-14px" flex="100"
+                               ng-click="dvm.addContactToSelectedContactsList('click', contact)" 
+                               on-long-press="dvm.addContactToSelectedContactsList('long', contact)"
+                               long-press-duration="400" ng-class="{'contact-exist' : contact.exist}">
+                                <div layout="row">
+                                    <span ng-if="::!contact.exist" class="from">{{::contact.name}}</span>
+                                    <span ng-if="::contact.exist" class="font-14px">{{::contact.name}}</span>
+                                </div>
 
-                                    <div layout="row">
-                                        <div layout="row" flex="90" class="font-14px margin-left-15px margin-top-7px">
-                                            <span ng-if="::!contact.exist && contact.phone !== undefined">{{::dvm.getLocalPhoneFormat(contact.phone)}}</span>
-                                            <span ng-if="::!contact.exist && contact.type === 'group'">{{::dvm.getUsersInGroupAsString(contact.usersInGroup)}}</span>
-                                            <span ng-if="::contact.exist">כבר נבחר/ה</span>
-                                        </div>
+                                <div layout="row" >
+                                    <div layout="row" flex="90" class="font-14px margin-left-15px margin-top-7px">
+                                        <span ng-if="::!contact.exist && contact.phone !== undefined">{{::dvm.getLocalPhoneFormat(contact.phone)}}</span>
+                                        <span ng-if="::!contact.exist && contact.type === 'group'">{{::dvm.getUsersInGroupAsString(contact.usersInGroup)}}</span>
+                                        <span ng-if="::contact.exist">כבר נבחר/ה</span>
                                     </div>
-                                </a>
-                                <md-divider md-inset ng-if="!$last"></md-divider>
-                            </md-list-item>
-                        <!--</md-virtual-repeat-container>-->
+                                </div>                               
+                            </a>
+                            <md-divider md-inset ng-if="!$last"></md-divider>
+                        </md-list-item>
                         <md-divider></md-divider>
                     </md-list>
                     <md-list dir="rtl" ng-if="dvm.contactsList.length < 1">

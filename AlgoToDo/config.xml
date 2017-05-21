@@ -165,4 +165,7 @@
   <plugin name="cordova-plugin-filepath" version="1.0.2" />
   <plugin name="cordova-plugin-actionsheet" version="2.3.3" />
   <plugin name="com.telerik.plugins.nativepagetransitions" version="0.6.5" />
+  <plugin name="cordova-plugin-is-debug" version="1.0.0" />
+  <plugin name="cordova-plugin-datetimepicker" spec="~1.0.0" />
+  <plugin name="skwas-cordova-plugin-datetimepicker" version="0.9.1" />
 </widget>

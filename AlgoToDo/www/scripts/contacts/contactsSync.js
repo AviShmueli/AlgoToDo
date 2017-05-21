@@ -119,6 +119,7 @@
                 }
                 if (appUsers.length > 0) {
                     datacontext.addUsersToUsersCache(appUsers, true);
+                    datacontext.sortUsersByfrequencyOfUse();
                     updateUsersPhoto();
                 }
                 self.deferred.resolve(appUsers.length);

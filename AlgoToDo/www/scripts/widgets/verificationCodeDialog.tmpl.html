@@ -7,8 +7,9 @@
     <br/>
     <md-dialog-content layout="row" layout-padding>
         <md-input-container layout-margin >
-            <input md-no-asterisk focus-on="focusVerificationInput" name="verificationCode" ng-model="verificationCode" type="number"
-                    placeholder="קוד אימות">
+            <input md-no-asterisk md-autofocus focus-on="focusVerificationInput" 
+                   name="verificationCode" ng-model="verificationCode" type="number"
+                   placeholder="קוד אימות" ng-keypress="submitOnEnter($event)">
             
         </md-input-container>
         <md-button class="md-fab md-mini md-icon-button" ng-disabled="!showButton" aria-label="report" ng-click="resend()">

@@ -51,21 +51,26 @@
 
         var d = deferred();
 
-        mongodb.connect(mongoUrl, function (err, db) {
+        try {        
+            mongodb.connect(mongoUrl, function (err, db) {
 
-            if (err) {
-                var errorObj = {
-                    message: "error while trying to connect MongoDB",
-                    error: err
-                };
-                d.reject(errorObj);
-            }
-
-            d.resolve({
-                collection: db.collection(collectionName),
-                db: db
+                if (err) {
+                    var errorObj = {
+                        message: "error while trying to connect MongoDB",
+                        error: err
+                    };
+                    d.reject(errorObj);
+                }
+                if (db) {              
+                    d.resolve({
+                        collection: db.collection(collectionName),
+                        db: db
+                    });
+                }
             });
-        });
+        } catch (error) {
+            d.reject(error);
+        }
 
         return d.promise;
     }

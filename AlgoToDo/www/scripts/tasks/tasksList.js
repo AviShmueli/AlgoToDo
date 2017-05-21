@@ -30,6 +30,9 @@
         }
 
         vm.user = datacontext.getUserFromLocalStorage();
+        if (vm.user === undefined) {
+            $location('/login');
+        }
         vm.imagesPath = device.getImagesPath();
         vm.progressActivated = false;
         vm.showSearch = false;
@@ -47,18 +50,7 @@
             if (!device.isMobileDevice()) {
                 datacontext.reloadAllTasks(false);
             }
-        }, 0);
-
-        vm.logOff = function () {      
-            datacontext.deleteUserFromLocalStorage();
-            datacontext.deleteAllCachedUsers();
-            datacontext.deleteTaskListFromLocalStorage();           
-            cordovaPlugins.clearAppBadge();
-            if (device.isMobileDevice()) {
-                DAL.saveUsersNewRegistrationId('', vm.user);
-            }
-            $location.path('/logIn');
-        };
+        }, 0);      
 
         vm.toggleSidenav = function(menuId) {
             $mdSidenav(menuId).toggle();
@@ -118,6 +110,12 @@
                 return;
                 // do nothing - dialog will be closed
             }
+            if ($location.path() === '/tasksList' && $rootScope.selectedIndex !== 1) {
+                e.preventDefault();
+                $rootScope.selectedIndex = 1;
+                $scope.$apply();
+                return;
+            }
             if ($location.path() === '/tasksList' || $location.path() === '/signUp' || $location.path() === '/logIn') {
                 e.preventDefault();
                 if (!vm.exitApp) {
@@ -151,7 +149,7 @@
                 task.doneTime = new Date();
                 //datacontext.removeAllTaskImagesFromCache(task);
                 //localNotifications.cancelNotification(task._id);
-                $toast.showActionToast("המשימה סומנה כבוצע", "בטל", 3000).then(function (response) {
+                $toast.showActionToast("המשימה סומנה כבוצע", "בטל", 4000).then(function (response) {
                     if (response === 'ok') {
                         task.doneTime = null;
                         if (task.offlineMode === true) {
@@ -199,7 +197,7 @@
 
         vm.navigateToTaskPage = function (task) {
             
-            $transitions.slide("left");
+            //$transitions.slide("left");
 
             if (task.type === 'group-main') {
                 $location.path('/groupTask/' + task._id);
@@ -251,6 +249,7 @@
         };
 
         vm.moreLoadedTasks = [];
+        vm.loadingMoreDoneTasks = false;
 
         vm.doneTasks = function () {
             return $filter('orderBy')($filter('doneTasks')(datacontext.getTaskList(), vm.user._id).concat(datacontext.getMoreLoadedTasks()/*vm.moreLoadedTasks*/), 'doneTime', true);
@@ -284,7 +283,8 @@
                     else {
                         this.toLoad_ += 20;
                     }
-
+                    
+                    vm.loadingMoreDoneTasks = true;
                     DAL.getDoneTasks(this.toLoad_, vm.user).then(angular.bind(this, function (response) {
                         if (response.data.length === 0) {
                             this.stopLoadData = true;
@@ -294,6 +294,7 @@
                             //vm.moreLoadedTasks = vm.moreLoadedTasks.concat(response.data);// = $filter('orderBy')(vm.doneTasks.concat(response.data), 'createTime', true);
                             this.numLoaded_ = this.toLoad_;
                         }
+                        vm.loadingMoreDoneTasks = false;
                     }));                                     
                 }
             }
@@ -338,7 +339,6 @@
             );
 
         }, false);
-
         
     }
 

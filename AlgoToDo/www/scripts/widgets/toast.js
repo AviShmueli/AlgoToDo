@@ -30,6 +30,7 @@
               .highlightAction(true)
               .highlightClass('md-accent')// Accent is used by default, this just demonstrates the usage.
               .position('bottom left')
+              .toastClass('direction-rtl')
               .hideDelay(toastTime);
 
             return $mdToast.show(toast);

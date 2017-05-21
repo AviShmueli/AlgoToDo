@@ -103,6 +103,9 @@
                                         <!--<span class="font-bold" ng-bind-html="(user.createTime | amCalendar)"></span>-->
                                     </div>
                                 </a>
+                                <div ng-if="task !== null" class="md-secondary">
+                                    <md-badge class="new-responses-badge-inProcess" ng-if="task.unSeenResponses > 0">{{task.unSeenResponses}}</md-badge>
+                                </div>
                                 <md-divider md-inset ng-if="!$last"></md-divider>
                             </md-list-item>
                             <md-divider ng-if="vm.inProgressTasksLength > 0"></md-divider>
@@ -142,6 +145,9 @@
                                         <!--<span class="font-bold" ng-bind-html="(user.createTime | amCalendar)"></span>-->
                                     </div>
                                 </a>
+                                <div ng-if="task !== null" class="md-secondary">
+                                    <md-badge class="new-responses-badge-inProcess" ng-if="task.unSeenResponses > 0">{{task.unSeenResponses}}</md-badge>
+                                </div>
                                 <md-divider md-inset ng-if="!$last"></md-divider>
                             </md-list-item>
 
