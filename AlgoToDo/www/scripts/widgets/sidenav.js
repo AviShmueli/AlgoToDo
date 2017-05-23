@@ -23,6 +23,7 @@
 
             $scope.$watch(function () { return datacontext.getUserFromLocalStorage() }, function (oldVal, newVal) {
                 vm.user = newVal;
+                vm.imagesPath = device.getImagesPath();
             },true);
             
             vm.appVersion = '';

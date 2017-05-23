@@ -19,7 +19,7 @@
         self.imagesPath = device.getImagesPath();
         self.deferred = $q.defer();
         self.currentNumber = '';
-        
+        self.user = datacontext.getUserFromLocalStorage();
 
         var syncPhoneContactsWithServer = function () {
 
@@ -117,6 +117,12 @@
                     console.log(crossUser);
                     appUsers.push(crossUser);
                 }
+
+                if (self.user !== undefined && common.arrayObjectIndexOf(appUsers, 'phone', self.user.phone) === -1) {
+                    appUsers.push(self.user);
+                }
+                
+
                 if (appUsers.length > 0) {
                     datacontext.addUsersToUsersCache(appUsers, true);
                     datacontext.sortUsersByfrequencyOfUse();
@@ -169,20 +175,24 @@
 
             var user = datacontext.getUserFromLocalStorage();
 
-            DAL.searchUsers('', user).then(function (response) {
-                var usersList = response.data;
-                for (var i = 0; i < usersList.length; i++) {
-                    usersList[i]['avatarUrl'] = usersList[i].avatarUrl; //self.imagesPath + usersList[i].avatarUrl;
-                }
-                datacontext.addUsersToUsersCache(usersList, true);
+            if (user.cliqot !== undefined && user.cliqot[0] !== undefined && user.cliqot[0]._id === '585c1e28ee630b29fc4b2d3d') {
                 deferred.resolve();
-            }, function (error) {
-                if (error.status === -1) {
-                    error.data = "App lost connection to the server";
-                }
-                logger.error('Error while trying to search Users: ', error.data || error);
-                deferred.resolve();
-            });
+            } else {            
+                DAL.searchUsers('', user).then(function (response) {
+                    var usersList = response.data;
+                    for (var i = 0; i < usersList.length; i++) {
+                        usersList[i]['avatarUrl'] = usersList[i].avatarUrl; //self.imagesPath + usersList[i].avatarUrl;
+                    }
+                    datacontext.addUsersToUsersCache(usersList, true);
+                    deferred.resolve();
+                }, function (error) {
+                    if (error.status === -1) {
+                        error.data = "App lost connection to the server";
+                    }
+                    logger.error('Error while trying to search Users: ', error.data || error);
+                    deferred.resolve();
+                });
+            }
 
             return deferred.promise;
         }

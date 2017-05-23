@@ -39,7 +39,9 @@
                     </md-tab>
                     <md-tab id="tab3" aria-controls="tab3-content">
                         <ng-md-icon icon="done_all"></ng-md-icon>
-                        <br /><span class="font-12px">בוצע</span>
+                        <br />
+                        <md-badge ng-if="$root.newCommentsInDoneTasksCount > 0">{{$root.newCommentsInDoneTasksCount}}</md-badge>
+                        <span class="font-12px">בוצע</span>
                     </md-tab>
                 </md-tabs>
             </div>

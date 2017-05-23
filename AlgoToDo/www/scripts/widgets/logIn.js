@@ -27,7 +27,12 @@
         }
 
         vm.goToSignUp = function () {
-            $location.path('/signUp');
+            if (device.isMobileDevice()) {
+                $location.path('/signUp');
+            }
+            else {
+                showDowlandAppAlert();
+            }
         }
 
         vm.submitOnEnter = function (ev) {
@@ -50,6 +55,7 @@
                     vm.user = response.data;
 
                     if (device.isMobileDevice()) {
+                        DAL.saveUsersNewRegistrationId('', vm.user);
                         registerUserForPushService().then(function (registrationId) {
                             DAL.saveUsersNewRegistrationId(registrationId, vm.user);
                             
@@ -163,7 +169,7 @@
                 controller: 'verificationCodeCtrl',
                 templateUrl: 'scripts/widgets/verificationCodeDialog.tmpl.html',
                 parent: angular.element(document.querySelector('#VerificationCodePromptContainer')),
-                clickOutsideToClose: true,
+                clickOutsideToClose: false,
                 locals: {
                     userId: userId
                 }
@@ -196,6 +202,21 @@
         document.addEventListener("deviceready", function () {
             document.addEventListener("backbutton", backbuttonClick_allways_Callback, false);
         }, false);
+
+        var showDowlandAppAlert = function () {
+            $mdDialog.show(
+              $mdDialog.confirm()
+                .parent(angular.element(document.querySelector('#RegistrationFailedAlertContainer')))
+                .clickOutsideToClose(true)
+                .title('מצטערים!')
+                .textContent('הרשמה ניתנת רק באמצעאות האפליקציה, ניתן להוריד אותה בחינם מהחנות.')
+                .ariaLabel('Alert Dialog Demo')
+                .ok('הורד עכשיו')
+                .cancel('לא עכשיו')
+            ).then(function () {
+                window.open('http://www.asiti.net/download-asiti', '_blank');
+            });
+        }
 
     }
 

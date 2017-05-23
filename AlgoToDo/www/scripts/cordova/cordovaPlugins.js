@@ -45,34 +45,6 @@
                 });
             }, false);
 
-
-
-
-            /*
-            var options = {
-                date: new Date(),
-                minDate: new Date(),
-                mode: 'datetime',
-                allowOldDates: false,
-                allowFutureDates: true,
-                doneButtonLabel: 'אישור',
-                doneButtonColor: '#000000',
-                cancelButtonLabel: 'ביטול',
-                titleText: 'בחר תאריך ושעה',
-                cancelButtonColor: '#000000',
-                is24Hour: true
-            };
-
-            document.addEventListener("deviceready", function () {
-
-                $cordovaDatePicker.show(options).then(function (date) {
-                    deferred.resolve(date);
-                }, function (error) {
-                    //alert(error);
-                });
-
-            }, false);
-            */
             return deferred.promise;
         }
 

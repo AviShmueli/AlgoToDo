@@ -39,10 +39,18 @@
                 var groupTask = datacontext.getTaskByTaskId(vm.task.groupMainTaskId);
                 groupTask.unSeenResponses = groupTask.unSeenResponses !== undefined && groupTask.unSeenResponses !== '' ? groupTask.unSeenResponses - vm.task.unSeenResponses : 0;
             }
-            $rootScope.newCommentsInTasksInProcessCount =
-                $rootScope.newCommentsInTasksInProcessCount !== undefined ?
-                $rootScope.newCommentsInTasksInProcessCount - vm.task.unSeenResponses :
-                0;
+            if ($rootScope.newCommentsInTasksInProcessCount > 0 && vm.task.status === 'inProgress') {           
+                $rootScope.newCommentsInTasksInProcessCount =
+                    $rootScope.newCommentsInTasksInProcessCount !== undefined ?
+                    $rootScope.newCommentsInTasksInProcessCount - vm.task.unSeenResponses :
+                    0;
+            }
+            if ($rootScope.newCommentsInDoneTasksCount > 0 && (vm.task.status === 'done' || vm.task.status === 'closed')) {
+                $rootScope.newCommentsInDoneTasksCount =
+                    $rootScope.newCommentsInDoneTasksCount !== undefined ?
+                    $rootScope.newCommentsInDoneTasksCount - vm.task.unSeenResponses :
+                    0;
+            }
         }
         vm.task.unSeenResponses = 0;
 
@@ -217,7 +225,9 @@
                 vm.showProgress = true;
             }
 
-            if (comment.fileLocalPath !== undefined && (comment.fileLocalPath.indexOf("upload-empty") !== -1 || comment.fileLocalPath.indexOf(comment.fileName) === -1)) {
+            if (comment.fileLocalPath !== undefined &&
+                (comment.fileLocalPath.indexOf("upload-empty") !== -1 ||
+                 comment.fileLocalPath.indexOf(comment.fileName) === -1)) {
                 downloadFileFromDropbox(comment);
             }
 
@@ -248,20 +258,33 @@
         self.downloadTryCount = 0;
 
         var downloadFileFromDropbox = function (comment) {
-            dropbox.getThumbnail(comment.fileName, 'w128h128')
-            .then(function (response) {
-                var url = URL.createObjectURL(response.fileBlob);
-                if (comment.fileLocalPath.indexOf("upload-empty") !== -1) {
-                    comment.fileLocalPath = url;
-                }
-                comment.errorDownloadFile = false;
-            })
-            .catch(function (error) {
-                logger.error("error while trying to get file Thumbnail", error);
-                vm.showProgress = false;
-                comment.errorDownloadFile = true;
-            });
 
+            if (comment.fileLocalPath.startsWith("blob")) {
+                comment.fileLocalPath = device.getImagesPath() + "/images/upload-empty.png";
+                vm.showProgress = true;                
+            }
+
+            downloadThumbnail(comment);
+            downloadFullImage(comment);          
+        }
+
+        var downloadThumbnail = function (comment) {
+            dropbox.getThumbnail(comment.fileName, 'w128h128')
+                .then(function (response) {
+                    var url = URL.createObjectURL(response.fileBlob);
+                    if (comment.fileLocalPath.indexOf("upload-empty") !== -1) {
+                        comment.fileLocalPath = url;
+                    }
+                    comment.errorDownloadFile = false;
+                })
+                .catch(function (error) {
+                    logger.error("error while trying to get file Thumbnail", error);
+                    vm.showProgress = false;
+                    comment.errorDownloadFile = true;
+                });
+        }
+
+        var downloadFullImage = function (comment) {
             self.downloadTryCount++;
 
             dropbox.downloadFile(comment.fileName)
@@ -286,7 +309,7 @@
                     });
                 }
             })
-            .catch(function (error) {               
+            .catch(function (error) {
                 if (error.error.toString().indexOf('path/not_found/') !== -1 && self.downloadTryCount < 4) {
                     downloadFileFromDropbox(comment)
                 }

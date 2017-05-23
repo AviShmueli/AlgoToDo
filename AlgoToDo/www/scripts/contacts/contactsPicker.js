@@ -149,9 +149,9 @@
             $mdDialog.hide(dvm.selectedContactsList);
         };
 
-        dvm.searchKeypress = function ($event) {
+        /*dvm.searchKeypress = function ($event) {
             var a = dvm.search + $event.key;
-        }
+        }*/
     }
 
 })();

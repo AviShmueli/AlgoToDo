@@ -113,6 +113,9 @@
                 if (f_index !== -1) {
                     task.from = allCachedUsers[f_index];
                 }
+                else {
+                    addUsersToUsersCache([task.from], true);
+                }
 
                 if (task.to !== undefined && !Array.isArray(task.to)) {
                     if (task.from._id !== task.to._id) {
@@ -176,6 +179,30 @@
                     var localTask = tasksList[localTaskIndex];
                     if (localTask.status !== newTask.status) {
                         localTask.status = newTask.status;
+                        if (localTask.unSeenResponses !== undefined && localTask.unSeenResponses > 0) {
+                            
+                            if (newTask.status === 'done' || newTask.status === 'closed') {
+                                $rootScope.newCommentsInTasksInProcessCount =
+                                    $rootScope.newCommentsInTasksInProcessCount !== undefined ?
+                                    $rootScope.newCommentsInTasksInProcessCount - localTask.unSeenResponses :
+                                    0;
+                                $rootScope.newCommentsInDoneTasksCount =
+                                    $rootScope.newCommentsInDoneTasksCount !== undefined ?
+                                    $rootScope.newCommentsInDoneTasksCount + localTask.unSeenResponses :
+                                    localTask.unSeenResponses;
+                            }
+
+                            if (newTask.status === 'inProgress') {
+                                $rootScope.newCommentsInDoneTasksCount =
+                                    $rootScope.newCommentsInDoneTasksCount !== undefined ?
+                                    $rootScope.newCommentsInDoneTasksCount - localTask.unSeenResponses :
+                                    0;
+                                $rootScope.newCommentsInTasksInProcessCount =
+                                    $rootScope.newCommentsInTasksInProcessCount !== undefined ?
+                                    $rootScope.newCommentsInTasksInProcessCount + localTask.unSeenResponses :
+                                    localTask.unSeenResponses;
+                            }
+                        }
                     }
                     if (localTask.comments.length !== newTask.comments.length) {
                         var diffCount = newTask.comments.length - localTask.comments.length;
@@ -240,16 +267,27 @@
                     var groupTask = getTaskByTaskId(task.groupMainTaskId);
                     groupTask.unSeenResponses = groupTask.unSeenResponses === undefined || groupTask.unSeenResponses === '' ? 1 : groupTask.unSeenResponses +1;
                 }
-            }
-            var user = getUserFromLocalStorage();
-            if (task.status === 'inProgress' &&
-                    task.from._id === user._id &&
-                    task.to._id !== user._id /*&&
-                    task.type !== 'group-sub'*/) {
-                $rootScope.newCommentsInTasksInProcessCount =
-                    $rootScope.newCommentsInTasksInProcessCount !== undefined ?
-                    $rootScope.newCommentsInTasksInProcessCount + 1 :
-                    1;
+            
+                var user = getUserFromLocalStorage();
+                if (task.status === 'inProgress' &&
+                        task.from._id === user._id &&
+                        task.to._id !== user._id /*&&
+                        task.type !== 'group-sub'*/) {
+                    $rootScope.newCommentsInTasksInProcessCount =
+                        $rootScope.newCommentsInTasksInProcessCount !== undefined ?
+                        $rootScope.newCommentsInTasksInProcessCount + 1 :
+                        1;
+                }
+
+                if ((task.status === 'done' ||  task.status === 'closed') &&
+                        task.from._id === user._id &&
+                        task.to._id !== user._id /*&&
+                        task.type !== 'group-sub'*/) {
+                    $rootScope.newCommentsInDoneTasksCount =
+                        $rootScope.newCommentsInDoneTasksCount !== undefined ?
+                        $rootScope.newCommentsInDoneTasksCount + 1 :
+                        1;
+                }
             }
         }
 
