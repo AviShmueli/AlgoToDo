@@ -11,60 +11,6 @@
         });
 
     angular
-        .module('app').directive('tmContactTouch', function ($interval) {
-            return function (scope, elem, attr) {
-
-                scope.startTime;
-                scope.timerPromise;
-                scope.totalElapsedMs = 0;
-                scope.elapsedMs = 0;
-
-                elem.on('touchstart', function (e) {
-                    scope.startContactId = attr.contactId;
-
-                    console.log("start");
-                    if (!scope.timerPromise) {
-                        scope.startTime = new Date();
-                        scope.timerPromise = $interval(function () {
-                            var now = new Date();
-                            //$scope.time = now;
-                            scope.elapsedMs = now.getTime() - scope.startTime.getTime();
-                        }, 31);
-                    }
-                });
-
-                elem.on('touchend', function (e) {
-                    
-
-                    scope.endContactId = attr.contactId;
-
-
-                    if (scope.timerPromise) {
-                        $interval.cancel(scope.timerPromise);
-                        scope.timerPromise = undefined;
-                        scope.totalElapsedMs += scope.elapsedMs;
-                        console.log(scope.totalElapsedMs);
-                        if (scope.endContactId === scope.startContactId) {
-                            if (scope.totalElapsedMs > 400) {
-                                scope.$watch(attr.callback, function (callback) {
-                                    callback('long', scope.endContactId);
-                                });
-                            }
-                            else {
-                                scope.$watch(attr.callback, function (callback) {
-                                    callback('click', scope.endContactId);
-                                });
-                            }
-                        }
-
-                        scope.startTime = new Date();
-                        scope.totalElapsedMs = scope.elapsedMs = 0;
-                    }
-                });
-            };
-        });
-
-    angular
         .module('app.contacts')
         .controller('contactsPickerCtrl', contactsPickerCtrl);
 
@@ -119,26 +65,55 @@
             return usersInGroupString.substring(0, usersInGroupString.length - 2);
         }
 
-        dvm.addContactToSelectedContactsList = function (clickType, contactId) {
-            var index = common.arrayObjectIndexOf(dvm.contactsList, '_id', contactId);
-            var contact = dvm.contactsList[index];
 
+        dvm.startTime;
+        dvm.timerPromise;
+        dvm.totalElapsedMs = 0;
+        dvm.elapsedMs = 0;
+
+        dvm.startTimer = function (contact) {
+            console.log("start");
+            if (!dvm.timerPromise) {
+                dvm.startTime = new Date();
+                dvm.timerPromise = $interval(function () {
+                    var now = new Date();
+                    //$scope.time = now;
+                    dvm.elapsedMs = now.getTime() - dvm.startTime.getTime();
+                }, 31);
+            }
+        };
+
+        dvm.stopTimer = function (contact) {
+            console.log("stop");
+            if (dvm.timerPromise) {
+                $interval.cancel(dvm.timerPromise);
+                dvm.timerPromise = undefined;
+                dvm.totalElapsedMs += dvm.elapsedMs;
+                console.log(dvm.totalElapsedMs + dvm.elapsedMs);
+                dvm.startTime = new Date();
+                dvm.totalElapsedMs = dvm.elapsedMs = 0;
+            }
+        };
+
+        dvm.isLong = false;
+        dvm.addContactToSelectedContactsList = function (clickType, contact) {
             console.log(clickType, dvm.isLong, contact.name);
-            if (contact.exist) {
+            if (contact.exist || (clickType === 'click' && dvm.isLong === true)) {
                 return;
             }
-            if (clickType === 'click' && dvm.selectedContactsList.length === 0) {
-                if (common.arrayObjectIndexOf(dvm.selectedContactsList, '_id', contact._id) === -1) {              
-                    dvm.selectedContactsList.push(contact);
-                    dvm.save();
-                    return;
-                }
+            if (clickType === 'click' && dvm.selectedContactsList.length === 0 && dvm.isLong === false) {
+                dvm.selectedContactsList.push(contact);
+                dvm.save();
+                return;
             }
             if (clickType === 'long' && dvm.selectedContactsList.length === 0 && device.isMobileDevice()) {
                 dvm.isLong = true;
                 $timeout(function () {
                     device.vibrate(50);
                 }, 100);
+                $timeout(function () {
+                    dvm.isLong = false;
+                }, 800)
             }
             if (contact.selected) {
                 contact.selected = false;
