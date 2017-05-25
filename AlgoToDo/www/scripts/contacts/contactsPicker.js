@@ -3,25 +3,25 @@
 
     angular
         .module('app').directive('focusOn', function () {
-        return function (scope, elem, attr) {
-            scope.$on(attr.focusOn, function (e) {
-                elem[0].focus();
-            });
-        };
-    });
+            return function (scope, elem, attr) {
+                scope.$on(attr.focusOn, function (e) {
+                    elem[0].focus();
+                });
+            };
+        });
 
     angular
         .module('app.contacts')
         .controller('contactsPickerCtrl', contactsPickerCtrl);
 
-    function contactsPickerCtrl($scope, existingContacts,/* updateList,*/ $mdDialog,
-                                datacontext, $mdMedia, $q, logger,
-                                device, DAL, $offlineHandler, $timeout,
-                                appConfig, common, cordovaPlugins, contactsSync,
-                                $interval) {
+    function contactsPickerCtrl($scope, existingContacts, /* updateList,*/ $mdDialog,
+        datacontext, $mdMedia, $q, logger,
+        device, DAL, $offlineHandler, $timeout,
+        appConfig, common, cordovaPlugins, contactsSync,
+        $interval) {
 
         var dvm = this;
-        
+
         dvm.isSmallScrean = $mdMedia('sm');
         $timeout(function () {
             dvm.imagesPath = device.getImagesPath();
@@ -54,29 +54,66 @@
             if (usersInGroup === undefined) {
                 return '';
             }
-            var usersInGroupString = '', userFirstName, splitedName;
+            var usersInGroupString = '',
+                userFirstName, splitedName;
             for (var i = 0; i < usersInGroup.length; i++) {
                 splitedName = usersInGroup[i].name.split(" ");
                 userFirstName = splitedName !== undefined && splitedName.length > 0 ?
-                                splitedName[0] : usersInGroup[i].name;
+                    splitedName[0] : usersInGroup[i].name;
                 usersInGroupString += userFirstName + ', ';
             }
             return usersInGroupString.substring(0, usersInGroupString.length - 2);
         }
 
+
+        dvm.startTime;
+        dvm.timerPromise;
+        dvm.totalElapsedMs = 0;
+        dvm.elapsedMs = 0;
+
+        dvm.startTimer = function (contact) {
+            console.log("start");
+            if (!dvm.timerPromise) {
+                dvm.startTime = new Date();
+                dvm.timerPromise = $interval(function () {
+                    var now = new Date();
+                    //$scope.time = now;
+                    dvm.elapsedMs = now.getTime() - dvm.startTime.getTime();
+                }, 31);
+            }
+        };
+
+        dvm.stopTimer = function (contact) {
+            console.log("stop");
+            if (dvm.timerPromise) {
+                $interval.cancel(dvm.timerPromise);
+                dvm.timerPromise = undefined;
+                dvm.totalElapsedMs += dvm.elapsedMs;
+                console.log(dvm.totalElapsedMs + dvm.elapsedMs);
+                dvm.startTime = new Date();
+                dvm.totalElapsedMs = dvm.elapsedMs = 0;
+            }
+        };
+
+        dvm.isLong = false;
         dvm.addContactToSelectedContactsList = function (clickType, contact) {
-            if (contact.exist) {
+            console.log(clickType, dvm.isLong, contact.name);
+            if (contact.exist || (clickType === 'click' && dvm.isLong === true)) {
                 return;
             }
-            if (clickType === 'click' && dvm.selectedContactsList.length === 0) {
+            if (clickType === 'click' && dvm.selectedContactsList.length === 0 && dvm.isLong === false) {
                 dvm.selectedContactsList.push(contact);
                 dvm.save();
                 return;
             }
             if (clickType === 'long' && dvm.selectedContactsList.length === 0 && device.isMobileDevice()) {
+                dvm.isLong = true;
                 $timeout(function () {
                     device.vibrate(50);
-                }, 100)
+                }, 100);
+                $timeout(function () {
+                    dvm.isLong = false;
+                }, 800)
             }
             if (contact.selected) {
                 contact.selected = false;
@@ -84,8 +121,7 @@
                 if (index !== -1) {
                     dvm.selectedContactsList.splice(index, 1);
                 }
-            }
-            else {
+            } else {
                 contact.selected = true;
                 dvm.selectedContactsList.push(contact);
             }
