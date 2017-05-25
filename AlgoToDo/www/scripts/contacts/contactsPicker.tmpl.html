@@ -99,7 +99,7 @@
                                 <img ng-if="::(contact.avatarUrl.startsWith('content') || contact.avatarUrl.startsWith('file'))" alt="" ng-src="{{::contact.avatarUrl}}" class="md-avatar user-avatar margin-right-10px" />
                                 <img ng-if="::!contact.avatarUrl.startsWith('content')  && !contact.avatarUrl.startsWith('file')" alt="" ng-src="{{::dvm.imagesPath + contact.avatarUrl}}" class="md-avatar user-avatar margin-right-10px" />
                             </md-card-avatar>
-                            <a class="md-tile-content margin-bottom-14px" flex="100"
+                            <a  class="md-tile-content margin-bottom-14px" flex="100"
                                ng-click="dvm.addContactToSelectedContactsList('click', contact)" 
                                on-long-press="dvm.addContactToSelectedContactsList('long', contact)"
                                long-press-duration="400" ng-class="{'contact-exist' : contact.exist}">

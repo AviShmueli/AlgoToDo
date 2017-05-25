@@ -65,7 +65,7 @@
         }
 
         dvm.addContactToSelectedContactsList = function (clickType, contact) {
-            if (contact.exist) {
+            if (contact.exist) { 
                 return;
             }
             if (clickType === 'click' && dvm.selectedContactsList.length === 0) {
