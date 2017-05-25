@@ -99,9 +99,7 @@
                                 <img ng-if="::(contact.avatarUrl.startsWith('content') || contact.avatarUrl.startsWith('file'))" alt="" ng-src="{{::contact.avatarUrl}}" class="md-avatar user-avatar margin-right-10px" />
                                 <img ng-if="::!contact.avatarUrl.startsWith('content')  && !contact.avatarUrl.startsWith('file')" alt="" ng-src="{{::dvm.imagesPath + contact.avatarUrl}}" class="md-avatar user-avatar margin-right-10px" />
                             </md-card-avatar>
-                            <a class="md-tile-content margin-bottom-14px" flex="100"
-                               ng-mousedown="dvm.startTimer(contact)"
-                               ng-mouseup="dvm.stopTimer(contact)" 
+                            <a id="contactCard" tm-contact-touch contact-id="{{contact._id}}" callback="dvm.addContactToSelectedContactsList" class="md-tile-content margin-bottom-14px" flex="100" 
                                ng-class="{'contact-exist' : contact.exist}">
                                 <div layout="row">
                                     <span ng-if="::!contact.exist" class="from">{{::contact.name}}</span>
