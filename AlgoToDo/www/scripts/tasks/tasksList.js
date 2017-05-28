@@ -146,7 +146,7 @@
         vm.setTaskStatus = function (task, newStatus) {
             task.status = newStatus;
             if (task.status === 'done') {
-                task.doneTime = new Date();
+                task.doneTime = new Date().toISOString();
                 //datacontext.removeAllTaskImagesFromCache(task);
                 //localNotifications.cancelNotification(task._id);
                 $toast.showActionToast("המשימה סומנה כבוצע", "בטל", 4000).then(function (response) {

@@ -51,7 +51,7 @@
 
         var d = deferred();
 
-        try {        
+        try {
             mongodb.connect(mongoUrl, function (err, db) {
 
                 if (err) {
@@ -61,7 +61,7 @@
                     };
                     d.reject(errorObj);
                 }
-                if (db) {              
+                if (db) {
                     d.resolve({
                         collection: db.collection(collectionName),
                         db: db
@@ -964,9 +964,10 @@
 
             mongo.collection.count({
                     groupMainTaskId: mainTaskId,
-                    status: {
-                        '$ne': 'done'
-                    }
+                    $nor: [{
+                        status: 'done'},{
+                        status: 'closed'
+                    }]
                 },
                 function (err, result) {
                     if (err) {

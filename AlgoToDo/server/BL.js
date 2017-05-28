@@ -251,7 +251,7 @@
             }
             if (task.type === 'group-sub') {
                 setTimeout(function () {
-                    checkIfGroupMainTaskIsDone(task.groupMainTaskId);
+                    checkIfGroupMainTaskIsDone(task);
                 }, 0);
             }
             d.resolve();
@@ -284,7 +284,7 @@
                     }
                 }
                 if (task.type === 'group-sub') {
-                    checkIfGroupMainTaskIsDone(task.groupMainTaskId);
+                    checkIfGroupMainTaskIsDone(task);
                 }
             }
             d.resolve();
@@ -916,14 +916,14 @@
         return d.promise;
     }
 
-    function checkIfGroupMainTaskIsDone(mainTaskId) {
+    function checkIfGroupMainTaskIsDone(task) {
 
-        DAL.getGroupSubTasksInProgress(new ObjectID(mainTaskId)).then(function (result) {
-            if (result.count === 0) {
+        DAL.getGroupSubTasksInProgress(new ObjectID(task.groupMainTaskId)).then(function (result) {
+            if (((task.status === 'done' || task.status === 'closed') && result.count === 0) || (task.status === 'inProgress' && result.count === 1))  {
                 DAL.updateTaskStatus({
-                    _id: mainTaskId,
-                    'status': 'done',
-                    'doneTime': new Date(),
+                    _id: task.groupMainTaskId,
+                    'status': task.status,
+                    'doneTime': task.doneTime,
                     'seenTime': null
                 }).then(function (result) {
                     pushUpdatetdTaskToUsersDevice(result, result.from._id);

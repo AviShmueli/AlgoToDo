@@ -36,7 +36,11 @@
                     minuteInterval: 15,
                     locale: "IL",
                     okText: "אישור",
-                    cancelText: "ביטול"
+                    cancelText: "ביטול",
+                    android: {
+                        theme: 16974126, // Theme_DeviceDefault_Dialog
+                        calendar: true
+                    }
                 }, function(newDate) {
                     deferred.resolve(newDate);
                 }, function (err) {

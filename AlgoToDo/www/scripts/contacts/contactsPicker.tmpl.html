@@ -91,7 +91,7 @@
             <ui-view layout="column" layout-fill>
                 <div aria-labelledby="all"
                      layout="row" layout-align="center center">
-                    <md-list flex dir="rtl" ng-if="dvm.contactsList.length > 0">
+                    <md-list flex dir="rtl" ng-if="dvm.contactsList.length > 0" class="padding-top-0">
                         <md-list-item ng-repeat="contact in dvm.contactsList | orderBy : 'name' | orderBy : 'useCount' : false | filter : dvm.search" 
                                       class="noright task-item margin" ng-class="{'contact-selected' : contact.selected}"
                                       ng-init="contact.exist = dvm.existingContacts.indexOf(contact._id) !== -1">

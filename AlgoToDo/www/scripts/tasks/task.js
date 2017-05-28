@@ -35,17 +35,20 @@
                     pushNotifications.clearAllNotifications();
                 }, 0);
             }
+            var status = vm.task.status;
             if (vm.task.type === 'group-sub') {
                 var groupTask = datacontext.getTaskByTaskId(vm.task.groupMainTaskId);
                 groupTask.unSeenResponses = groupTask.unSeenResponses !== undefined && groupTask.unSeenResponses !== '' ? groupTask.unSeenResponses - vm.task.unSeenResponses : 0;
+                status = groupTask.status;
             }
-            if ($rootScope.newCommentsInTasksInProcessCount > 0 && vm.task.status === 'inProgress') {           
+            if ($rootScope.newCommentsInTasksInProcessCount > 0 && status === 'inProgress') {           
                 $rootScope.newCommentsInTasksInProcessCount =
                     $rootScope.newCommentsInTasksInProcessCount !== undefined ?
                     $rootScope.newCommentsInTasksInProcessCount - vm.task.unSeenResponses :
                     0;
             }
-            if ($rootScope.newCommentsInDoneTasksCount > 0 && (vm.task.status === 'done' || vm.task.status === 'closed')) {
+            if ($rootScope.newCommentsInDoneTasksCount > 0 &&
+                (status === 'done' || status === 'closed')) {
                 $rootScope.newCommentsInDoneTasksCount =
                     $rootScope.newCommentsInDoneTasksCount !== undefined ?
                     $rootScope.newCommentsInDoneTasksCount - vm.task.unSeenResponses :
@@ -178,7 +181,7 @@
         vm.setTaskStatus = function (task, newStatus) {
             task.status = newStatus;
             if (task.status === 'done') {
-                task.doneTime = new Date();
+                task.doneTime = new Date().toISOString();
                 //datacontext.removeAllTaskImagesFromCache(task);
                 //localNotifications.cancelNotification(task._id);
                 $toast.showActionToast("המשימה סומנה כבוצע", "בטל", 4000).then(function (response) {
@@ -473,7 +476,15 @@
 
         function openNativeDateTimePicker() {
             cordovaPlugins.showDatePicker().then(function (date) {
-                setLocalNotification(date);
+                var now = new Date();
+                if (date.getTime() < now.getTime()) {
+                    cordovaPlugins.showToast('אפשר לקבוע תזכורת רק לזמן עתידי', 2000);
+                    openNativeDateTimePicker();
+                }
+                else{
+                    setLocalNotification(date);
+                }
+                
             });
         }
 

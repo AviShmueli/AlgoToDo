@@ -829,3 +829,4 @@ md-tabs.md-primary > md-tabs-wrapper > md-tabs-canvas > md-pagination-wrapper > 
 .md-icon-button{line-height: 0 !important; }
 .font-width-100{ font-weight: 100 !important; }
 md-fab-trigger > .md-icon-button:hover {    background-color: rgb(221,44,0) !important; }
+.width-100p { width: 100% !important}

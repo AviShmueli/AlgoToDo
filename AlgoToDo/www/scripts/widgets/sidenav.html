@@ -11,7 +11,26 @@
                 <img class="md-user-avatar user-avatar-big" ng-if="!vm.user.avatarUrl.startsWith('content')  && !vm.user.avatarUrl.startsWith('file')" ng-src="{{vm.imagesPath + vm.user.avatarUrl}}">
                 <img class="md-user-avatar user-avatar-big" ng-if="vm.user.avatarUrl.startsWith('content')  || vm.user.avatarUrl.startsWith('file')" ng-src="{{vm.user.avatarUrl}}">
             </md-card-avatar>
-            <div class="username">{{vm.user.name}}</div>
+            <div class="width-100p">
+                <div layout="row">
+                    <div class="username">{{vm.user.name}}</div>
+                    <span flex></span>
+                    <md-menu >
+                        <a class="cursor-pointer" ng-click="$mdOpenMenu($event)">
+                            <ng-md-icon icon="expand_more"></ng-md-icon>
+                        </a>
+                        <md-menu-content width="4">
+                            <md-menu-item layout="row" layout-align="start center">
+                                <md-button ng-click="vm.logOff()">
+                                    <ng-md-icon md-menu-origin icon="logout"></ng-md-icon>
+                                    <span flex></span>
+                                    <span class="float-right">התנתק/י</span>                                  
+                                </md-button>
+                            </md-menu-item>
+                        </md-menu-content>
+                    </md-menu>
+                </div>
+            </div>
             <!--<div>{{vm.user.cliqot[0].name}}</div>-->
         </div>
     </md-toolbar>
@@ -76,19 +95,6 @@
             <span>ניהול</span>
         </md-subheader>
         <md-item>
-            <a class="cursor-pointer" ng-click="vm.showLogoffButton = true">
-                <md-item-content md-ink-ripple layout="row" layout-align="start center">
-                    <div class="inset">
-                        <ng-md-icon icon="settings"></ng-md-icon>
-                    </div>
-                    <span flex></span>
-                    <div class="inset">
-                        הגדרות
-                    </div>
-                </md-item-content>
-            </a>
-        </md-item>
-        <md-item>
             <a class="cursor-pointer" ng-click="vm.goToRepeatTasksPage()">
                 <md-item-content md-ink-ripple layout="row" layout-align="start center">
                     <div class="inset">
@@ -144,20 +150,6 @@
                     <span flex></span>
                     <div class="inset">
                         ממשק ניהול
-                    </div>
-                </md-item-content>
-            </a>
-        </md-item>
-        <md-divider></md-divider>
-        <md-item ng-if="vm.showLogoffButton === true">
-            <a ng-click="vm.logOff()" class="cursor-pointer">
-                <md-item-content md-ink-ripple layout="row" layout-align="start center">
-                    <div class="inset">
-                        <ng-md-icon icon="logout"></ng-md-icon>
-                    </div>
-                    <span flex></span>
-                    <div class="inset">
-                        התנתק/י
                     </div>
                 </md-item-content>
             </a>

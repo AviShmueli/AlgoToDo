@@ -179,7 +179,7 @@
                     var localTask = tasksList[localTaskIndex];
                     if (localTask.status !== newTask.status) {
                         localTask.status = newTask.status;
-                        if (localTask.unSeenResponses !== undefined && localTask.unSeenResponses > 0) {
+                        if (localTask.type !== 'group-sub' && localTask.unSeenResponses !== undefined && localTask.unSeenResponses > 0) {
                             
                             if (newTask.status === 'done' || newTask.status === 'closed') {
                                 $rootScope.newCommentsInTasksInProcessCount =
