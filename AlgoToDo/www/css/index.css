@@ -830,3 +830,9 @@ md-tabs.md-primary > md-tabs-wrapper > md-tabs-canvas > md-pagination-wrapper > 
 .font-width-100{ font-weight: 100 !important; }
 md-fab-trigger > .md-icon-button:hover {    background-color: rgb(221,44,0) !important; }
 .width-100p { width: 100% !important}
+.main-tabs md-ink-bar{
+    height: 2.5px;
+    border-radius: 3px;
+        color: rgba(255,255,255,0.87);
+    background: rgba(255,255,255,0.87);
+}
