@@ -106,7 +106,7 @@
                     document.addEventListener("deviceready", function () {
                         cordova.plugins.IsDebug.getIsDebug(function (isDebug) {
 
-                            if (true || isDebug) {
+                            if (isDebug) {
                                 self.appDomain = 'https://algotodo-test.herokuapp.com';
                             }
                             else {
