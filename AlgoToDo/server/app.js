@@ -56,7 +56,6 @@ var jobs = require('./cron-jobs');
     },0);*/
 
 
-
 /* ---- Start the server ------ */
 server.listen(process.env.PORT || 5001, function (err) {
     console.log("Express server listening on port %d in %s mode", this.address().port, app.settings.env);

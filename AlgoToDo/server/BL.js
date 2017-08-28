@@ -314,7 +314,7 @@
     function registerUser(user) {
 
         var d = deferred();
-        
+
         var cliqa;
         try {
             cliqa = JSON.parse(user.cliqot[0]);
@@ -331,17 +331,29 @@
 
         user.phone = phoneUtil.format(phoneUtil.parse(user.phone, 'il'), 1);
 
-        DAL.registerUser(user).then(function (result) {
-            var newUser = result.ops[0];
+        var query = {
+            'phone': user.phone
+        };
 
-            if (newUser.type === 'apple-tester') {
-                d.resolve(newUser);
-            } else {
-                sendVerificationCodeToUser(newUser).then(function () {
-                    d.resolve(newUser);
+        DAL.checkIfUserExist(query).then(function (user) {
+            if (user === null) {
+                DAL.registerUser(user).then(function (result) {
+                    var newUser = result.ops[0];
+
+                    if (newUser.type === 'apple-tester') {
+                        d.resolve(newUser);
+                    } else {
+                        sendVerificationCodeToUser(newUser).then(function () {
+                            d.resolve(newUser);
+                        }, function (error) {
+                            d.deferred(error);
+                        });
+                    }
                 }, function (error) {
                     d.deferred(error);
                 });
+            } else {
+                d.deferred();
             }
         }, function (error) {
             d.deferred(error);
@@ -514,6 +526,17 @@
         filter.type = {
             $ne: 'group-main'
         };
+
+        if (filter['userId'] !== undefined) {
+            var userId = filter['userId'];
+            delete filter['userId'];
+            filter['$or'] = [{
+                'from._id': new ObjectID(userId)
+            }, {
+                'to._id': new ObjectID(userId)
+            }];
+        }
+
         var options = {
             "limit": limit,
             "skip": (page - 1) * limit
@@ -531,6 +554,16 @@
     function getAllTasksCount(filter) {
 
         var d = deferred();
+
+        if (filter['userId'] !== undefined) {
+            var userId = filter['userId'];
+            delete filter['userId'];
+            filter['$or'] = [{
+                'from._id': new ObjectID(userId)
+            }, {
+                'to._id': new ObjectID(userId)
+            }];
+        }
 
         DAL.getAllTasksCount(filter).then(function (result) {
             d.resolve(result);
@@ -919,7 +952,7 @@
     function checkIfGroupMainTaskIsDone(task) {
 
         DAL.getGroupSubTasksInProgress(new ObjectID(task.groupMainTaskId)).then(function (result) {
-            if (((task.status === 'done' || task.status === 'closed') && result.count === 0) || (task.status === 'inProgress' && result.count === 1))  {
+            if (((task.status === 'done' || task.status === 'closed') && result.count === 0) || (task.status === 'inProgress' && result.count === 1)) {
                 DAL.updateTaskStatus({
                     _id: task.groupMainTaskId,
                     'status': task.status,

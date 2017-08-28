@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<widget defaultlocale="he-IL" id="com.algotodo.app" version="0.3.5" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0" xmlns:vs="http://schemas.microsoft.com/appx/2014/htmlapps">
+<widget defaultlocale="he-IL" id="com.algotodo.app" version="0.3.6" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0" xmlns:vs="http://schemas.microsoft.com/appx/2014/htmlapps">
   <name>Asiti</name>
-  <description> אפליקצית מסרים מידית מוכוונת משימות אישיות וחברתיות</description>
+  <description> אפליקצית מסרים מידיים מוכוונת משימות אישיות וחברתיות</description>
   <author email="avis@algo.bz" href="http://algo.bz">Avi Shmueli</author>
   <content src="index.html" />
   <vs:features />

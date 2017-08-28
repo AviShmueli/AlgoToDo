@@ -65,7 +65,7 @@
 
 
         <md-fab-trigger>
-            <md-button class="md-fab md-icon-button md-fab-bottom-left z-index-21" aria-label="Add" ng-click="vm.showAdd($event)" md-no-ink="true">
+            <md-button class="md-fab md-icon-button md-fab-bottom-right z-index-21" ng-class="{'md-fab-bottom-left': !vm.isMobile}" aria-label="Add" ng-click="vm.showAdd($event)" md-no-ink="true">
                 <ng-md-icon icon="add"></ng-md-icon>
             </md-button>
         </md-fab-trigger>

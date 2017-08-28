@@ -36,14 +36,14 @@
         vm.emptyFileUrl = vm.imagesPath + '/images/upload-empty.png';
         vm.uplodingInProgress = false;
         
-        $timeout(function () {
+        /*$timeout(function () {
             var element = angular.element(document.getElementsByClassName('md-chip-input-container')).find('input');
             element.attr('readonly', 'readonly');
             element.on('click', function (evt) {
                 vm.openContactPickerDialog(evt);
                 evt.preventDefault();
             });
-        }, 200);
+        }, 200);*/
 
         vm.openContactPickerDialog = function (ev) {
             vm.selectedRecipientsIds = [];
