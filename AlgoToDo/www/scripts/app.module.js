@@ -25,6 +25,7 @@
         'angular-web-notification',
         '720kb.tooltips',
         'pr.longpress',
+        'ngFileSaver',
 
         /*
          * Everybody has access to these.

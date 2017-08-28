@@ -65,8 +65,13 @@
                                 <md-checkbox ng-model="vm.tasksFilterStatusClosed">נסגר</md-checkbox>
                             </div>
 
-                            <div class="md-secondary md-block" flex layout="row" layout-align="end center">
+                            <div class="md-secondary md-block" flex layout="column" layout-align="end center">
                                 <md-button ng-click="vm.getTasks()" class="md-warn md-raised md-hue-1">סנן</md-button>
+                                <md-button aria-label="download" ng-click="vm.downloadFilterdTable()" class=" md-raised ">
+                                    <md-icon ng-hide="vm.downloading" style="width:22px;height:22px;" md-svg-src="/images/Exel_download.svg">
+                                    </md-icon>
+                                    <md-progress-circular ng-show="vm.downloading" class="md-hue-2 btn-circular" md-diameter="20px"></md-progress-circular>
+                                </md-button>
                             </div>
                         </div>
                     </div>
@@ -74,7 +79,7 @@
 
                 <md-card layout-margin>
                     <md-table-container>
-                        <table md-table md-row-select multiple ng-model="selected" md-progress="vm.promise">
+                        <table md-table multiple ng-model="selected" md-progress="vm.promise">
                             <thead md-head md-order="vm.query.order" md-on-reorder="vm.getTasks">
                                 <tr md-row>
                                     <th md-column><span>שולח</span></th>

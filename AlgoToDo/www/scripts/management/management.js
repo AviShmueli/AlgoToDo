@@ -6,18 +6,18 @@
         .controller('managementCtrl', managementCtrl);
 
     managementCtrl.$inject = ['$rootScope', '$scope', 'logger', '$q',
-                             'datacontext', 'moment', '$mdMedia', 'DAL',
-                             '$location', '$timeout', 'appConfig'
+        'datacontext', 'moment', '$mdMedia', 'DAL',
+        '$location', '$timeout', 'appConfig', 'filesHandler'
     ];
 
     function managementCtrl($rootScope, $scope, logger, $q,
-                            datacontext, moment, $mdMedia, DAL,
-                            $location, $timeout, appConfig) {
+        datacontext, moment, $mdMedia, DAL,
+        $location, $timeout, appConfig, filesHandler) {
 
         var vm = this;
 
         angular.element(document.querySelectorAll('html')).removeClass("hight-auto");
-        
+
         vm.selected = [];
         vm.totalTaskCount = 0;
         vm.query = {
@@ -44,7 +44,12 @@
         var userCliqotIds = [];
 
         $timeout(function () {
-            vm.allCliqot['all'] = { name: 'כל הקליקות', '_id': { $in: userCliqotIds } };
+            vm.allCliqot['all'] = {
+                name: 'כל הקליקות',
+                '_id': {
+                    $in: userCliqotIds
+                }
+            };
             for (var i = 0; i < vm.user.cliqot.length; i++) {
                 vm.allCliqot[vm.user.cliqot[i]._id] = vm.user.cliqot[i];
                 userCliqotIds.push(vm.user.cliqot[i]._id);
@@ -52,7 +57,9 @@
             // { "$exists" : false } - to get the task that dont contains cliqaId filed
 
             // always filer the table according to admin's cliqot!
-            vm.tasksFilter.cliqaId = { $in: userCliqotIds };
+            vm.tasksFilter.cliqaId = {
+                $in: userCliqotIds
+            };
         }, 0);
 
         vm.getTasks = function () {
@@ -60,9 +67,11 @@
             vm.query.order = 'createTime';
 
             if (vm.tasksFilterFreeText !== undefined && vm.tasksFilterFreeText !== '') {
-                vm.tasksFilter.description = { "$regex": vm.tasksFilterFreeText, "$options": "i" };
-            }
-            else {
+                vm.tasksFilter.description = {
+                    "$regex": vm.tasksFilterFreeText,
+                    "$options": "i"
+                };
+            } else {
                 vm.tasksFilter['description'] = '';
             }
 
@@ -111,7 +120,7 @@
 
         $timeout(function () {
             vm.getTasks();
-        }, 0);       
+        }, 0);
 
         vm.getTotalTaskTime = function (task) {
             if (task.doneTime === undefined) {
@@ -171,8 +180,7 @@
             if (vm.showTasksFilter === true) {
                 vm.showTasksFilter = false;
                 vm.expand_icon = 'expand_more';
-            }
-            else {
+            } else {
                 vm.showTasksFilter = true;
                 vm.expand_icon = 'expand_less';
             }
@@ -188,9 +196,11 @@
 
             vm.query.order = 'name';
             if (vm.usersFilterName !== undefined && vm.usersFilterName !== '') {
-                vm.usersFilter.name = { "$regex": vm.usersFilterName, "$options": "i" };
-            }
-            else {
+                vm.usersFilter.name = {
+                    "$regex": vm.usersFilterName,
+                    "$options": "i"
+                };
+            } else {
                 vm.usersFilter['name'] = '';
             }
 
@@ -198,12 +208,11 @@
                 if (vm.usersFilterPlatform === '') {
                     delete vm.usersFilterPlatform;
                     delete vm.usersFilter['device.platform'];
-                }
-                else {
+                } else {
                     vm.usersFilter['device.platform'] = vm.usersFilterPlatform;
                 }
             }
-            
+
 
             for (var property in vm.usersFilter) {
                 if (vm.usersFilter.hasOwnProperty(property)) {
@@ -230,6 +239,82 @@
                 return phoneUtils.formatNational(phone, appConfig.region)
             }
             return '';
+        }
+
+
+        /* ------ Excel download -----*/
+        var fields = {
+            createTime: 'תאריך',
+            from: 'שולח',
+            to: 'נמען',
+            description: 'תיאור',
+            status: 'סטטוס',
+            totalTime: 'זמן ביצוע',
+            comments: 'תגובות',
+            photos: 'תמונות'
+        };
+
+
+        vm.downloadFilterdTable = function () {
+            var fileName = 'משימות' + '_' + moment().format("DD/MM/YYYY");
+            DAL.getAllTasks(vm.query, vm.tasksFilter, vm.user).then(function (response) {
+                var taskToDownload = convertTasksToExcelFormat(response.data);
+                filesHandler.downloadAsCSV(taskToDownload, fields, fileName);
+            });
+        }
+
+        var convertTasksToExcelFormat = function (tasks) {
+            var listToReturn = []
+            for (var index = 0; index < tasks.length; index++) {
+                var task = tasks[index];
+                var excelTask = {
+                    createTime: moment(task.createTime).format("DD/MM/YYYY hh:mm"),
+                    from: task.from.name,
+                    to: task.to.name,
+                    description: task.description,
+                    status: grtStatusHebString(task.status),
+                    totalTime: vm.getTotalTaskTime(task),
+                    comments: getTaskCommentsAsString(task),
+                    photos: getTaskPhotos(task)
+                };
+                listToReturn.push(excelTask);
+            }
+            return listToReturn;
+        }
+
+        var getTaskCommentsAsString = function (task) {
+            var str = '';
+            for (var index = 0; index < task.comments.length; index++) {
+                var comment = task.comments[index];
+                if (comment.text && comment.text !== '') {
+                    str += comment.from.name + ': ' + comment.text + ', ';
+                }
+            }
+            return str;
+        }
+
+        var getTaskPhotos = function (task) {
+            var str = '';
+            for (var index = 0; index < task.comments.length; index++) {
+                var comment = task.comments[index];
+                if (comment.fileName && comment.fileName !== '') {
+                    str += comment.from.name + ': ' + comment.fileName + ', ';
+                }
+            }
+            return str;
+        }
+
+        var grtStatusHebString = function (status) {
+            switch (key) {
+                case 'inProgress':
+                    return 'בתהליך';
+                case 'done':
+                    return 'בוצע'
+                case 'closed':
+                    return 'נסגר'
+                default:
+                    break;
+            }
         }
     }
 

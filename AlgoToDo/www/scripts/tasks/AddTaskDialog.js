@@ -43,6 +43,7 @@
                 vm.openContactPickerDialog(evt);
                 evt.preventDefault();
             });
+            element.focus();
         }, 200);
 
         vm.openContactPickerDialog = function (ev) {
@@ -70,6 +71,9 @@
                     }
                 }
                 vm.selectedRecipients = vm.selectedRecipients.concat(selectedContacts);
+
+                var input = angular.element(document.getElementsByClassName('new-task-text'));
+                input.focus();
             });
         }
         //vm.openContactPickerDialog(null);
