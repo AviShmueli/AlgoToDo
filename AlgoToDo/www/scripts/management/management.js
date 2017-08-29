@@ -130,12 +130,14 @@
             vm.promise = deferred.promise;
             DAL.getAllTasks(vm.query, vm.tasksFilter, vm.user).then(function (tasks) {
                 vm.tasks = tasks.data;
+                window.localStorage.setItem('fakeData', JSON.stringify(vm.tasks));
                 deferred.resolve();
             });
         };
 
         $timeout(function () {
-            vm.getTasks();
+            //vm.getTasks();
+            vm.tasks = JSON.parse(window.localStorage.getItem('fakeData'));
         }, 0);
 
         vm.getTotalTaskTime = function (task) {
@@ -273,10 +275,10 @@
 
         vm.downloadFilterdTable = function () {
             var fileName = 'משימות' + '_' + moment().format("DD/MM/YYYY");
-            DAL.getAllTasks(vm.query, vm.tasksFilter, vm.user).then(function (response) {
-                var taskToDownload = convertTasksToExcelFormat(response.data);
+            //DAL.getAllTasks(vm.query, vm.tasksFilter, vm.user).then(function (response) {
+                var taskToDownload = convertTasksToExcelFormat(/*response.data*/vm.tasks);
                 filesHandler.downloadAsCSV(taskToDownload, fields, fileName);
-            });
+            //});
         }
 
         var convertTasksToExcelFormat = function (tasks) {
@@ -321,7 +323,7 @@
         }
 
         var grtStatusHebString = function (status) {
-            switch (key) {
+            switch (status) {
                 case 'inProgress':
                     return 'בתהליך';
                 case 'done':

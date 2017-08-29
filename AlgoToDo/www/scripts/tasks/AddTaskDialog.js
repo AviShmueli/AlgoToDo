@@ -38,13 +38,20 @@
         
         $timeout(function () {
             var element = angular.element(document.getElementsByClassName('md-chip-input-container')).find('input');
-            element.attr('readonly', 'readonly');
-            element.on('click', function (evt) {
-                vm.openContactPickerDialog(evt);
-                evt.preventDefault();
-            });
-            element.focus();
-        }, 200);
+            
+            //element.attr('readonly', 'readonly');
+            // element.on('click', function (evt) {
+            //     vm.openContactPickerDialog(evt);
+            //     evt.preventDefault();
+            // });
+            element[0].focus();
+
+        }, 800);
+
+        $scope.$watch('vm.selectedRecipients', function (newVal) {
+            var input = angular.element(document.getElementsByClassName('new-task-text'));
+            input.focus();
+        }, true);
 
         vm.openContactPickerDialog = function (ev) {
             vm.selectedRecipientsIds = [];

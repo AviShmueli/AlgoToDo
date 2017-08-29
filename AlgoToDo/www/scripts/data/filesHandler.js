@@ -43,7 +43,8 @@
         var downloadFile = function (strData) {
 
             var blob = new Blob([strData], {
-                type: "text/plain;charset=utf-8"
+                //type: "text/plain;charset=utf-8"
+                type: "application/vnd.openxmlformat-officedocument.spreadsheetml.sheet;"
             });
 
             FileSaver.saveAs(blob, scope.filename + '.xls');
