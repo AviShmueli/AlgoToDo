@@ -27,12 +27,12 @@
         };
         vm.tasksFilter = {};
         vm.tasks = [];
+        vm.users = [];
         vm.allCliqot = {};
         vm.activeTab = 'tasks';
         vm.tasksFilterStatusInProgress = true;
         vm.tasksFilterStatusDone = true;
         vm.tasksFilterStatusClosed = true;
-        //
 
         vm.user = datacontext.getUserFromLocalStorage();
 
@@ -42,6 +42,16 @@
         });
 
         var userCliqotIds = [];
+
+        vm.cliqaChanged = function () {
+            delete vm.tasksFilter.userId;
+            if (vm.tasksFilter.cliqaId.indexOf('$in') !== -1) {
+                vm.users = [];
+            }
+            DAL.getUsersInCliqa(vm.tasksFilter.cliqaId).then(function (users) {
+                vm.users = users.data;
+            });
+        }
 
         $timeout(function () {
             vm.allCliqot['all'] = {
@@ -77,12 +87,14 @@
 
             for (var property in vm.tasksFilter) {
                 if (vm.tasksFilter.hasOwnProperty(property)) {
-                    if (property === 'cliqaId' && typeof vm.tasksFilter[property] !== 'object' && vm.tasksFilter[property].indexOf('$in') !== -1) {
+                    if (property === 'cliqaId' &&
+                        typeof vm.tasksFilter[property] !== 'object' &&
+                        vm.tasksFilter[property].indexOf('$in') !== -1) {
                         vm.tasksFilter[property] = JSON.parse(vm.tasksFilter[property]);
                     }
                     if (vm.tasksFilter[property] === '') {
                         delete vm.tasksFilter[property];
-                    }
+                    }                   
                 }
             }
 
@@ -95,10 +107,14 @@
             if (vm.tasksFilterStatusClosed) {
                 vm.tasksFilter.status = 'closed';
             }
-            if (vm.tasksFilterStatusDone && vm.tasksFilterStatusInProgress && vm.tasksFilterStatusClosed) {
+            if (vm.tasksFilterStatusDone &&
+                vm.tasksFilterStatusInProgress &&
+                vm.tasksFilterStatusClosed) {
                 delete vm.tasksFilter.status;
             }
-            if (!vm.tasksFilterStatusDone && !vm.tasksFilterStatusInProgress && !vm.tasksFilterStatusClosed) {
+            if (!vm.tasksFilterStatusDone &&
+                !vm.tasksFilterStatusInProgress &&
+                !vm.tasksFilterStatusClosed) {
                 delete vm.tasksFilter.status;
                 vm.tasksFilterStatusDone = true;
                 vm.tasksFilterStatusClosed = true;

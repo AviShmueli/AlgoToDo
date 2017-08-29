@@ -40,6 +40,8 @@
         $rootScope.taskcount = 0;
         vm.doneTasks = [];
         vm.descriptionTextLength = function () { return Math.floor((window.innerWidth - 70 - 16 - 40 - 16 - 8) / 4); };
+        vm.isMobile = device.isMobileDevice();
+
 
         vm.allTasks = function () { return datacontext.getTaskList(); };
 

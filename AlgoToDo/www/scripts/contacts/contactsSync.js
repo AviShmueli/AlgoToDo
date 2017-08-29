@@ -6,10 +6,11 @@
         .service('contactsSync', contactsSync);
 
     contactsSync.$inject = ['device', 'datacontext', 'appConfig', 'logger', '$q',
-                            'DAL', 'common', '$timeout', 'storage'];
+        'DAL', 'common', '$timeout', 'storage'
+    ];
 
     function contactsSync(device, datacontext, appConfig, logger, $q,
-                          DAL, common, $timeout, storage) {
+        DAL, common, $timeout, storage) {
 
 
         var self = this;
@@ -30,12 +31,12 @@
                 if (!device.isMobileDevice()) {
                     $timeout(function () {
                         self.deferred.resolve();
-                    }, 0); 
-                }
-                else{
+                    }, 0);
+                } else {
                     device.getContacts('').then(function (allContacts) {
 
-                        var phoneNumbers = [], contact;
+                        var phoneNumbers = [],
+                            contact;
 
                         for (var i = 0; i < allContacts.length; i++) {
 
@@ -46,22 +47,21 @@
                             if (contact.phoneNumbers !== null && contact.phoneNumbers.length > 0) {
                                 for (var j = 0; j < contact.phoneNumbers.length; j++) {
                                     var phoneNumber = contact.phoneNumbers[j].value;
-                                    if (phoneNumber.startsWith('#31#')) {
-                                        phoneNumber = phoneNumber.substring(4);
-                                    }
-                                    self.currentNumber = phoneNumber;
+
                                     try {
-                                
+                                        if (phoneNumber.startsWith('#31#')) {
+                                            phoneNumber = phoneNumber.substring(4);
+                                        }
+                                        self.currentNumber = phoneNumber;
                                         if (isNumberValid(phoneNumber)) {
                                             var internatianalFormat = phoneUtils.formatInternational(phoneNumber, self.region);
                                             self.phone_contact_map[internatianalFormat] = contact;
                                             phoneNumbers.push(internatianalFormat);
                                         }
-                                    }
-                                    catch (err) {
+                                    } catch (err) {
                                         logger.error('Error while trying to get Number Type: ' + self.currentNumber, err.data || err);
                                         self.deferred.reject(err);
-                                    }                            
+                                    }
                                 }
                             }
                         }
@@ -91,17 +91,16 @@
                         avatarUrl: user.avatarUrl //self.imagesPath + user.avatarUrl
                         //cliqot: user.cliqot || ''
                     };
-                    
+
 
                     if (contact.photos !== null && contact.photos.length > 0) {
                         var filePath = contact.photos[0].value;
                         // in Android - tack the contact photo
                         if (filePath.startsWith('file://') || filePath.startsWith('content://')) {
-                            crossUser.avatarUrl = contact.photos[0].value ;
-                        }
-                        else{    
+                            crossUser.avatarUrl = contact.photos[0].value;
+                        } else {
                             // in iOS - do nothing for now
-                            
+
                             /*filePath =  "file://" + filePath;            
                             var splitedPath = filePath.split('/');
                             var fileName = splitedPath[splitedPath.length - 1]; //cordova.file.tempDirectory + 
@@ -121,7 +120,7 @@
                 if (self.user !== undefined && common.arrayObjectIndexOf(appUsers, 'phone', self.user.phone) === -1) {
                     appUsers.push(self.user);
                 }
-                
+
 
                 if (appUsers.length > 0) {
                     datacontext.addUsersToUsersCache(appUsers, true);
@@ -139,7 +138,7 @@
         }
 
         var isNumberValid = function (phoneNumber) {
-             
+
             if (phoneNumber.length < 8) {
                 return false;
             }
@@ -177,7 +176,7 @@
 
             if (user.cliqot !== undefined && user.cliqot[0] !== undefined && user.cliqot[0]._id === '585c1e28ee630b29fc4b2d3d') {
                 deferred.resolve();
-            } else {            
+            } else {
                 DAL.searchUsers('', user).then(function (response) {
                     var usersList = response.data;
                     for (var i = 0; i < usersList.length; i++) {

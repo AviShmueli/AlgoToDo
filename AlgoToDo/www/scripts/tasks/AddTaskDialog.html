@@ -20,19 +20,26 @@
     </md-toolbar>
     <md-dialog-content flex md-scroll-y class="md-padding" layout-margin>
         <form name="newTaskForm" novalidate>
-            <div layout layout-sm="column">
-                <md-contact-chips flex md-input-name="autocompleteField"
-                                  md-autofocus="true" ng-required="true"
-                                  ng-model="vm.selectedRecipients"
-                                  md-contacts="vm.querySearch($query)"
-                                  md-contact-name="name"
-                                  md-contact-image="avatarUrl"
-                                  md-require-match="true"
-                                  md-highlight-flags="i"
-                                  placeholder="נמען"
-                                  secondary-placeholder="נמען נוסף">
-                </md-contact-chips>
-                
+            <div layout="row">
+                <div layout="column" flex="90">
+                    <md-contact-chips flex md-input-name="autocompleteField"
+                                      md-autofocus="true" ng-required="true"
+                                      ng-model="vm.selectedRecipients"
+                                      md-contacts="vm.querySearch($query)"
+                                      md-contact-name="name"
+                                      md-contact-image="avatarUrl"
+                                      md-require-match="true"
+                                      md-highlight-flags="i"
+                                      placeholder="נמען"
+                                      secondary-placeholder="נמען נוסף">
+                    </md-contact-chips>
+                </div>
+                <div layout="column" flex="10" id="pick-contact-btn">
+                    <md-button layout="column" class="md-fab md-mini md-icon-button" aria-label="launch"
+                               ng-click="vm.openContactPickerDialog($event)">
+                        <ng-md-icon icon="launch"></ng-md-icon>
+                    </md-button>
+                </div>            
             </div>
             <div ng-show="vm.showNoRecipientsSelectedError">
                 <div class="input-message-validate"><b>חובה</b> לבחור לפחות נמען אחד למשימה</div>
