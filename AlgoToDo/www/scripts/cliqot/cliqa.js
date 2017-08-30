@@ -74,7 +74,18 @@
                     //    calledFromIntent: calledFromIntent
                 }
             }).then(function (selectedContacts) {
-                vm.contactsList = vm.contactsList.concat(selectedContacts);
+                
+                DAL.addUsersToCliqa({_id: cliqaId, name: vm.cliqaName}, selectedContacts).then(function (response) {
+                    if (response.data === 'ok') {
+                        logger.toast('הפעולה בוצעה בהצלחה', 700);
+                        vm.contactsList = vm.contactsList.concat(selectedContacts);
+                    }
+                    else{
+                        logger.error('error while trying to add users to cliqa');
+                    }
+                }, function (error) {
+                    logger.error('error while trying to add users to cliqa: ', error.data || error);
+                });
             });
         }
 

@@ -1,1 +1,14 @@
-{}
+{
+    "compilerOptions": {
+        "target": "ES6"
+    },
+    "exclude": [
+        "node_modules",
+        "bower_components",
+        "platforms",
+        "bin",
+        "bld",
+        "merges",
+        "plugins"
+    ]
+}

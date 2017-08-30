@@ -33,6 +33,7 @@
     BL.addNewGroup = addNewGroup;
     BL.deleteGroups = deleteGroups;
     BL.getUsersInCliqa = getUsersInCliqa;
+    BL.addUsersToCliqa = addUsersToCliqa;
 
 
     var ObjectID = require('mongodb').ObjectID;
@@ -353,7 +354,10 @@
                     d.deferred(error);
                 });
             } else {
-                d.resolve({message: "user alredy exist", error: "user alredy exist"});
+                d.resolve({
+                    message: "user alredy exist",
+                    error: "user alredy exist"
+                });
             }
         }, function (error) {
             d.deferred(error);
@@ -975,6 +979,19 @@
 
         DAL.getUsersInCliqa(cliqaId).then(function (result) {
             d.resolve(result);
+        }, function (error) {
+            d.deferred(error);
+        });
+
+        return d.promise;
+    }
+
+    function addUsersToCliqa(cliqa, users) {
+
+        var d = deferred();
+
+        DAL.addUsersToCliqa(cliqa, users).then(function () {
+            d.resolve();
         }, function (error) {
             d.deferred(error);
         });

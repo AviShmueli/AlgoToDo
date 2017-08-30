@@ -37,6 +37,7 @@
     DAL.addNewGroup = addNewGroup;
     DAL.deleteGroups = deleteGroups;
     DAL.getUsersInCliqa = getUsersInCliqa;
+    DAL.addUsersToCliqa = addUsersToCliqa;
 
 
     var deferred = require('deferred');
@@ -965,7 +966,8 @@
             mongo.collection.count({
                     groupMainTaskId: mainTaskId,
                     $nor: [{
-                        status: 'done'},{
+                        status: 'done'
+                    }, {
                         status: 'closed'
                     }]
                 },
@@ -1197,6 +1199,70 @@
 
                 mongo.db.close();
                 d.resolve(result);
+            });
+        });
+
+        return d.promise;
+    }
+
+
+    function addUsersToCliqa(cliqa, users) {
+
+        var d = deferred();
+
+        getCollection('users').then(function (mongo) {
+
+            // Initialize the unordered Batch
+            var batch = mongo.collection.initializeUnorderedBulkOp({
+                useLegacyOps: true
+            });
+
+            cliqa._id = new ObjectID(cliqa._id);
+
+            for (var i = 0; i < users.length; i++) {
+                var user = users[i];
+
+                batch.find({
+                    _id: new ObjectID(user._id)
+                }).updateOne({
+                    $push: {
+                        cliqot: cliqa
+                    }
+                });
+
+                // TODO: 1. notify user that he has been aded to cliqa.
+                //       2. mark the cliqa status in the user as pending
+                //       2.1 in the cliqa page show that he in pending state
+                //       2.2 in user make indication about the invitation and an option to acsept the invitation
+                //       3. add option to acsept invitation
+                //       3.1 change cliqa status in user to active 
+                //       3.2 notify manager and cliqa members about new member in the cliqa 
+                //       3.3 in user add to allUsersList all the members in the cliqa
+
+                // if (user.userIdToNotify !== '') {
+                //     commentsNotificationsList.push({
+                //         comment: user.comment,
+                //         task: {
+                //             _id: user.taskId
+                //         },
+                //         userIdToNotify: new ObjectID(user.userIdToNotify)
+                //     });
+                // }
+            }
+
+            batch.execute(function (err, result) {
+
+                if (err) {
+                    var errorObj = {
+                        message: "error while trying to add users to cliqa:",
+                        error: err
+                    };
+                    mongo.db.close();
+                    d.reject(errorObj);
+                }
+
+                mongo.db.close();
+                d.resolve();
             });
         });
 

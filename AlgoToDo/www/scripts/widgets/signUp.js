@@ -1,219 +1,219 @@
 ﻿(function () {
     'use strict';
-    
+
     angular
         .module('app.widgets')
         .controller('signUpCtrl', signUpCtrl);
 
     signUpCtrl.$inject = ['$scope', 'datacontext', 'logger', 'cordovaPlugins', '$q', 'pushNotifications',
-                          'device', '$mdDialog', 'DAL', '$location', 'contactsSync', '$timeout'];
+        'device', '$mdDialog', 'DAL', '$location', 'contactsSync', '$timeout'
+    ];
 
     function signUpCtrl($scope, datacontext, logger, cordovaPlugins, $q, pushNotifications,
-                        device, $mdDialog, DAL, $location, contactsSync, $timeout) {
+        device, $mdDialog, DAL, $location, contactsSync, $timeout) {
 
-            angular.element(document.querySelectorAll('html')).addClass("hight-auto");
+        angular.element(document.querySelectorAll('html')).addClass("hight-auto");
 
-            var vm = this;
-            vm.inProgress = false;
-            vm.user = {};
-            vm.AllCliqot = [];
-            vm.selectedCliqa;
-            vm.showCube = false;
-            vm.loadingMode = 'syncing';       
+        var vm = this;
+        vm.inProgress = false;
+        vm.user = {};
+        vm.AllCliqot = [];
+        vm.selectedCliqa;
+        vm.showCube = false;
+        vm.loadingMode = 'syncing';
 
-            DAL.getAllCliqot().then(function (allCliqot) {
-                vm.AllCliqot = allCliqot.data;
-            });
+        DAL.getAllCliqot().then(function (allCliqot) {
+            vm.AllCliqot = allCliqot.data;
+        });
 
-            vm.imagesPath = device.getImagesPath();
+        vm.imagesPath = device.getImagesPath();
 
-            vm.womanAvatar = '/images/woman-' + Math.floor((Math.random() * 15) + 1) + '.svg';
-            vm.manAvatar = '/images/man-' + Math.floor((Math.random() * 9) + 1) + '.svg';
-            
+        vm.womanAvatar = '/images/woman-' + Math.floor((Math.random() * 15) + 1) + '.svg';
+        vm.manAvatar = '/images/man-' + Math.floor((Math.random() * 9) + 1) + '.svg';
 
-            vm.signMeUp = function () {
-                if (vm.inProgress === false) {
-                    vm.inProgress = true;
 
-                    vm.user.cliqot = vm.selectedCliqa || vm.AllCliqot[1] || {};
-                    vm.user.cliqot = [vm.user.cliqot];
+        vm.signMeUp = function () {
+            if (vm.inProgress === false) {
+                vm.inProgress = true;
 
-                    registerUser();
-                }
-            };
+                vm.user.cliqot = vm.selectedCliqa || vm.AllCliqot[1] || {};
+                vm.user.cliqot = [vm.user.cliqot];
 
-            var user = datacontext.getUserFromLocalStorage();
-            if (user !== undefined) {
-                datacontext.reloadAllTasks();
-                $location.path('/tasksList');
-            }          
+                registerUser();
+            }
+        };
 
-            var registerUser = function () {
-                vm.user.phone = vm.userPhone;
-                if (vm.user.sex === undefined) {
-                    if (vm.user.avatarUrl !== undefined) {
-                        vm.user.sex = (vm.user.avatarUrl.indexOf('woman') === -1) ? 'man' : 'woman';
-                    }
-                    else {
-                        vm.user.sex = 'man';
-                        vm.user.avatarUrl = vm.manAvatar;
-                    }
-                }
-                if (vm.user.sex === 'man') {
+        var user = datacontext.getUserFromLocalStorage();
+        if (user !== undefined) {
+            datacontext.reloadAllTasks();
+            $location.path('/tasksList');
+        }
+
+        var registerUser = function () {
+            vm.user.phone = vm.userPhone;
+            if (vm.user.sex === undefined) {
+                if (vm.user.avatarUrl !== undefined) {
+                    vm.user.sex = (vm.user.avatarUrl.indexOf('woman') === -1) ? 'man' : 'woman';
+                } else {
+                    vm.user.sex = 'man';
                     vm.user.avatarUrl = vm.manAvatar;
                 }
-                if (vm.user.sex === 'woman') {
-                    vm.user.avatarUrl = vm.womanAvatar;
-                }
-              
-                //document.addEventListener("deviceready", function () {
+            }
+            if (vm.user.sex === 'man') {
+                vm.user.avatarUrl = vm.manAvatar;
+            }
+            if (vm.user.sex === 'woman') {
+                vm.user.avatarUrl = vm.womanAvatar;
+            }
 
-                    //vm.user.device = device.getDeviceDetails();
-                    //datacontext.setDeviceDetailes(vm.user.device, cordova.file.applicationDirectory);
+            document.addEventListener("deviceready", function () {
 
-                    //registerUserForPushService().then(function (registrationId) {
+                vm.user.device = device.getDeviceDetails();
+                datacontext.setDeviceDetailes(vm.user.device, cordova.file.applicationDirectory);
 
-                       /* if (vm.user.device.platform === 'iOS') {
-                            vm.user.ApnRegistrationId = registrationId;
-                        }
-                        if (vm.user.device.platform === 'Android') {
-                            vm.user.GcmRegistrationId = registrationId;
-                        }
-*/
-                        DAL.registerUser(vm.user).then(function (response) {
-                            if (response.error) {
-                                vm.inProgress = false;
-                                showRegistrationFailedAlert('המשתשמש קיים...');    
-                            }
+                registerUserForPushService().then(function (registrationId) {
+
+                    if (vm.user.device.platform === 'iOS') {
+                        vm.user.ApnRegistrationId = registrationId;
+                    }
+                    if (vm.user.device.platform === 'Android') {
+                        vm.user.GcmRegistrationId = registrationId;
+                    }
+
+                    DAL.registerUser(vm.user).then(function (response) {
+                        if (response.data.error) {
+                            vm.inProgress = false;
+                            showRegistrationFailedAlert('מספר הטלפון שהוזן רשום כבר לאפליקציה, נסה להיכנס שוב במסך הקודם.');
+                        } else {
                             vm.user = response.data;
                             verifyUser();
-                        }, function (error) {
-                            vm.inProgress = false;
-                            logger.error("error while trying to register user to app: ", error.data || error);
-                            showRegistrationFailedAlert();
-                        });
-                    //});
-                //}, false);
-                
-            };
-
-            var verifyUser = function () {
-                // check here if reg-code recived by sms match reg-code in server
-                showVerificationCodePrompt(vm.user._id).then(function (verificationCode) {
-
-                    DAL.checkIfVerificationCodeMatch(vm.user, verificationCode).then(function (result) {
-                        if (result.data === 'ok') {
-                            datacontext.saveUserToLocalStorage(vm.user);
-
-                            showCube();
-                            contactsSync.syncPhoneContactsWithServer().then(function () {
-                                vm.loadingMode = 'loading';
-                                datacontext.reloadAllTasks().then(function () {
-                                    $location.path('/tasksList');
-                                });
-                            }, function () {
-                                vm.loadingMode = 'loading';
-                                datacontext.reloadAllTasks().then(function () {
-                                    $location.path('/tasksList');
-                                });
-                            });
-                        }
-                        else {
-                            showVerificationFailedAlert();
-                            vm.inProgress = false;
                         }
                     }, function (error) {
                         vm.inProgress = false;
-                        logger.error("error while trying to check If VerificationCode Match", error);
+                        logger.error("error while trying to register user to app: ", error.data || error);
                         showRegistrationFailedAlert();
                     });
-                }, function () {
-                    DAL.reSendVerificationCodeToUser(vm.user._id);
                 });
-            }
+            }, false);
 
-            var registerUserForPushService = function () {
-                var deferred = $q.defer();
+        };
 
-                pushNotifications.initializePushV5().then(function () {
-                    pushNotifications.registerForPushNotifications().then(function (registrationId) {
-                        deferred.resolve(registrationId);
-                    });
-                }, function (error) {
-                    logger.error("error while trying to register user to app", error);
-                    deferred.reject();
-                });
+        var verifyUser = function () {
+            // check here if reg-code recived by sms match reg-code in server
+            showVerificationCodePrompt(vm.user._id).then(function (verificationCode) {
 
-                return deferred.promise;
-            };
+                DAL.checkIfVerificationCodeMatch(vm.user, verificationCode).then(function (result) {
+                    if (result.data === 'ok') {
+                        datacontext.saveUserToLocalStorage(vm.user);
 
-            vm.showCliqaAlert = function (ev) {
-                $mdDialog.show(
-                  $mdDialog.alert()
-                    .parent(angular.element(document.querySelector('#CliqaAlertContainer')))
-                    .clickOutsideToClose(true)
-                    .title('קליקה')
-                    .textContent('קליקה היא קבוצת האנשים (הארגון) איתו אתה עובד ומקבל משימות.'+ '\n'+
-                            'בעתיד הקמת קליקות תהיה באופן חופשי ועצמאי,'+ '\n' +
-                            'כרגע חובה לבחור קליקה מתוך הרשימה.'+ '\n\n' +
-                            'אם אתה נסיין של המערכת אנא בחר "נסייני מערכת" מתוך הרשימה')
-                    .ariaLabel('Alert Dialog Demo')
-                    .ok('הבנתי!')
-                    .targetEvent(ev)
-                );
-            };
- 
-            vm.showTermsOfServiceAlert = function myfunction(ev) {
-                $mdDialog.show(
-                  $mdDialog.alert()
-                    .parent(angular.element(document.querySelector('#TermsOfServiceAlertContainer')))
-                    .clickOutsideToClose(true)
-                    .title('תנאי השירות')
-                    .textContent('האפליקציה פועלת בתחום המשימות, במטרה לסייע לכל אחד לבצע את המשימות האישיות והחברתיות שלו.ניתן לנהל משימות אישיות, לשלוח לנמענים, לעקוב אחר ביצוע ולנהל שיחה על כל משימה ומשימה.האפליקציה מיועדת לאנשים פרטיים, חברות וארגונים, בתי ספר, משפחות וכל אחד שרוצה לבצע את המשימות שלו בצורה קלה ונוחה** האפליקציה נמצאת בגרסת אלפא. לא מיועדת עדיין לשימוש. בנוסף, בשלב הרצת האפליקציה כלל האפשרויות המוצעות באפליקציה הינם חינם לשימוש לאנשים פרטייים וכן לאירגונים, משתהפוך האפליקציה לרישמית ייתכן ואפשרויות מסוימות באפליקציה יהיו בתשלום .')
-                    .ariaLabel('TermsOfServiceAlert')
-                    .ok('סגור')
-                    .targetEvent(ev)
-                );
-            };            
-
-            var showVerificationCodePrompt = function (userId) {
-                return $mdDialog.show({
-                    controller: 'verificationCodeCtrl',
-                    templateUrl: 'scripts/widgets/verificationCodeDialog.tmpl.html',
-                    parent: angular.element(document.querySelector('#VerificationCodePromptContainer')),
-                    clickOutsideToClose: false,
-                    locals: {
-                        userId: userId
+                        showCube();
+                        contactsSync.syncPhoneContactsWithServer().then(function () {
+                            vm.loadingMode = 'loading';
+                            datacontext.reloadAllTasks().then(function () {
+                                $location.path('/tasksList');
+                            });
+                        }, function () {
+                            vm.loadingMode = 'loading';
+                            datacontext.reloadAllTasks().then(function () {
+                                $location.path('/tasksList');
+                            });
+                        });
+                    } else {
+                        showVerificationFailedAlert();
+                        vm.inProgress = false;
                     }
+                }, function (error) {
+                    vm.inProgress = false;
+                    logger.error("error while trying to check If VerificationCode Match", error);
+                    showRegistrationFailedAlert();
                 });
-            };
+            }, function () {
+                DAL.reSendVerificationCodeToUser(vm.user._id);
+            });
+        }
 
-            var showVerificationFailedAlert = function () {
-                $mdDialog.show(
-                  $mdDialog.alert()
-                    .parent(angular.element(document.querySelector('#VerificationFailedAlertContainer')))
-                    .clickOutsideToClose(true)
-                    .title('שגיאה')
-                    .textContent('תהליך הזיהוי נכשל, הקוד שהוכנס לא תואם למספר הטלפון שהוקש, אנא נסה שנית.')
-                    .ariaLabel('Alert Dialog Demo')
-                    .ok('המשך')
-                );
-            };
+        var registerUserForPushService = function () {
+            var deferred = $q.defer();
 
-            var showRegistrationFailedAlert = function (text) {
-                $mdDialog.show(
-                  $mdDialog.alert()
-                    .parent(angular.element(document.querySelector('#RegistrationFailedAlertContainer')))
-                    .clickOutsideToClose(true)
-                    .title('שגיאה')
-                    .textContent(text || 'מצטערים!   תהליך ההרשמה נכשל , תנו לנו עוד הזדמנות ונסו שוב להירשם. אם הבעיה נמשכת נשמח אם תפנו אלינו במייל או בטלפון.')
-                    .ariaLabel('Alert Dialog Demo')
-                    .ok('המשך')
-                );
-            };
+            pushNotifications.initializePushV5().then(function () {
+                pushNotifications.registerForPushNotifications().then(function (registrationId) {
+                    deferred.resolve(registrationId);
+                });
+            }, function (error) {
+                logger.error("error while trying to register user to app", error);
+                deferred.reject();
+            });
 
-            vm.showMoreAvatars = function (ev) {
-                $mdDialog.show({
+            return deferred.promise;
+        };
+
+        vm.showCliqaAlert = function (ev) {
+            $mdDialog.show(
+                $mdDialog.alert()
+                .parent(angular.element(document.querySelector('#CliqaAlertContainer')))
+                .clickOutsideToClose(true)
+                .title('קליקה')
+                .textContent('קליקה היא קבוצת האנשים (הארגון) איתו אתה עובד ומקבל משימות.' + '\n' +
+                    'בעתיד הקמת קליקות תהיה באופן חופשי ועצמאי,' + '\n' +
+                    'כרגע חובה לבחור קליקה מתוך הרשימה.' + '\n\n' +
+                    'אם אתה נסיין של המערכת אנא בחר "נסייני מערכת" מתוך הרשימה')
+                .ariaLabel('Alert Dialog Demo')
+                .ok('הבנתי!')
+                .targetEvent(ev)
+            );
+        };
+
+        vm.showTermsOfServiceAlert = function myfunction(ev) {
+            $mdDialog.show(
+                $mdDialog.alert()
+                .parent(angular.element(document.querySelector('#TermsOfServiceAlertContainer')))
+                .clickOutsideToClose(true)
+                .title('תנאי השירות')
+                .textContent('האפליקציה פועלת בתחום המשימות, במטרה לסייע לכל אחד לבצע את המשימות האישיות והחברתיות שלו.ניתן לנהל משימות אישיות, לשלוח לנמענים, לעקוב אחר ביצוע ולנהל שיחה על כל משימה ומשימה.האפליקציה מיועדת לאנשים פרטיים, חברות וארגונים, בתי ספר, משפחות וכל אחד שרוצה לבצע את המשימות שלו בצורה קלה ונוחה** האפליקציה נמצאת בגרסת אלפא. לא מיועדת עדיין לשימוש. בנוסף, בשלב הרצת האפליקציה כלל האפשרויות המוצעות באפליקציה הינם חינם לשימוש לאנשים פרטייים וכן לאירגונים, משתהפוך האפליקציה לרישמית ייתכן ואפשרויות מסוימות באפליקציה יהיו בתשלום .')
+                .ariaLabel('TermsOfServiceAlert')
+                .ok('סגור')
+                .targetEvent(ev)
+            );
+        };
+
+        var showVerificationCodePrompt = function (userId) {
+            return $mdDialog.show({
+                controller: 'verificationCodeCtrl',
+                templateUrl: 'scripts/widgets/verificationCodeDialog.tmpl.html',
+                parent: angular.element(document.querySelector('#VerificationCodePromptContainer')),
+                clickOutsideToClose: false,
+                locals: {
+                    userId: userId
+                }
+            });
+        };
+
+        var showVerificationFailedAlert = function () {
+            $mdDialog.show(
+                $mdDialog.alert()
+                .parent(angular.element(document.querySelector('#VerificationFailedAlertContainer')))
+                .clickOutsideToClose(true)
+                .title('שגיאה')
+                .textContent('תהליך הזיהוי נכשל, הקוד שהוכנס לא תואם למספר הטלפון שהוקש, אנא נסה שנית.')
+                .ariaLabel('Alert Dialog Demo')
+                .ok('המשך')
+            );
+        };
+
+        var showRegistrationFailedAlert = function (text) {
+            $mdDialog.show(
+                $mdDialog.alert()
+                .parent(angular.element(document.querySelector('#RegistrationFailedAlertContainer')))
+                .clickOutsideToClose(true)
+                .title('שגיאה')
+                .textContent(text || 'מצטערים!   תהליך ההרשמה נכשל , תנו לנו עוד הזדמנות ונסו שוב להירשם. אם הבעיה נמשכת נשמח אם תפנו אלינו במייל או בטלפון.')
+                .ariaLabel('Alert Dialog Demo')
+                .ok('המשך')
+            );
+        };
+
+        vm.showMoreAvatars = function (ev) {
+            $mdDialog.show({
                     controller: pickAvatarCtrl,
                     templateUrl: 'scripts/widgets/pickAvatarDialog.tmpl.html',
                     parent: angular.element(document.body),
@@ -224,66 +224,68 @@
                     }
                 })
                 .then(function (answer) {
-                    vm.user.avatarUrl = answer;               
+                    vm.user.avatarUrl = answer;
                 }, function () {
 
                 });
 
-            };
-            
-            var showCube = function () {
-                vm.showCube = true;
-                vm.loadingMode = 'syncing';
-                angular.element(document.querySelectorAll('html')).removeClass("hight-auto");
-            };
-            
-            function pickAvatarCtrl($scope, $mdDialog, imagesPath) {
-                $scope.imagesPath = imagesPath;
-                $scope.manAvatars = [];
-                for (var i = 1; i < 10; i++) {
-                    $scope.manAvatars.push('/images/man-' + i + '.svg');
-                }
+        };
 
-                $scope.womanAvatars = [];
-                for (var j = 1; j < 16; j++) {
-                    $scope.womanAvatars.push('/images/woman-' + j + '.svg');
-                }
-                
+        var showCube = function () {
+            vm.showCube = true;
+            vm.loadingMode = 'syncing';
+            angular.element(document.querySelectorAll('html')).removeClass("hight-auto");
+        };
 
-                $scope.hide = function () {
-                    $mdDialog.hide();
-                };
-
-                $scope.cancel = function () {
-                    $mdDialog.cancel();
-                };
-
-                $scope.answer = function (answer) {
-                    $mdDialog.hide(answer);
-                };
+        function pickAvatarCtrl($scope, $mdDialog, imagesPath) {
+            $scope.imagesPath = imagesPath;
+            $scope.manAvatars = [];
+            for (var i = 1; i < 10; i++) {
+                $scope.manAvatars.push('/images/man-' + i + '.svg');
             }
-        
 
-            vm.exitApp = false;
+            $scope.womanAvatars = [];
+            for (var j = 1; j < 16; j++) {
+                $scope.womanAvatars.push('/images/woman-' + j + '.svg');
+            }
 
-            var backbuttonClick_allways_Callback = function (e) {
 
-                if ($location.path() === '/signUp') {
-                    e.preventDefault();
-                    if (!vm.exitApp) {
-                        vm.exitApp = true;
-                        cordovaPlugins.showToast("הקש שוב ליציאה", 1000);
-                        $timeout(function () { vm.exitApp = false; }, 1000);
-                    } else {
-                        window.plugins.toast.hide();
-                        navigator.app.exitApp();
-                    }
-                }
+            $scope.hide = function () {
+                $mdDialog.hide();
             };
 
-            document.addEventListener("deviceready", function () {
-                document.addEventListener("backbutton", backbuttonClick_allways_Callback, false);
-            }, false);
+            $scope.cancel = function () {
+                $mdDialog.cancel();
+            };
+
+            $scope.answer = function (answer) {
+                $mdDialog.hide(answer);
+            };
         }
+
+
+        vm.exitApp = false;
+
+        var backbuttonClick_allways_Callback = function (e) {
+
+            if ($location.path() === '/signUp') {
+                e.preventDefault();
+                if (!vm.exitApp) {
+                    vm.exitApp = true;
+                    cordovaPlugins.showToast("הקש שוב ליציאה", 1000);
+                    $timeout(function () {
+                        vm.exitApp = false;
+                    }, 1000);
+                } else {
+                    window.plugins.toast.hide();
+                    navigator.app.exitApp();
+                }
+            }
+        };
+
+        document.addEventListener("deviceready", function () {
+            document.addEventListener("backbutton", backbuttonClick_allways_Callback, false);
+        }, false);
+    }
 
 })();

@@ -27,7 +27,7 @@
         }
 
         vm.goToSignUp = function () {
-            if (true || device.isMobileDevice()) {
+            if (device.isMobileDevice()) {
                 $location.path('/signUp');
             }
             else {

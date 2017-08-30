@@ -444,6 +444,19 @@
             return $http(req);
         }
 
+        var addUsersToCliqa = function (cliqa, users) {
+            var req = {
+                method: 'POST',
+                url: appConfig.appDomain() + '/TaskManeger/addUsersToCliqa',
+                data: {
+                    cliqa: cliqa,
+                    users: users
+                }
+            };
+
+            return $http(req);
+        };
+
         var service = {
             saveNewTasks: saveNewTasks,
             getTasks: getTasks,
@@ -476,8 +489,8 @@
             getUsersByPhoneNumbers: getUsersByPhoneNumbers,
             addNewGroup: addNewGroup,
             deleteGroups: deleteGroups,
-            getUsersInCliqa: getUsersInCliqa
-      
+            getUsersInCliqa: getUsersInCliqa,
+            addUsersToCliqa: addUsersToCliqa
         };
 
         return service;
