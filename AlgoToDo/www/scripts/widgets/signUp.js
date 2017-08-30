@@ -66,21 +66,25 @@
                     vm.user.avatarUrl = vm.womanAvatar;
                 }
               
-                document.addEventListener("deviceready", function () {
+                //document.addEventListener("deviceready", function () {
 
-                    vm.user.device = device.getDeviceDetails();
-                    datacontext.setDeviceDetailes(vm.user.device, cordova.file.applicationDirectory);
+                    //vm.user.device = device.getDeviceDetails();
+                    //datacontext.setDeviceDetailes(vm.user.device, cordova.file.applicationDirectory);
 
-                    registerUserForPushService().then(function (registrationId) {
+                    //registerUserForPushService().then(function (registrationId) {
 
-                        if (vm.user.device.platform === 'iOS') {
+                       /* if (vm.user.device.platform === 'iOS') {
                             vm.user.ApnRegistrationId = registrationId;
                         }
                         if (vm.user.device.platform === 'Android') {
                             vm.user.GcmRegistrationId = registrationId;
                         }
-
+*/
                         DAL.registerUser(vm.user).then(function (response) {
+                            if (response.error) {
+                                vm.inProgress = false;
+                                showRegistrationFailedAlert('המשתשמש קיים...');    
+                            }
                             vm.user = response.data;
                             verifyUser();
                         }, function (error) {
@@ -88,8 +92,8 @@
                             logger.error("error while trying to register user to app: ", error.data || error);
                             showRegistrationFailedAlert();
                         });
-                    });
-                }, false);
+                    //});
+                //}, false);
                 
             };
 
@@ -196,13 +200,13 @@
                 );
             };
 
-            var showRegistrationFailedAlert = function () {
+            var showRegistrationFailedAlert = function (text) {
                 $mdDialog.show(
                   $mdDialog.alert()
                     .parent(angular.element(document.querySelector('#RegistrationFailedAlertContainer')))
                     .clickOutsideToClose(true)
                     .title('שגיאה')
-                    .textContent('מצטערים!   תהליך ההרשמה נכשל , תנו לנו עוד הזדמנות ונסו שוב להירשם. אם הבעיה נמשכת נשמח אם תפנו אלינו במייל או בטלפון.')
+                    .textContent(text || 'מצטערים!   תהליך ההרשמה נכשל , תנו לנו עוד הזדמנות ונסו שוב להירשם. אם הבעיה נמשכת נשמח אם תפנו אלינו במייל או בטלפון.')
                     .ariaLabel('Alert Dialog Demo')
                     .ok('המשך')
                 );

@@ -353,7 +353,7 @@
                     d.deferred(error);
                 });
             } else {
-                d.deferred();
+                d.resolve({message: "user alredy exist", error: "user alredy exist"});
             }
         }, function (error) {
             d.deferred(error);
