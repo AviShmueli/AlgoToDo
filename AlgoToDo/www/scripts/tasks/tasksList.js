@@ -31,7 +31,7 @@
 
         vm.user = datacontext.getUserFromLocalStorage();
         if (vm.user === undefined) {
-            $location('/login');
+            $location.path('/login');
         }
         vm.imagesPath = device.getImagesPath();
         vm.progressActivated = false;

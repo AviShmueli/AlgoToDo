@@ -43,11 +43,11 @@
         var downloadFile = function (strData) {
 
             var blob = new Blob([strData], {
-                //type: "text/plain;charset=utf-8"
-                type: "application/vnd.openxmlformat-officedocument.spreadsheetml.sheet;"
+                type: "text/plain;charset=utf-8"
+                //type: "application/vnd.openxmlformat-officedocument.spreadsheetml.sheet;charset=utf-8"
             });
 
-            FileSaver.saveAs(blob, scope.filename + '.xls');
+            FileSaver.saveAs(blob, scope.filename + '.csv');
         }
 
         function _bodyData(data) {
