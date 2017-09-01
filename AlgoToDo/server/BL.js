@@ -40,6 +40,7 @@
     var deferred = require('deferred');
     var PNF = require('google-libphonenumber').PhoneNumberFormat;
     var phoneUtil = require('google-libphonenumber').PhoneNumberUtil.getInstance();
+    var Moment = require('moment-timezone');
 
     var DAL = require('./DAL');
     var winston = require('./logger');
@@ -541,6 +542,22 @@
             }];
         }
 
+        var offset = Moment().tz('Asia/Jerusalem').utcOffset();
+        
+        if (filter.hasOwnProperty('fromDate')) {
+            filter.createTime = filter.createTime ? filter.createTime : {};
+            var date = new Date(filter.fromDate).toDateString();
+            var dayStart = Moment(date).tz('Asia/Jerusalem').add(offset, 'm').toDate();
+            filter.createTime["$gt"] = dayStart;
+        }
+
+        if (filter.hasOwnProperty('toDate')) {
+            filter.createTime = filter.createTime ? filter.createTime : {};
+            var date = new Date(filter.toDate).toDateString();
+            var dayEnd = Moment(date).tz('Asia/Jerusalem').add(offset, 'm').toDate();
+            filter.createTime["$lt"] = dayEnd;
+        }
+
         var options = {
             "limit": limit,
             "skip": (page - 1) * limit
@@ -567,6 +584,22 @@
             }, {
                 'to._id': new ObjectID(userId)
             }];
+        }
+
+        var offset = Moment().tz('Asia/Jerusalem').utcOffset();
+        
+        if (filter.hasOwnProperty('fromDate')) {
+            filter.createTime = filter.createTime ? filter.createTime : {};
+            var date = new Date(filter.fromDate).toDateString();
+            var dayStart = Moment(date).tz('Asia/Jerusalem').add(offset, 'm').toDate();
+            filter.createTime["$gt"] = dayStart;
+        }
+
+        if (filter.hasOwnProperty('toDate')) {
+            filter.createTime = filter.createTime ? filter.createTime : {};
+            var date = new Date(filter.toDate).toDateString();
+            var dayEnd = Moment(date).tz('Asia/Jerusalem').add(offset, 'm').toDate();
+            filter.createTime["$lt"] = dayEnd;
         }
 
         DAL.getAllTasksCount(filter).then(function (result) {

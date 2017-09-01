@@ -136,8 +136,8 @@
         };
 
         $timeout(function () {
-            //vm.getTasks();
-            vm.tasks = JSON.parse(window.localStorage.getItem('fakeData'));
+            vm.getTasks();
+            //vm.tasks = JSON.parse(window.localStorage.getItem('fakeData'));
         }, 0);
 
         vm.getTotalTaskTime = function (task) {

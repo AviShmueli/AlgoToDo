@@ -18,7 +18,7 @@
     "google-libphonenumber": "^2.0.13",
     "loggly": "^1.1.1",
     "moment": "^2.18.1",
-    "moment-timezone": "^0.5.11",
+    "moment-timezone": "^0.5.13",
     "mongodb": "^2.2.10",
     "node-gcm": "^0.14.4",
     "passport": "^0.3.2",
