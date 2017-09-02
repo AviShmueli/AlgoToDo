@@ -27,28 +27,13 @@
         "cordova-plugin-file": {
             "PACKAGE_NAME": "com.algotodo.app"
         },
-        "cordova-plugin-file-transfer": {
-            "PACKAGE_NAME": "com.algotodo.app"
-        },
-        "cordova-plugin-network-information": {
-            "PACKAGE_NAME": "com.algotodo.app"
-        },
         "cordova-plugin-screensize": {
-            "PACKAGE_NAME": "com.algotodo.app"
-        },
-        "cordova-plugin-vibration": {
-            "PACKAGE_NAME": "com.algotodo.app"
-        },
-        "cordova-plugin-x-toast": {
             "PACKAGE_NAME": "com.algotodo.app"
         },
         "cordova-plugin-datepicker": {
             "PACKAGE_NAME": "com.algotodo.app"
         },
         "cordova-sms-plugin": {
-            "PACKAGE_NAME": "com.algotodo.app"
-        },
-        "cordova-plugin-x-socialsharing": {
             "PACKAGE_NAME": "com.algotodo.app"
         },
         "cordova-plugin-apprate": {
@@ -70,10 +55,6 @@
         "cordova-plugin-appminimize": {
             "PACKAGE_NAME": "com.algotodo.app"
         },
-        "cordova-plugin-contacts": {
-            "CONTACTS_USAGE_DESCRIPTION": " ",
-            "PACKAGE_NAME": "com.algotodo.app"
-        },
         "cordova-plugin-filepath": {
             "PACKAGE_NAME": "com.algotodo.app"
         },
@@ -88,16 +69,41 @@
         },
         "skwas-cordova-plugin-datetimepicker": {
             "PACKAGE_NAME": "com.algotodo.app"
-        }
-    },
-    "dependent_plugins": {
-        "cordova-plugin-app-event": {
+        },
+        "cordova-plugin-contacts": {
+            "CONTACTS_USAGE_DESCRIPTION": " ",
+            "PACKAGE_NAME": "com.algotodo.app"
+        },
+        "cordova-plugin-x-socialsharing": {
+            "PACKAGE_NAME": "com.algotodo.app"
+        },
+        "cordova-plugin-statusbar": {
+            "PACKAGE_NAME": "com.algotodo.app"
+        },
+        "cordova-plugin-file-transfer": {
+            "PACKAGE_NAME": "com.algotodo.app"
+        },
+        "cordova-plugin-network-information": {
+            "PACKAGE_NAME": "com.algotodo.app"
+        },
+        "cordova-plugin-vibration": {
+            "PACKAGE_NAME": "com.algotodo.app"
+        },
+        "cordova-plugin-x-toast": {
             "PACKAGE_NAME": "com.algotodo.app"
         },
         "cordova-plugin-dialogs": {
             "PACKAGE_NAME": "com.algotodo.app"
         },
+        "cordova-plugin-app-event": {
+            "PACKAGE_NAME": "com.algotodo.app"
+        }
+    },
+    "dependent_plugins": {
         "cordova-plugin-globalization": {
+            "PACKAGE_NAME": "com.algotodo.app"
+        },
+        "es6-promise-plugin": {
             "PACKAGE_NAME": "com.algotodo.app"
         }
     }

@@ -1,5 +1,5 @@
 #import "SocialSharing.h"
-#import "NSString+URLEncoding.h"
+#import "NSString+SSURLEncoding.h"
 #import <Cordova/CDV.h>
 #import <Social/Social.h>
 #import <Foundation/NSException.h>
@@ -137,7 +137,7 @@ static NSString *const kShareOptionUrl = @"url";
 #pragma GCC diagnostic ignored "-Wdeprecated-declarations"
         [activityVC setCompletionHandler:^(NSString *activityType, BOOL completed) {
           [self cleanupStoredFiles];
-          NSDictionary * result = @{@"completed":@(completed), @"app":activityType};
+          NSDictionary * result = @{@"completed":@(completed), @"app":activityType == nil ? @"" : activityType};
           CDVPluginResult * pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:result];
           [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
         }];
@@ -200,10 +200,11 @@ static NSString *const kShareOptionUrl = @"url";
   NSString *message = [command.arguments objectAtIndex:0];
   if (message != (id)[NSNull null]) {
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 1000 * NSEC_PER_MSEC), dispatch_get_main_queue(), ^{
-      BOOL fbAppInstalled = [[UIApplication sharedApplication] canOpenURL:[NSURL URLWithString:@"fb://"]]; // requires whitelisting on iOS9
+      // since iOS 11 the internal sharing widgets have been removed, so it's safe to assume the app has been installed
+      BOOL fbAppInstalled = IsAtLeastiOSVersion(@"11.0") || [[UIApplication sharedApplication] canOpenURL:[NSURL URLWithString:@"fb://"]]; // requires whitelisting on iOS9
       if (fbAppInstalled) {
         UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
-        [pasteboard setValue:message forPasteboardType:@"public.text"];
+        [pasteboard setValue:message forPasteboardType:@"public.utf8-plain-text"];
         NSString *hint = [command.arguments objectAtIndex:4];
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"" message:hint delegate:nil cancelButtonTitle:nil otherButtonTitles:nil];
         [alert show];
@@ -256,6 +257,11 @@ static NSString *const kShareOptionUrl = @"url";
 
 - (bool)isAvailableForSharing:(CDVInvokedUrlCommand*)command
                          type:(NSString *) type {
+  // since iOS 11 this will always return false, so assume true
+  if (IsAtLeastiOSVersion(@"11.0")) {
+    return YES;
+  }
+
   // isAvailableForServiceType returns true if you pass it a type that is not
   // in the defined constants, this is probably a bug on apples part
   if(!([type isEqualToString:SLServiceTypeFacebook]
@@ -577,7 +583,7 @@ static NSString *const kShareOptionUrl = @"url";
 
     // .. we put the message on the clipboard (you app can prompt the user to paste it)
     UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
-    [pasteboard setValue:message forPasteboardType:@"public.text"];
+    [pasteboard setValue:message forPasteboardType:@"public.utf8-plain-text"];
   }
 
   // remember the command for the delegate method

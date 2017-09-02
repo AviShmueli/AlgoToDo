@@ -16,7 +16,6 @@ public class AppMinimize extends CordovaPlugin {
 			startMain.addCategory(Intent.CATEGORY_HOME);
 			startMain.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 			this.cordova.getActivity().startActivity(startMain);
-			// try : this.cordova.getActivity().finishActivity() for going back to prev activity
 			callbackContext.success(1);
         }
 		

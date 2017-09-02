@@ -1,7 +1,57 @@
 {
-  "name": "cordova-plugin-dialogs",
-  "version": "1.3.1",
-  "description": "Cordova Notification Plugin",
+  "_args": [
+    [
+      {
+        "raw": "cordova-plugin-dialogs@1.3.1",
+        "scope": null,
+        "escapedName": "cordova-plugin-dialogs",
+        "name": "cordova-plugin-dialogs",
+        "rawSpec": "1.3.1",
+        "spec": "1.3.1",
+        "type": "version"
+      },
+      "C:\\dev\\AlgoToDo\\AlgoToDo\\node_modules"
+    ]
+  ],
+  "_from": "cordova-plugin-dialogs@1.3.1",
+  "_id": "cordova-plugin-dialogs@1.3.1",
+  "_inCache": true,
+  "_location": "/cordova-plugin-dialogs",
+  "_nodeVersion": "6.7.0",
+  "_npmOperationalInternal": {
+    "host": "packages-18-east.internal.npmjs.com",
+    "tmp": "tmp/cordova-plugin-dialogs-1.3.1.tgz_1481567748531_0.32130999281071126"
+  },
+  "_npmUser": {
+    "name": "shazron",
+    "email": "shazron@gmail.com"
+  },
+  "_npmVersion": "3.10.9",
+  "_phantomChildren": {},
+  "_requested": {
+    "raw": "cordova-plugin-dialogs@1.3.1",
+    "scope": null,
+    "escapedName": "cordova-plugin-dialogs",
+    "name": "cordova-plugin-dialogs",
+    "rawSpec": "1.3.1",
+    "spec": "1.3.1",
+    "type": "version"
+  },
+  "_requiredBy": [
+    "#USER",
+    "/"
+  ],
+  "_resolved": "https://registry.npmjs.org/cordova-plugin-dialogs/-/cordova-plugin-dialogs-1.3.1.tgz",
+  "_shasum": "a46022671ac0d19095643b95e2bab275243db8a1",
+  "_shrinkwrap": null,
+  "_spec": "cordova-plugin-dialogs@1.3.1",
+  "_where": "C:\\dev\\AlgoToDo\\AlgoToDo\\node_modules",
+  "author": {
+    "name": "Apache Software Foundation"
+  },
+  "bugs": {
+    "url": "https://github.com/apache/cordova-plugin-dialogs/issues"
+  },
   "cordova": {
     "id": "cordova-plugin-dialogs",
     "platforms": [
@@ -18,10 +68,24 @@
       "windows"
     ]
   },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/apache/cordova-plugin-dialogs"
+  "dependencies": {},
+  "description": "Cordova Notification Plugin",
+  "devDependencies": {
+    "jshint": "^2.6.0"
   },
+  "directories": {},
+  "dist": {
+    "shasum": "a46022671ac0d19095643b95e2bab275243db8a1",
+    "tarball": "https://registry.npmjs.org/cordova-plugin-dialogs/-/cordova-plugin-dialogs-1.3.1.tgz"
+  },
+  "engines": {
+    "cordovaDependencies": {
+      "2.0.0": {
+        "cordova": ">100"
+      }
+    }
+  },
+  "homepage": "https://github.com/apache/cordova-plugin-dialogs#readme",
   "keywords": [
     "cordova",
     "notification",
@@ -38,20 +102,31 @@
     "cordova-windows8",
     "cordova-windows"
   ],
-  "scripts": {
-    "test": "npm run jshint",
-    "jshint": "node node_modules/jshint/bin/jshint www && node node_modules/jshint/bin/jshint src && node node_modules/jshint/bin/jshint tests"
-  },
-  "author": "Apache Software Foundation",
   "license": "Apache-2.0",
-  "engines": {
-    "cordovaDependencies": {
-      "2.0.0": {
-        "cordova": ">100"
-      }
+  "maintainers": [
+    {
+      "name": "csantanapr",
+      "email": "csantana23@gmail.com"
+    },
+    {
+      "name": "shazron",
+      "email": "shazron@gmail.com"
+    },
+    {
+      "name": "stevegill",
+      "email": "stevengill97@gmail.com"
     }
+  ],
+  "name": "cordova-plugin-dialogs",
+  "optionalDependencies": {},
+  "readme": "ERROR: No README data found!",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/apache/cordova-plugin-dialogs.git"
   },
-  "devDependencies": {
-    "jshint": "^2.6.0"
-  }
+  "scripts": {
+    "jshint": "node node_modules/jshint/bin/jshint www && node node_modules/jshint/bin/jshint src && node node_modules/jshint/bin/jshint tests",
+    "test": "npm run jshint"
+  },
+  "version": "1.3.1"
 }

@@ -127,7 +127,7 @@
             return {
                 region : 'IL',
                 appDomain: function () { return self.appDomain },
-                appVersion: '0.3.5'
+                appVersion: '0.3.6'
             };
         })
         .run(function (amMoment, $offlineHandler) {

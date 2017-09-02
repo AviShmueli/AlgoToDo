@@ -46,7 +46,7 @@
             // });
             element[0].focus();
 
-        }, 800);
+        }, 1000);
 
         $scope.$watch('vm.selectedRecipients', function (newVal) {
             var input = angular.element(document.getElementsByClassName('new-task-text'));

@@ -44,6 +44,7 @@ public class DateTimePicker extends CordovaPlugin {
 		// Android specific
 		public int theme = android.R.style.Theme_DeviceDefault_Dialog;
 		public boolean calendar = false;
+		public boolean is24HourView = true;
 
 		public DateTimePickerOptions() {
 		}
@@ -56,7 +57,6 @@ public class DateTimePicker extends CordovaPlugin {
 			date = new Date(obj.getLong("ticks"));
 			minuteInterval = obj.optInt("minuteInterval", 1);
 
-			// Other values currently not handled/supported in Android...
 			allowOldDates = obj.optBoolean("allowOldDates", allowOldDates);
 			allowFutureDates = obj.optBoolean("allowFutureDates", allowFutureDates);
 
@@ -74,6 +74,7 @@ public class DateTimePicker extends CordovaPlugin {
 			if (androidOptions != null) {
 				theme = androidOptions.optInt("theme", theme);
 				calendar = androidOptions.optBoolean("calendar", calendar);
+				is24HourView = androidOptions.optBoolean("is24HourView", is24HourView);
 			}
 		}
 	}
@@ -156,7 +157,7 @@ public class DateTimePicker extends CordovaPlugin {
 						timeSetListener,
 						calendar.get(Calendar.HOUR_OF_DAY),
 						calendar.get(Calendar.MINUTE),
-						true,
+						options.is24HourView,
 						options.minuteInterval
 				);
 

@@ -44,12 +44,12 @@ Locales = (function() {
     return locales[localeObject.language] = localeObject;
   };
 
-  Locales.getLocale = function(language, applicationTitle) {
+  Locales.getLocale = function(language, applicationTitle, customLocale) {
     var localeObject;
     if (applicationTitle == null) {
       applicationTitle = '';
     }
-    localeObject = locales[language] || locales[language.split(/-/)[0]] || locales[LOCALE_DEFAULT];
+    localeObject = customLocale || locales[language] || locales[language.split(/-/)[0]] || locales[LOCALE_DEFAULT];
     localeObject.title = localeObject.title.replace(/%@/g, applicationTitle);
     localeObject.message = localeObject.message.replace(/%@/g, applicationTitle);
     return localeObject;
@@ -300,6 +300,15 @@ Locales.addLocale(new Locale({
   cancelButtonLabel: "Não, Obrigado",
   laterButtonLabel: "Lembrar mais tarde",
   rateButtonLabel: "Avaliar Agora"
+}));
+
+Locales.addLocale(new Locale({
+  language: 'pt-PT',
+  title: "Avaliar %@",
+  message: "Se gostou de utilziar o %@, importa-se de o avaliar? Não vai demorar mais do que um minuto. Obrigado pelo seu apoio!",
+  cancelButtonLabel: "Não, obrigado",
+  laterButtonLabel: "Lembrar mais tarde",
+  rateButtonLabel: "Avaliar agora"
 }));
 
 Locales.addLocale(new Locale({

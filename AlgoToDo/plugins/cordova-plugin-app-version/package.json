@@ -1,14 +1,70 @@
 {
-  "name": "cordova-plugin-app-version",
-  "version": "0.1.9",
+  "_args": [
+    [
+      {
+        "raw": "https://github.com/whiteoctober/cordova-plugin-app-version.git",
+        "scope": null,
+        "escapedName": null,
+        "name": null,
+        "rawSpec": "https://github.com/whiteoctober/cordova-plugin-app-version.git",
+        "spec": "git+https://github.com/whiteoctober/cordova-plugin-app-version.git",
+        "type": "hosted",
+        "hosted": {
+          "type": "github",
+          "ssh": "git@github.com:whiteoctober/cordova-plugin-app-version.git",
+          "sshUrl": "git+ssh://git@github.com/whiteoctober/cordova-plugin-app-version.git",
+          "httpsUrl": "git+https://github.com/whiteoctober/cordova-plugin-app-version.git",
+          "gitUrl": "git://github.com/whiteoctober/cordova-plugin-app-version.git",
+          "shortcut": "github:whiteoctober/cordova-plugin-app-version",
+          "directUrl": "https://raw.githubusercontent.com/whiteoctober/cordova-plugin-app-version/master/package.json"
+        }
+      },
+      "C:\\dev\\AlgoToDo\\AlgoToDo\\node_modules"
+    ]
+  ],
+  "_from": "git+https://github.com/whiteoctober/cordova-plugin-app-version.git",
+  "_id": "cordova-plugin-app-version@0.1.9",
+  "_inCache": true,
+  "_location": "/cordova-plugin-app-version",
+  "_phantomChildren": {},
+  "_requested": {
+    "raw": "https://github.com/whiteoctober/cordova-plugin-app-version.git",
+    "scope": null,
+    "escapedName": null,
+    "name": null,
+    "rawSpec": "https://github.com/whiteoctober/cordova-plugin-app-version.git",
+    "spec": "git+https://github.com/whiteoctober/cordova-plugin-app-version.git",
+    "type": "hosted",
+    "hosted": {
+      "type": "github",
+      "ssh": "git@github.com:whiteoctober/cordova-plugin-app-version.git",
+      "sshUrl": "git+ssh://git@github.com/whiteoctober/cordova-plugin-app-version.git",
+      "httpsUrl": "git+https://github.com/whiteoctober/cordova-plugin-app-version.git",
+      "gitUrl": "git://github.com/whiteoctober/cordova-plugin-app-version.git",
+      "shortcut": "github:whiteoctober/cordova-plugin-app-version",
+      "directUrl": "https://raw.githubusercontent.com/whiteoctober/cordova-plugin-app-version/master/package.json"
+    }
+  },
+  "_requiredBy": [
+    "#USER",
+    "/"
+  ],
+  "_resolved": "git+https://github.com/whiteoctober/cordova-plugin-app-version.git#e16bc62ab9556e1df34ef52a57eaa08dda16ba8d",
+  "_shasum": "29cb80794b52c1678c8b00e9c6f496996a03f467",
+  "_shrinkwrap": null,
+  "_spec": "https://github.com/whiteoctober/cordova-plugin-app-version.git",
+  "_where": "C:\\dev\\AlgoToDo\\AlgoToDo\\node_modules",
+  "author": {
+    "name": "whiteoctober"
+  },
+  "bugs": {
+    "url": "https://github.com/whiteoctober/cordova-plugin-app-version/issues"
+  },
+  "dependencies": {},
   "description": "Cordova plugin to return the version number of the current app",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/whiteoctober/cordova-plugin-app-version.git"
-  },
+  "devDependencies": {},
+  "gitHead": "e16bc62ab9556e1df34ef52a57eaa08dda16ba8d",
+  "homepage": "https://github.com/whiteoctober/cordova-plugin-app-version#readme",
   "keywords": [
     "cordova",
     "ecosystem:cordova",
@@ -17,10 +73,17 @@
     "appversion",
     "plugin"
   ],
-  "author": "whiteoctober",
   "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/whiteoctober/cordova-plugin-app-version/issues"
+  "name": "cordova-plugin-app-version",
+  "optionalDependencies": {},
+  "readme": "# Cordova AppVersion plugin\r\n\r\nReads the version of your app from the target build settings.\r\n\r\n## Installation\r\n\r\n### With cordova-cli\r\n\r\nIf you are using [cordova-cli](https://github.com/apache/cordova-cli), install\r\nwith:\r\n\r\n    cordova plugin add cordova-plugin-app-version\r\n\r\n### With plugman\r\n\r\nWith a plain [plugman](https://github.com/apache/cordova-plugman), you should be\r\nable to install with something like:\r\n\r\n    plugman --platform <ios|android> --project <directory> --plugin https://github.com/whiteoctober/cordova-plugin-app-version.git\r\n\r\n### Manually in iOS\r\n\r\nTODO: Write these instructions\r\n\r\n### Manually in Android\r\n\r\nTODO: Write these instructions\r\n\r\n## Use from Javascript\r\n\r\nIf you are using jQuery, AngularJS, WinJS or any Promise/A library (Bluebird), promise style is supported. Use something like:\r\n\r\n    cordova.getAppVersion.getVersionNumber().then(function (version) {\r\n        $('.version').text(version);\r\n    });\r\n\r\nIf not, pass a callback function:\r\n\r\n    cordova.getAppVersion.getVersionNumber(function (version) {\r\n        alert(version);\r\n    });\r\n\r\nIn addition to the version number you can also retrieve other details about your application:\r\n\r\n### getAppName\r\n\r\nReturns the name of the app. E.g. \"My Awesome App\"\r\n\r\n### getPackageName\r\n\r\nReturns the package name of the app - the reversed domain name app identifier like com.example.myawesomeapp\r\n\r\n### getVersionCode\r\n\r\nReturns the build identifier of the app\r\n\r\n### getVersionNumber\r\n\r\nReturns the version number of the app\r\n\r\n## Credits\r\n\r\nWritten by [Robert (Jamie) Munro](http://twitter.com/rjmunro) at\r\n[White October](http://whiteoctober.co.uk/)\r\n\r\nVarious others have contributed fixes and new features. See the CHANGELOG.md for details.\r\n\r\nOriginal code based on the following Stack Overflow posts:\r\n\r\n* [iOS](http://stackoverflow.com/a/14713364/3408)\r\n* [Android](http://stackoverflow.com/a/3637686/3408)\r\n",
+  "readmeFilename": "README.md",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/whiteoctober/cordova-plugin-app-version.git"
   },
-  "homepage": "https://github.com/whiteoctober/cordova-plugin-app-version#readme"
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "version": "0.1.9"
 }

@@ -39,7 +39,8 @@
                     cancelText: "ביטול",
                     android: {
                         theme: 16974126, // Theme_DeviceDefault_Dialog
-                        calendar: true
+                        calendar: true,
+                        is24HourView: true
                     }
                 }, function(newDate) {
                     deferred.resolve(newDate);

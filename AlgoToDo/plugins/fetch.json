@@ -7,42 +7,10 @@
         "is_top_level": true,
         "variables": {}
     },
-    "cordova-plugin-app-event": {
-        "source": {
-            "type": "registry",
-            "id": "cordova-plugin-app-event"
-        },
-        "is_top_level": false,
-        "variables": {}
-    },
-    "cordova-plugin-x-toast": {
-        "source": {
-            "type": "registry",
-            "id": "cordova-plugin-x-toast"
-        },
-        "is_top_level": true,
-        "variables": {}
-    },
     "cordova-plugin-badge": {
         "source": {
             "type": "registry",
             "id": "cordova-plugin-badge@0.7.2"
-        },
-        "is_top_level": true,
-        "variables": {}
-    },
-    "cordova-plugin-vibration": {
-        "source": {
-            "type": "registry",
-            "id": "cordova-plugin-vibration"
-        },
-        "is_top_level": true,
-        "variables": {}
-    },
-    "cordova-plugin-network-information": {
-        "source": {
-            "type": "registry",
-            "id": "cordova-plugin-network-information"
         },
         "is_top_level": true,
         "variables": {}
@@ -57,17 +25,8 @@
     },
     "cordova-plugin-app-version": {
         "source": {
-            "type": "git",
-            "url": "https://github.com/whiteoctober/cordova-plugin-app-version.git",
-            "subdir": "."
-        },
-        "is_top_level": true,
-        "variables": {}
-    },
-    "cordova-plugin-file-transfer": {
-        "source": {
             "type": "registry",
-            "id": "cordova-plugin-file-transfer"
+            "id": "https://github.com/whiteoctober/cordova-plugin-app-version.git"
         },
         "is_top_level": true,
         "variables": {}
@@ -91,69 +50,25 @@
     "cordova-plugin-screensize": {
         "source": {
             "type": "registry",
-            "id": "cordova-plugin-screensize"
-        },
-        "is_top_level": true,
-        "variables": {}
-    },
-    "cordova-plugin-datepicker": {
-        "source": {
-            "type": "git",
-            "url": "https://github.com/VitaliiBlagodir/cordova-plugin-datepicker.git",
-            "subdir": "."
-        },
-        "is_top_level": true,
-        "variables": {}
-    },
-    "cordova-plugin-statusbar": {
-        "source": {
-            "type": "registry",
-            "id": "cordova-plugin-statusbar@~2.2.1"
+            "id": "cordova-plugin-screensize@~1.3.1"
         },
         "is_top_level": true,
         "variables": {}
     },
     "cordova-sms-plugin": {
         "source": {
-            "type": "git",
-            "url": "https://github.com/cordova-sms/cordova-sms-plugin.git",
-            "subdir": "."
-        },
-        "is_top_level": true,
-        "variables": {}
-    },
-    "cordova-plugin-x-socialsharing": {
-        "source": {
-            "type": "git",
-            "url": "https://github.com/EddyVerbruggen/SocialSharing-PhoneGap-Plugin.git",
-            "subdir": "."
-        },
-        "is_top_level": true,
-        "variables": {}
-    },
-    "cordova-plugin-apprate": {
-        "source": {
-            "type": "git",
-            "url": "https://github.com/pushandplay/cordova-plugin-apprate.git",
-            "subdir": "."
-        },
-        "is_top_level": true,
-        "variables": {}
-    },
-    "cordova-plugin-dialogs": {
-        "source": {
             "type": "registry",
-            "id": "cordova-plugin-dialogs"
+            "id": "https://github.com/cordova-sms/cordova-sms-plugin.git"
         },
-        "is_top_level": false,
+        "is_top_level": true,
         "variables": {}
     },
     "cordova-plugin-globalization": {
         "source": {
             "type": "registry",
-            "id": "cordova-plugin-globalization"
+            "id": "cordova-plugin-globalization@^1.0.7"
         },
-        "is_top_level": false,
+        "is_top_level": true,
         "variables": {}
     },
     "cordova-plugin-whitelist": {
@@ -176,9 +91,8 @@
     },
     "de.appplant.cordova.plugin.local-notification": {
         "source": {
-            "type": "git",
-            "url": "https://github.com/katzer/cordova-plugin-local-notifications",
-            "subdir": "."
+            "type": "registry",
+            "id": "https://github.com/katzer/cordova-plugin-local-notifications"
         },
         "is_top_level": true,
         "variables": {}
@@ -194,17 +108,8 @@
     },
     "cordova-plugin-appminimize": {
         "source": {
-            "type": "git",
-            "url": "https://github.com/tomloprod/cordova-plugin-appminimize.git",
-            "subdir": "."
-        },
-        "is_top_level": true,
-        "variables": {}
-    },
-    "cordova-plugin-contacts": {
-        "source": {
             "type": "registry",
-            "id": "cordova-plugin-contacts"
+            "id": "https://github.com/tomloprod/cordova-plugin-appminimize.git"
         },
         "is_top_level": true,
         "variables": {}
@@ -212,25 +117,135 @@
     "cordova-plugin-filepath": {
         "source": {
             "type": "registry",
-            "id": "cordova-plugin-filepath"
+            "id": "cordova-plugin-filepath@1.0.2"
         },
         "is_top_level": true,
         "variables": {}
     },
     "cordova-plugin-actionsheet": {
         "source": {
-            "type": "git",
-            "url": "https://github.com/EddyVerbruggen/cordova-plugin-actionsheet.git",
-            "subdir": "."
+            "type": "registry",
+            "id": "https://github.com/EddyVerbruggen/cordova-plugin-actionsheet.git"
         },
         "is_top_level": true,
         "variables": {}
     },
     "com.telerik.plugins.nativepagetransitions": {
         "source": {
-            "type": "git",
-            "url": "https://github.com/Telerik-Verified-Plugins/NativePageTransitions",
-            "subdir": "."
+            "type": "registry",
+            "id": "https://github.com/Telerik-Verified-Plugins/NativePageTransitions"
+        },
+        "is_top_level": true,
+        "variables": {}
+    },
+    "cordova-plugin-contacts": {
+        "source": {
+            "type": "registry",
+            "id": "cordova-plugin-contacts@2.3.0"
+        },
+        "is_top_level": true,
+        "variables": {}
+    },
+    "cordova-plugin-x-socialsharing": {
+        "source": {
+            "type": "registry",
+            "id": "https://github.com/EddyVerbruggen/SocialSharing-PhoneGap-Plugin.git"
+        },
+        "is_top_level": true,
+        "variables": {}
+    },
+    "es6-promise-plugin": {
+        "source": {
+            "type": "registry",
+            "id": "es6-promise-plugin@4.1.0"
+        },
+        "is_top_level": true,
+        "variables": {}
+    },
+    "cordova-plugin-statusbar": {
+        "source": {
+            "type": "registry",
+            "id": "cordova-plugin-statusbar@~2.2.1"
+        },
+        "is_top_level": true,
+        "variables": {}
+    },
+    "cordova-plugin-file-transfer": {
+        "source": {
+            "type": "registry",
+            "id": "cordova-plugin-file-transfer@~1.6.0"
+        },
+        "is_top_level": true,
+        "variables": {}
+    },
+    "cordova-plugin-network-information": {
+        "source": {
+            "type": "registry",
+            "id": "cordova-plugin-network-information@~1.3.0"
+        },
+        "is_top_level": true,
+        "variables": {}
+    },
+    "cordova-plugin-vibration": {
+        "source": {
+            "type": "registry",
+            "id": "cordova-plugin-vibration@~2.1.2"
+        },
+        "is_top_level": true,
+        "variables": {}
+    },
+    "cordova-plugin-x-toast": {
+        "source": {
+            "type": "registry",
+            "id": "cordova-plugin-x-toast@~2.5.2"
+        },
+        "is_top_level": true,
+        "variables": {}
+    },
+    "cordova-plugin-dialogs": {
+        "source": {
+            "type": "registry",
+            "id": "cordova-plugin-dialogs@1.3.1"
+        },
+        "is_top_level": true,
+        "variables": {}
+    },
+    "cordova-plugin-app-event": {
+        "source": {
+            "type": "registry",
+            "id": "cordova-plugin-app-event@1.2.0"
+        },
+        "is_top_level": true,
+        "variables": {}
+    },
+    "skwas-cordova-plugin-datetimepicker": {
+        "source": {
+            "type": "registry",
+            "id": "https://github.com/skwasjer/skwas-cordova-plugin-datetimepicker"
+        },
+        "is_top_level": true,
+        "variables": {}
+    },
+    "cordova-plugin-datepicker": {
+        "source": {
+            "type": "registry",
+            "id": "cordova-plugin-datepicker@0.9.2"
+        },
+        "is_top_level": true,
+        "variables": {}
+    },
+    "cordova-plugin-apprate": {
+        "source": {
+            "type": "registry",
+            "id": "cordova-plugin-apprate@^1.3.0"
+        },
+        "is_top_level": true,
+        "variables": {}
+    },
+    "cordova-plugin-inappbrowser": {
+        "source": {
+            "type": "registry",
+            "id": "cordova-plugin-inappbrowser@^1.7.1"
         },
         "is_top_level": true,
         "variables": {}
@@ -238,16 +253,7 @@
     "cordova-plugin-is-debug": {
         "source": {
             "type": "registry",
-            "id": "cordova-plugin-is-debug"
-        },
-        "is_top_level": true,
-        "variables": {}
-    },
-    "skwas-cordova-plugin-datetimepicker": {
-        "source": {
-            "type": "git",
-            "url": "https://github.com/skwasjer/skwas-cordova-plugin-datetimepicker.git",
-            "subdir": "."
+            "id": "cordova-plugin-is-debug@^1.0.0"
         },
         "is_top_level": true,
         "variables": {}

@@ -1,0 +1,93 @@
+{
+  "_args": [
+    [
+      {
+        "raw": "https://github.com/tomloprod/cordova-plugin-appminimize.git",
+        "scope": null,
+        "escapedName": null,
+        "name": null,
+        "rawSpec": "https://github.com/tomloprod/cordova-plugin-appminimize.git",
+        "spec": "git+https://github.com/tomloprod/cordova-plugin-appminimize.git",
+        "type": "hosted",
+        "hosted": {
+          "type": "github",
+          "ssh": "git@github.com:tomloprod/cordova-plugin-appminimize.git",
+          "sshUrl": "git+ssh://git@github.com/tomloprod/cordova-plugin-appminimize.git",
+          "httpsUrl": "git+https://github.com/tomloprod/cordova-plugin-appminimize.git",
+          "gitUrl": "git://github.com/tomloprod/cordova-plugin-appminimize.git",
+          "shortcut": "github:tomloprod/cordova-plugin-appminimize",
+          "directUrl": "https://raw.githubusercontent.com/tomloprod/cordova-plugin-appminimize/master/package.json"
+        }
+      },
+      "C:\\dev\\AlgoToDo\\AlgoToDo\\node_modules"
+    ]
+  ],
+  "_from": "git+https://github.com/tomloprod/cordova-plugin-appminimize.git",
+  "_id": "cordova-plugin-appminimize@1.0.0",
+  "_inCache": true,
+  "_location": "/cordova-plugin-appminimize",
+  "_phantomChildren": {},
+  "_requested": {
+    "raw": "https://github.com/tomloprod/cordova-plugin-appminimize.git",
+    "scope": null,
+    "escapedName": null,
+    "name": null,
+    "rawSpec": "https://github.com/tomloprod/cordova-plugin-appminimize.git",
+    "spec": "git+https://github.com/tomloprod/cordova-plugin-appminimize.git",
+    "type": "hosted",
+    "hosted": {
+      "type": "github",
+      "ssh": "git@github.com:tomloprod/cordova-plugin-appminimize.git",
+      "sshUrl": "git+ssh://git@github.com/tomloprod/cordova-plugin-appminimize.git",
+      "httpsUrl": "git+https://github.com/tomloprod/cordova-plugin-appminimize.git",
+      "gitUrl": "git://github.com/tomloprod/cordova-plugin-appminimize.git",
+      "shortcut": "github:tomloprod/cordova-plugin-appminimize",
+      "directUrl": "https://raw.githubusercontent.com/tomloprod/cordova-plugin-appminimize/master/package.json"
+    }
+  },
+  "_requiredBy": [
+    "#USER",
+    "/"
+  ],
+  "_resolved": "git+https://github.com/tomloprod/cordova-plugin-appminimize.git#0d4d05aa337ffedb2aebe95a6b4d6969026863ab",
+  "_shasum": "f546a813799f54450cff5713a96f3a406c4f5e68",
+  "_shrinkwrap": null,
+  "_spec": "https://github.com/tomloprod/cordova-plugin-appminimize.git",
+  "_where": "C:\\dev\\AlgoToDo\\AlgoToDo\\node_modules",
+  "author": {
+    "name": "tomloprod"
+  },
+  "bugs": {
+    "url": "https://github.com/tomloprod/cordova-plugin-appminimize/issues"
+  },
+  "cordova": {
+    "id": "cordova-plugin-appminimize",
+    "platforms": [
+      "android"
+    ]
+  },
+  "dependencies": {},
+  "description": "This is a cordova plugin to minimizes the application in android devices.",
+  "devDependencies": {},
+  "gitHead": "0d4d05aa337ffedb2aebe95a6b4d6969026863ab",
+  "homepage": "https://github.com/tomloprod/cordova-plugin-appminimize#readme",
+  "keywords": [
+    "cordova",
+    "ionic",
+    "minimize",
+    "android"
+  ],
+  "license": "MIT",
+  "name": "cordova-plugin-appminimize",
+  "optionalDependencies": {},
+  "readme": "# cordova-plugin-appminimize [![License](https://img.shields.io/github/license/tomloprod/cordova-plugin-appminimize.svg)](http://www.opensource.org/licenses/mit-license.php)\r\n\r\n**AppMinimize** is a cordova plugin to minimize the application in android devices\r\n\r\n## Supported Platforms\r\n\r\n- Android\r\n\r\n## Installation\r\n\r\nCordova:\r\n\r\n    cordova plugin add cordova-plugin-appminimize\r\n\r\n## Usage\r\n\r\nThis plugin exports an object with one method called \"minimize\":\r\n\r\n```javascript\r\nwindow.plugins.appMinimize.minimize();\r\n```\r\n\r\n## Ionic Example\r\n\r\nIn this example the application is minimized by pressing the back button\r\n\r\n```javascript\r\n$ionicPlatform.registerBackButtonAction(function (event) {\r\n    event.preventDefault();\r\n    window.plugins.appMinimize.minimize();\r\n}, 100);\r\n```\r\n\r\n\r\n## Ionic Example\r\n\r\nIn this example the application is minimized by pressing the back button\r\n\r\n```bash\r\nionic cordova plugin add cordova-plugin-appminimize\r\nnpm install --save @ionic-native/app-minimize\r\n```\r\n\r\n```typescript\r\nimport { AppMinimize } from '@ionic-native/app-minimize';\r\n\r\n...\r\n\r\nconstructor(private appMinimize: AppMinimize) { }\r\n\r\n...\r\n\r\nthis.platform.registerBackButtonAction(() => {\r\n    this.appMinimize.minimize();\r\n});\r\n```\r\n",
+  "readmeFilename": "README.MD",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tomloprod/cordova-plugin-appminimize.git"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "version": "1.0.0"
+}

@@ -1,7 +1,57 @@
 {
-  "name": "cordova-plugin-globalization",
-  "version": "1.0.5",
-  "description": "Cordova Globalization Plugin",
+  "_args": [
+    [
+      {
+        "raw": "cordova-plugin-globalization",
+        "scope": null,
+        "escapedName": "cordova-plugin-globalization",
+        "name": "cordova-plugin-globalization",
+        "rawSpec": "",
+        "spec": "latest",
+        "type": "tag"
+      },
+      "C:\\dev\\AlgoToDo\\AlgoToDo\\node_modules"
+    ]
+  ],
+  "_from": "cordova-plugin-globalization@latest",
+  "_id": "cordova-plugin-globalization@1.0.7",
+  "_inCache": true,
+  "_location": "/cordova-plugin-globalization",
+  "_nodeVersion": "6.10.1",
+  "_npmOperationalInternal": {
+    "host": "packages-12-west.internal.npmjs.com",
+    "tmp": "tmp/cordova-plugin-globalization-1.0.7.tgz_1493685642490_0.06781368516385555"
+  },
+  "_npmUser": {
+    "name": "filmaj",
+    "email": "maj.fil@gmail.com"
+  },
+  "_npmVersion": "3.10.10",
+  "_phantomChildren": {},
+  "_requested": {
+    "raw": "cordova-plugin-globalization",
+    "scope": null,
+    "escapedName": "cordova-plugin-globalization",
+    "name": "cordova-plugin-globalization",
+    "rawSpec": "",
+    "spec": "latest",
+    "type": "tag"
+  },
+  "_requiredBy": [
+    "#USER",
+    "/"
+  ],
+  "_resolved": "https://registry.npmjs.org/cordova-plugin-globalization/-/cordova-plugin-globalization-1.0.7.tgz",
+  "_shasum": "b9941848fb5eb5dcd633e6971118fad638f648cf",
+  "_shrinkwrap": null,
+  "_spec": "cordova-plugin-globalization",
+  "_where": "C:\\dev\\AlgoToDo\\AlgoToDo\\node_modules",
+  "author": {
+    "name": "Apache Software Foundation"
+  },
+  "bugs": {
+    "url": "https://github.com/apache/cordova-plugin-globalization/issues"
+  },
   "cordova": {
     "id": "cordova-plugin-globalization",
     "platforms": [
@@ -17,10 +67,24 @@
       "blackberry10"
     ]
   },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/apache/cordova-plugin-globalization"
+  "dependencies": {},
+  "description": "Cordova Globalization Plugin",
+  "devDependencies": {
+    "jshint": "^2.6.0"
   },
+  "directories": {},
+  "dist": {
+    "shasum": "b9941848fb5eb5dcd633e6971118fad638f648cf",
+    "tarball": "https://registry.npmjs.org/cordova-plugin-globalization/-/cordova-plugin-globalization-1.0.7.tgz"
+  },
+  "engines": {
+    "cordovaDependencies": {
+      "2.0.0": {
+        "cordova": ">100"
+      }
+    }
+  },
+  "homepage": "https://github.com/apache/cordova-plugin-globalization#readme",
   "keywords": [
     "cordova",
     "globalization",
@@ -36,20 +100,44 @@
     "cordova-tizen",
     "cordova-blackberry10"
   ],
-  "scripts": {
-    "test": "npm run jshint",
-    "jshint": "jshint www && jshint src && jshint tests"
-  },
-  "author": "Apache Software Foundation",
   "license": "Apache-2.0",
-  "engines": {
-    "cordovaDependencies": {
-      "2.0.0": {
-        "cordova": ">100"
-      }
+  "maintainers": [
+    {
+      "name": "bowserj",
+      "email": "bowserj@apache.org"
+    },
+    {
+      "name": "csantanapr",
+      "email": "csantana23@gmail.com"
+    },
+    {
+      "name": "filmaj",
+      "email": "maj.fil@gmail.com"
+    },
+    {
+      "name": "purplecabbage",
+      "email": "purplecabbage@gmail.com"
+    },
+    {
+      "name": "shazron",
+      "email": "shazron@gmail.com"
+    },
+    {
+      "name": "stevegill",
+      "email": "stevengill97@gmail.com"
     }
+  ],
+  "name": "cordova-plugin-globalization",
+  "optionalDependencies": {},
+  "readme": "ERROR: No README data found!",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/apache/cordova-plugin-globalization.git"
   },
-  "devDependencies": {
-    "jshint": "^2.6.0"
-  }
+  "scripts": {
+    "jshint": "jshint www && jshint src && jshint tests",
+    "test": "npm run jshint"
+  },
+  "types": "./types/index.d.ts",
+  "version": "1.0.7"
 }

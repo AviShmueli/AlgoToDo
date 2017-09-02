@@ -1,7 +1,65 @@
 {
-  "name": "cordova-sms-plugin",
-  "version": "0.1.11",
-  "description": "Cross-platform plugin for Cordova / PhoneGap to to easily send SMS. Available for Android, iOS and WP.",
+  "_args": [
+    [
+      {
+        "raw": "https://github.com/cordova-sms/cordova-sms-plugin.git",
+        "scope": null,
+        "escapedName": null,
+        "name": null,
+        "rawSpec": "https://github.com/cordova-sms/cordova-sms-plugin.git",
+        "spec": "git+https://github.com/cordova-sms/cordova-sms-plugin.git",
+        "type": "hosted",
+        "hosted": {
+          "type": "github",
+          "ssh": "git@github.com:cordova-sms/cordova-sms-plugin.git",
+          "sshUrl": "git+ssh://git@github.com/cordova-sms/cordova-sms-plugin.git",
+          "httpsUrl": "git+https://github.com/cordova-sms/cordova-sms-plugin.git",
+          "gitUrl": "git://github.com/cordova-sms/cordova-sms-plugin.git",
+          "shortcut": "github:cordova-sms/cordova-sms-plugin",
+          "directUrl": "https://raw.githubusercontent.com/cordova-sms/cordova-sms-plugin/master/package.json"
+        }
+      },
+      "C:\\dev\\AlgoToDo\\AlgoToDo\\node_modules"
+    ]
+  ],
+  "_from": "git+https://github.com/cordova-sms/cordova-sms-plugin.git",
+  "_id": "cordova-sms-plugin@0.1.11",
+  "_inCache": true,
+  "_location": "/cordova-sms-plugin",
+  "_phantomChildren": {},
+  "_requested": {
+    "raw": "https://github.com/cordova-sms/cordova-sms-plugin.git",
+    "scope": null,
+    "escapedName": null,
+    "name": null,
+    "rawSpec": "https://github.com/cordova-sms/cordova-sms-plugin.git",
+    "spec": "git+https://github.com/cordova-sms/cordova-sms-plugin.git",
+    "type": "hosted",
+    "hosted": {
+      "type": "github",
+      "ssh": "git@github.com:cordova-sms/cordova-sms-plugin.git",
+      "sshUrl": "git+ssh://git@github.com/cordova-sms/cordova-sms-plugin.git",
+      "httpsUrl": "git+https://github.com/cordova-sms/cordova-sms-plugin.git",
+      "gitUrl": "git://github.com/cordova-sms/cordova-sms-plugin.git",
+      "shortcut": "github:cordova-sms/cordova-sms-plugin",
+      "directUrl": "https://raw.githubusercontent.com/cordova-sms/cordova-sms-plugin/master/package.json"
+    }
+  },
+  "_requiredBy": [
+    "#USER",
+    "/"
+  ],
+  "_resolved": "git+https://github.com/cordova-sms/cordova-sms-plugin.git#81110db56e933d2246f740af84eca29c60ffdc79",
+  "_shasum": "2ab9ea8c65a35cc506a05739da2c08610c68faee",
+  "_shrinkwrap": null,
+  "_spec": "https://github.com/cordova-sms/cordova-sms-plugin.git",
+  "_where": "C:\\dev\\AlgoToDo\\AlgoToDo\\node_modules",
+  "author": {
+    "name": "Didier Baquier"
+  },
+  "bugs": {
+    "url": "https://github.com/cordova-sms/cordova-sms-plugin/issues"
+  },
   "cordova": {
     "id": "cordova-sms-plugin",
     "platforms": [
@@ -11,10 +69,17 @@
       "windows"
     ]
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/cordova-sms/cordova-sms-plugin.git"
-  },
+  "dependencies": {},
+  "description": "Cross-platform plugin for Cordova / PhoneGap to to easily send SMS. Available for Android, iOS and WP.",
+  "devDependencies": {},
+  "engines": [
+    {
+      "name": "cordova",
+      "version": ">=3.0.0"
+    }
+  ],
+  "gitHead": "81110db56e933d2246f740af84eca29c60ffdc79",
+  "homepage": "https://github.com/cordova-sms/cordova-sms-plugin#readme",
   "keywords": [
     "cordova",
     "phonegap",
@@ -25,16 +90,14 @@
     "cordova-ios",
     "cordova-windows"
   ],
-  "engines": [
-    {
-      "name": "cordova",
-      "version": ">=3.0.0"
-    }
-  ],
-  "author": "Didier Baquier",
   "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/cordova-sms/cordova-sms-plugin/issues"
+  "name": "cordova-sms-plugin",
+  "optionalDependencies": {},
+  "readme": "# Cordova SMS Plugin\r\n\r\nCross-platform plugin for Cordova / PhoneGap to to easily send SMS. Available for **Android**, **iOS**, **Windows Phone 8** and **Windows 10 Universal (BETA)**.\r\n\r\n## Installing the plugin\r\n\r\nUsing the Cordova CLI and NPM, run:\r\n\r\n    cordova plugin add cordova-sms-plugin\r\n\r\nIt is also possible to install via repo url directly (unstable), run :\r\n\r\n    cordova plugin add https://github.com/cordova-sms/cordova-sms-plugin.git\r\n\r\n## Using the plugin\r\nHTML\r\n\r\n    <input id=\"numberTxt\" placeholder=\"Enter mobile number\" value=\"\" type=\"tel\" />\r\n    <textarea id=\"messageTxt\" placeholder=\"Enter message\"></textarea>\r\n    <input type=\"button\" onclick=\"app.sendSms()\" value=\"Send SMS\" />\r\n\r\nJavascript\r\n\r\n    var app = {\r\n        sendSms: function() {\r\n            var number = document.getElementById('numberTxt').value;\r\n            var message = document.getElementById('messageTxt').value;\r\n            console.log(\"number=\" + number + \", message= \" + message);\r\n  \r\n            //CONFIGURATION\r\n            var options = {\r\n                replaceLineBreaks: false, // true to replace \\n by a new line, false by default\r\n                android: {\r\n                    intent: 'INTENT'  // send SMS with the native android SMS messaging\r\n                    //intent: '' // send SMS without open any other app\r\n                }\r\n            };\r\n\r\n            var success = function () { alert('Message sent successfully'); };\r\n            var error = function (e) { alert('Message Failed:' + e); };\r\n            sms.send(number, message, options, success, error);\r\n        }\r\n    };\r\n\r\nOn Android, an extra function is exposed to know whether or not you have the permission to send a SMS (Android Marshmallow permission).\r\n\r\n    var app = {\r\n        checkSMSPermission: function() {\r\n            var success = function (hasPermission) { \r\n                if (hasPermission) {\r\n                    sms.send(...);\r\n                }\r\n                else {\r\n                    // show a helpful message to explain why you need to require the permission to send a SMS\r\n                    // read http://developer.android.com/training/permissions/requesting.html#explain for more best practices\r\n                }\r\n            };\r\n            var error = function (e) { alert('Something went wrong:' + e); };\r\n            sms.hasPermission(success, error);\r\n        }\r\n    };\r\n\r\n## FAQ\r\n#### `sms` is undefined\r\n\r\nPlease go through all the [closed issues about this subject](https://github.com/cordova-sms/cordova-sms-plugin/issues?q=is%3Aissue+is%3Aclosed+sms+label%3A%22sms+undefined%22). The issue is mostly coming from the way you installed the plugin, please double check everything before opening another issue.\r\n\r\n#### When building my project for android I get the following error: `cannot find symbol: cordova.hasPermission(string)`\r\n\r\nYou need to update `cordova-android` to the latest version (recommended), or at least to the version 5.1.1.\r\n\r\n`cordova platform update android` or `cordova platform update android@5.1.1` \r\n\r\n#### Is the plugin available on [Adobe PhoneGap Build](https://build.phonegap.com)?\r\n\r\nYes, the plugin is available, please see instructions here: http://docs.phonegap.com/phonegap-build/configuring/plugins/. Use the npm or github source.\r\n\r\n#### How can I receive SMS?\r\n\r\nYou can't receive SMS via this plugin. This plugin only sends SMS.\r\n\r\n#### Android immediately passes success back to app? \r\n\r\nPlease read [#issue 26](https://github.com/cordova-sms/cordova-sms-plugin/issues/26)\r\n\r\n#### I get this error. What's wrong?\r\n\r\n    compile:\r\n        [javac] Compiling 4 source files to /Users/username/MyProject/platforms/android/bin/classes\r\n        [javac] /Users/username/MyProject/platforms/android/src/org/apache/cordova/plugin/sms/Sms.java:15: cannot find symbol\r\n        [javac] symbol  : class Telephony\r\n        [javac] location: package android.provider\r\n        [javac] import android.provider.Telephony;\r\n        [javac]                        ^\r\n        [javac] /Users/username/MyProject/platforms/android/src/org/apache/cordova/plugin/sms/Sms.java:60: cannot find symbol\r\n        [javac] symbol  : variable KITKAT\r\n        [javac] location: class android.os.Build.VERSION_CODES\r\n        [javac]     if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {\r\n        [javac]                                                    ^\r\n        [javac] /Users/username/MyProject/platforms/android/src/org/apache/cordova/plugin/sms/Sms.java:61: package Telephony does not exist\r\n        [javac]       String defaultSmsPackageName = Telephony.Sms.getDefaultSmsPackage(this.cordova.getActivity());\r\n        [javac]                                               ^\r\n        [javac] 3 errors\r\n\r\n    BUILD FAILED\r\n\r\nThe problem is that you need to make sure that you set the target to android-19 or later in your ./platforms/android/project.properties file like this:\r\n\r\n    # Project target.\r\n    target=android-19\r\n\r\n\r\n##### How can I send an sms in my iOS app without passing control to the native app like it can be done on Android?\r\n\r\nThis isn't possible on iOS. It requires that you show the user the native sms composer, to be able to send an sms.\r\n\r\nContributing\r\n============\r\n\r\nI believe that everything is working, feel free to put in an issue or to fork and make pull requests if you want to add a new feature.\r\n\r\nThings you can fix:\r\n* Allow for null number to be passed in\r\n  Right now, it breaks when a null value is passed in for a number, but it works if it's a blank string, and allows the user to pick the number\r\n  It should automatically convert a  null value to an empty string\r\n\r\nThanks for considering contributing to this project.\r\n\r\n### Finding something to do\r\n\r\nAsk, or pick an issue and comment on it announcing your desire to work on it. Ideally wait until we assign it to you to minimize work duplication.\r\n\r\n### Reporting an issue\r\n\r\n- Search existing issues before raising a new one.\r\n\r\n- Include as much detail as possible.\r\n\r\n### Pull requests\r\n\r\n- Make it clear in the issue tracker what you are working on, so that someone else doesn't duplicate the work.\r\n\r\n- Use a feature branch, not master.\r\n\r\n- Rebase your feature branch onto origin/master before raising the PR.\r\n\r\n- Keep up to date with changes in master so your PR is easy to merge.\r\n\r\n- Be descriptive in your PR message: what is it for, why is it needed, etc.\r\n\r\n- Make sure the tests pass\r\n\r\n- Squash related commits as much as possible.\r\n\r\n### Coding style\r\n\r\n- Try to match the existing indent style.\r\n\r\n- Don't mix platform-specific stuff into the main code.\r\n\r\n\r\n\r\n\r\n## History\r\n\r\n-  The Android portion was forked from https://github.com/javatechig/phonegap-sms-plugin by @javatechig and then modified to upgrade it to phonegap 3.0.\r\n- The iOS portion was copied from https://github.com/phonegap/phonegap-plugins by Jesse MacFadyen and then modified slightly to work with this plugin and phonegap 3.x by @aharris88.\r\n- The Windows Phone 8 part was contributed by [fredrikeldh](https://github.com/fredrikeldh)\r\n- This repository is now maintained by @dbaq.\r\n\r\n## License\r\n\r\nThe MIT License (MIT)\r\n\r\nPermission is hereby granted, free of charge, to any person obtaining a copy of\r\nthis software and associated documentation files (the \"Software\"), to deal in\r\nthe Software without restriction, including without limitation the rights to\r\nuse, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of\r\nthe Software, and to permit persons to whom the Software is furnished to do so,\r\nsubject to the following conditions:\r\n\r\nThe above copyright notice and this permission notice shall be included in all\r\ncopies or substantial portions of the Software.\r\n\r\nTHE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR\r\nIMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS\r\nFOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR\r\nCOPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER\r\nIN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN\r\nCONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.\r\n",
+  "readmeFilename": "readme.md",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cordova-sms/cordova-sms-plugin.git"
   },
-  "homepage": "https://github.com/cordova-sms/cordova-sms-plugin#readme"
+  "version": "0.1.11"
 }

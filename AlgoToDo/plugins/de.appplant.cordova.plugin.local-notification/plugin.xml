@@ -80,7 +80,7 @@
     <!-- android -->
     <platform name="android">
 
-        <framework src="com.android.support:support-v4:+" value="gradle" />
+        <framework src="com.android.support:support-v4:25.+" value="gradle" />
 
         <config-file target="res/xml/config.xml" parent="/*">
             <feature name="LocalNotification">
@@ -101,7 +101,7 @@
             <activity
                 android:name="de.appplant.cordova.plugin.localnotification.ClickActivity"
                 android:launchMode="singleInstance"
-                android:theme="@android:style/Theme.NoDisplay"
+                android:theme="@android:style/Theme.Translucent"
                 android:exported="false" />
 
             <receiver
@@ -121,7 +121,7 @@
             <activity
                 android:name="de.appplant.cordova.plugin.notification.ClickActivity"
                 android:launchMode="singleInstance"
-                android:theme="@android:style/Theme.NoDisplay"
+                android:theme="@android:style/Theme.Translucent"
                 android:exported="false" />
 
         </config-file>
