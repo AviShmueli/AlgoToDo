@@ -42,33 +42,25 @@
                 </div>
             </div>
             <div layout-align="center center" class="login-text">
-                <h1>ברוכים הבאים ל- צ'ק נט</h1>
+                <h1>הזן את הקוד שנשלח ב sms</h1>
             </div>
             <div layout="row" layout-align="center center" class="padding-top-10">
                 <form name="signUpForm" layout="column" layout-align="center center" flex flex-gt-sm="50" flex-md="66">
                     <md-content class="md-no-momentum" layout-padding>
 
                         <md-input-container class="md-block">
-                            <md-icon ng-md-icon icon="phone"></md-icon>
-                            <input md-no-asterisk name="phone" ng-model="vm.userPhone" type="tel" ng-pattern="/^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/"
-                                placeholder="מספר טלפון" ng-required="true" class="login-phone" md-autofocus ng-keypress="vm.submitOnEnter($event)">
+                            <md-icon ng-md-icon icon="dialpad"></md-icon>
+                            <input md-no-asterisk name="phone" ng-model="vm.userPhone" type="number" 
+                                placeholder="קוד" ng-required="true" class="login-phone" md-autofocus ng-keypress="vm.submitOnEnter($event)">
                             <div ng-messages="signUpForm.phone.$error">
                                 <div ng-message="required">טלפון הוא שדה חובה</div>
                                 <div ng-message="pattern">נא להכניס מספר טלפון חוקי</div>
                             </div>
                         </md-input-container>
-                        <md-input-container>
-
-                            <md-checkbox md-no-asterisk ng-required="true" aria-label="acceptTerms">
-                                <span calss="font-size-x-small">
-                                    אני מסכים לתנאי השימוש המופיעים <a class="href-class">כאן</a>.
-                                </span>
-                            </md-checkbox>
-                        </md-input-container>
 
                         <section layout="row" layout-align="center center" layout-wrap>
                             <md-button class="md-raised md-primary circular-progress-button" ng-click="vm.signMeUp()" ng-disabled="signUpForm.$invalid">
-                                <span ng-show="!vm.inProgress">כניסה</span>
+                                <span ng-show="!vm.inProgress">אישור</span>
                                 <md-progress-circular md-mode="indeterminate" ng-show="vm.inProgress" md-diameter="20px" class="md-accent md-hue-2"></md-progress-circular>
                             </md-button>
                         </section>

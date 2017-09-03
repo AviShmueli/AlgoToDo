@@ -14,6 +14,7 @@ body {
     /*background-color:rgb(42, 114, 160);*/
     font-family: 'RobotoRegular', 'Droid Sans', 'Segoe UI', Segoe, 'San Francisco', 'Helvetica Neue', Helvetica, Arial, Geneva, sans-serif;
     font-size:12px;
+    height: -webkit-fill-available;
     background-size:cover
 }
 
@@ -93,7 +94,7 @@ h1 {
 
 
 .login-form .md-no-momentum {
-        opacity: 0.85 !important;
+     opacity: 0.85 !important;
     -webkit-font-smoothing: antialiased;
 }
 
@@ -109,7 +110,7 @@ h1 {
 }
 
 .login-img{
-    width: 230px;
+    width: 190px;
 }
 
 .login-text>h1,
@@ -129,4 +130,37 @@ h1 {
 
 .login-text>h3 {
     color: #dcad4a;
+}
+
+.padding-top-10 { padding-top: 10px; }
+.login-phone { width: 450px!important;max-width: 100%;}
+.circular-progress-button {
+    height: 36px;
+}
+
+.circular-progress-button>md-progress-circular {
+    margin: auto;
+    margin-top: 0; /* If circular does not appear at the center, change this value. */
+}
+
+.circular-progress-button>md-progress-circular .md-half-circle {
+    border-top-color: white !important;
+}
+
+.circular-progress-button>md-progress-circular .md-left>.md-half-circle {
+    border-left-color: white;
+}
+
+.circular-progress-button>md-progress-circular .md-right>.md-half-circle {
+    border-right-color: white;
+}
+.hight-auto{
+    height: auto;
+ }
+ .font-size-x-small{ font-size: x-small }
+ 
+.href-class{
+    color: blue;
+font-weight: 600;
+text-decoration: underline;
 }
