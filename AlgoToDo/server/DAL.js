@@ -78,6 +78,8 @@
 
     function insertNewTasks(tasks) {
 
+        // TODO: convert createTime to date object
+
         var d = deferred();
 
         getCollection('tasks').then(function (mongo) {
@@ -168,6 +170,8 @@
 
     function insertNewComment(taskId, comment) {
 
+        // TODO: convert createTime to date object
+
         var d = deferred();
 
         getCollection('tasks').then(function (mongo) {
@@ -206,6 +210,8 @@
     }
 
     function insertNewComments(comments) {
+
+        // TODO: convert createTime to date object
 
         var d = deferred();
 
@@ -269,6 +275,8 @@
 
     function updateTaskStatus(task) {
 
+        // TODO: convert createTime to date object
+
         var d = deferred();
 
         getCollection('tasks').then(function (mongo) {
@@ -307,6 +315,9 @@
     }
 
     function updateTasksStatus(tasks) {
+
+        // TODO: convert createTime to date object
+
         var d = deferred();
 
         getCollection('tasks').then(function (mongo) {
@@ -809,6 +820,8 @@
     }
 
     function insertNewRepeatsTasks(tasks) {
+
+        // TODO: convert createTime to date object
 
         var d = deferred();
 

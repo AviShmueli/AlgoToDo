@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html ng-app="app" class="hight-auto">
+<head>
+    <link rel="icon" href="./images/web_hi_res_512.png">
+    <!--
+        Customize the content security policy in the meta tag below as needed. Add 'unsafe-inline' to default-src to enable inline JavaScript.
+        For details, see http://go.microsoft.com/fwlink/?LinkID=617521
+    -->
+    <!--<meta http-equiv="Content-Security-Policy" content="default-src 'self' data: gap: https://ssl.gstatic.com 'unsafe-eval'; style-src 'self' 'unsafe-inline'; connect-src 'self' http://localhost:5001">-->
+
+    <meta name="format-detection" content="telephone=no">
+    <meta name="msapplication-tap-highlight" content="no">
+    <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width">
+
+    <meta content="./images/web_hi_res_512.png"
+          property="og:image">
+    <meta content="510" property="og:image:width">
+    <meta content="215" property="og:image:height">
+
+
+    <link href="./css/angular-material.min.css" rel="stylesheet" />
+    <link rel="stylesheet" type="text/css" href="./css/login.css">
+
+    <title>login</title>
+
+</head>
+<body layout="row">
+    
+    <script src="./js/angular.min.js"></script>
+    <script src="./js/angular-animate.min.js"></script>
+    <script src="./js/angular-material.min.js"></script>
+    <script src="./js/app.js"></script>
+
+<div layout="column" layout-padding="" dir="rtl" class="login-form" ng-cloak="">
+    <div>
+        <div layout-align="center center" layout="column">
+            <div layout-align="center center">
+                <img class="login-img" src="./images/web_hi_res_512.png" />
+            </div>
+        </div>
+        <div layout-align="center center" class="login-text">
+            <h1>ברוכים הבאים ל- Asiti</h1>
+        </div>
+        <div layout="row" layout-align="center center" class="padding-top-10">
+            <form name="signUpForm" layout="column" layout-align="center center" flex flex-gt-sm="50" flex-md="66">
+                <md-content class="md-no-momentum" layout-padding>
+
+                    <md-input-container class="md-block">
+                        <md-icon ng-md-icon icon="phone"></md-icon>
+                        <input md-no-asterisk name="phone" ng-model="vm.userPhone" type="tel"
+                               ng-pattern="/^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/"
+                               placeholder="מספר טלפון" ng-required="true"
+                               class="login-phone" md-autofocus ng-keypress="vm.submitOnEnter($event)">
+                        <div ng-messages="signUpForm.phone.$error">
+                            <div ng-message="required">טלפון הוא שדה חובה</div>
+                            <div ng-message="pattern">נא להכניס מספר טלפון חוקי</div>
+                        </div>
+                    </md-input-container>
+                    <section layout="row" layout-align="center center" layout-wrap>
+                        <md-button class="md-raised md-primary circular-progress-button" ng-click="vm.signMeUp()" ng-disabled="signUpForm.$invalid">
+                            <span ng-show="!vm.inProgress">כניסה</span>
+                            <md-progress-circular md-mode="indeterminate" ng-show="vm.inProgress" md-diameter="20px" class="md-accent md-hue-2"></md-progress-circular>
+                        </md-button>
+                    </section>
+                </md-content>
+
+
+
+                <h3>עוד לא רשום?</h3>
+                <section layout="row" layout-align="center center" layout-wrap>
+                    <md-button class="md-raised md-primary circular-progress-button" ng-click="vm.goToSignUp()">
+                        <span>הירשם עכשיו</span>
+                    </md-button>
+                </section>
+            </form>
+        </div>
+    </div>
+
+    <div ng-if="vm.showCube">
+        <div class='Cube panelLoad' id="Cube_loadder">
+            <div class='cube-face cube-face-front'>A</div>
+            <div class='cube-face cube-face-back'>✔</div>
+            <div class='cube-face cube-face-left'>s</div>
+            <div class='cube-face cube-face-right'>i</div>
+            <div class='cube-face cube-face-bottom'>t</div>
+            <div class='cube-face cube-face-top'>✔</div>
+        </div>
+
+        <div class="syncing-text" layout="row" layout-align="center center">
+            <div  ng-if="vm.loadingMode === 'syncing'"> מסנכרן את אנשי הקשר שלך ... </div>
+            <div  ng-if="vm.loadingMode === 'loading'"> טוען נתונים ... </div>
+        </div>
+
+    </div>
+</div>
+
+
+</body>
+</html>
