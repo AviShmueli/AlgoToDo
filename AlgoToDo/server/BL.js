@@ -532,6 +532,7 @@
             $ne: 'group-main'
         };
 
+        // doto: handel multi values
         if (filter['userId'] !== undefined) {
             var userId = filter['userId'];
             delete filter['userId'];
@@ -549,6 +550,7 @@
             var date = new Date(filter.fromDate).toDateString();
             var dayStart = Moment(date).tz('Asia/Jerusalem').add(offset, 'm').toDate();
             filter.createTime["$gt"] = dayStart;
+            delete filter.fromDate;
         }
 
         if (filter.hasOwnProperty('toDate')) {
@@ -556,6 +558,7 @@
             var date = new Date(filter.toDate).toDateString();
             var dayEnd = Moment(date).tz('Asia/Jerusalem').add(offset, 'm').toDate();
             filter.createTime["$lt"] = dayEnd;
+            delete filter.toDate;
         }
 
         var options = {
@@ -593,6 +596,7 @@
             var date = new Date(filter.fromDate).toDateString();
             var dayStart = Moment(date).tz('Asia/Jerusalem').add(offset, 'm').toDate();
             filter.createTime["$gt"] = dayStart;
+            delete filter.fromDate;
         }
 
         if (filter.hasOwnProperty('toDate')) {
@@ -600,6 +604,7 @@
             var date = new Date(filter.toDate).toDateString();
             var dayEnd = Moment(date).tz('Asia/Jerusalem').add(offset, 'm').toDate();
             filter.createTime["$lt"] = dayEnd;
+            delete filter.toDate;
         }
 
         DAL.getAllTasksCount(filter).then(function (result) {

@@ -37,23 +37,6 @@
                             <ng-md-icon id="expand_more_icon" icon="{{vm.expand_icon}}" options='{"rotation": "counterclock"}'></ng-md-icon>
                         </md-button>
                     </md-card-title>
-                    <!--<div layout-gt-xs="column" flex layout-padding ng-show="vm.showTasksFilter">
-                        <div layout-gt-xs="row" layout="column">
-
-
-
-                            <div layout-gt-xs="row" layout="column">
-
-
-
-                            </div>
-
-                            <div class="md-secondary md-block" flex layout="column" layout-align="end center">
-
-                            </div>
-                        </div>
-                    </div>-->
-
 
                     <div id="filterInputs" layout-gt-xs="row" flex layout-padding ng-show="vm.showTasksFilter">
                         <div layout-gt-xs="column" flex="90" layout="column">
@@ -68,14 +51,17 @@
                                     </md-select>
                                 </md-input-container>
 
-                                <md-input-container class="md-block" flex>
+                                <!--<md-input-container class="md-block" flex>
                                     <label>משתמש</label>
                                     <md-select md-no-asterisk ng-model="vm.tasksFilter.userId" name="user" ng-disabled="vm.users.length < 1">
                                         <md-option ng-repeat="(key, value) in vm.users" value="{{value._id}}" dir="rtl">
                                             {{value.name}}
                                         </md-option>
                                     </md-select>
-                                </md-input-container>
+                                </md-input-container>-->
+
+                                 <md-select-multi disabled="vm.users.length < 1" style="max-width: 25%;" flex="25" select-lable="'משתמש'" select-model="vm.tasksFilter.userId" select-values="vm.users"></md-select-multi>
+
 
                                 <md-input-container class="md-block" flex>
                                     <label>חיפוש</label>
@@ -114,7 +100,7 @@
                         </div>
 
                         <div class="md-secondary md-block" flex="10" layout="column" layout-align="center center">
-                            <md-button ng-click="vm.getTasks()" class="md-warn md-raised md-hue-1">סנן</md-button>
+                            <md-button ng-click="vm.getTasks(true)" class="md-warn md-raised md-hue-1">סנן</md-button>
                             <md-button aria-label="download" ng-click="vm.downloadFilterdTable()" class=" md-raised ">
                                 <md-icon ng-hide="vm.downloading" style="width:22px;height:22px;" md-svg-src="/images/Exel_download.svg">
                                 </md-icon>
