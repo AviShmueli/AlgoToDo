@@ -35,12 +35,17 @@
                 DAL.getTasksInProgress(user).then(function (response) {
 
                     //setTaskList(response.data);
-                    updateLocalTasks(response.data, isFromInterval);
+                    if (response.data && response.data.length > 0) {
+                        updateLocalTasks(response.data, isFromInterval);
+                    }
+                    
 
 
                     DAL.getDoneTasks(0, user).then(function (_response) {
                         //pushTasksToTasksList(_response.data);
-                        updateLocalTasks(_response.data, isFromInterval);
+                        if (_response.data && _response.data.length > 0) {
+                            updateLocalTasks(_response.data, isFromInterval);
+                        }
                         setMyTaskCount();
                         deferred.resolve();
                     });
@@ -154,9 +159,12 @@
 
         var setMyTaskCount = function () {
             var userId = self.$storage.user._id;
-            var count = $filter('myTasks')(getTaskList(), userId).length;
-            $rootScope.taskcount = count;
-
+            var tasks = getTaskList();
+            var count = 0;
+            if (tasks && tasks.length > 0) {
+                count = $filter('myTasks')(getTaskList(), userId).length;
+                $rootScope.taskcount = count;
+            }
             return count;
         };
 

@@ -337,8 +337,8 @@
             'phone': user.phone
         };
 
-        DAL.checkIfUserExist(query).then(function (user) {
-            if (user === null) {
+        DAL.checkIfUserExist(query).then(function (existUser) {
+            if (existUser === null) {
                 DAL.registerUser(user).then(function (result) {
                     var newUser = result.ops[0];
 
@@ -356,8 +356,7 @@
                 });
             } else {
                 d.resolve({
-                    message: "user alredy exist",
-                    error: "user alredy exist"
+                    message: "user alredy exist"
                 });
             }
         }, function (error) {
