@@ -72,7 +72,11 @@
             };
         }, 0);
 
-        vm.getTasks = function () {
+        vm.getTasks = function (reset) {
+
+            if (reset) {
+                vm.query.page = 1;
+            }
 
             vm.query.order = 'createTime';
 
@@ -92,7 +96,7 @@
                         vm.tasksFilter[property].indexOf('$in') !== -1) {
                         vm.tasksFilter[property] = JSON.parse(vm.tasksFilter[property]);
                     }
-                    if (vm.tasksFilter[property] === '') {
+                    if (vm.tasksFilter[property] === '' || vm.tasksFilter[property].length < 1) {
                         delete vm.tasksFilter[property];
                     }                   
                 }

@@ -79,6 +79,9 @@
     function insertNewTasks(tasks) {
 
         // TODO: convert createTime to date object
+        tasks.forEach(function(task) {
+            task.createTime = new Date(task.createTime);
+        }, this);
 
         var d = deferred();
 
@@ -933,6 +936,8 @@
 
     function updateRepeatsTasks(tasks) {
 
+        // TODO: convert createTime to date object
+
         var d = deferred();
 
         getCollection('repeats-tasks').then(function (mongo) {
@@ -1217,7 +1222,6 @@
 
         return d.promise;
     }
-
 
     function addUsersToCliqa(cliqa, users) {
 
