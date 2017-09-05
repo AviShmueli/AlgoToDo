@@ -42,14 +42,17 @@
                         <div layout-gt-xs="column" flex="90" layout="column">
                             <div layout-gt-xs="row" layout="column">
 
-                                <md-input-container class="md-block" flex>
+                                <!--<md-input-container class="md-block" flex>
                                     <label>קליקה</label>
                                     <md-select md-no-asterisk ng-model="vm.tasksFilter.cliqaId" name="cliqa" ng-change="vm.cliqaChanged()">
                                         <md-option ng-repeat="(key, value) in vm.allCliqot" value="{{value._id}}" dir="rtl">
                                             {{value.name}}
                                         </md-option>
                                     </md-select>
-                                </md-input-container>
+                                </md-input-container>-->
+
+                                <md-select-multi style="max-width: 25%;" flex="25" select-lable="'קליקה'" select-model="vm.tasksFilter.cliqaId" select-values="vm.allCliqotValues"></md-select-multi>
+
 
                                 <!--<md-input-container class="md-block" flex>
                                     <label>משתמש</label>

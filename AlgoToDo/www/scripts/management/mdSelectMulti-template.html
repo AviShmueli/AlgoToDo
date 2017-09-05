@@ -14,7 +14,7 @@
                 <span flex="20"></span>
             </div>
         </md-select-header>
-        <md-option ng-repeat="(key, value) in vm.selectValues | filter: vm.searchTerm" value="{{value.id || value.name}}" dir="rtl">
+        <md-option ng-repeat="(key, value) in vm.selectValues | filter: vm.searchTerm" value="{{value.id || value._id || value.name}}" dir="rtl">
             {{value.name}}
         </md-option>
     </md-select>

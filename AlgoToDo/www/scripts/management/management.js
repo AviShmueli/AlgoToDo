@@ -43,37 +43,39 @@
 
         var userCliqotIds = [];
 
-        vm.cliqaChanged = function () {
-            delete vm.tasksFilter.userId;
-            if (vm.tasksFilter.cliqaId.indexOf('$in') !== -1) {
-                vm.users = [];
-            }
-            DAL.getUsersInCliqa(vm.tasksFilter.cliqaId).then(function (users) {
-                vm.users = users.data;
-            });
-        }
 
-        $timeout(function () {
-            vm.allCliqot['all'] = {
-                name: 'כל הקליקות',
-                '_id': {
-                    $in: userCliqotIds
-                }
-            };
+        $scope.$watch('vm.tasksFilter.cliqaId', function (cliqot) {
+            if(cliqot){
+                delete vm.tasksFilter.userId;
+                // if (vm.tasksFilter.cliqaId.indexOf('$in') !== -1) {
+                //     vm.users = [];
+                // }
+                DAL.getUsersInCliqa(cliqot).then(function (users) {
+                    vm.users = users.data;
+                });
+            }
+        });
+
+        //$timeout(function () {
+            
+            // vm.allCliqot['all'] = {
+            //     name: 'כל הקליקות',
+            //     '_id': {
+            //         $in: userCliqotIds
+            //     }
+            // };
             for (var i = 0; i < vm.user.cliqot.length; i++) {
                 vm.allCliqot[vm.user.cliqot[i]._id] = vm.user.cliqot[i];
                 userCliqotIds.push(vm.user.cliqot[i]._id);
             }
             // { "$exists" : false } - to get the task that dont contains cliqaId filed
-
+            vm.allCliqotValues = Object.values(vm.allCliqot);
             // always filer the table according to admin's cliqot!
-            vm.tasksFilter.cliqaId = {
-                $in: userCliqotIds
-            };
-        }, 0);
+            vm.tasksFilter.cliqaId = userCliqotIds;
+        //}, 0);
 
         vm.getTasks = function (reset) {
-
+            
             if (reset) {
                 vm.query.page = 1;
             }

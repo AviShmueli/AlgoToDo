@@ -30,7 +30,7 @@
                 if (!vm.selectModel) {
                     vm.selectModel = [];
                 }
-                vm.selectModel.push(element.id || element.name);
+                vm.selectModel.push(element.id || element._id  ||  element.name);
             }, this);
 
         }

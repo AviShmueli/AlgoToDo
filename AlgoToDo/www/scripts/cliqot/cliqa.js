@@ -26,7 +26,7 @@
 
         angular.element(document.querySelectorAll('html')).removeClass("hight-auto");
         vm.loadingContacts = true;
-        DAL.getUsersInCliqa(cliqaId).then(function (response) {
+        DAL.getUsersInCliqa([cliqaId]).then(function (response) {
             vm.loadingContacts = false;
             vm.contactsList = response.data;
             for (var i = 0; i < vm.contactsList.length; i++) {

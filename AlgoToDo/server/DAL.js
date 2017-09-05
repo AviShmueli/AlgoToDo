@@ -1184,14 +1184,19 @@
         return d.promise;
     }
 
-    function getUsersInCliqa(cliqaId) {
+    function getUsersInCliqa(cliqot) {
 
         var d = deferred();
+
+        cliqot.forEach(function(cliqaId) {
+            cliqaId = new ObjectID(cliqaId);
+        }, this);
+
 
         getCollection('users').then(function (mongo) {
 
             mongo.collection.find({
-                'cliqot._id': new ObjectID(cliqaId),
+                'cliqot._id': {$in : cliqot},
                 cliqot: {
                     $exists: true
                 }
