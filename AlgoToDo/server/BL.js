@@ -356,7 +356,7 @@
                 });
             } else {
                 d.resolve({
-                    message: "user alredy exist"
+                    error: "user alredy exist"
                 });
             }
         }, function (error) {

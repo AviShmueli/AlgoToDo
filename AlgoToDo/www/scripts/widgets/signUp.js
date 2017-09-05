@@ -68,7 +68,7 @@
 
             document.addEventListener("deviceready", function () {
 
-                vm.user.device = device.getDeviceDetails();
+               vm.user.device = device.getDeviceDetails();
                 datacontext.setDeviceDetailes(vm.user.device, cordova.file.applicationDirectory);
 
                 registerUserForPushService().then(function (registrationId) {
