@@ -1,11 +1,22 @@
 {
   "android": {
     "release": {
-      "keystore": "c:\\my-release-key.keystore",
+      "keystore": "c:/dev/algotodo/asiti-release-key.keystore",
       "storePassword": "avi3011algo",
-      "alias": "johnS",
+      "alias": "asiti-key",
       "password": "avi3011algo",
       "keystoreType": ""
+    }
+  },
+  "ios": {
+    "debug": {
+      "developmentTeam": "TYMZRJ5DHP"
+    },
+
+    "release": {
+      "developmentTeam": "TYMZRJ5DHP",
+      "codeSignIdentity": "iPhone Developer",
+      "packageType": "ad-hoc"
     }
   }
 }
