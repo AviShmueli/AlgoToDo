@@ -7,7 +7,13 @@
         "files": {}
     },
     "installed_plugins": {
-        "cordova-plugin-app-version": {
+        "com.avishmueli.webintent": {
+            "PACKAGE_NAME": "com.algotodo.app"
+        },
+        "cordova-plugin-app-event": {
+            "PACKAGE_NAME": "com.algotodo.app"
+        },
+        "cordova-plugin-apprate": {
             "PACKAGE_NAME": "com.algotodo.app"
         },
         "cordova-plugin-badge": {
@@ -21,90 +27,89 @@
         "cordova-plugin-compat": {
             "PACKAGE_NAME": "com.algotodo.app"
         },
-        "cordova-plugin-device": {
-            "PACKAGE_NAME": "com.algotodo.app"
-        },
-        "cordova-plugin-file": {
-            "PACKAGE_NAME": "com.algotodo.app"
-        },
-        "cordova-plugin-screensize": {
+        "cordova-plugin-contacts": {
+            "CONTACTS_USAGE_DESCRIPTION": " ",
             "PACKAGE_NAME": "com.algotodo.app"
         },
         "cordova-plugin-datepicker": {
             "PACKAGE_NAME": "com.algotodo.app"
         },
-        "cordova-sms-plugin": {
+        "cordova-plugin-device": {
             "PACKAGE_NAME": "com.algotodo.app"
         },
-        "cordova-plugin-apprate": {
+        "cordova-plugin-dialogs": {
+            "PACKAGE_NAME": "com.algotodo.app"
+        },
+        "cordova-plugin-file": {
+            "PACKAGE_NAME": "com.algotodo.app"
+        },
+        "cordova-plugin-file-transfer": {
+            "PACKAGE_NAME": "com.algotodo.app"
+        },
+        "cordova-plugin-filepath": {
+            "PACKAGE_NAME": "com.algotodo.app"
+        },
+        "cordova-plugin-globalization": {
+            "PACKAGE_NAME": "com.algotodo.app"
+        },
+        "cordova-plugin-inappbrowser": {
+            "PACKAGE_NAME": "com.algotodo.app"
+        },
+        "cordova-plugin-is-debug": {
+            "PACKAGE_NAME": "com.algotodo.app"
+        },
+        "cordova-plugin-network-information": {
+            "PACKAGE_NAME": "com.algotodo.app"
+        },
+        "cordova-plugin-screensize": {
+            "PACKAGE_NAME": "com.algotodo.app"
+        },
+        "cordova-plugin-statusbar": {
+            "PACKAGE_NAME": "com.algotodo.app"
+        },
+        "cordova-plugin-vibration": {
             "PACKAGE_NAME": "com.algotodo.app"
         },
         "cordova-plugin-whitelist": {
+            "PACKAGE_NAME": "com.algotodo.app"
+        },
+        "cordova-plugin-x-toast": {
+            "PACKAGE_NAME": "com.algotodo.app"
+        },
+        "es6-promise-plugin": {
             "PACKAGE_NAME": "com.algotodo.app"
         },
         "phonegap-plugin-push": {
             "SENDER_ID": "874351794059",
             "PACKAGE_NAME": "com.algotodo.app"
         },
-        "de.appplant.cordova.plugin.local-notification": {
-            "PACKAGE_NAME": "com.algotodo.app"
-        },
-        "com.avishmueli.webintent": {
-            "PACKAGE_NAME": "com.algotodo.app"
-        },
-        "cordova-plugin-appminimize": {
-            "PACKAGE_NAME": "com.algotodo.app"
-        },
-        "cordova-plugin-filepath": {
+        "com.telerik.plugins.nativepagetransitions": {
             "PACKAGE_NAME": "com.algotodo.app"
         },
         "cordova-plugin-actionsheet": {
             "PACKAGE_NAME": "com.algotodo.app"
         },
-        "com.telerik.plugins.nativepagetransitions": {
+        "cordova-plugin-app-version": {
             "PACKAGE_NAME": "com.algotodo.app"
         },
-        "cordova-plugin-is-debug": {
+        "cordova-plugin-appminimize": {
+            "PACKAGE_NAME": "com.algotodo.app"
+        },
+        "cordova-sms-plugin": {
+            "PACKAGE_NAME": "com.algotodo.app"
+        },
+        "de.appplant.cordova.plugin.local-notification": {
             "PACKAGE_NAME": "com.algotodo.app"
         },
         "skwas-cordova-plugin-datetimepicker": {
             "PACKAGE_NAME": "com.algotodo.app"
         },
-        "cordova-plugin-contacts": {
-            "CONTACTS_USAGE_DESCRIPTION": " ",
-            "PACKAGE_NAME": "com.algotodo.app"
-        },
         "cordova-plugin-x-socialsharing": {
             "PACKAGE_NAME": "com.algotodo.app"
         },
-        "cordova-plugin-statusbar": {
-            "PACKAGE_NAME": "com.algotodo.app"
-        },
-        "cordova-plugin-file-transfer": {
-            "PACKAGE_NAME": "com.algotodo.app"
-        },
-        "cordova-plugin-network-information": {
-            "PACKAGE_NAME": "com.algotodo.app"
-        },
-        "cordova-plugin-vibration": {
-            "PACKAGE_NAME": "com.algotodo.app"
-        },
-        "cordova-plugin-x-toast": {
-            "PACKAGE_NAME": "com.algotodo.app"
-        },
-        "cordova-plugin-dialogs": {
-            "PACKAGE_NAME": "com.algotodo.app"
-        },
-        "cordova-plugin-app-event": {
+        "ionic-plugin-keyboard": {
             "PACKAGE_NAME": "com.algotodo.app"
         }
     },
-    "dependent_plugins": {
-        "cordova-plugin-globalization": {
-            "PACKAGE_NAME": "com.algotodo.app"
-        },
-        "es6-promise-plugin": {
-            "PACKAGE_NAME": "com.algotodo.app"
-        }
-    }
+    "dependent_plugins": {}
 }

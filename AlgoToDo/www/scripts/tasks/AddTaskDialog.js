@@ -45,12 +45,14 @@
             //     evt.preventDefault();
             // });
             element[0].focus();
-
+            device.openKeyBoard();
+            
         }, 1000);
 
         $scope.$watch('vm.selectedRecipients', function (newVal) {
             var input = angular.element(document.getElementsByClassName('new-task-text'));
             input.focus();
+            device.openKeyBoard();            
         }, true);
 
         vm.openContactPickerDialog = function (ev) {
@@ -81,6 +83,7 @@
 
                 var input = angular.element(document.getElementsByClassName('new-task-text'));
                 input.focus();
+                device.openKeyBoard();                
             });
         }
         //vm.openContactPickerDialog(null);

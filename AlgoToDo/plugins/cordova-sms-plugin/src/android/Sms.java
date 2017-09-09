@@ -38,13 +38,7 @@ public class Sms extends CordovaPlugin {
 		this.callbackContext = callbackContext;
 		this.args = args;
 		if (action.equals(ACTION_SEND_SMS)) {
-			boolean isIntent = false;
-			try {
-				isIntent = args.getString(2).equalsIgnoreCase("INTENT");
-			} catch (NullPointerException npe) {
-				// It might throw a NPE, but it doesn't matter.
-			}
-			if (isIntent || hasPermission()) {
+			if (hasPermission()) {
 				sendSMS();
 			} else {
 				requestPermission();

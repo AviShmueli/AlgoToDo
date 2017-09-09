@@ -723,7 +723,7 @@
     uiwebview = ((UIWebView*)self.webView);
   }
   if (href != nil && ![href isEqual:[NSNull null]]) {
-    if (![href hasPrefix:@"#"]) {
+    if (![href hasPrefix:@"#"] && [href rangeOfString:@".html"].location != NSNotFound) {
       // strip any params when looking for the file on the filesystem
       NSString *bareFileName = href;
       NSString *urlParams = nil;

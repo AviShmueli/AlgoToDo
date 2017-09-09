@@ -419,7 +419,7 @@ exports.getAllTriggered = function (callback, scope) {
 exports.hasPermission = function (callback, scope) {
     var fn = this.createCallbackFn(callback, scope);
 
-    if (device.platform != 'iOS' && device.platform != 'Android') {
+    if (device.platform != 'iOS') {
         fn(true);
         return;
     }

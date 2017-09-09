@@ -43,11 +43,9 @@ ActionSheet.prototype.show = function (options, successCallback, errorCallback) 
         }
 
         if (options.addCancelButtonWithLabel) {
-            if (options.addDestructiveButtonWithLabel)
-                this._addCancelButton(options.addCancelButtonWithLabel, actionSheetContainer, options.buttonLabels.length + 2);
-            else
-                this._addCancelButton(options.addCancelButtonWithLabel, actionSheetContainer, options.buttonLabels.length + 1);
+            this._addCancelButton(options.addCancelButtonWithLabel, actionSheetContainer);
         }
+
     }
 };
 
@@ -86,12 +84,13 @@ ActionSheet.prototype._addDestructiveButton = function (label, destination, posi
     destination.appendChild(btn);
 };
 
-ActionSheet.prototype._addCancelButton = function (label, destination, position) {
+ActionSheet.prototype._addCancelButton = function (label, destination) {
     var btn = document.createElement('button');
-    btn.setAttribute('value', position);
     btn.setAttribute('class', 'action-sheet-button action-sheet-cancel-button');
     btn.innerHTML = label;
-    btn.onclick = ActionSheet.prototype._onclick;
+    btn.onclick = function () {
+        ActionSheet.prototype.hide();
+    };
     destination.appendChild(btn);
 };
 

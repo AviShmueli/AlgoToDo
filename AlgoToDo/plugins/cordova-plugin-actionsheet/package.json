@@ -2,58 +2,50 @@
   "_args": [
     [
       {
-        "raw": "https://github.com/EddyVerbruggen/cordova-plugin-actionsheet.git",
+        "raw": "cordova-plugin-actionsheet",
         "scope": null,
-        "escapedName": null,
-        "name": null,
-        "rawSpec": "https://github.com/EddyVerbruggen/cordova-plugin-actionsheet.git",
-        "spec": "git+https://github.com/EddyVerbruggen/cordova-plugin-actionsheet.git",
-        "type": "hosted",
-        "hosted": {
-          "type": "github",
-          "ssh": "git@github.com:EddyVerbruggen/cordova-plugin-actionsheet.git",
-          "sshUrl": "git+ssh://git@github.com/EddyVerbruggen/cordova-plugin-actionsheet.git",
-          "httpsUrl": "git+https://github.com/EddyVerbruggen/cordova-plugin-actionsheet.git",
-          "gitUrl": "git://github.com/EddyVerbruggen/cordova-plugin-actionsheet.git",
-          "shortcut": "github:EddyVerbruggen/cordova-plugin-actionsheet",
-          "directUrl": "https://raw.githubusercontent.com/EddyVerbruggen/cordova-plugin-actionsheet/master/package.json"
-        }
+        "escapedName": "cordova-plugin-actionsheet",
+        "name": "cordova-plugin-actionsheet",
+        "rawSpec": "",
+        "spec": "latest",
+        "type": "tag"
       },
-      "C:\\dev\\AlgoToDo\\AlgoToDo\\node_modules"
+      "/Users/moshehoftman/Documents/AlgoToDo/AlgoToDo/node_modules"
     ]
   ],
-  "_from": "git+https://github.com/EddyVerbruggen/cordova-plugin-actionsheet.git",
+  "_from": "cordova-plugin-actionsheet@latest",
   "_id": "cordova-plugin-actionsheet@2.3.3",
   "_inCache": true,
   "_location": "/cordova-plugin-actionsheet",
+  "_nodeVersion": "4.2.2",
+  "_npmOperationalInternal": {
+    "host": "packages-18-east.internal.npmjs.com",
+    "tmp": "tmp/cordova-plugin-actionsheet-2.3.3.tgz_1483373957490_0.057802831986919045"
+  },
+  "_npmUser": {
+    "name": "eddyverbruggen",
+    "email": "eddyverbruggen@gmail.com"
+  },
+  "_npmVersion": "2.14.7",
   "_phantomChildren": {},
   "_requested": {
-    "raw": "https://github.com/EddyVerbruggen/cordova-plugin-actionsheet.git",
+    "raw": "cordova-plugin-actionsheet",
     "scope": null,
-    "escapedName": null,
-    "name": null,
-    "rawSpec": "https://github.com/EddyVerbruggen/cordova-plugin-actionsheet.git",
-    "spec": "git+https://github.com/EddyVerbruggen/cordova-plugin-actionsheet.git",
-    "type": "hosted",
-    "hosted": {
-      "type": "github",
-      "ssh": "git@github.com:EddyVerbruggen/cordova-plugin-actionsheet.git",
-      "sshUrl": "git+ssh://git@github.com/EddyVerbruggen/cordova-plugin-actionsheet.git",
-      "httpsUrl": "git+https://github.com/EddyVerbruggen/cordova-plugin-actionsheet.git",
-      "gitUrl": "git://github.com/EddyVerbruggen/cordova-plugin-actionsheet.git",
-      "shortcut": "github:EddyVerbruggen/cordova-plugin-actionsheet",
-      "directUrl": "https://raw.githubusercontent.com/EddyVerbruggen/cordova-plugin-actionsheet/master/package.json"
-    }
+    "escapedName": "cordova-plugin-actionsheet",
+    "name": "cordova-plugin-actionsheet",
+    "rawSpec": "",
+    "spec": "latest",
+    "type": "tag"
   },
   "_requiredBy": [
     "#USER",
     "/"
   ],
-  "_resolved": "git+https://github.com/EddyVerbruggen/cordova-plugin-actionsheet.git#6d0e125d9c4d6b0928285f62cdce7f1941917c83",
-  "_shasum": "9afefad31c33ab66b24e9a0f3c076636a74acd59",
+  "_resolved": "https://registry.npmjs.org/cordova-plugin-actionsheet/-/cordova-plugin-actionsheet-2.3.3.tgz",
+  "_shasum": "e9261b2d004a8da407388d60df534c156c52ff11",
   "_shrinkwrap": null,
-  "_spec": "https://github.com/EddyVerbruggen/cordova-plugin-actionsheet.git",
-  "_where": "C:\\dev\\AlgoToDo\\AlgoToDo\\node_modules",
+  "_spec": "cordova-plugin-actionsheet",
+  "_where": "/Users/moshehoftman/Documents/AlgoToDo/AlgoToDo/node_modules",
   "author": {
     "name": "Eddy Verbruggen - @EddyVerbruggen"
   },
@@ -71,13 +63,18 @@
   "dependencies": {},
   "description": "Show a sheet of options the user can choose from.",
   "devDependencies": {},
+  "directories": {},
+  "dist": {
+    "shasum": "e9261b2d004a8da407388d60df534c156c52ff11",
+    "tarball": "https://registry.npmjs.org/cordova-plugin-actionsheet/-/cordova-plugin-actionsheet-2.3.3.tgz"
+  },
   "engines": [
     {
       "name": "cordova",
       "version": ">=3.0.0"
     }
   ],
-  "gitHead": "6d0e125d9c4d6b0928285f62cdce7f1941917c83",
+  "gitHead": "b7773b9087f76487640e5ced493f3c0abac98399",
   "homepage": "https://github.com/EddyVerbruggen/cordova-plugin-actionsheet#readme",
   "keywords": [
     "ActionSheet",
@@ -94,13 +91,19 @@
     "cordova-wp8"
   ],
   "license": "MIT",
+  "maintainers": [
+    {
+      "name": "eddyverbruggen",
+      "email": "eddyverbruggen@gmail.com"
+    }
+  ],
   "name": "cordova-plugin-actionsheet",
   "optionalDependencies": {},
-  "readme": "# ActionSheet Cordova / PhoneGap Plugin\r\nby [Eddy Verbruggen](http://twitter.com/eddyverbruggen)\r\n\r\n## 0. Index\r\n\r\n1. [Description](#1-description)\r\n2. [Screenshots](#2-screenshots)\r\n3. [Installation](#3-installation)\r\n4. [Usage](#4-usage)\r\n5. [Credits](#5-credits)\r\n6. [License](#6-license)\r\n\r\n## 1. Description\r\n\r\nShow a sheet of options the user can choose from.\r\n\r\n* Compatible with [Cordova Plugman](https://github.com/apache/cordova-plugman)\r\n* iOS uses the native `UIActionSheet`\r\n* Android uses the native `AlertDialog`\r\n* WP8 uses the native `Popup`\r\n\r\n## 2. Screenshots\r\n\r\niOS\r\n\r\n<img src=\"screenshots/ios/ios-share.png\" width=\"235\"/>&nbsp;\r\n<img src=\"screenshots/ios/ios-delete.png\" width=\"235\"/>&nbsp;\r\n<img src=\"screenshots/ios/ios-logout.png\" width=\"235\"/>\r\n\r\n\r\nAndroid\r\n\r\n<img src=\"screenshots/android/android-share.png\" width=\"235\"/>&nbsp;\r\n<img src=\"screenshots/android/android-delete.png\" width=\"235\"/>&nbsp;\r\n<img src=\"screenshots/android/android-logout.png\" width=\"235\"/>\r\n\r\nWindows Phone 8\r\n\r\n<img src=\"screenshots/wp8/wp8-share.jpg\" width=\"235\"/>&nbsp;\r\n<img src=\"screenshots/wp8/wp8-delete.jpg\" width=\"235\"/>&nbsp;\r\n<img src=\"screenshots/wp8/wp8-logout.jpg\" width=\"235\"/>\r\n\r\n## 3. Installation\r\n\r\n### Automatically (CLI / Plugman)\r\n```\r\n$ cordova plugin add cordova-plugin-actionsheet\r\n$ cordova prepare\r\n```\r\n\r\nActionSheet.js is brought in automatically. There is no need to change or add anything in your html.\r\n\r\n### PhoneGap Build\r\nActionSheet  works with PhoneGap build too! Just add the following xml to your `config.xml` to always use the latest version of this plugin:\r\n```xml\r\n<plugin name=\"cordova-plugin-actionsheet\" />\r\n```\r\n\r\nActionSheet.js is brought in automatically. Make sure though you include a reference to cordova.js in your index.html's head:\r\n```html\r\n<script type=\"text/javascript\" src=\"cordova.js\"></script>\r\n```\r\n\r\n## 4. Usage\r\n\r\n### show\r\n\r\nCheck the [demo code](demo) to get you going quickly,\r\nor copy-paste some of the code below to replicate the ActionSheets of the screenshots above.\r\n\r\nAlso, wait for `deviceready` to fire before using plugins in general!\r\n\r\n```js\r\n  var callback = function(buttonIndex) {\r\n    setTimeout(function() {\r\n      // like other Cordova plugins (prompt, confirm) the buttonIndex is 1-based (first button is index 1)\r\n      alert('button index clicked: ' + buttonIndex);\r\n    });\r\n  };\r\n\r\n  function testShareSheet() {\r\n    var options = {\r\n        androidTheme: window.plugins.actionsheet.ANDROID_THEMES.THEME_DEVICE_DEFAULT_LIGHT, // default is THEME_TRADITIONAL\r\n        title: 'What do you want with this image?',\r\n        subtitle: 'Choose wisely, my friend', // supported on iOS only\r\n        buttonLabels: ['Share via Facebook', 'Share via Twitter'],\r\n        androidEnableCancelButton : true, // default false\r\n        winphoneEnableCancelButton : true, // default false\r\n        addCancelButtonWithLabel: 'Cancel',\r\n        addDestructiveButtonWithLabel : 'Delete it',\r\n        position: [20, 40], // for iPad pass in the [x, y] position of the popover\r\n        destructiveButtonLast: true // you can choose where the destructive button is shown\r\n    };\r\n    // Depending on the buttonIndex, you can now call shareViaFacebook or shareViaTwitter\r\n    // of the SocialSharing plugin (https://github.com/EddyVerbruggen/SocialSharing-PhoneGap-Plugin)\r\n    window.plugins.actionsheet.show(options, callback);\r\n  };\r\n\r\n  function testDeleteSheet() {\r\n    var options = {\r\n        'addCancelButtonWithLabel': 'Cancel',\r\n        'addDestructiveButtonWithLabel' : 'Delete note'\r\n    };\r\n    window.plugins.actionsheet.show(options, callback);\r\n  };\r\n\r\n  function testLogoutSheet() {\r\n    var options = {\r\n        'buttonLabels': ['Log out'],\r\n        'androidEnableCancelButton' : true, // default false\r\n        'winphoneEnableCancelButton' : true, // default false\r\n        'addCancelButtonWithLabel': 'Cancel'\r\n    };\r\n    window.plugins.actionsheet.show(options, callback);\r\n  };\r\n```\r\n\r\nOn iOS, you can also position the actionSheet origin by adding `position: [100, 200]`\r\n\r\n### hide\r\n\r\nIf for some reason you want to hide the actionsheet programmatically, do this:\r\n```js\r\n  // options and callbacks are optional, so either approach will work:\r\n  window.plugins.actionsheet.hide();\r\n  window.plugins.actionsheet.hide({}, onSuccess, onError);\r\n```\r\n\r\n## 5. Credits\r\niOS and WP8 code: [Eddy Verbruggen](https://github.com/EddyVerbruggen)\r\n\r\nAndroid code: mostly [Brill Papping](https://github.com/bpappin)\r\n\r\n\r\n## 6. Change history\r\n* 2.3.3 Default iPad popup is now in the center (was in the top left corner)\r\n* 2.3.1 Added `subtitle` (iOS) and `destructiveButtonLast` preferences. Also, iOS now uses the newer `UIAlertController` instead of `UIActionSheet`.\r\n* 2.2.2 OK, 2.2.1 has issues with Russian and the like, so reverted. Just add `<meta charset=\"utf-8\" />` to your html file.\r\n* 2.2.1 Encoding of diacritical characters fixed on iOS, so you can now use `Español` as a title or button label.\r\n* 1.1.6 You can now set the iOS actionSheet origin position (uses the iOS `actionSheet.showFromRect` method)\r\n* 1.1.2 You can now select a theme for your Android popup, see the first example above\r\n\r\n## 7. License\r\n\r\n[The MIT License (MIT)](http://www.opensource.org/licenses/mit-license.html)\r\n\r\nPermission is hereby granted, free of charge, to any person obtaining a copy\r\nof this software and associated documentation files (the \"Software\"), to deal\r\nin the Software without restriction, including without limitation the rights\r\nto use, copy, modify, merge, publish, distribute, sublicense, and/or sell\r\ncopies of the Software, and to permit persons to whom the Software is\r\nfurnished to do so, subject to the following conditions:\r\n\r\nThe above copyright notice and this permission notice shall be included in\r\nall copies or substantial portions of the Software.\r\n\r\nTHE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR\r\nIMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,\r\nFITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE\r\nAUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER\r\nLIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,\r\nOUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN\r\nTHE SOFTWARE.\r\n",
-  "readmeFilename": "README.md",
+  "readme": "ERROR: No README data found!",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/EddyVerbruggen/cordova-plugin-actionsheet.git"
   },
+  "scripts": {},
   "version": "2.3.3"
 }

@@ -2,58 +2,50 @@
   "_args": [
     [
       {
-        "raw": "https://github.com/Telerik-Verified-Plugins/NativePageTransitions",
+        "raw": "com.telerik.plugins.nativepagetransitions",
         "scope": null,
-        "escapedName": null,
-        "name": null,
-        "rawSpec": "https://github.com/Telerik-Verified-Plugins/NativePageTransitions",
-        "spec": "git+https://github.com/Telerik-Verified-Plugins/NativePageTransitions.git",
-        "type": "hosted",
-        "hosted": {
-          "type": "github",
-          "ssh": "git@github.com:Telerik-Verified-Plugins/NativePageTransitions.git",
-          "sshUrl": "git+ssh://git@github.com/Telerik-Verified-Plugins/NativePageTransitions.git",
-          "httpsUrl": "git+https://github.com/Telerik-Verified-Plugins/NativePageTransitions.git",
-          "gitUrl": "git://github.com/Telerik-Verified-Plugins/NativePageTransitions.git",
-          "shortcut": "github:Telerik-Verified-Plugins/NativePageTransitions",
-          "directUrl": "https://raw.githubusercontent.com/Telerik-Verified-Plugins/NativePageTransitions/master/package.json"
-        }
+        "escapedName": "com.telerik.plugins.nativepagetransitions",
+        "name": "com.telerik.plugins.nativepagetransitions",
+        "rawSpec": "",
+        "spec": "latest",
+        "type": "tag"
       },
-      "C:\\dev\\AlgoToDo\\AlgoToDo\\node_modules"
+      "/Users/moshehoftman/Documents/AlgoToDo/AlgoToDo/node_modules"
     ]
   ],
-  "_from": "git+https://github.com/Telerik-Verified-Plugins/NativePageTransitions.git",
+  "_from": "com.telerik.plugins.nativepagetransitions@latest",
   "_id": "com.telerik.plugins.nativepagetransitions@0.6.5",
   "_inCache": true,
   "_location": "/com.telerik.plugins.nativepagetransitions",
+  "_nodeVersion": "4.2.2",
+  "_npmOperationalInternal": {
+    "host": "packages-16-east.internal.npmjs.com",
+    "tmp": "tmp/com.telerik.plugins.nativepagetransitions-0.6.5.tgz_1464118644176_0.7883392283692956"
+  },
+  "_npmUser": {
+    "name": "eddyverbruggen",
+    "email": "eddyverbruggen@gmail.com"
+  },
+  "_npmVersion": "2.14.7",
   "_phantomChildren": {},
   "_requested": {
-    "raw": "https://github.com/Telerik-Verified-Plugins/NativePageTransitions",
+    "raw": "com.telerik.plugins.nativepagetransitions",
     "scope": null,
-    "escapedName": null,
-    "name": null,
-    "rawSpec": "https://github.com/Telerik-Verified-Plugins/NativePageTransitions",
-    "spec": "git+https://github.com/Telerik-Verified-Plugins/NativePageTransitions.git",
-    "type": "hosted",
-    "hosted": {
-      "type": "github",
-      "ssh": "git@github.com:Telerik-Verified-Plugins/NativePageTransitions.git",
-      "sshUrl": "git+ssh://git@github.com/Telerik-Verified-Plugins/NativePageTransitions.git",
-      "httpsUrl": "git+https://github.com/Telerik-Verified-Plugins/NativePageTransitions.git",
-      "gitUrl": "git://github.com/Telerik-Verified-Plugins/NativePageTransitions.git",
-      "shortcut": "github:Telerik-Verified-Plugins/NativePageTransitions",
-      "directUrl": "https://raw.githubusercontent.com/Telerik-Verified-Plugins/NativePageTransitions/master/package.json"
-    }
+    "escapedName": "com.telerik.plugins.nativepagetransitions",
+    "name": "com.telerik.plugins.nativepagetransitions",
+    "rawSpec": "",
+    "spec": "latest",
+    "type": "tag"
   },
   "_requiredBy": [
     "#USER",
     "/"
   ],
-  "_resolved": "git+https://github.com/Telerik-Verified-Plugins/NativePageTransitions.git#b3e01b655dfea16adf0c479582155f26586632e1",
-  "_shasum": "a425cc6d911b84d6b40afa84a285345551d545e1",
+  "_resolved": "https://registry.npmjs.org/com.telerik.plugins.nativepagetransitions/-/com.telerik.plugins.nativepagetransitions-0.6.5.tgz",
+  "_shasum": "3a7afdbdd396ff57c3516f08f2488945e5485b1f",
   "_shrinkwrap": null,
-  "_spec": "https://github.com/Telerik-Verified-Plugins/NativePageTransitions",
-  "_where": "C:\\dev\\AlgoToDo\\AlgoToDo\\node_modules",
+  "_spec": "com.telerik.plugins.nativepagetransitions",
+  "_where": "/Users/moshehoftman/Documents/AlgoToDo/AlgoToDo/node_modules",
   "author": {
     "name": "Telerik / Eddy Verbruggen",
     "email": "eddyverbruggen@gmail.com",
@@ -63,13 +55,18 @@
   "dependencies": {},
   "description": "Slide out the current page to reveal the next one. By a native transitions.",
   "devDependencies": {},
+  "directories": {},
+  "dist": {
+    "shasum": "3a7afdbdd396ff57c3516f08f2488945e5485b1f",
+    "tarball": "https://registry.npmjs.org/com.telerik.plugins.nativepagetransitions/-/com.telerik.plugins.nativepagetransitions-0.6.5.tgz"
+  },
   "engines": [
     {
       "name": "cordova",
       "version": ">=3.0.0"
     }
   ],
-  "gitHead": "b3e01b655dfea16adf0c479582155f26586632e1",
+  "gitHead": "8661cf2570e76d5950479bd020af944571d04945",
   "issue": "https://github.com/Telerik-Verified-Plugins/WKWebView/issues",
   "keywords": [
     "Native transitions",
@@ -86,6 +83,12 @@
     "cordova-windows"
   ],
   "license": "MIT",
+  "maintainers": [
+    {
+      "name": "eddyverbruggen",
+      "email": "eddyverbruggen@gmail.com"
+    }
+  ],
   "name": "com.telerik.plugins.nativepagetransitions",
   "optionalDependencies": {},
   "platforms": [
@@ -94,8 +97,8 @@
     "wp8",
     "windows"
   ],
-  "readme": "## Native Page Transitions Cordova / PhoneGap Plugin\r\nby [Telerik](http://www.telerik.com)\r\n\r\n\r\n<table width=\"100%\">\r\n    <tr>\r\n        <td width=\"100\"><a href=\"http://plugins.telerik.com/plugin/native-page-transitions\"><img src=\"http://www.x-services.nl/github-images/telerik-verified-plugins-marketplace.png\" width=\"97px\" height=\"71px\" alt=\"Marketplace logo\"/></a></td>\r\n        <td>For a quick demo app and easy code samples, check out the plugin page at the Verified Plugins Marketplace: http://plugins.telerik.com/plugin/native-page-transitions</td>\r\n    </tr>\r\n</table>\r\n\r\n\r\nUsing the Cordova CLI?\r\n\r\n```\r\ncordova plugin add com.telerik.plugins.nativepagetransitions\r\n```\r\n\r\nUsing PGB?\r\n\r\n```xml\r\n<plugin name=\"com.telerik.plugins.nativepagetransitions\" source=\"npm\" />\r\n```\r\n\r\n[The MIT License (MIT)](http://www.opensource.org/licenses/mit-license.html)\r\n",
-  "readmeFilename": "README.md",
+  "readme": "ERROR: No README data found!",
   "repo": "https://github.com/Telerik-Verified-Plugins/WKWebView.git",
+  "scripts": {},
   "version": "0.6.5"
 }

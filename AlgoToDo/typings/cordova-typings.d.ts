@@ -12,3 +12,4 @@
 /// <reference path="../.vscode/typings/cordova/plugins/Vibration.d.ts"/>
 /// <reference path="../.vscode/typings/cordova/plugins/InAppBrowser.d.ts"/>
 /// <reference path="../.vscode/typings/cordova/plugins/NetworkInformation.d.ts"/>
+/// <reference path="../.vscode/typings/cordova-ionic/plugins/keyboard.d.ts"/>

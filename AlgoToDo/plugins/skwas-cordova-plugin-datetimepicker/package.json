@@ -2,58 +2,50 @@
   "_args": [
     [
       {
-        "raw": "https://github.com/skwasjer/skwas-cordova-plugin-datetimepicker",
+        "raw": "skwas-cordova-plugin-datetimepicker",
         "scope": null,
-        "escapedName": null,
-        "name": null,
-        "rawSpec": "https://github.com/skwasjer/skwas-cordova-plugin-datetimepicker",
-        "spec": "git+https://github.com/skwasjer/skwas-cordova-plugin-datetimepicker.git",
-        "type": "hosted",
-        "hosted": {
-          "type": "github",
-          "ssh": "git@github.com:skwasjer/skwas-cordova-plugin-datetimepicker.git",
-          "sshUrl": "git+ssh://git@github.com/skwasjer/skwas-cordova-plugin-datetimepicker.git",
-          "httpsUrl": "git+https://github.com/skwasjer/skwas-cordova-plugin-datetimepicker.git",
-          "gitUrl": "git://github.com/skwasjer/skwas-cordova-plugin-datetimepicker.git",
-          "shortcut": "github:skwasjer/skwas-cordova-plugin-datetimepicker",
-          "directUrl": "https://raw.githubusercontent.com/skwasjer/skwas-cordova-plugin-datetimepicker/master/package.json"
-        }
+        "escapedName": "skwas-cordova-plugin-datetimepicker",
+        "name": "skwas-cordova-plugin-datetimepicker",
+        "rawSpec": "",
+        "spec": "latest",
+        "type": "tag"
       },
-      "C:\\dev\\AlgoToDo\\AlgoToDo\\node_modules"
+      "/Users/moshehoftman/Documents/AlgoToDo/AlgoToDo/node_modules"
     ]
   ],
-  "_from": "git+https://github.com/skwasjer/skwas-cordova-plugin-datetimepicker.git",
+  "_from": "skwas-cordova-plugin-datetimepicker@latest",
   "_id": "skwas-cordova-plugin-datetimepicker@1.0.0",
   "_inCache": true,
   "_location": "/skwas-cordova-plugin-datetimepicker",
+  "_nodeVersion": "6.2.1",
+  "_npmOperationalInternal": {
+    "host": "s3://npm-registry-packages",
+    "tmp": "tmp/skwas-cordova-plugin-datetimepicker-1.0.0.tgz_1497097826013_0.7880643873941153"
+  },
+  "_npmUser": {
+    "name": "skwas",
+    "email": "skwas@skwas.net"
+  },
+  "_npmVersion": "3.9.5",
   "_phantomChildren": {},
   "_requested": {
-    "raw": "https://github.com/skwasjer/skwas-cordova-plugin-datetimepicker",
+    "raw": "skwas-cordova-plugin-datetimepicker",
     "scope": null,
-    "escapedName": null,
-    "name": null,
-    "rawSpec": "https://github.com/skwasjer/skwas-cordova-plugin-datetimepicker",
-    "spec": "git+https://github.com/skwasjer/skwas-cordova-plugin-datetimepicker.git",
-    "type": "hosted",
-    "hosted": {
-      "type": "github",
-      "ssh": "git@github.com:skwasjer/skwas-cordova-plugin-datetimepicker.git",
-      "sshUrl": "git+ssh://git@github.com/skwasjer/skwas-cordova-plugin-datetimepicker.git",
-      "httpsUrl": "git+https://github.com/skwasjer/skwas-cordova-plugin-datetimepicker.git",
-      "gitUrl": "git://github.com/skwasjer/skwas-cordova-plugin-datetimepicker.git",
-      "shortcut": "github:skwasjer/skwas-cordova-plugin-datetimepicker",
-      "directUrl": "https://raw.githubusercontent.com/skwasjer/skwas-cordova-plugin-datetimepicker/master/package.json"
-    }
+    "escapedName": "skwas-cordova-plugin-datetimepicker",
+    "name": "skwas-cordova-plugin-datetimepicker",
+    "rawSpec": "",
+    "spec": "latest",
+    "type": "tag"
   },
   "_requiredBy": [
     "#USER",
     "/"
   ],
-  "_resolved": "git+https://github.com/skwasjer/skwas-cordova-plugin-datetimepicker.git#36a3fdba1593230e0bb6db3db0002c9f4c1f8391",
-  "_shasum": "f8bf45b08d604178a9b71c73a597df5580558a40",
+  "_resolved": "https://registry.npmjs.org/skwas-cordova-plugin-datetimepicker/-/skwas-cordova-plugin-datetimepicker-1.0.0.tgz",
+  "_shasum": "2d3b08c17c06ebfa520cab356df2b8b39591fd5d",
   "_shrinkwrap": null,
-  "_spec": "https://github.com/skwasjer/skwas-cordova-plugin-datetimepicker",
-  "_where": "C:\\dev\\AlgoToDo\\AlgoToDo\\node_modules",
+  "_spec": "skwas-cordova-plugin-datetimepicker",
+  "_where": "/Users/moshehoftman/Documents/AlgoToDo/AlgoToDo/node_modules",
   "author": {
     "name": "skwasjer"
   },
@@ -72,6 +64,11 @@
   "dependencies": {},
   "description": "Cordova DateTime picker plugin",
   "devDependencies": {},
+  "directories": {},
+  "dist": {
+    "shasum": "2d3b08c17c06ebfa520cab356df2b8b39591fd5d",
+    "tarball": "https://registry.npmjs.org/skwas-cordova-plugin-datetimepicker/-/skwas-cordova-plugin-datetimepicker-1.0.0.tgz"
+  },
   "engines": [],
   "gitHead": "36a3fdba1593230e0bb6db3db0002c9f4c1f8391",
   "homepage": "https://github.com/skwasjer/skwas-cordova-plugin-datetimepicker#readme",
@@ -83,17 +80,23 @@
     "datetime"
   ],
   "license": "MIT",
+  "maintainers": [
+    {
+      "name": "skwas",
+      "email": "skwas@skwas.net"
+    }
+  ],
   "name": "skwas-cordova-plugin-datetimepicker",
   "optionalDependencies": {},
   "platforms": [
     "android",
     "ios"
   ],
-  "readme": "[![npm version](https://badge.fury.io/js/skwas-cordova-plugin-datetimepicker.svg)](https://badge.fury.io/js/skwas-cordova-plugin-datetimepicker)\r\n\r\n# skwas-cordova-plugin-datetimepicker\r\nCordova Plugin for showing a native date, time or datetime picker.\r\n\r\n## Installation ##\r\n\r\n`cordova plugin add skwas-cordova-plugin-datetimepicker`\r\n\r\nor for latest\r\n\r\n`cordova plugin add https://github.com/skwasjer/skwas-cordova-plugin-datetimepicker.git`\r\n\r\n## Supported platforms ##\r\n\r\nAndroid 4 and higher  \r\niOS 8 and higher (tested with Xcode 7.2.3 and Xcode 8)\r\n\r\n## Methods ##\r\n\r\n### show ###\r\n\r\n`show(options)`  \r\nShow the plugin with specified options. \r\n\r\n`show(options, successCallback, errorCallback)`  \r\nShow the plugin with specified options and callbacks.\r\n\r\nThis was the original way to call the plugin, and is kept for compatibility. \r\n> Note: The `successCallback` and `errorCallback` respectively will be ignored if the `success` or `error` callback is provided on the `options` argument.\r\n\r\n#### Options ####\r\n\r\n| Name                | Type                | Default        | Android                    | iOS                        | |\r\n|---------------------|---------------------|----------------|:--------------------------:|:--------------------------:|--------------------------|\r\n| mode                | String              | \"date\"         | `date`, `time`, `datetime` | `date`, `time`, `datetime` | The display mode |\r\n| date                | Date                |                | required                   | required                   | The initial date to display |\r\n| allowOldDates       | boolean             | true           | -                          | supported                  | Allow older dates to be selected |\r\n| allowFutureDates    | boolean             | true           | -                          | supported                  | Allow future dates to be selected |\r\n| minuteInterval      | int                 | 1              | >= Honeycomb               | supported                  | For minute spinner the number of minutes per step |\r\n| locale              | String              | \"EN\"           | -                          | supported                  | The locale to use for text and date/time |\r\n| okText              | String              | \"Select\"       | supported                  | supported                  | The text to use for the ok button |\r\n| cancelText          | String              | \"Cancel\"       | supported                  | supported                  | The text to use for the cancel button |\r\n| success             | Function            | -              | supported                  | supported                  | The success callback |\r\n| cancel              | Function            | -              | supported                  | supported                  | The cancel callback |\r\n| error               | Function            | -              | supported                  | supported                  | The error callback |\r\n| android             | Object              | {}             | optional                   | ignored                    | Android specific options |\r\n\r\n#### Android options\r\n\r\n| Name                | Type                | Default     | Description               |\r\n|---------------------|---------------------|-------------|---------------------------|\r\n| theme               | int                 | [Theme_DeviceDefault_Dialog](https://developer.android.com/reference/android/R.style.html#Theme_DeviceDefault_Dialog)| android.R.style theme |\r\n| calendar            | boolean             | false       | False shows spinners, however this depend on the theme selected and SDK version. When true, forces a calendar view.|\r\n| is24HourView        | boolean             | true        | Use a 24 hour clock |\r\n\r\n> On Lollipop and upwards the date and time pickers changed to calendar and radial pickers. If you want to use spinners (for example to use `minuteInterval`), choose a theme that shows a date and time picker with spinners, like Theme_DeviceDefault_Light, Theme_Holo_Dialog or the traditional theme (1).\r\n\r\n#### Example ####\r\n\r\n```js\r\ndocument.addEventListener(\"deviceready\", onDeviceReady, false);\r\nfunction onDeviceReady() {\r\n\r\n\tvar myDate = new Date(); // From model.\r\n\r\n\tcordova.plugins.DateTimePicker.show({\r\n\t\tmode: \"date\",\r\n\t\tdate: myDate,\r\n\t\tallowOldDates: true,\r\n\t\tallowFutureDates: true,\r\n\t\tminuteInterval: 15,\r\n\t\tlocale: \"EN\",\r\n\t\tokText: \"Select\",\r\n\t\tcancelText: \"Cancel\",\r\n\t\tandroid: {\r\n\t\t\ttheme: 16974126, // Theme_DeviceDefault_Dialog\r\n\t\t\tcalendar: false,\r\n\t\t\tis24HourView: true\r\n\t\t},\r\n\t\tsuccess: function(newDate) {\r\n\t\t\t// Handle new date.\r\n\t\t\tconsole.info(newDate);\r\n\t\t\tmyDate = newDate;\r\n\t\t},\r\n\t\tcancel: function() {\r\n\t\t\tconsole.info(\"Cancelled\");\r\n\t\t},\r\n\t\terror: function (err) {\r\n\t\t\t// Handle error.\r\n\t\t\tconsole.error(err);\r\n\t\t}\r\n\t});\r\n}\r\n```\r\n> Note that not all options have to be set.\r\n\r\n## Changelog\r\n\r\n#### 1.0.0 ####\r\n\r\n- Android/iOS: add support for cancel-event\r\n- Moved callback handlers from method parameters to options while keeping backward compatibility\r\n- Android: add 24 hour clock support\r\n\r\n#### 0.9.1 ####\r\n\r\n- Android: add support for okText/cancelText\r\n\r\n#### 0.9.0 ####\r\n\r\n- Android: fixed datetime mode only showing date picker (see #10)\r\n- Android: added theme support\r\n- Android: added calendar switch\r\n\r\n#### 0.8.0 ####\r\n\r\n- Android: fix @NonNull error when building apk\r\n\r\n#### 0.7.0 ####\r\n\r\n- iOS: use auto layout\r\n- iOS: remove < iOS 7 support (UIActionSheet)\r\n- iOS: remove custom modal picker type\r\n- Android: fix minute spinner for setting minute interval\r\n\r\n#### 0.6.0 ####\r\n\r\n- Android: support Lollipop radial picker (no support for minute interval however)\r\n- Android: overall refactor and improvements\r\n\r\n#### 0.5.1 ####\r\n\r\n- iOS: replace initWithWebView with pluginInitialize (deprecated in cordova-ios-4.0)\r\n\r\n#### 0.5.0 ####\r\n\r\n- rename repo to conform to npm/cordova plugin naming convention\r\n\r\n### Contributors ###\r\n\r\n- [turshija](https://github.com/turshija)\r\n- [emanfu](https://github.com/emanfu)\r\n",
-  "readmeFilename": "README.md",
+  "readme": "ERROR: No README data found!",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/skwasjer/skwas-cordova-plugin-datetimepicker.git"
   },
+  "scripts": {},
   "version": "1.0.0"
 }

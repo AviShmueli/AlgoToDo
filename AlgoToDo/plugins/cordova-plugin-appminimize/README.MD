@@ -10,7 +10,7 @@
 
 Cordova:
 
-    cordova plugin add cordova-plugin-appminimize
+    cordova plugin add https://github.com/tomloprod/cordova-plugin-appminimize.git
 
 ## Usage
 
@@ -32,25 +32,12 @@ $ionicPlatform.registerBackButtonAction(function (event) {
 ```
 
 
-## Ionic Example
+## Ionic 2 Example
 
 In this example the application is minimized by pressing the back button
 
-```bash
-ionic cordova plugin add cordova-plugin-appminimize
-npm install --save @ionic-native/app-minimize
-```
-
-```typescript
-import { AppMinimize } from '@ionic-native/app-minimize';
-
-...
-
-constructor(private appMinimize: AppMinimize) { }
-
-...
-
+```javascript
 this.platform.registerBackButtonAction(() => {
-    this.appMinimize.minimize();
+    window['plugins'].appMinimize.minimize();
 });
 ```

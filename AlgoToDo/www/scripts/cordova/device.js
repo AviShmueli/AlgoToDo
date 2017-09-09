@@ -7,11 +7,11 @@
 
     device.$inject = ['$rootScope', 'datacontext', '$cordovaDevice', '$log', '$q',
                               '$cordovaNetwork', '$cordovaAppVersion', '$cordovaVibration'/*,
-                               '$cordovaStatusbar'*/, '$cordovaContacts'];
+                               '$cordovaStatusbar'*/, '$cordovaContacts', '$cordovaKeyboard'];
 
     function device($rootScope, datacontext, $cordovaDevice, $log, $q,
                             $cordovaNetwork, $cordovaAppVersion, $cordovaVibration/*,
-                            $cordovaStatusbar*/, $cordovaContacts) {
+                            $cordovaStatusbar*/, $cordovaContacts, $cordovaKeyboard) {
 
         var self = this;
         self.appState = 'foreground';
@@ -118,6 +118,19 @@
             return cordova.file.tempDirectory;
         }
 
+        var openKeyBoard = function(){
+            if(isMobileDevice()){
+                document.addEventListener("deviceready", function () {
+                    $timeout(function () {
+                        if (window.cordova && window.cordova.plugins && window.cordova.plugins.Keyboard) {
+                            alert(1);
+                            cordova.plugins.Keyboard.show(); //open keyboard manually
+                        }
+                    }, 350);
+                }, false);
+            }
+        }
+
         var service = {
             getDeviceDetails: getDeviceDetails,
             isMobileDevice: isMobileDevice,
@@ -130,7 +143,8 @@
             vibrate: vibrate,
             setStatusBarStyleBlackTranslucent: setStatusBarStyleBlackTranslucent,
             getIOStempDirectory: getIOStempDirectory,
-            pickContactUsingNativeUI: pickContactUsingNativeUI
+            pickContactUsingNativeUI: pickContactUsingNativeUI,
+            openKeyBoard: openKeyBoard
         };
 
         return service;

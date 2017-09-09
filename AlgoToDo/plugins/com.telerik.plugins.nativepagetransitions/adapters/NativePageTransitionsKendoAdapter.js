@@ -99,11 +99,7 @@
         // hijack programmatic navigation
         if (!window.originalAppNavigate) {
           window.originalAppNavigate = window.app.navigate;
-          window.app.navigate = function (href, transition) {
-            if (href.charAt(0) !== '#') {
-                //if remote view with no # prefix, prepend it
-                href = '#' + href;
-            }
+          window.app.navigate = function(href, transition) {
             if (transition === undefined) {
               transition = defaultTransition;
             }
