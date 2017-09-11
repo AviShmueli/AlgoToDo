@@ -16,19 +16,39 @@
         function sidenavController($rootScope, $scope, device, cordovaPlugins, $location,
                                    $mdSidenav, $mdDialog, DAL, logger,
                                    contactsSync, $interval, datacontext,
-                                   appConfig, $timeout) {
+                                   appConfig, $timeout, MAIN_CLIQA_ID) {
             var vm = this;
 
             vm.imagesPath = device.getImagesPath();
+            vm.showUserCliqot = false;
+            vm.MAIN_CLIQA_ID = MAIN_CLIQA_ID;
 
             $scope.$watch(function () { return datacontext.getUserFromLocalStorage() }, function (oldVal, newVal) {
                 vm.user = newVal;
                 vm.imagesPath = device.getImagesPath();
             },true);
+
+            $scope.$watch('vm.user', function (oldVal) {
+                if(vm.user){
+                    if(vm.user.type === 'system-admin'){
+                        vm.showUserCliqot = true;
+                    }
+                    if(vm.user.cliqot && vm.user.cliqot.length){
+                        for (var index = 0; index < vm.user.cliqot.length; index++) {
+                            var cliqa = vm.user.cliqot[index];
+                            if(cliqa._id !== MAIN_CLIQA_ID){
+                                vm.showUserCliqot = true;
+                            }
+                        }
+                    }
+                }
+            },true);
+
+
             
             vm.appVersion = '';
             vm.showLogoffButton = false;
-            vm.expand_icon = 'add_circle';
+            vm.expand_icon = 'expand_more';
 
             vm.showSideNav = function () {
                 return $location.path() !== '/signUp' && $location.path() !== '/logIn';

@@ -114,10 +114,10 @@
                 };
             }
             else {
-                if (user.cliqot !== undefined && user.cliqot[0] !== undefined) {
+                if (user.cliqot !== undefined && user.cliqot.length > 0) {
                     params = {
                         queryString: string,
-                        userCliqaId: user.cliqot[0]._id
+                        userCliqaId: user.cliqot
                     };
                 }
                 else {

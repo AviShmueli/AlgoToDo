@@ -1188,15 +1188,22 @@
 
         var d = deferred();
 
+        // if request came from old version, convert to Array
+        if (typeof cliqot == 'string') {
+            cliqot = [cliqot];
+        }
+        
+        var objectIdCliqot = [];
+
         cliqot.forEach(function(cliqaId) {
-            cliqaId = new ObjectID(cliqaId);
+            objectIdCliqot.push(new ObjectID(cliqaId));
         }, this);
 
 
         getCollection('users').then(function (mongo) {
 
             mongo.collection.find({
-                'cliqot._id': {$in : cliqot},
+                'cliqot._id': {$in : objectIdCliqot},
                 cliqot: {
                     $exists: true
                 }

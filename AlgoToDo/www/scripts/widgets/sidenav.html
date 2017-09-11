@@ -66,8 +66,8 @@
                 </md-item-content>
             </a>
         </md-item>
-        <md-item ng-if="vm.user.type === 'system-admin'">
-            <a class="cursor-pointer" ng-click="vm.expand_icon = vm.expand_icon === 'add_circle' ? 'remove_circle' : 'add_circle'">
+        <md-item ng-if="vm.showUserCliqot">
+            <a class="cursor-pointer" ng-click="vm.expand_icon = vm.expand_icon === 'expand_more' ? 'expand_less' : 'expand_more'">
                 <md-item-content md-ink-ripple layout="row" layout-align="start center">
                     <div class="inset">
                         <ng-md-icon icon={{vm.expand_icon}} options='{"rotation": "counterclock", "duration": 375}'></ng-md-icon>
@@ -79,7 +79,7 @@
                 </md-item-content>
             </a>
         </md-item>
-        <md-item ng-repeat="cliqa in vm.user.cliqot" ng-if="vm.expand_icon === 'remove_circle' && vm.user.type === 'system-admin'" >
+        <md-item ng-repeat="cliqa in vm.user.cliqot" ng-if="vm.expand_icon === 'expand_less' && vm.showUserCliqot && cliqa._id !== vm.MAIN_CLIQA_ID" >
             <a class="cursor-pointer" ng-click="vm.goToCliqaPage(cliqa._id)">
                 <md-item-content md-ink-ripple layout="row" layout-align="start center">
                     <span flex></span>

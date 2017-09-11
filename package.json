@@ -1,5 +1,5 @@
 {
-  "name": "AlgoToDo",
+  "name": "algotodo",
   "version": "1.0.0",
   "scripts": {
     "start": "node AlgoToDo/server/app.js"

@@ -174,7 +174,8 @@
 
             var user = datacontext.getUserFromLocalStorage();
 
-            if (user.cliqot !== undefined && user.cliqot[0] !== undefined && user.cliqot[0]._id === '585c1e28ee630b29fc4b2d3d') {
+            // if this is a regular user (with cliqa נסייני מערכת) 
+            if (user.cliqot !== undefined && user.cliqot.length < 2 && user.cliqot[0]._id === '585c1e28ee630b29fc4b2d3d') {
                 deferred.resolve();
             } else {
                 DAL.searchUsers('', user).then(function (response) {

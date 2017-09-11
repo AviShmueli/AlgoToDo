@@ -465,13 +465,26 @@
         return d.promise;
     }
 
-    function searchUsers(string, cliqaId) {
+    function searchUsers(string, cliqot) {
 
         var d = deferred();
 
         var query = {};
 
-        if (cliqaId !== undefined) {
+        if (cliqot !== undefined) {
+            
+            // if request came from old version, convert to Array
+            if (typeof cliqot == 'string') {
+                cliqot = [cliqot];
+            }
+
+            var objectIdCliqot = [];
+
+            for (var index = 0; index < cliqot.length; index++) {
+                var cliqa = JSON.parse(cliqot[index]);
+                objectIdCliqot.push(new ObjectID(cliqa._id));
+            }
+
             query = {
                 $and: [{
                     'name': {
@@ -480,9 +493,13 @@
                     }
                 }, {
                     $or: [{
-                        'cliqaId': cliqaId
+                        'cliqaId': {
+                            $in: cliqot
+                        }
                     }, {
-                        'cliqot._id': new ObjectID(cliqaId)
+                        'cliqot._id': {
+                            $in: objectIdCliqot
+                        }
                     }]
                 }]
 
@@ -531,6 +548,10 @@
             $ne: 'group-main'
         };
 
+        if (filter.cliqaId) {
+            filter.cliqaId = {$in : filter.cliqaId};
+        }
+
         // doto: handel multi values
         if (filter['userId'] !== undefined) {
             var userId = filter['userId'];
@@ -543,7 +564,7 @@
         }
 
         var offset = Moment().tz('Asia/Jerusalem').utcOffset();
-        
+
         if (filter.hasOwnProperty('fromDate')) {
             filter.createTime = filter.createTime ? filter.createTime : {};
             var date = new Date(filter.fromDate).toDateString();
@@ -578,6 +599,10 @@
 
         var d = deferred();
 
+        if (filter.cliqaId) {
+            filter.cliqaId = {$in : filter.cliqaId};
+        }
+        
         if (filter['userId'] !== undefined) {
             var userId = filter['userId'];
             delete filter['userId'];
@@ -589,7 +614,7 @@
         }
 
         var offset = Moment().tz('Asia/Jerusalem').utcOffset();
-        
+
         if (filter.hasOwnProperty('fromDate')) {
             filter.createTime = filter.createTime ? filter.createTime : {};
             var date = new Date(filter.fromDate).toDateString();
