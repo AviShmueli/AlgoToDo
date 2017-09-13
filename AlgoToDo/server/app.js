@@ -56,7 +56,7 @@ var jobs = require('./cron-jobs');
 },0);
 */
 
-/* ---- Start the server ------ */
+// /* ---- Start the server ------ */
 server.listen(process.env.PORT || 5001, function (err) {
     console.log("Express server listening on port %d in %s mode", this.address().port, app.settings.env);
 });
@@ -430,5 +430,14 @@ app.post('/TaskManeger/addUsersToCliqa', function (req, res) {
         winston.log('error', error.message, error.error);
         res.status(500).send(error);
     });
+
+});
+
+var excelHandler = require('./excelHandler');
+
+app.get('/getExcel', function (req, res) {
+
+    var wb = excelHandler.generateWorkbook();
+    wb.write('MyExcel.xlsx', res);
 
 });
