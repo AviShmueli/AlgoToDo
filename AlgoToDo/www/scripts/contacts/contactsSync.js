@@ -6,11 +6,11 @@
         .service('contactsSync', contactsSync);
 
     contactsSync.$inject = ['device', 'datacontext', 'appConfig', 'logger', '$q',
-        'DAL', 'common', '$timeout', 'storage'
+        'DAL', 'common', '$timeout', 'storage', 'MAIN_CLIQA_ID'
     ];
 
     function contactsSync(device, datacontext, appConfig, logger, $q,
-        DAL, common, $timeout, storage) {
+        DAL, common, $timeout, storage, MAIN_CLIQA_ID) {
 
 
         var self = this;
@@ -107,7 +107,7 @@
                             var path = filePath.substring(0, filePath.indexOf(fileName));
 
                             
-                            storage.copyLocalFile(path, fileName, storage.getRootDirectory() + 'Asiti/Asiti Images/contacts/' , fileName).then(function(fileNewPath){
+                            storage.copyLocalFile(path, fileName, storage.getRootDirectory() + 'Asiti/Media/Asiti Images/contacts/' , fileName).then(function(fileNewPath){
                                 alert(fileNewPath);
                                 //crossUser.avatarUrl = fileNewPath ;
                             });*/
@@ -175,7 +175,7 @@
             var user = datacontext.getUserFromLocalStorage();
 
             // if this is a regular user (with cliqa נסייני מערכת) 
-            if (user.cliqot !== undefined && user.cliqot.length < 2 && user.cliqot[0]._id === '585c1e28ee630b29fc4b2d3d') {
+            if (user.cliqot !== undefined && user.cliqot.length < 2 && user.cliqot[0]._id === MAIN_CLIQA_ID) {
                 deferred.resolve();
             } else {
                 DAL.searchUsers('', user).then(function (response) {

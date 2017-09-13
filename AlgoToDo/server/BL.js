@@ -47,6 +47,8 @@
     var pushNotifications = require('./push-notifications/push-notifications');
     var sms = require('./sms');
 
+    var MAIN_CLIQA_ID = '585c1e28ee630b29fc4b2d3d';
+
     function addNewTasks(tempTask, pushToSenderAnyway) {
 
         var d = deferred();
@@ -482,7 +484,9 @@
 
             for (var index = 0; index < cliqot.length; index++) {
                 var cliqa = JSON.parse(cliqot[index]);
-                objectIdCliqot.push(new ObjectID(cliqa._id));
+                if (cliqa._id !== MAIN_CLIQA_ID) {
+                    objectIdCliqot.push(new ObjectID(cliqa._id));
+                }   
             }
 
             query = {

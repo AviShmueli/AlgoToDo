@@ -237,7 +237,7 @@
             if (device.isMobileDevice()) {
                 // if this is file you uploaded - the file will be in the cache
                 var dataDirectory = storage.getRootDirectory();
-                var newPath = 'Asiti/Asiti Images/' + vm.taskId + '/';
+                var newPath = 'Asiti/Media/Asiti Images/' + vm.taskId + '/';
                 var src = dataDirectory + newPath + comment.fileName;
             
                 if (comment.fileLocalPath === undefined) { // &&                 

@@ -7,11 +7,11 @@
 
     cordovaPlugins.$inject = ['$rootScope', '$cordovaToast', '$cordovaBadge', '$log',
                               '$q', '$cordovaDatePicker', '$cordovaSocialSharing',
-                              '$cordovaAppRate', '$cordovaActionSheet'];
+                              '$cordovaAppRate', '$cordovaActionSheet', '$window'];
 
     function cordovaPlugins($rootScope, $cordovaToast, $cordovaBadge, $log,
                             $q, $cordovaDatePicker, $cordovaSocialSharing,
-                            $cordovaAppRate, $cordovaActionSheet) {
+                            $cordovaAppRate, $cordovaActionSheet, $window) {
 
         var self = this;
         self.appState = 'foreground';
@@ -108,14 +108,18 @@
                 'זו תוכנת מסרים מידיים לטלפונים חכמים שמוכוונת לניהול משימות אישיות וחברתיות.  \n\n'+
                 'עם Asiti קל לנהל את המשימות שלך ולשתף משימות עם חברים, מכרים, ועמיתים בצורה מהירה ופשוטה, ולעקוב אחר סטטוס ביצוע המשימה.\n\n'+
                 'האפליקציה Asiti זמינה למכשירי Android, iPhone  ובדפדפן במחשב שלך.\n\n'+
-                'אפשר להוריד את Asiti מהאתר \n',
-                subject = '',
-                file = [],
-                link = 'http://www.asiti.net/download-asiti';
+                'אפשר להוריד את Asiti מהאתר \n';
 
-                $cordovaSocialSharing
-                   .share(message, subject, file, link) // Share via native share sheet
-                   .then(function (result) {
+                var options = {
+                    message: message,
+                    subject: '',
+                    files: [],
+                    url: 'http://www.asiti.net/download-asiti',
+                    chooserTitle: 'בחר/י אפליקציה' 
+                }
+
+                $window.plugins.socialsharing.shareWithOptions(options,
+                   function (result) {
                        showToast('תודה ששיתפת את האפילקציה 😄', 2000);
                    }, function (err) {
                        // An error occured. Show a message to the user
