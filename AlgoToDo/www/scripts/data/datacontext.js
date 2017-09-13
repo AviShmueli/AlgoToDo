@@ -158,14 +158,17 @@
         };
 
         var setMyTaskCount = function () {
-            var userId = self.$storage.user._id;
-            var tasks = getTaskList();
-            var count = 0;
-            if (tasks && tasks.length > 0) {
-                count = $filter('myTasks')(getTaskList(), userId).length;
-                $rootScope.taskcount = count;
+            if(self.$storage.user){
+                var userId = self.$storage.user._id;
+                var tasks = getTaskList();
+                var count = 0;
+                if (tasks && tasks.length > 0) {
+                    count = $filter('myTasks')(getTaskList(), userId).length;
+                    $rootScope.taskcount = count;
+                }
+                return count;
             }
-            return count;
+            return 0;
         };
 
         var updateLocalTasks = function (newTasks, isFromInterval) {

@@ -45,7 +45,7 @@
 
 
         $scope.$watch('vm.tasksFilter.cliqaId', function (cliqot) {
-            if(cliqot){
+            if(cliqot && cliqot.length){
                 delete vm.tasksFilter.userId;
                 // if (vm.tasksFilter.cliqaId.indexOf('$in') !== -1) {
                 //     vm.users = [];
