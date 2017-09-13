@@ -14,7 +14,7 @@
         var saveFileToStorage = function (taskId, fileName, downloadUrl) {
             var deferred = $q.defer();
 
-            var folderpath = getRootDirectory() + 'Asiti/Asiti Images/' + taskId + "/" + fileName;
+            var folderpath = getRootDirectory() + 'Asiti/Media/Asiti Images/' + taskId + "/" + fileName;
 
             if (downloadUrl.startsWith("content://")) {
                 resolveAndDownloadNativePath(downloadUrl, folderpath).then(function (entry) {
@@ -43,7 +43,7 @@
         var getFileFromStorage = function (path, fileName) {
             var deferred = $q.defer();
             if (path.startsWith("content://")) {
-                var fileURL = getRootDirectory() + 'Asiti/Asiti Images/temp/' + fileName;
+                var fileURL = getRootDirectory() + 'Asiti/Media/Asiti Images/temp/' + fileName;
                 resolveAndDownloadNativePath(path + fileName, fileURL).then(function (entry) {
                     var url = entry.toURL();
                     var splitedPath = url.split('/');

@@ -26,26 +26,26 @@
             $scope.$watch(function () { return datacontext.getUserFromLocalStorage() }, function (oldVal, newVal) {
                 vm.user = newVal;
                 vm.imagesPath = device.getImagesPath();
-            },true);
+            }, true);
 
             $scope.$watch('vm.user', function (oldVal) {
-                if(vm.user){
-                    if(vm.user.type === 'system-admin'){
+                if (vm.user) {
+                    if (vm.user.type === 'system-admin') {
                         vm.showUserCliqot = true;
                     }
-                    if(vm.user.cliqot && vm.user.cliqot.length){
+                    if (vm.user.cliqot && vm.user.cliqot.length) {
                         for (var index = 0; index < vm.user.cliqot.length; index++) {
                             var cliqa = vm.user.cliqot[index];
-                            if(cliqa._id !== MAIN_CLIQA_ID){
+                            if (cliqa._id !== MAIN_CLIQA_ID) {
                                 vm.showUserCliqot = true;
                             }
                         }
                     }
                 }
-            },true);
+            }, true);
 
 
-            
+
             vm.appVersion = '';
             vm.showLogoffButton = false;
             vm.expand_icon = 'expand_more';
@@ -61,11 +61,11 @@
                 datacontext.deleteTaskListFromLocalStorage();
                 datacontext.deleteRepeatsTaskListFromLocalStorage();
                 cordovaPlugins.clearAppBadge();
-                if(device.isMobileDevice()) {
+                if (device.isMobileDevice()) {
                     DAL.saveUsersNewRegistrationId('', vm.user);
                 }
                 $location.path('/logIn');
-                vm.user = undefined;          
+                vm.user = undefined;
             };
 
             vm.appVersion = appConfig.appVersion;
@@ -77,7 +77,7 @@
 
             vm.goToManagementPage = function () {
                 vm.closeSidenav();
-                $timeout(function() {
+                $timeout(function () {
                     $location.path('/management');
                 }, 0);
             };
@@ -143,7 +143,7 @@
                         logger.error(error);
                     });
                 });
-            }       
+            }
 
             vm.goToContactsListPage = function () {
                 vm.closeSidenav();
@@ -160,4 +160,4 @@
 
         return directive;
     }
-})();
+})(); 
