@@ -13,6 +13,7 @@
     "cron": "^1.2.1",
     "deferred": "^0.7.5",
     "ejs": "^2.5.1",
+    "excel4node": "^1.2.1",
     "express": "^4.14.0",
     "express-session": "^1.14.0",
     "google-libphonenumber": "^2.0.13",
