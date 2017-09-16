@@ -296,7 +296,7 @@
                     from: task.from.name,
                     to: task.to.name,
                     description: task.description,
-                    status: grtStatusHebString(task.status),
+                    status: getStatusHebString(task.status),
                     totalTime: vm.getTotalTaskTime(task),
                     comments: getTaskCommentsAsString(task),
                     photos: getTaskPhotos(task)
@@ -328,7 +328,7 @@
             return str;
         }
 
-        var grtStatusHebString = function (status) {
+        var getStatusHebString = function (status) {
             switch (status) {
                 case 'inProgress':
                     return 'בתהליך';
