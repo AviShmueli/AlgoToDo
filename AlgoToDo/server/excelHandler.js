@@ -45,6 +45,20 @@
         return str;
     }
 
+
+    var https = require('https');
+    var fs = require('fs');
+    var request = require('request');
+
+    var download = function(uri, filename, callback){
+        request.head(uri, function(err, res, body){
+          console.log('content-type:', res.headers['content-type']);
+          console.log('content-length:', res.headers['content-length']);
+      
+          request(uri).pipe(fs.createWriteStream(filename)).on('close', callback);
+        });
+      };
+
     var getTaskPhotos = function (task) {
         var str = '';
         for (var index = 0; index < task.comments.length; index++) {
@@ -59,15 +73,22 @@
     function downloadExcel () {
 
         var d = deferred();
+    
+    download('https://www.dropbox.com/s/3o48o6gcq5s75sm/2017-01-30T08_52_53.540Z.jpg?dl=1', 'file.jpg', function(){
+      console.log('done');
+      d.resolve(generateWorkbook()) ;
+    });
 
-        var http = require('http');
-        var fs = require('fs');
-        
-        var file = fs.createWriteStream("file.jpg");
-        var request = http.get("http://app.asiti.net/images/web_hi_res_512.png", function(response) {
-          response.pipe(file);
-          d.resolve(generateWorkbook()) ;
-        });
+
+
+
+        // var file = fs.createWriteStream("file.jpg");
+        // var request = https.get("https://www.dropbox.com/s/3o48o6gcq5s75sm/2017-01-30T08_52_53.540Z.jpg?dl=1", function(response) {
+        //     response.on('data', (_d) => {
+        //         _d.pipe(file);
+        //         d.resolve(generateWorkbook()) ;
+        //       });  
+        // });
 
         return d.promise;
     }
