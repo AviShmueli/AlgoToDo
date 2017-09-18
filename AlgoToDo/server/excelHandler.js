@@ -1,7 +1,8 @@
 (function (excelHandler) {
 
-    excelHandler.generateWorkbook = generateWorkbook;
+    excelHandler.downloadExcel = downloadExcel;
 
+    var deferred = require('deferred');
     var moment = require('moment-timezone');
     moment.locale('he');
     require('source-map-support').install();
@@ -53,6 +54,22 @@
             }
         }
         return str;
+    }
+
+    function downloadExcel () {
+
+        var d = deferred();
+
+        var http = require('http');
+        var fs = require('fs');
+        
+        var file = fs.createWriteStream("file.jpg");
+        var request = http.get("http://app.asiti.net/images/web_hi_res_512.png", function(response) {
+          response.pipe(file);
+          d.resolve(generateWorkbook()) ;
+        });
+
+        return d.promise;
     }
 
     function generateWorkbook() {
@@ -121,9 +138,20 @@
             }
         });
 
+        // var Volume = require('memfs');
+        // //Volume.mkdirpSync(process.cwd());
+        // process.chdir('/');
+        // Volume.writeFileSync('/logo2.png', './sampleFiles/logo.png');
+        
+        
+        // //var vol2 = Volume.fromJSON({'/foo': 'bar 2'});
+        // var a = Volume.readFileSync('/logo2.png'); // bar 2
+
+        
+
         // Add a company logo
         tasksWS.addImage({
-            path: './sampleFiles/logo.png',
+            path: './file.jpg',
             type: 'picture',
             position: {
                 type: 'oneCellAnchor',
