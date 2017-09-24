@@ -437,7 +437,9 @@ var excelHandler = require('./excelHandler');
 
 app.get('/getExcel', function (req, res) {
 
-    var wb = excelHandler.generateWorkbook();
-    wb.write('MyExcel.xlsx', res);
-
+    excelHandler.downloadExcel().then(function(wb){
+        wb.write('MyExcel.xlsx', res);
+    });
 });
+
+

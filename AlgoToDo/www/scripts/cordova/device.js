@@ -7,11 +7,13 @@
 
     device.$inject = ['$rootScope', 'datacontext', '$cordovaDevice', '$log', '$q',
                               '$cordovaNetwork', '$cordovaAppVersion', '$cordovaVibration'/*,
-                               '$cordovaStatusbar'*/, '$cordovaContacts', '$cordovaKeyboard'];
+                               '$cordovaStatusbar'*/, '$cordovaContacts', '$cordovaKeyboard',
+                               '$timeout'];
 
     function device($rootScope, datacontext, $cordovaDevice, $log, $q,
                             $cordovaNetwork, $cordovaAppVersion, $cordovaVibration/*,
-                            $cordovaStatusbar*/, $cordovaContacts, $cordovaKeyboard) {
+                            $cordovaStatusbar*/, $cordovaContacts, $cordovaKeyboard,
+                            $timeout) {
 
         var self = this;
         self.appState = 'foreground';
