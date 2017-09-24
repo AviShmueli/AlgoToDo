@@ -436,8 +436,9 @@ app.post('/TaskManeger/addUsersToCliqa', function (req, res) {
 var excelHandler = require('./excelHandler');
 
 app.get('/getExcel', function (req, res) {
-
-    var wb = excelHandler.generateWorkbook();
-    wb.write('MyExcel.xlsx', res);
-
+    
+    var tempTasks = require('../sampleFiles/invoiceData.json');
+    excelHandler.downloadExcel(tempTasks).then(function(wb){
+        wb.write('MyExcel.xlsx', res);
+    });
 });

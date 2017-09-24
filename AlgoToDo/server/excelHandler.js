@@ -1,406 +1,453 @@
 (function (excelHandler) {
 
-    excelHandler.downloadExcel = downloadExcel;
+        excelHandler.downloadExcel = downloadExcel;
 
-    var deferred = require('deferred');
-    var moment = require('moment-timezone');
-    moment.locale('he');
+        var deferred = require('deferred');
+        var moment = require('moment-timezone');
+        moment.locale('he');
 
-    require('source-map-support').install();
-    var xl = require('excel4node');
-    var Jimp = require("jimp");
-    var dropbox = require("./dropbox");
+        require('source-map-support').install();
+        var xl = require('excel4node');
+        var Jimp = require("jimp");
+        var dropbox = require("./dropbox");
+        var fs = require('fs');
 
-    var worksheetName = 'משימות';
+        var tasksExcelObjects;
+        var photos;
+        var worksheetName = 'משימות';
 
-    var getStatusHebString = function (status) {
-        switch (status) {
-            case 'inProgress':
-                return 'בתהליך';
-            case 'done':
-                return 'בוצע'
-            case 'closed':
-                return 'נסגר'
-            default:
-                break;
-        }
-    }
-
-    var getTotalTaskTime = function (task) {
-        if (task.doneTime === undefined) {
-            return '';
-        }
-        var end = new Date(task.doneTime);
-        var start = new Date(task.createTime);
-        var totalInMillisconds = end.getTime() - start.getTime();
-        var totalTime = moment.duration(totalInMillisconds);
-        return moment.duration(totalInMillisconds).humanize();
-    };
-
-    var getTaskCommentsAsString = function (task) {
-        var str = '';
-        for (var index = 0; index < task.comments.length; index++) {
-            var comment = task.comments[index];
-            if (comment.text && comment.text !== '') {
-                str += comment.from.name + ': ' + comment.text + '\n';
+        var getStatusHebString = function (status) {
+            switch (status) {
+                case 'inProgress':
+                    return 'בתהליך';
+                case 'done':
+                    return 'בוצע'
+                case 'closed':
+                    return 'נסגר'
+                default:
+                    break;
             }
         }
-        return str;
-    }
 
-
-    var https = require('https');
-    var fs = require('fs');
-    var request = require('request');
-
-    var download = function (uri, filename, callback) {
-        request.head(uri, function (err, res, body) {
-            console.log('content-type:', res.headers['content-type']);
-            console.log('content-length:', res.headers['content-length']);
-
-            request(uri).pipe(fs.createWriteStream(filename)).on('close', callback);
-        });
-    };
-
-    var getTaskPhotos = function (task) {
-        var str = '';
-        for (var index = 0; index < task.comments.length; index++) {
-            var comment = task.comments[index];
-            if (comment.fileName && comment.fileName !== '') {
-                str += comment.from.name + ': ' + comment.fileName + ', ';
+        var getTotalTaskTime = function (task) {
+            if (task.doneTime === undefined) {
+                return '';
             }
-        }
-        return str;
-    }
-
-    dropbox.downloadFile('2017-09-17T18_58_01.290Z.jpg', function (entry) {
-        var a = 1;
-        // Jimp.read("./file.jpg", function (err, lenna) {
-        //     if (err) throw err;
-        //     lenna.resize(128, 128) // resize
-        //         .quality(60) // set JPEG quality
-        //         .greyscale() // set greyscale
-        //         .write("file-small-bw.jpg"); // save
-        //     // d.resolve(generateWorkbook());
-
-        // });
-    },function(error){
-        var b = 2;
-    });
-
-    function downloadExcel() {
-
-        var d = deferred();
-        //https://www.dropbox.com/s/4ho2j0sfc5zwtm5/2017-09-17T18_48_42.864Z.jpg?dl=1
-        //https://www.dropbox.com/s/pb0hks4ixe4qjj4/2017-09-17T18_58_01.290Z.jpg?dl=1
-        download('https://www.dropbox.com/s/pb0hks4ixe4qjj4/2017-09-17T18_58_01.290Z.jpg?dl=1', 'file.jpg', function () {
-
-            // open a file called "lenna.png"
-            Jimp.read("./file.jpg", function (err, lenna) {
-                if (err) throw err;
-                lenna.resize(128, 128) // resize
-                    .quality(60) // set JPEG quality
-                    .greyscale() // set greyscale
-                    .write("file-small-bw.jpg"); // save
-
-                setTimeout(function () {
-                    d.resolve(generateWorkbook());
-                }, 0);
-
-            });
-        });
-
-
-
-
-        // var file = fs.createWriteStream("file.jpg");
-        // var request = https.get("https://www.dropbox.com/s/3o48o6gcq5s75sm/2017-01-30T08_52_53.540Z.jpg?dl=1", function(response) {
-        //     response.on('data', (_d) => {
-        //         _d.pipe(file);
-        //         d.resolve(generateWorkbook()) ;
-        //       });  
-        // });
-
-        return d.promise;
-    }
-
-    function generateWorkbook() {
-        var wb = new xl.Workbook({
-            defaultFont: {
-                name: 'Verdana',
-                size: 12
-            },
-            dateFormat: 'd/m/yy hh:mm'
-        });
-
-        /*****************************************
-         * START Create a sample invoice
-         *****************************************/
-
-        // Create some styles to be used throughout
-        var multiLineStyle = wb.createStyle({
-            alignment: {
-                wrapText: true,
-                vertical: 'top'
-            }
-        });
-        var largeText = wb.createStyle({
-            font: {
-                name: 'Cambria',
-                size: 20
-            }
-        });
-        var medText = wb.createStyle({
-            font: {
-                name: 'Cambria',
-                size: 14,
-                color: '#D4762C'
-            },
-            alignment: {
-                vertical: 'center'
-            }
-        });
-        var currencyStyle = wb.createStyle({
-            numberFormat: '$##0.00; [Red]($##0.00); $0.00'
-        });
-
-        var tasksWS = wb.addWorksheet(worksheetName, {
-            pageSetup: {
-                fitToWidth: 1
-            },
-            headerFooter: {
-                oddHeader: 'iAmNater invoice',
-                oddFooter: 'Invoice Page &P'
-            }
-        });
-
-        // Set some row and column properties
-        tasksWS.row(5).setHeight(45);
-        tasksWS.column(1).setWidth(3);
-        tasksWS.column(2).setWidth(20);
-        tasksWS.column(3).setWidth(20);
-        tasksWS.column(5).setWidth(25);
-        tasksWS.column(8).setWidth(35);
-        tasksWS.column(9).setWidth(35);
-
-        tasksWS.cell(5, 2).string('משימות').style(largeText);
-        tasksWS.cell(5, 3).string('מחסני השוק').style(largeText).style({
-            font: {
-                color: '#D4762C'
-            }
-        });
-
-        // var Volume = require('memfs');
-        // //Volume.mkdirpSync(process.cwd());
-        // process.chdir('/');
-        // Volume.writeFileSync('/logo2.png', './sampleFiles/logo.png');
-
-
-        // //var vol2 = Volume.fromJSON({'/foo': 'bar 2'});
-        // var a = Volume.readFileSync('/logo2.png'); // bar 2
-
-
-
-        // Add a company logo
-        tasksWS.addImage({
-            path: './sampleFiles/logo.png',
-            type: 'picture',
-            position: {
-                type: 'oneCellAnchor',
-                from: {
-                    col: 8,
-                    colOff: 0,
-                    row: 1,
-                    rowOff: 0
-                },
-                to: {
-                    col: 9,
-                    colOff: 0,
-                    row: 2,
-                    rowOff: 0
-                }
-            }
-        });
-
-        // Add some borders to specific cells
-        /* tasksWS.cell(2, 2, 2, 5).style({
-             border: {
-                 bottom: {
-                     style: 'thick',
-                     color: '#000000'
-                 }
-             }
-         });
-
-         // Add some data and adjust styles for specific cells
-         tasksWS.cell(3, 2, 3, 3, true).string('January 1, 2016').style({
-             border: {
-                 bottom: {
-                     style: 'thin',
-                     color: '#D4762C'
-                 }
-             }
-         });
-         tasksWS.cell(4, 2, 4, 3, true).string('PAYMENT DUE BY: March 1, 2016').style({
-             font: {
-                 bold: true
-             }
-         });
-
-         // style methods can be chained. multiple styles will be merged with last style taking precedence if there is a conflict
-         tasksWS.cell(3, 5, 4, 5, true).formula('E31').style(currencyStyle).style({
-             font: {
-                 size: 20,
-                 color: '#D4762C'
-             },
-             alignment: {
-                 vertical: 'center'
-             }
-         });
-         tasksWS.cell(4, 2, 4, 5).style({
-             border: {
-                 bottom: {
-                     style: 'thin',
-                     color: '#000000'
-                 }
-             }
-         });
-
-         tasksWS.row(6).setHeight(75);
-         tasksWS.cell(6, 2, 6, 5).style(multiLineStyle);
-
-         // set some strings to have multiple font formats within a single cell
-         tasksWS.cell(6, 2, 6, 3, true).string([{
-                 bold: true
-             },
-             'Client Name\n',
-             {
-                 bold: false
-             },
-             'Company Name Inc.\n1234 First Street\nSomewhere, OR 12345'
-         ]);
-
-         tasksWS.cell(6, 4, 6, 5, true).string([{
-                 bold: true
-             },
-             'iAmNater.com\n',
-             {
-                 bold: false
-             },
-             '123 Nowhere Lane\nSomewhere, OR 12345'
-         ]).style({
-             alignment: {
-                 horizontal: 'right'
-             }
-         });*/
-
-        tasksWS.cell(6, 2, 6, 9).style({
-            border: {
-                bottom: {
-                    style: 'thick',
-                    color: '#000000'
-                }
-            }
-        });
-
-        var HeadersFields = {
-            createTime: 'תאריך',
-            from: 'שולח',
-            to: 'נמען',
-            description: 'תיאור',
-            status: 'סטטוס',
-            totalTime: 'זמן ביצוע',
-            comments: 'תגובות',
-            photos: 'תמונות'
+            var end = new Date(task.doneTime);
+            var start = new Date(task.createTime);
+            var totalInMillisconds = end.getTime() - start.getTime();
+            var totalTime = moment.duration(totalInMillisconds);
+            return moment.duration(totalInMillisconds).humanize();
         };
 
-        var keyIndex = 2;
-        for (var key in HeadersFields) {
-            if (HeadersFields.hasOwnProperty(key)) {
-                tasksWS.cell(7, keyIndex++).string(HeadersFields[key]).style({
-                    alignment: {
-                        horizontal: 'right'
-                    },
-                    font: {
-                        bold: true
-                    }
+        var getTaskCommentsAsString = function (task) {
+            var str = '';
+            for (var index = 0; index < task.comments.length; index++) {
+                var comment = task.comments[index];
+                if (comment.text && comment.text !== '') {
+                    str += comment.from.name + ': ' + comment.text + '\n';
+                }
+            }
+            return str;
+        }
+
+        var getTaskPhotos = function (task) {
+            photos = [];
+            for (var index = 0; index < task.comments.length; index++) {
+                var comment = task.comments[index];
+                if (comment.fileName && comment.fileName !== '') {
+                    photos.push(comment.fileName);
+                }
+            }
+            return photos;
+        }
+
+        var createExcelObjects = function (tasksList) {
+            tasksExcelObjects = [];
+            for (var index = 0; index < tasksList.length; index++) {
+                var task = tasksList[index];
+                tasksExcelObjects.push({
+                    createdDate: new Date(task.createTime),
+                    from: task.from.name,
+                    to: task.to.name,
+                    description: task.description,
+                    status: getStatusHebString(task.status),
+                    totalTime: getTotalTaskTime(task),
+                    comments: getTaskCommentsAsString(task),
+                    photos: getTaskPhotos(task)
                 });
             }
         }
 
-        tasksWS.row(7).filter(2, 9);
 
-        var tasks = require('../sampleFiles/invoiceData.json');
-        var i = 0;
-        var rowOffset = 8;
-        var oddBackgroundColor = '#F8F5EE';
-        for (var index = 0; index < tasks.length; index++) {
-            var task = tasks[index];
-            var curRow = rowOffset + i;
-            if (task !== undefined) {
-                // tasksWS.cell(curRow, 2).number(task.units).style({
-                //     alignment: {
-                //         horizontal: 'left'
-                //     }
-                // });
-                tasksWS.cell(curRow, 2).date(new Date(task.createTime)).style(multiLineStyle);
-                tasksWS.cell(curRow, 3).string(task.from.name).style(multiLineStyle);
-                tasksWS.cell(curRow, 4).string(task.to.name).style(multiLineStyle);
-                tasksWS.cell(curRow, 5).string(task.description).style(multiLineStyle);
-                tasksWS.cell(curRow, 6).string(getStatusHebString(task.status)).style({
-                    alignment: {
-                        horizontal: 'center',
-                        wrapText: true,
-                        vertical: 'top'
-                    }
-                });
-                tasksWS.cell(curRow, 7).string(getTotalTaskTime(task)).style({
-                    alignment: {
-                        horizontal: 'center',
-                        wrapText: true,
-                        vertical: 'top'
-                    }
-                });
-                tasksWS.cell(curRow, 8).string(getTaskCommentsAsString(task)).style(multiLineStyle);
-                tasksWS.cell(curRow, 9).string(getTaskPhotos(task)).style(multiLineStyle);
-                if (index === 3) {
+        // var https = require('https');
+        // var fs = require('fs');
+        // var request = require('request');
 
+        // var download = function (uri, filename, callback) {
+        //     request.head(uri, function (err, res, body) {
+        //         console.log('content-type:', res.headers['content-type']);
+        //         console.log('content-length:', res.headers['content-length']);
 
-                    tasksWS.addImage({
-                        path: './file-small-bw.jpg',
-                        type: 'picture',
-                        position: {
-                            type: 'oneCellAnchor',
-                            from: {
-                                col: 9,
-                                colOff: 0,
-                                row: curRow,
-                                rowOff: 0
-                            },
-                            to: {
-                                col: 10,
-                                colOff: 0,
-                                row: curRow + 1,
-                                rowOff: 0
-                            }
-                        }
-                    });
+        //         request(uri).pipe(fs.createWriteStream(filename)).on('close', callback);
+        //     });
+        // };
 
-                    // tasksWS.cell(curRow, 4).number(task.unitCost).style(currencyStyle);
-                    //tasksWS.cell(curRow, 5).formula(xl.getExcelCellRef(rowOffset + i, 2) + '*' + xl.getExcelCellRef(rowOffset + 1, 4)).style(currencyStyle);
-                }
-                if (i % 2 === 0) {
-                    tasksWS.cell(curRow, 2, curRow, 9).style({
-                        fill: {
-                            type: 'pattern',
-                            patternType: 'solid',
-                            fgColor: oddBackgroundColor
-                        }
-                    });
-                }
-                i++;
+        var resolveCount;
+        var downloadTasksPhotos = function () {
+            
+            var d = deferred();
+
+            var ThumbnailSize = 'w128h128';
+            
+            if (!photos || photos.length < 1) {
+                d.resolve();
             }
 
+            resolveCount = 0;
+            
+            for (var index = 0; index < photos.length; index++) {
+                var fileName = photos[index];
+                dropbox.getThumbnail(fileName, ThumbnailSize)
+                .then(function (entry) {
+                    fs.writeFile('tempFiles/' + entry.name, entry.fileBinary, 'binary', function (err) {
+                        if (err) {
+                            throw err;
+                            // error
+                            resolveCount++;
+                        }
+                        resolveCount++;
+                        if(resolveCount === photos.length){
+                            d.resolve();
+                        } 
+                    });
+                }, function (error) {
+                    resolveCount++;
+                    // error
+                });
+            }
+            
+            return d.promise;
+        }
+
+        function downloadExcel(tasks) {
+
+            var d = deferred();
+            //https://www.dropbox.com/s/4ho2j0sfc5zwtm5/2017-09-17T18_48_42.864Z.jpg?dl=1
+            //https://www.dropbox.com/s/pb0hks4ixe4qjj4/2017-09-17T18_58_01.290Z.jpg?dl=1
+            // download('https://www.dropbox.com/s/pb0hks4ixe4qjj4/2017-09-17T18_58_01.290Z.jpg?dl=1', 'file.jpg', function () {
+
+            //     // open a file called "lenna.png"
+            //     Jimp.read("./file.jpg", function (err, lenna) {
+            //         if (err) throw err;
+            //         lenna.resize(128, 128) // resize
+            //             .quality(60) // set JPEG quality
+            //             .greyscale() // set greyscale
+            //             .write("file-small-bw.jpg"); // save
+
+            //         setTimeout(function () {
+            //             d.resolve(generateWorkbook());
+            //         }, 0);
+
+            //     });
+            // });
+
+            
+            createExcelObjects(tasks);
+
+            downloadTasksPhotos().then(function(){
+                d.resolve(generateWorkbook());
+            });
+
+            
+
+            // var file = fs.createWriteStream("file.jpg");
+            // var request = https.get("https://www.dropbox.com/s/3o48o6gcq5s75sm/2017-01-30T08_52_53.540Z.jpg?dl=1", function(response) {
+            //     response.on('data', (_d) => {
+            //         _d.pipe(file);
+            //         d.resolve(generateWorkbook()) ;
+            //       });  
+            // });
+
+            return d.promise;
+        }
+
+        function generateWorkbook() {
+            var wb = new xl.Workbook({
+                defaultFont: {
+                    name: 'Verdana',
+                    size: 12
+                },
+                dateFormat: 'd/m/yy hh:mm'
+            });
+
+            /*****************************************
+             * START Create a sample invoice
+             *****************************************/
+
+            // Create some styles to be used throughout
+            var multiLineStyle = wb.createStyle({
+                alignment: {
+                    wrapText: true,
+                    vertical: 'top'
+                }
+            });
+            var largeText = wb.createStyle({
+                font: {
+                    name: 'Cambria',
+                    size: 20
+                }
+            });
+            var medText = wb.createStyle({
+                font: {
+                    name: 'Cambria',
+                    size: 14,
+                    color: '#D4762C'
+                },
+                alignment: {
+                    vertical: 'center'
+                }
+            });
+            var currencyStyle = wb.createStyle({
+                numberFormat: '$##0.00; [Red]($##0.00); $0.00'
+            });
+
+            var tasksWS = wb.addWorksheet(worksheetName, {
+                pageSetup: {
+                    fitToWidth: 1
+                },
+                headerFooter: {
+                    oddHeader: 'iAmNater invoice',
+                    oddFooter: 'Invoice Page &P'
+                }
+            });
+
+            // Set some row and column properties
+            tasksWS.row(5).setHeight(45);
+            tasksWS.column(1).setWidth(3);
+            tasksWS.column(2).setWidth(20);
+            tasksWS.column(3).setWidth(20);
+            tasksWS.column(5).setWidth(25);
+            tasksWS.column(8).setWidth(35);
+            tasksWS.column(9).setWidth(35);
+
+            tasksWS.cell(5, 2).string('משימות').style(largeText);
+            tasksWS.cell(5, 3).string('מחסני השוק').style(largeText).style({
+                font: {
+                    color: '#D4762C'
+                }
+            });
+
+            // var Volume = require('memfs');
+            // //Volume.mkdirpSync(process.cwd());
+            // process.chdir('/');
+            // Volume.writeFileSync('/logo2.png', './sampleFiles/logo.png');
+
+
+            // //var vol2 = Volume.fromJSON({'/foo': 'bar 2'});
+            // var a = Volume.readFileSync('/logo2.png'); // bar 2
+
+
+
+            // Add a company logo
+            tasksWS.addImage({
+                path: '../sampleFiles/logo.png',
+                type: 'picture',
+                position: {
+                    type: 'oneCellAnchor',
+                    from: {
+                        col: 8,
+                        colOff: 0,
+                        row: 1,
+                        rowOff: 0
+                    },
+                    to: {
+                        col: 9,
+                        colOff: 0,
+                        row: 2,
+                        rowOff: 0
+                    }
+                }
+            });
+
+            // Add some borders to specific cells
+            /* tasksWS.cell(2, 2, 2, 5).style({
+                 border: {
+                     bottom: {
+                         style: 'thick',
+                         color: '#000000'
+                     }
+                 }
+             });
+
+             // Add some data and adjust styles for specific cells
+             tasksWS.cell(3, 2, 3, 3, true).string('January 1, 2016').style({
+                 border: {
+                     bottom: {
+                         style: 'thin',
+                         color: '#D4762C'
+                     }
+                 }
+             });
+             tasksWS.cell(4, 2, 4, 3, true).string('PAYMENT DUE BY: March 1, 2016').style({
+                 font: {
+                     bold: true
+                 }
+             });
+
+             // style methods can be chained. multiple styles will be merged with last style taking precedence if there is a conflict
+             tasksWS.cell(3, 5, 4, 5, true).formula('E31').style(currencyStyle).style({
+                 font: {
+                     size: 20,
+                     color: '#D4762C'
+                 },
+                 alignment: {
+                     vertical: 'center'
+                 }
+             });
+             tasksWS.cell(4, 2, 4, 5).style({
+                 border: {
+                     bottom: {
+                         style: 'thin',
+                         color: '#000000'
+                     }
+                 }
+             });
+
+             tasksWS.row(6).setHeight(75);
+             tasksWS.cell(6, 2, 6, 5).style(multiLineStyle);
+
+             // set some strings to have multiple font formats within a single cell
+             tasksWS.cell(6, 2, 6, 3, true).string([{
+                     bold: true
+                 },
+                 'Client Name\n',
+                 {
+                     bold: false
+                 },
+                 'Company Name Inc.\n1234 First Street\nSomewhere, OR 12345'
+             ]);
+
+             tasksWS.cell(6, 4, 6, 5, true).string([{
+                     bold: true
+                 },
+                 'iAmNater.com\n',
+                 {
+                     bold: false
+                 },
+                 '123 Nowhere Lane\nSomewhere, OR 12345'
+             ]).style({
+                 alignment: {
+                     horizontal: 'right'
+                 }
+             });*/
+
+            tasksWS.cell(6, 2, 6, 9).style({
+                border: {
+                    bottom: {
+                        style: 'thick',
+                        color: '#000000'
+                    }
+                }
+            });
+
+            var HeadersFields = {
+                createTime: 'תאריך',
+                from: 'שולח',
+                to: 'נמען',
+                description: 'תיאור',
+                status: 'סטטוס',
+                totalTime: 'זמן ביצוע',
+                comments: 'תגובות',
+                photos: 'תמונות'
+            };
+
+            var keyIndex = 2;
+            for (var key in HeadersFields) {
+                if (HeadersFields.hasOwnProperty(key)) {
+                    tasksWS.cell(7, keyIndex++).string(HeadersFields[key]).style({
+                        alignment: {
+                            horizontal: 'right'
+                        },
+                        font: {
+                            bold: true
+                        }
+                    });
+                }
+            }
+
+            tasksWS.row(7).filter(2, 9);
+
+            var tasks = tasksExcelObjects;
+            var i = 0;
+            var rowOffset = 8;
+            var oddBackgroundColor = '#F8F5EE';
+            for (var index = 0; index < tasks.length; index++) {
+                var task = tasks[index];
+                var curRow = rowOffset + i;
+                if (task !== undefined) {
+                    // tasksWS.cell(curRow, 2).number(task.units).style({
+                    //     alignment: {
+                    //         horizontal: 'left'
+                    //     }
+                    // });
+                    tasksWS.cell(curRow, 2).date(task.createdDate).style(multiLineStyle);
+                    tasksWS.cell(curRow, 3).string(task.from).style(multiLineStyle);
+                    tasksWS.cell(curRow, 4).string(task.to).style(multiLineStyle);
+                    tasksWS.cell(curRow, 5).string(task.description).style(multiLineStyle);
+                    tasksWS.cell(curRow, 6).string(task.status).style({
+                        alignment: {
+                            horizontal: 'center',
+                            wrapText: true,
+                            vertical: 'top'
+                        }
+                    });
+                    tasksWS.cell(curRow, 7).string(task.totalTime).style({
+                        alignment: {
+                            horizontal: 'center',
+                            wrapText: true,
+                            vertical: 'top'
+                        }
+                    });
+                    tasksWS.cell(curRow, 8).string(task.comments).style(multiLineStyle);
+
+                    for (var j = 0; j < task.photos.length; j++) {
+                        var photos = task.photos[j];
+                        tasksWS.cell(curRow, 9 + j).string().style(multiLineStyle);
+
+                        tasksWS.addImage({
+                            path: './file-small-bw.jpg',
+                            type: 'picture',
+                            position: {
+                                type: 'oneCellAnchor',
+                                from: {
+                                    col: 9 + j,
+                                    colOff: 0,
+                                    row: curRow,
+                                    rowOff: 0
+                                },
+                                to: {
+                                    col: 10 + j,
+                                    colOff: 0,
+                                    row: curRow + 1,
+                                    rowOff: 0
+                                }
+                            }
+                        });
+                    }
+
+                    if (i % 2 === 0) {
+                        tasksWS.cell(curRow, 2, curRow, 9).style({
+                            fill: {
+                                type: 'pattern',
+                                patternType: 'solid',
+                                fgColor: oddBackgroundColor
+                            }
+                        });
+                    }
+                    i++;
+                }
+            }
             // tasksWS.cell(21, 2, 21, 5).style({
             //     border: {
             //         bottom: {
@@ -708,7 +755,7 @@
             return wb;
         }
 
-    }
+    
 
 
 })(module.exports);
