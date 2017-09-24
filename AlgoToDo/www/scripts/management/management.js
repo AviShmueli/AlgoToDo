@@ -103,6 +103,10 @@
                     }                   
                 }
             }
+            if (!vm.tasksFilter.hasOwnProperty('cliqaId')) {
+                logger.toast('חובה לבחור קליקה', 700);
+                return;
+            }
 
             if (vm.tasksFilterStatusInProgress) {
                 vm.tasksFilter.status = 'inProgress';
