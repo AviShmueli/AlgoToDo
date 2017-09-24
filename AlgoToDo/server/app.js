@@ -443,5 +443,3 @@ app.get('/getExcel', function (req, res) {
 });
 
 
-
-var b = 1;
