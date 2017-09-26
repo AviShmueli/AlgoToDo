@@ -560,23 +560,23 @@
             };
         }
 
-        // todo: handel multi values
         if (filter['userId'] !== undefined) {
             var usersIds = filter['userId'];
-            
-            // new
-            // var idsList = [];
-            // for (var index = 0; index < usersIds.length; index++) {
-            //     var userId = new ObjectID(usersIds[index]);
-            //     idsList.push(userId);
-            // }
 
-            // old
+            var idsList = [];
+            for (var index = 0; index < usersIds.length; index++) {
+                var userId = new ObjectID(usersIds[index]);
+                idsList.push(userId);
+            }
             delete filter['userId'];
             filter['$or'] = [{
-                'from._id': new ObjectID(usersIds)
+                'from._id': {
+                    $in: idsList
+                }
             }, {
-                'to._id': new ObjectID(usersIds)
+                'to._id': {
+                    $in: idsList
+                }
             }];
         }
 
@@ -623,12 +623,22 @@
         }
 
         if (filter['userId'] !== undefined) {
-            var userId = filter['userId'];
+            var usersIds = filter['userId'];
+
+            var idsList = [];
+            for (var index = 0; index < usersIds.length; index++) {
+                var userId = new ObjectID(usersIds[index]);
+                idsList.push(userId);
+            }
             delete filter['userId'];
             filter['$or'] = [{
-                'from._id': new ObjectID(userId)
+                'from._id': {
+                    $in: idsList
+                }
             }, {
-                'to._id': new ObjectID(userId)
+                'to._id': {
+                    $in: idsList
+                }
             }];
         }
 
