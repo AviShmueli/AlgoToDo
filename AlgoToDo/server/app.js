@@ -433,12 +433,13 @@ app.post('/TaskManeger/addUsersToCliqa', function (req, res) {
 
 });
 
-var excelHandler = require('./excelHandler');
-
-app.get('/getExcel', function (req, res) {
+app.get('/TaskManeger/generateReport', function (req, res) {
     
-    var tempTasks = require('../sampleFiles/invoiceData.json');
-    excelHandler.downloadExcel(tempTasks).then(function(wb){
-        wb.write('MyExcel.xlsx', res);
+    BL.generateReport(req.query).then(function (excelFile) {
+        excelFile.write('MyExcel.xlsx', res);
+    }, function (error) {
+        winston.log('error', error.message, error.error);
+        res.status(500).send(error);
     });
+
 });

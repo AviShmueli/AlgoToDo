@@ -103,7 +103,7 @@
                         </div>
 
                         <div class="md-secondary md-block" flex="10" layout="column" layout-align="center center">
-                            <md-button ng-click="vm.getTasks(true)" class="md-warn md-raised md-hue-1">סנן</md-button>
+                            <md-button ng-click="vm.getTasksFilter(true)" class="md-warn md-raised md-hue-1">סנן</md-button>
                             <md-button aria-label="download" ng-click="vm.downloadFilterdTable()" class="md-raised">
                                 <md-icon ng-hide="vm.downloading" style="width:22px;height:22px;" md-svg-src="/images/Exel_download.svg">
                                 </md-icon>
@@ -117,7 +117,7 @@
                 <md-card layout-margin>
                     <md-table-container>
                         <table md-table md-progress="vm.promise">
-                            <thead md-head md-order="vm.query.order" md-on-reorder="vm.getTasks">
+                            <thead md-head md-order="vm.query.order" md-on-reorder="vm.getTasksFilter">
                                 <tr md-row>
                                     <th md-column><span>שולח</span></th>
                                     <th md-column>נמען</th>
@@ -156,7 +156,7 @@
                     <!--</md-card>
                     <md-card>-->
                     <md-table-pagination md-label="{'of': ' מתוך ', 'page': 'עמוד מספר', 'rowsPerPage': 'מספר שורות בעמוד' }" md-limit="vm.query.limit"
-                        md-limit-options="[5, 10, 15, 20]" md-page="vm.query.page" md-total="{{vm.totalTaskCount}}" md-on-paginate="vm.getTasks"
+                        md-limit-options="[5, 10, 15, 20]" md-page="vm.query.page" md-total="{{vm.totalTaskCount}}" md-on-paginate="vm.getTasksFilter"
                         md-page-select></md-table-pagination>
                 </md-card>
 
@@ -294,7 +294,7 @@
                     </div>
 
                     <div class="md-secondary" layout-gt-xsm="column" flex-xs flex-gt-xs="20" layout-align="center center">
-                        <md-button ng-click="vm.getTasks()" class="md-warn md-raised md-hue-1">סנן</md-button>
+                        <md-button ng-click="vm.getTasksFilter()" class="md-warn md-raised md-hue-1">סנן</md-button>
                     </div>
 
                 </md-card>
@@ -302,7 +302,7 @@
                 <md-card layout-margin>
                     <md-table-container>
                         <table md-table md-row-select multiple ng-model="selected" md-progress="vm.promise">
-                            <thead md-head md-order="vm.query.order" md-on-reorder="vm.getTasks">
+                            <thead md-head md-order="vm.query.order" md-on-reorder="vm.getTasksFilter">
                                 <tr md-row>
                                     <th md-column><span>שולח</span></th>
                                     <th md-column>נמען</th>
@@ -336,7 +336,7 @@
                         </table>
                     </md-table-container>
 
-                    <md-table-pagination md-label="{'of': ' מתוך ', 'page': 'עמוד מספר', 'rowsPerPage': 'מספר שורות בעמוד' }" md-limit="vm.query.limit" md-limit-options="[5, 10, 15, 20]" md-page="vm.query.page" md-total="{{vm.totalTaskCount}}" md-on-paginate="vm.getTasks" md-page-select></md-table-pagination>
+                    <md-table-pagination md-label="{'of': ' מתוך ', 'page': 'עמוד מספר', 'rowsPerPage': 'מספר שורות בעמוד' }" md-limit="vm.query.limit" md-limit-options="[5, 10, 15, 20]" md-page="vm.query.page" md-total="{{vm.totalTaskCount}}" md-on-paginate="vm.getTasksFilter" md-page-select></md-table-pagination>
                 </md-card>
 
             </ui-view>-->

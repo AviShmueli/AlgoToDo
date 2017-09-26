@@ -34,7 +34,7 @@
     BL.deleteGroups = deleteGroups;
     BL.getUsersInCliqa = getUsersInCliqa;
     BL.addUsersToCliqa = addUsersToCliqa;
-
+    BL.generateReport = generateReport;
 
     var ObjectID = require('mongodb').ObjectID;
     var deferred = require('deferred');
@@ -46,6 +46,8 @@
     var winston = require('./logger');
     var pushNotifications = require('./push-notifications/push-notifications');
     var sms = require('./sms');
+    var excelHandler = require('./excelHandler');
+
 
     var MAIN_CLIQA_ID = '585c1e28ee630b29fc4b2d3d';
 
@@ -474,7 +476,7 @@
         var query = {};
 
         if (cliqot !== undefined) {
-            
+
             // if request came from old version, convert to Array
             if (typeof cliqot == 'string') {
                 cliqot = [cliqot];
@@ -486,7 +488,7 @@
                 var cliqa = JSON.parse(cliqot[index]);
                 if (cliqa._id !== MAIN_CLIQA_ID) {
                     objectIdCliqot.push(new ObjectID(cliqa._id));
-                }   
+                }
             }
 
             query = {
@@ -553,10 +555,12 @@
         };
 
         if (filter.cliqaId) {
-            filter.cliqaId = {$in : filter.cliqaId};
+            filter.cliqaId = {
+                $in: filter.cliqaId
+            };
         }
 
-        // doto: handel multi values
+        // todo: handel multi values
         if (filter['userId'] !== undefined) {
             var userId = filter['userId'];
             delete filter['userId'];
@@ -604,9 +608,11 @@
         var d = deferred();
 
         if (filter.cliqaId) {
-            filter.cliqaId = {$in : filter.cliqaId};
+            filter.cliqaId = {
+                $in: filter.cliqaId
+            };
         }
-        
+
         if (filter['userId'] !== undefined) {
             var userId = filter['userId'];
             delete filter['userId'];
@@ -1058,6 +1064,35 @@
 
         DAL.addUsersToCliqa(cliqa, users).then(function () {
             d.resolve();
+        }, function (error) {
+            d.deferred(error);
+        });
+
+        return d.promise;
+    }
+
+    function generateReport(query) {
+
+        var d = deferred();
+
+        // var order = query.order,
+        //     limit = parseInt(query.limit),
+        //     page = query.page,
+        //     filter = JSON.parse(query.filter);
+
+        var queryFilter = {
+            order: 'createTime',
+            limit: 100,
+            filter: query.filter
+        }
+
+        getAllTasks(queryFilter).then(function (tasks) {
+
+            excelHandler.downloadExcel(tasks).then(function (wb) {
+                d.resolve(wb);
+                //wb.write('MyExcel.xlsx', res);
+            });
+
         }, function (error) {
             d.deferred(error);
         });

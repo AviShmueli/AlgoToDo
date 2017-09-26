@@ -448,9 +448,22 @@
             var req = {
                 method: 'POST',
                 url: appConfig.appDomain() + '/TaskManeger/addUsersToCliqa',
-                data: {
+                r: {
                     cliqa: cliqa,
                     users: users
+                }
+            };
+
+            return $http(req);
+        };
+
+        var generateReport = function (query, filter, user) {
+            var req = {
+                method: 'GET',
+                url: appConfig.appDomain() + '/TaskManeger/generateReport',
+                params: {
+                    query: query,
+                    filter: filter
                 }
             };
 
@@ -490,7 +503,8 @@
             addNewGroup: addNewGroup,
             deleteGroups: deleteGroups,
             getUsersInCliqa: getUsersInCliqa,
-            addUsersToCliqa: addUsersToCliqa
+            addUsersToCliqa: addUsersToCliqa,
+            generateReport: generateReport
         };
 
         return service;

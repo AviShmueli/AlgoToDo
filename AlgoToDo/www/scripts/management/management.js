@@ -45,7 +45,7 @@
 
 
         $scope.$watch('vm.tasksFilter.cliqaId', function (cliqot) {
-            if(cliqot && cliqot.length){
+            if (cliqot && cliqot.length) {
                 delete vm.tasksFilter.userId;
                 // if (vm.tasksFilter.cliqaId.indexOf('$in') !== -1) {
                 //     vm.users = [];
@@ -57,25 +57,25 @@
         });
 
         //$timeout(function () {
-            
-            // vm.allCliqot['all'] = {
-            //     name: 'כל הקליקות',
-            //     '_id': {
-            //         $in: userCliqotIds
-            //     }
-            // };
-            for (var i = 0; i < vm.user.cliqot.length; i++) {
-                vm.allCliqot[vm.user.cliqot[i]._id] = vm.user.cliqot[i];
-                userCliqotIds.push(vm.user.cliqot[i]._id);
-            }
-            // { "$exists" : false } - to get the task that dont contains cliqaId filed
-            vm.allCliqotValues = Object.values(vm.allCliqot);
-            // always filer the table according to admin's cliqot!
-            vm.tasksFilter.cliqaId = userCliqotIds;
+
+        // vm.allCliqot['all'] = {
+        //     name: 'כל הקליקות',
+        //     '_id': {
+        //         $in: userCliqotIds
+        //     }
+        // };
+        for (var i = 0; i < vm.user.cliqot.length; i++) {
+            vm.allCliqot[vm.user.cliqot[i]._id] = vm.user.cliqot[i];
+            userCliqotIds.push(vm.user.cliqot[i]._id);
+        }
+        // { "$exists" : false } - to get the task that dont contains cliqaId filed
+        vm.allCliqotValues = Object.values(vm.allCliqot);
+        // always filer the table according to admin's cliqot!
+        vm.tasksFilter.cliqaId = userCliqotIds;
         //}, 0);
 
-        vm.getTasks = function (reset) {
-            
+        vm.getTasksFilter = function (reset, dontFilter) {
+
             if (reset) {
                 vm.query.page = 1;
             }
@@ -100,7 +100,7 @@
                     }
                     if (vm.tasksFilter[property] === '' || vm.tasksFilter[property].length < 1) {
                         delete vm.tasksFilter[property];
-                    }                   
+                    }
                 }
             }
             if (!vm.tasksFilter.hasOwnProperty('cliqaId')) {
@@ -131,6 +131,12 @@
                 vm.tasksFilterStatusInProgress = true;
             }
 
+            if (!dontFilter) {
+                getFilterdTasks();
+            }
+        };
+
+        var getFilterdTasks = function () {
 
             DAL.getAllTasksCount(vm.tasksFilter).then(function (response) {
                 vm.totalTaskCount = response.data;
@@ -143,10 +149,10 @@
                 window.localStorage.setItem('fakeData', JSON.stringify(vm.tasks));
                 deferred.resolve();
             });
-        };
+        }
 
         $timeout(function () {
-            vm.getTasks();
+            vm.getTasksFilter();
             //vm.tasks = JSON.parse(window.localStorage.getItem('fakeData'));
         }, 0);
 
@@ -182,7 +188,7 @@
 
             switch (vm.activeTab) {
                 case "tasks":
-                    vm.getTasks();
+                    vm.getTasksFilter();
                     break;
                 case "users":
                     vm.getUsers();
@@ -191,7 +197,7 @@
 
                     break;
                 default:
-                    vm.getTasks();
+                    vm.getTasksFilter();
                     break;
             }
         }
@@ -284,52 +290,46 @@
 
 
         vm.downloadFilterdTable = function () {
-            var fileName = 'משימות' + '_' + moment().format("DD/MM/YYYY");
-            //DAL.getAllTasks(vm.query, vm.tasksFilter, vm.user).then(function (response) {
-                var taskToDownload = convertTasksToExcelFormat(/*response.data*/vm.tasks);
-                filesHandler.downloadAsCSV(taskToDownload, fields, fileName);
-            //});
-        }
 
-        var convertTasksToExcelFormat = function (tasks) {
-            var listToReturn = []
-            for (var index = 0; index < tasks.length; index++) {
-                var task = tasks[index];
-                var excelTask = {
-                    createTime: moment(task.createTime).format("DD/MM/YYYY hh:mm"),
-                    from: task.from.name,
-                    to: task.to.name,
-                    description: task.description,
-                    status: getStatusHebString(task.status),
-                    totalTime: vm.getTotalTaskTime(task),
-                    comments: getTaskCommentsAsString(task),
-                    photos: getTaskPhotos(task)
-                };
-                listToReturn.push(excelTask);
+            if (!vm.tasksFilter.hasOwnProperty('cliqaId')) {
+                logger.toast('חובה לבחור קליקה', 700);
+                return;
             }
-            return listToReturn;
-        }
 
-        var getTaskCommentsAsString = function (task) {
-            var str = '';
-            for (var index = 0; index < task.comments.length; index++) {
-                var comment = task.comments[index];
-                if (comment.text && comment.text !== '') {
-                    str += comment.from.name + ': ' + comment.text + ', ';
-                }
-            }
-            return str;
-        }
+            var query = {
+                order: 'createTime'
+            };
 
-        var getTaskPhotos = function (task) {
-            var str = '';
-            for (var index = 0; index < task.comments.length; index++) {
-                var comment = task.comments[index];
-                if (comment.fileName && comment.fileName !== '') {
-                    str += comment.from.name + ': ' + comment.fileName + ', ';
-                }
+            vm.getTasksFilter(false, true);
+
+            if (vm.tasksFilter.hasOwnProperty('cliqaId')) {
+                DAL.generateReport(query, vm.tasksFilter, vm.user).success(function (data, status, headers) {
+                    headers = headers();
+
+                    var filename = headers['x-filename'];
+                    var contentType = headers['content-type'];
+
+                    var linkElement = document.createElement('a');
+                    try {
+                        var blob = new Blob([data], {
+                            type: contentType
+                        });
+                        var url = window.URL.createObjectURL(blob);
+
+                        linkElement.setAttribute('href', url);
+                        linkElement.setAttribute("download", filename);
+
+                        var clickEvent = new MouseEvent("click", {
+                            "view": window,
+                            "bubbles": true,
+                            "cancelable": false
+                        });
+                        linkElement.dispatchEvent(clickEvent);
+                    } catch (ex) {
+                        console.log(ex);
+                    }
+                });
             }
-            return str;
         }
 
         var getStatusHebString = function (status) {
