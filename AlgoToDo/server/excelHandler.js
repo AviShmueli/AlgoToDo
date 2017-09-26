@@ -159,9 +159,9 @@
             downloadTasksPhotos().then(function () {
 
                 var excel = generateWorkbook();
-                logger.log("info", "step 8: ");
+                logger.log("info", "step 8: ", null);
                 deleatePhotos();
-                logger.log("info", "step 9: ");
+                logger.log("info", "step 9: ", null);
                 d.resolve(excel);
             });
         } catch (error) {
@@ -238,7 +238,7 @@
         logger.log("info", "step 3: ", null);
         // Add a company logo
         tasksWS.addImage({
-            path: '/logo.png',
+            path: 'logo.png',
             type: 'picture',
             position: {
                 type: 'oneCellAnchor',
