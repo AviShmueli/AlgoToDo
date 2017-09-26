@@ -1091,6 +1091,9 @@
             excelHandler.downloadExcel(tasks).then(function (wb) {
                 d.resolve(wb);
                 //wb.write('MyExcel.xlsx', res);
+            }, function (error) {
+                winston.log("error", "error while trying to create excel file: ", error);
+                d.resolve(error);
             });
 
         }, function (error) {

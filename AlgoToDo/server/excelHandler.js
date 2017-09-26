@@ -11,6 +11,7 @@
     var Jimp = require("jimp");
     var dropbox = require("./dropbox");
     var fs = require('fs');
+    var logger = require('./logger');
 
     var tasksExcelObjects;
     var photos;
@@ -52,27 +53,28 @@
     }
 
     var getTaskPhotos = function (task) {
-
+        var taskPhotos = [];
         for (var index = 0; index < task.comments.length; index++) {
             var comment = task.comments[index];
             if (comment.fileName && comment.fileName !== '') {
                 photos.push(comment.fileName);
+                taskPhotos.push(comment.fileName);
             }
         }
-        return photos;
+        return taskPhotos;
     }
 
     var removeUnsuportedChars = function (str) {
         var chars, chr;
         if (this.allowSurrogateChars) {
-          chars = /[\u0000-\u0008\u000B-\u000C\u000E-\u001F\uFFFE-\uFFFF]/;
+            chars = /[\u0000-\u0008\u000B-\u000C\u000E-\u001F\uFFFE-\uFFFF]/;
         } else {
-          chars = /[\u0000-\u0008\u000B-\u000C\u000E-\u001F\uD800-\uDFFF\uFFFE-\uFFFF]/;
+            chars = /[\u0000-\u0008\u000B-\u000C\u000E-\u001F\uD800-\uDFFF\uFFFE-\uFFFF]/;
         }
         chr = str.match(chars);
         if (chr) {
             str = str.replace(chr, "");
-          //throw new Error("Invalid character (" + chr + ") in string: " + str + " at index " + chr.index);
+            //throw new Error("Invalid character (" + chr + ") in string: " + str + " at index " + chr.index);
         }
         return str;
     }
@@ -94,20 +96,6 @@
             });
         }
     }
-
-
-    // var https = require('https');
-    // var fs = require('fs');
-    // var request = require('request');
-
-    // var download = function (uri, filename, callback) {
-    //     request.head(uri, function (err, res, body) {
-    //         console.log('content-type:', res.headers['content-type']);
-    //         console.log('content-length:', res.headers['content-length']);
-
-    //         request(uri).pipe(fs.createWriteStream(filename)).on('close', callback);
-    //     });
-    // };
 
     var resolveCount;
     var downloadTasksPhotos = function () {
@@ -144,7 +132,7 @@
                     });
                 }, function (error) {
                     resolveCount++;
-                    // error
+                    logger.log("error", "error while trying to get file from dropbox: ", error);
                 });
         }
 
@@ -155,49 +143,27 @@
         var rimraf = require('rimraf');
         rimraf('tempFiles', function () {
             console.log('done');
+        }, function (error) {
+            logger.log("error", "error while trying to delete temp folder: ", error);
         });
     }
 
     function downloadExcel(tasks) {
 
         var d = deferred();
-        //https://www.dropbox.com/s/4ho2j0sfc5zwtm5/2017-09-17T18_48_42.864Z.jpg?dl=1
-        //https://www.dropbox.com/s/pb0hks4ixe4qjj4/2017-09-17T18_58_01.290Z.jpg?dl=1
-        // download('https://www.dropbox.com/s/pb0hks4ixe4qjj4/2017-09-17T18_58_01.290Z.jpg?dl=1', 'file.jpg', function () {
 
-        //     // open a file called "lenna.png"
-        //     Jimp.read("./file.jpg", function (err, lenna) {
-        //         if (err) throw err;
-        //         lenna.resize(128, 128) // resize
-        //             .quality(60) // set JPEG quality
-        //             .greyscale() // set greyscale
-        //             .write("file-small-bw.jpg"); // save
+        try {
+            createExcelObjects(tasks);
 
-        //         setTimeout(function () {
-        //             d.resolve(generateWorkbook());
-        //         }, 0);
-
-        //     });
-        // });
-
-
-        createExcelObjects(tasks);
-
-        downloadTasksPhotos().then(function () {
-            var excel = generateWorkbook();
-            deleatePhotos();
-            d.resolve(excel);
-        });
-
-
-
-        // var file = fs.createWriteStream("file.jpg");
-        // var request = https.get("https://www.dropbox.com/s/3o48o6gcq5s75sm/2017-01-30T08_52_53.540Z.jpg?dl=1", function(response) {
-        //     response.on('data', (_d) => {
-        //         _d.pipe(file);
-        //         d.resolve(generateWorkbook()) ;
-        //       });  
-        // });
+            downloadTasksPhotos().then(function () {
+                var excel = generateWorkbook();
+                deleatePhotos();
+                d.resolve(excel);
+            });
+        } catch (error) {
+            logger.log("error", "error while trying to create report: ", error);
+            d.reject(error);
+        }
 
         return d.promise;
     }
@@ -211,9 +177,6 @@
             dateFormat: 'd/m/yy hh:mm'
         });
 
-        /*****************************************
-         * START Create a sample invoice
-         *****************************************/
 
         // Create some styles to be used throughout
         var multiLineStyle = wb.createStyle({
@@ -259,7 +222,7 @@
         tasksWS.column(3).setWidth(20);
         tasksWS.column(5).setWidth(25);
         tasksWS.column(8).setWidth(35);
-        tasksWS.column(9).setWidth(35);
+        tasksWS.column(9).setWidth(15);
 
         tasksWS.cell(5, 2).string('משימות').style(largeText);
         tasksWS.cell(5, 3).string('מחסני השוק').style(largeText).style({
@@ -267,17 +230,6 @@
                 color: '#D4762C'
             }
         });
-
-        // var Volume = require('memfs');
-        // //Volume.mkdirpSync(process.cwd());
-        // process.chdir('/');
-        // Volume.writeFileSync('/logo2.png', './sampleFiles/logo.png');
-
-
-        // //var vol2 = Volume.fromJSON({'/foo': 'bar 2'});
-        // var a = Volume.readFileSync('/logo2.png'); // bar 2
-
-
 
         // Add a company logo
         tasksWS.addImage({
@@ -299,6 +251,115 @@
                 }
             }
         });
+
+        tasksWS.cell(6, 2, 6, 9).style({
+            border: {
+                bottom: {
+                    style: 'thick',
+                    color: '#000000'
+                }
+            }
+        });
+
+        var HeadersFields = {
+            createTime: 'תאריך',
+            from: 'שולח',
+            to: 'נמען',
+            description: 'תיאור',
+            status: 'סטטוס',
+            totalTime: 'זמן ביצוע',
+            comments: 'תגובות',
+            photos: 'תמונות'
+        };
+
+        var keyIndex = 2;
+        for (var key in HeadersFields) {
+            if (HeadersFields.hasOwnProperty(key)) {
+                tasksWS.cell(7, keyIndex++).string(HeadersFields[key]).style({
+                    alignment: {
+                        horizontal: 'right'
+                    },
+                    font: {
+                        bold: true
+                    }
+                });
+            }
+        }
+
+        tasksWS.row(7).filter(2, 9);
+
+        var tasks = tasksExcelObjects;
+        var i = 0;
+        var rowOffset = 8;
+        var oddBackgroundColor = '#F8F5EE';
+        for (var index = 0; index < tasks.length; index++) {
+            var task = tasks[index];
+            var curRow = rowOffset + i;
+            if (task !== undefined) {
+                tasksWS.cell(curRow, 2).date(task.createdDate).style(multiLineStyle);
+                tasksWS.cell(curRow, 3).string(task.from).style(multiLineStyle);
+                tasksWS.cell(curRow, 4).string(task.to).style(multiLineStyle);
+                tasksWS.cell(curRow, 5).string(task.description).style(multiLineStyle);
+                tasksWS.cell(curRow, 6).string(task.status).style({
+                    alignment: {
+                        horizontal: 'center',
+                        wrapText: true,
+                        vertical: 'top'
+                    }
+                });
+                tasksWS.cell(curRow, 7).string(task.totalTime).style({
+                    alignment: {
+                        horizontal: 'center',
+                        wrapText: true,
+                        vertical: 'top'
+                    }
+                });
+                tasksWS.cell(curRow, 8).string(task.comments).style(multiLineStyle);
+
+                var maxCol = 9;
+                for (var j = 0; j < task.photos.length; j++) {
+                    var fileName = task.photos[j];
+
+                    //tasksWS.cell(curRow, (9 + j)).string('').style(multiLineStyle);
+                    tasksWS.row(curRow).setHeight(128);
+                    tasksWS.column(9 + j).setWidth(15);
+                    if (9 + j > maxCol) {
+                        maxCol = 9 + j;
+                    }
+
+                    tasksWS.addImage({
+                        path: './tempFiles/' + fileName,
+                        type: 'picture',
+                        position: {
+                            type: 'oneCellAnchor',
+                            from: {
+                                col: 9 + j,
+                                colOff: 0,
+                                row: curRow,
+                                rowOff: 0
+                            },
+                            to: {
+                                col: 10 + j,
+                                colOff: 0,
+                                row: curRow + 1,
+                                rowOff: 0
+                            }
+                        }
+                    });
+                }
+
+                if (i % 2 === 0) {
+                    tasksWS.cell(curRow, 2, curRow, maxCol).style({
+                        fill: {
+                            type: 'pattern',
+                            patternType: 'solid',
+                            fgColor: oddBackgroundColor
+                        }
+                    });
+                }
+                i++;
+            }
+        }
 
         // Add some borders to specific cells
         /* tasksWS.cell(2, 2, 2, 5).style({
@@ -372,113 +433,6 @@
              }
          });*/
 
-        tasksWS.cell(6, 2, 6, 9).style({
-            border: {
-                bottom: {
-                    style: 'thick',
-                    color: '#000000'
-                }
-            }
-        });
-
-        var HeadersFields = {
-            createTime: 'תאריך',
-            from: 'שולח',
-            to: 'נמען',
-            description: 'תיאור',
-            status: 'סטטוס',
-            totalTime: 'זמן ביצוע',
-            comments: 'תגובות',
-            photos: 'תמונות'
-        };
-
-        var keyIndex = 2;
-        for (var key in HeadersFields) {
-            if (HeadersFields.hasOwnProperty(key)) {
-                tasksWS.cell(7, keyIndex++).string(HeadersFields[key]).style({
-                    alignment: {
-                        horizontal: 'right'
-                    },
-                    font: {
-                        bold: true
-                    }
-                });
-            }
-        }
-
-        tasksWS.row(7).filter(2, 9);
-
-        var tasks = tasksExcelObjects;
-        var i = 0;
-        var rowOffset = 8;
-        var oddBackgroundColor = '#F8F5EE';
-        for (var index = 0; index < tasks.length; index++) {
-            var task = tasks[index];
-            var curRow = rowOffset + i;
-            if (task !== undefined) {
-                // tasksWS.cell(curRow, 2).number(task.units).style({
-                //     alignment: {
-                //         horizontal: 'left'
-                //     }
-                // });
-                tasksWS.cell(curRow, 2).date(task.createdDate).style(multiLineStyle);
-                tasksWS.cell(curRow, 3).string(task.from).style(multiLineStyle);
-                tasksWS.cell(curRow, 4).string(task.to).style(multiLineStyle);
-                tasksWS.cell(curRow, 5).string(task.description).style(multiLineStyle);
-                tasksWS.cell(curRow, 6).string(task.status).style({
-                    alignment: {
-                        horizontal: 'center',
-                        wrapText: true,
-                        vertical: 'top'
-                    }
-                });
-                tasksWS.cell(curRow, 7).string(task.totalTime).style({
-                    alignment: {
-                        horizontal: 'center',
-                        wrapText: true,
-                        vertical: 'top'
-                    }
-                });
-                tasksWS.cell(curRow, 8).string(task.comments).style(multiLineStyle);
-
-                for (var j = 0; j < task.photos.length; j++) {
-                    var fileName = task.photos[j];
-                    // todo: continue here there is a bug here, and replace the file-small-bw.jpg to actual path to file
-                    tasksWS.cell(curRow, (9 + j)).string('').style(multiLineStyle);
-
-                    tasksWS.addImage({
-                        path: './tempFiles/' + fileName,
-                        type: 'picture',
-                        position: {
-                            type: 'oneCellAnchor',
-                            from: {
-                                col: 9 + j,
-                                colOff: 0,
-                                row: curRow,
-                                rowOff: 0
-                            },
-                            to: {
-                                col: 10 + j,
-                                colOff: 0,
-                                row: curRow + 1,
-                                rowOff: 0
-                            }
-                        }
-                    });
-                }
-
-                if (i % 2 === 0) {
-                    tasksWS.cell(curRow, 2, curRow, 9).style({
-                        fill: {
-                            type: 'pattern',
-                            patternType: 'solid',
-                            fgColor: oddBackgroundColor
-                        }
-                    });
-                }
-                i++;
-            }
-        }
         // tasksWS.cell(21, 2, 21, 5).style({
         //     border: {
         //         bottom: {

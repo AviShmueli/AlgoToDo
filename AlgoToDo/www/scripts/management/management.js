@@ -303,21 +303,17 @@
             vm.getTasksFilter(false, true);
 
             if (vm.tasksFilter.hasOwnProperty('cliqaId')) {
-                DAL.generateReport(query, vm.tasksFilter, vm.user).success(function (data, status, headers) {
-                    headers = headers();
-
-                    var filename = headers['x-filename'];
-                    var contentType = headers['content-type'];
+                var req = DAL.generateReport(query, vm.tasksFilter, vm.user);
 
                     var linkElement = document.createElement('a');
                     try {
-                        var blob = new Blob([data], {
-                            type: contentType
-                        });
-                        var url = window.URL.createObjectURL(blob);
+
+                        var url = req.url + '?query=' +
+                                  JSON.stringify(req.params.query) + '&filter=' +
+                                  JSON.stringify(req.params.filter);
 
                         linkElement.setAttribute('href', url);
-                        linkElement.setAttribute("download", filename);
+                        linkElement.setAttribute("download", "MyExcel.xlsx");
 
                         var clickEvent = new MouseEvent("click", {
                             "view": window,
@@ -328,7 +324,7 @@
                     } catch (ex) {
                         console.log(ex);
                     }
-                });
+
             }
         }
 

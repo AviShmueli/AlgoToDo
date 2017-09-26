@@ -467,7 +467,7 @@
                 }
             };
 
-            return $http(req);
+            return req;
         };
 
         var service = {
