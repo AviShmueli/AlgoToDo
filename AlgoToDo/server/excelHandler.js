@@ -153,11 +153,15 @@
         var d = deferred();
 
         try {
+            logger.log("info", "step 1: ");
             createExcelObjects(tasks);
-
+            logger.log("info", "step 2: ");
             downloadTasksPhotos().then(function () {
+                logger.log("info", "step 3: ");
                 var excel = generateWorkbook();
+                logger.log("info", "step 4: ");
                 deleatePhotos();
+                logger.log("info", "step 5: ");
                 d.resolve(excel);
             });
         } catch (error) {
@@ -224,12 +228,12 @@
         tasksWS.column(8).setWidth(35);
         tasksWS.column(9).setWidth(15);
 
-        tasksWS.cell(5, 2).string('משימות').style(largeText);
-        tasksWS.cell(5, 3).string('מחסני השוק').style(largeText).style({
-            font: {
-                color: '#D4762C'
-            }
-        });
+        tasksWS.cell(5, 2).string('דו"ח משימות').style(largeText);
+        // tasksWS.cell(5, 3).string('מחסני השוק').style(largeText).style({
+        //     font: {
+        //         color: '#D4762C'
+        //     }
+        // });
 
         // Add a company logo
         tasksWS.addImage({
