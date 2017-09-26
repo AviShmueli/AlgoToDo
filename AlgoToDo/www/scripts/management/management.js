@@ -74,6 +74,12 @@
         vm.tasksFilter.cliqaId = userCliqotIds;
         //}, 0);
 
+        vm.getNextPage = function (page, skip) {
+            vm.query.page = page;
+            vm.query.skip = skip;
+            vm.getTasksFilter(false, false);
+        }
+
         vm.getTasksFilter = function (reset, dontFilter) {
 
             if (reset) {
