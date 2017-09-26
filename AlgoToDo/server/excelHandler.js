@@ -228,7 +228,7 @@
         tasksWS.column(8).setWidth(35);
         tasksWS.column(9).setWidth(15);
 
-        tasksWS.cell(5, 2).string('דו"ח משימות').style(largeText);
+        tasksWS.cell(5, 2).string('דו"ח משימות').style(largeText); 
         // tasksWS.cell(5, 3).string('מחסני השוק').style(largeText).style({
         //     font: {
         //         color: '#D4762C'
