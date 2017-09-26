@@ -562,12 +562,21 @@
 
         // todo: handel multi values
         if (filter['userId'] !== undefined) {
-            var userId = filter['userId'];
+            var usersIds = filter['userId'];
+            
+            // new
+            // var idsList = [];
+            // for (var index = 0; index < usersIds.length; index++) {
+            //     var userId = new ObjectID(usersIds[index]);
+            //     idsList.push(userId);
+            // }
+
+            // old
             delete filter['userId'];
             filter['$or'] = [{
-                'from._id': new ObjectID(userId)
+                'from._id': new ObjectID(usersIds)
             }, {
-                'to._id': new ObjectID(userId)
+                'to._id': new ObjectID(usersIds)
             }];
         }
 

@@ -238,7 +238,7 @@
         logger.log("info", "step 3: ", null);
         // Add a company logo
         tasksWS.addImage({
-            path: 'logo.png',
+            path: '../logo.png',
             type: 'picture',
             position: {
                 type: 'oneCellAnchor',
