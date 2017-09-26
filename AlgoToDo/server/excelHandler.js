@@ -132,6 +132,7 @@
                     });
                 }, function (error) {
                     resolveCount++;
+                    // todo: check whay fals when filterd avi iphon all tasks
                     logger.log("error", "error while trying to get file from dropbox: ", error);
                 });
         }
