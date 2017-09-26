@@ -237,8 +237,16 @@
         // });
         logger.log("info", "step 3: ", null);
         // Add a company logo
+        console.log(__dirname + "/logo.png");
+        fs.readFile(__dirname + "/logo.png", function (err, data) {
+            if (err) {
+                console.log(err)
+            } else {
+                console.log("file exists");
+            }
+        });
         tasksWS.addImage({
-            path: '../www/images/icon2.png',
+            path: __dirname + "/logo.png",
             type: 'picture',
             position: {
                 type: 'oneCellAnchor',
