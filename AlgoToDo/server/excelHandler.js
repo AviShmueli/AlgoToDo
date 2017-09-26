@@ -153,15 +153,15 @@
         var d = deferred();
 
         try {
-            logger.log("info", "step 1: ");
+
             createExcelObjects(tasks);
-            logger.log("info", "step 2: ");
+
             downloadTasksPhotos().then(function () {
-                logger.log("info", "step 3: ");
+
                 var excel = generateWorkbook();
-                logger.log("info", "step 4: ");
+                logger.log("info", "step 8: ");
                 deleatePhotos();
-                logger.log("info", "step 5: ");
+                logger.log("info", "step 9: ");
                 d.resolve(excel);
             });
         } catch (error) {
@@ -173,6 +173,7 @@
     }
 
     function generateWorkbook() {
+        logger.log("info", "step 1: ", null);
         var wb = new xl.Workbook({
             defaultFont: {
                 name: 'Verdana',
@@ -218,7 +219,7 @@
                 oddFooter: 'Invoice Page &P'
             }
         });
-
+        logger.log("info", "step 2: ", null);
         // Set some row and column properties
         tasksWS.row(5).setHeight(45);
         tasksWS.column(1).setWidth(3);
@@ -234,10 +235,10 @@
         //         color: '#D4762C'
         //     }
         // });
-
+        logger.log("info", "step 3: ", null);
         // Add a company logo
         tasksWS.addImage({
-            path: './sampleFiles/logo.png',
+            path: './logo.png',
             type: 'picture',
             position: {
                 type: 'oneCellAnchor',
@@ -255,6 +256,8 @@
                 }
             }
         });
+
+        logger.log("info", "step 4: ", null);
 
         tasksWS.cell(6, 2, 6, 9).style({
             border: {
@@ -289,7 +292,7 @@
                 });
             }
         }
-
+        logger.log("info", "step 5: ", null);
         tasksWS.row(7).filter(2, 9);
 
         var tasks = tasksExcelObjects;
@@ -330,7 +333,7 @@
                     if (9 + j > maxCol) {
                         maxCol = 9 + j;
                     }
-
+                    logger.log("info", "step 6: ", null);
                     tasksWS.addImage({
                         path: './tempFiles/' + fileName,
                         type: 'picture',
@@ -364,7 +367,7 @@
                 i++;
             }
         }
-
+        logger.log("info", "step 7: ", null);
         // Add some borders to specific cells
         /* tasksWS.cell(2, 2, 2, 5).style({
              border: {
