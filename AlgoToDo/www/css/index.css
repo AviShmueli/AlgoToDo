@@ -843,3 +843,7 @@ md-fab-trigger > .md-icon-button:hover {    background-color: rgb(221,44,0) !imp
     z-index: 100000;
     cursor: pointer;
 }
+
+.md-toast-content{
+    direction: rtl;
+}

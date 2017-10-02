@@ -435,7 +435,7 @@ app.post('/TaskManeger/addUsersToCliqa', function (req, res) {
 
 app.get('/TaskManeger/generateReport', function (req, res) {
     
-    BL.generateReport(req.query).then(function (excelFile) {
+    BL.generateReport(req.query, io, io_m).then(function (excelFile) {
         excelFile.write('MyExcel.xlsx', res);
     }, function (error) {
         winston.log('error', error.message, error.error);
@@ -443,3 +443,11 @@ app.get('/TaskManeger/generateReport', function (req, res) {
     });
 
 });
+
+
+
+
+
+// ----- socket.io ------ //
+var io_m = require('./socket.io');
+var io = io_m.listen(server);

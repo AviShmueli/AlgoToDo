@@ -7,12 +7,14 @@
 
     managementCtrl.$inject = ['$rootScope', '$scope', 'logger', '$q',
         'datacontext', 'moment', '$mdMedia', 'DAL',
-        '$location', '$timeout', 'appConfig', 'filesHandler'
+        '$location', '$timeout', 'appConfig', 'filesHandler',
+        'socket', '$mdToast'
     ];
 
     function managementCtrl($rootScope, $scope, logger, $q,
         datacontext, moment, $mdMedia, DAL,
-        $location, $timeout, appConfig, filesHandler) {
+        $location, $timeout, appConfig, filesHandler,
+        socket, $mdToast) {
 
         var vm = this;
 
@@ -302,21 +304,25 @@
                 return;
             }
 
-            var query = {
-                order: 'createTime'
-            };
+            showToast();
 
-            vm.getTasksFilter(false, true);
+            subscribeToIO().then(function (clientId) {
+                var query = {
+                    order: 'createTime'
+                };
+                //updateToast('filter...');
+                vm.getTasksFilter(false, true);
 
-            if (vm.tasksFilter.hasOwnProperty('cliqaId')) {
-                var req = DAL.generateReport(query, vm.tasksFilter, vm.user);
+                if (vm.tasksFilter.hasOwnProperty('cliqaId')) {
+                    var req = DAL.generateReport(query, vm.tasksFilter, vm.user);
 
                     var linkElement = document.createElement('a');
                     try {
 
                         var url = req.url + '?query=' +
-                                  JSON.stringify(req.params.query) + '&filter=' +
-                                  JSON.stringify(req.params.filter);
+                            JSON.stringify(req.params.query) + '&filter=' +
+                            JSON.stringify(req.params.filter) + '&clientId=' +
+                            clientId;
 
                         linkElement.setAttribute('href', url);
                         linkElement.setAttribute("download", "MyExcel.xlsx");
@@ -326,12 +332,23 @@
                             "bubbles": true,
                             "cancelable": false
                         });
+                        updateToast('שולח נתונים לשרת ...');
                         linkElement.dispatchEvent(clickEvent);
+
+                        socket.emit('start', "avi");
                     } catch (ex) {
                         console.log(ex);
                     }
+                } else {
+                    updateToast('אירעה שגיאה, נסה שוב');
+                    $timeout(function () {
+                        hideToast();
+                    }, 4000);
 
-            }
+                }
+            });
+
+
         }
 
         var getStatusHebString = function (status) {
@@ -346,6 +363,78 @@
                     break;
             }
         }
+
+        var deferred;
+        var subscribeToIO = function name(params) {
+            deferred = $q.defer();
+
+            socket.emit('start', "avi");
+
+            $timeout(function () {
+                deferred.resolve(clientId);
+            }, 10000);
+
+            return deferred.promise;
+        }
+        socket.on('wellcome', function (data) {
+            clientId = data;
+            if (deferred) {
+                deferred.resolve(clientId);
+            }
+        });
+        socket.on('status', function (data) {
+            handelStatusFromServer(data);
+        });
+        var clientId;
+
+        var handelStatusFromServer = function (statusCode) {
+            switch (statusCode) {
+                case "1":
+                    //updateToast('geting tasks');
+                    break;
+                case "2":
+                    //updateToast('creating worksheet');
+                    break;
+                case "3":
+                    updateToast('מוריד תמונות ...');
+                    break;
+                case "4":
+                    //updateToast('inserting data to worksheet');
+                    break;
+                case "5":
+                    //updateToast('removing temp files');
+                    break;
+                case "6":
+                    //updateToast('compleateing');
+                    break;
+                case "compleate":
+                    //updateToast('done!');
+                    hideToast();
+                    break;
+                case "error":
+                    updateToast('אירעה שגיאה, נסה שוב');
+                    $timeout(function () {
+                        hideToast();
+                    }, 4000);
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        var showToast = function () {
+            $mdToast.show($mdToast.simple().textContent('מכין נתונים ...').hideDelay(300000));
+        }
+
+        var updateToast = function (text) {
+            $mdToast.updateTextContent(text);
+        }
+
+        var hideToast = function () {
+            $mdToast.hide();
+        }
+
+
     }
 
 })();

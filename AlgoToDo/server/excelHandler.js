@@ -131,9 +131,19 @@
                         }
                     });
                 }, function (error) {
-                    resolveCount++;
-                    // todo: check whay fals when filterd avi iphon all tasks
-                    logger.log("error", "error while trying to get file from dropbox: ", error);
+                    
+                    try {
+                        var notFountFile = error.response.request.header["Dropbox-API-Arg"];
+                        notFountFile = JSON.parse(notFountFile);
+                        var index = photos.indexOf(notFountFile.path.replace('/',''));
+                        if(index !== -1){
+                            photos.splice(index, 1);
+                        }
+                    } catch (error) {
+                        resolveCount++;
+                    }
+
+                    logger.log("error", "error while trying to get file from dropbox: ", error.error);
                 });
         }
 
@@ -149,7 +159,7 @@
         });
     }
 
-    function downloadExcel(tasks) {
+    function downloadExcel(tasks, clientId, io_m) {
 
         var d = deferred();
 
@@ -157,14 +167,25 @@
 
             createExcelObjects(tasks);
 
+            io_m.emitStatus(clientId, "3");
+
             downloadTasksPhotos().then(function () {
 
+                io_m.emitStatus(clientId, "4");
+
                 var excel = generateWorkbook();
+
+                io_m.emitStatus(clientId, "5");
+
                 deleatePhotos();
+
+                io_m.emitStatus(clientId, "6");
+
                 d.resolve(excel);
             });
         } catch (error) {
             logger.log("error", "error while trying to create report: ", error);
+            io_m.emitStatus(clientId, "error");
             d.reject(error);
         }
 
@@ -328,26 +349,30 @@
                     if (9 + j > maxCol) {
                         maxCol = 9 + j;
                     }
-
-                    tasksWS.addImage({
-                        path: './tempFiles/' + fileName,
-                        type: 'picture',
-                        position: {
-                            type: 'oneCellAnchor',
-                            from: {
-                                col: 9 + j,
-                                colOff: 0,
-                                row: curRow,
-                                rowOff: 0
-                            },
-                            to: {
-                                col: 10 + j,
-                                colOff: 0,
-                                row: curRow + 1,
-                                rowOff: 0
+                    try {
+                        tasksWS.addImage({
+                            path: './tempFiles/' + fileName,
+                            type: 'picture',
+                            position: {
+                                type: 'oneCellAnchor',
+                                from: {
+                                    col: 9 + j,
+                                    colOff: 0,
+                                    row: curRow,
+                                    rowOff: 0
+                                },
+                                to: {
+                                    col: 10 + j,
+                                    colOff: 0,
+                                    row: curRow + 1,
+                                    rowOff: 0
+                                }
                             }
-                        }
-                    });
+                        });
+                    } catch (error) {
+                        logger.log('error', 'Error while trying to add image to worksheet: ', error.message);
+                    }
+                    
                 }
 
                 if (i % 2 === 0) {

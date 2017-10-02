@@ -1090,7 +1090,7 @@
         return d.promise;
     }
 
-    function generateReport(query) {
+    function generateReport(query, io, io_m) {
 
         var d = deferred();
 
@@ -1105,17 +1105,25 @@
             filter: query.filter
         }
 
+        var clientId = query.clientId;
+        io_m.emitStatus(clientId, "1");
+
         getAllTasks(queryFilter).then(function (tasks) {
 
-            excelHandler.downloadExcel(tasks).then(function (wb) {
+            io_m.emitStatus(clientId, "2");
+
+            excelHandler.downloadExcel(tasks, clientId, io_m).then(function (wb) {
                 d.resolve(wb);
+                io_m.emitStatus(clientId, "compleate");
                 //wb.write('MyExcel.xlsx', res);
             }, function (error) {
                 winston.log("error", "error while trying to create excel file: ", error);
+                io_m.emitStatus(clientId, "error");
                 d.resolve(error);
             });
 
         }, function (error) {
+            io_m.emitStatus(clientId, "error");
             d.deferred(error);
         });
 

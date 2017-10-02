@@ -1,23 +1,57 @@
 (function (socketIO) {
 
-//var io = require('socket.io').listen(server);
+    var io_m = require('socket.io');
+    var io;
+    var clients = {};
 
-/*var users = [];
-io.on('connection', function (socket) {
+    socketIO.listen = listen;
+    socketIO.emitStatus = emitStatus;
 
-    // response to the client call for Login and join the chat
-    socket.on('join', function (data) {
-        socket.userId = data.userId;
-        users[socket.userId] = socket;
-        var userObj = {
-            userId: data.userId,
-            socketid: socket.id
-        };
-        users.push(userObj);
-        //console.log(userObj.userName + ' just connected!!');
-        //io.emit('all-users', users);
-    });
-*/
+    function listen(server) {
+        io = io_m.listen(server);
+
+        io.sockets.on('connection', function (client) {
+            clients[client.id] = client;
+            client.emit('wellcome', client.id);
+        });
+
+        io.sockets.on('start', function (client) {
+            clients[client.id] = client;
+            client.emit('wellcome', client.id);
+        });
+
+
+        
+
+        return io;
+    }
+
+    function emitStatus(clientId, statusId){
+        if (clients[clientId]) {
+            clients[clientId].emit('status', statusId);
+        }
+    }
+
+    
+
+    //var io = require('socket.io').listen(server);
+
+    /*var users = [];
+    io.on('connection', function (socket) {
+
+        // response to the client call for Login and join the chat
+        socket.on('join', function (data) {
+            socket.userId = data.userId;
+            users[socket.userId] = socket;
+            var userObj = {
+                userId: data.userId,
+                socketid: socket.id
+            };
+            users.push(userObj);
+            //console.log(userObj.userName + ' just connected!!');
+            //io.emit('all-users', users);
+        });
+    */
     /* //send to the client all the users when Login
     socket.on('get-users', function () {
         socket.emit('all-users', users);
@@ -86,6 +120,6 @@ io.on('connection', function (socket) {
         // socket.broadcast.emit('task-received', data);
     });
     */
-});
-    
+    //});
+
 })(module.exports);
