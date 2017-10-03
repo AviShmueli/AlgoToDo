@@ -558,6 +558,129 @@
 
             vm.goBack();
         }
+
+        /* ---  Speech Recognition -----*/
+
+        // without speech recognition
+        vm.btnState = 'send';
+        
+        // with speech recognition
+        vm.btnState = 'mic';
+
+        vm.changeBtnState = function () {
+            
+            if (vm.newCommentText === '') {
+                vm.btnState = 'mic';
+            }
+            else {
+                vm.btnState = 'send';
+            }
+        }
+
+        vm.recognition;
+
+        var initialRecognitionObject = function () {
+            if (!device.isMobileDevice()) {
+                vm.recognition = new webkitSpeechRecognition();
+            }
+            else {
+                vm.recognition = new SpeechRecognition();
+            }
+            vm.recognition.continuous = true;
+            vm.recognition.interimResults = false;
+            vm.recognition.lang = 'he-IL';
+            vm.recording = false;
+            vm.recognitionIsAlreadyCalled = false;
+
+            vm.recognition.onresult = function (event) {
+                if (event.results[0][0].transcript !== undefined) {
+                    vm.newCommentText = event.results[0][0].transcript;
+                    vm.btnState = 'send';
+                    if (!$scope.$$phase) {
+                        $scope.$digest();
+                    }
+                }
+            }
+        }
+
+        $timeout(initialRecognitionObject, 0);
+
+        vm.startRecord = function () {
+            vm.isHolded = true;
+
+            $timeout(function () {
+                if (vm.isHolded) {
+                    if (vm.recognitionIsAlreadyCalled === false) {
+                        vm.recognitionIsAlreadyCalled = true;
+                        vm.newCommentText = 'מקליט...';
+                        if (device.isMobileDevice()) {
+                            device.vibrate(100);
+                        }
+                        vm.recognition.start();
+                        
+                    }                           
+                           /*device.recordAudio().then(function (savedFilePath) {
+                               var fileName = savedFilePath.split('/')[savedFilePath.split('/').length - 1];
+                               var folderpath = 'Asiti/' + vm.task._id + '/';
+                               var newFileName = new Date().toISOString().replace(/:/g, "_") + '.m4a';
+                               storage.moveFileToAppFolder(cordova.file.dataDirectory, fileName, folderpath, newFileName).then(function (storageFilePath) {
+                                   var a = storageFilePath;
+                               }, function (error) {
+                                   logger.error("error while trying to save audio file to app folder", error);
+                               });
+                           }, function (error) {
+                               logger.error("error while trying to record audio", error);
+                           });*/
+                    
+                }
+            }, 200);
+        }
+
+        vm.endRecord = function () {
+            vm.isHolded = false;
+            
+            if (vm.newCommentText === 'מקליט...') {
+                vm.newCommentText = '';
+            }
+            vm.recognitionIsAlreadyCalled = false;
+            vm.recognition.stop();
+
+            if (!$scope.$$phase) {
+                $scope.$digest();
+            }
+            /*window.plugins.audioRecorderAPI.stop(function (msg) {
+                // success
+                //alert('ok: ' + msg);
+            }, function (msg) {
+                // failed
+                //alert('ko: ' + msg);
+            });*/
+
+           /* window.plugins.audioRecorderAPI.playback(function (msg) {
+                // complete
+                alert('ok: ' + msg);
+            }, function (msg) {
+                // failed
+                alert('ko: ' + msg);
+            });*/
+        }
+
+        $timeout(function () {
+            angular.element(document.getElementById('recordBTN')).
+                bind('touchstart mousedown', function (event) {
+                    if (vm.btnState === 'mic') {
+                        vm.startRecord();
+                    }
+                    else {
+                        vm.addComment();
+                    }                   
+                });
+
+            angular.element(document.getElementById('recordBTN')).
+                bind('touchend mouseup', function (event) {
+                    vm.endRecord();
+                });
+        }, 100);
     }
 
 })();

@@ -109,6 +109,9 @@
         },
         "ionic-plugin-keyboard": {
             "PACKAGE_NAME": "com.algotodo.app"
+        },
+        "cordova-plugin-audio-recorder-api": {
+            "PACKAGE_NAME": "com.algotodo.app"
         }
     },
     "dependent_plugins": {}

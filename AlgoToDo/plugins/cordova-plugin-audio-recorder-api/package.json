@@ -1,0 +1,97 @@
+{
+  "_args": [
+    [
+      {
+        "raw": "cordova-plugin-audio-recorder-api",
+        "scope": null,
+        "escapedName": "cordova-plugin-audio-recorder-api",
+        "name": "cordova-plugin-audio-recorder-api",
+        "rawSpec": "",
+        "spec": "latest",
+        "type": "tag"
+      },
+      "/Users/moshehoftman/Documents/AlgoToDo/AlgoToDo/node_modules"
+    ]
+  ],
+  "_from": "cordova-plugin-audio-recorder-api@latest",
+  "_id": "cordova-plugin-audio-recorder-api@0.0.6",
+  "_inCache": true,
+  "_location": "/cordova-plugin-audio-recorder-api",
+  "_nodeVersion": "3.3.1",
+  "_npmUser": {
+    "name": "emj365",
+    "email": "emj365@gmail.com"
+  },
+  "_npmVersion": "2.14.3",
+  "_phantomChildren": {},
+  "_requested": {
+    "raw": "cordova-plugin-audio-recorder-api",
+    "scope": null,
+    "escapedName": "cordova-plugin-audio-recorder-api",
+    "name": "cordova-plugin-audio-recorder-api",
+    "rawSpec": "",
+    "spec": "latest",
+    "type": "tag"
+  },
+  "_requiredBy": [
+    "#USER",
+    "/"
+  ],
+  "_resolved": "https://registry.npmjs.org/cordova-plugin-audio-recorder-api/-/cordova-plugin-audio-recorder-api-0.0.6.tgz",
+  "_shasum": "849d0e26932ce3a489d1b121e18b0fa14af74c4c",
+  "_shrinkwrap": null,
+  "_spec": "cordova-plugin-audio-recorder-api",
+  "_where": "/Users/moshehoftman/Documents/AlgoToDo/AlgoToDo/node_modules",
+  "author": {
+    "name": "emj365"
+  },
+  "bugs": {
+    "url": "https://github.com/emj365/cordova-plugin-audio-recorder-api/issues"
+  },
+  "cordova": {
+    "id": "cordova-plugin-audio-recorder-api",
+    "platforms": [
+      "android"
+    ]
+  },
+  "cordova_name": "AudioRecorderAPI",
+  "dependencies": {},
+  "description": "This plugin is a Cordova audio recorder plugin which works as API.",
+  "devDependencies": {},
+  "directories": {},
+  "dist": {
+    "shasum": "849d0e26932ce3a489d1b121e18b0fa14af74c4c",
+    "tarball": "https://registry.npmjs.org/cordova-plugin-audio-recorder-api/-/cordova-plugin-audio-recorder-api-0.0.6.tgz"
+  },
+  "engines": [
+    {
+      "name": "cordova",
+      "version": ">=3.0.0"
+    }
+  ],
+  "gitHead": "cd88b4bab8188aba7a33c211ec47f797062aacc9",
+  "homepage": "https://github.com/emj365/cordova-plugin-audio-recorder-api#readme",
+  "keywords": [
+    "ecosystem:cordova",
+    "cordova-android"
+  ],
+  "license": "MIT",
+  "maintainers": [
+    {
+      "name": "emj365",
+      "email": "emj365@gmail.com"
+    }
+  ],
+  "name": "cordova-plugin-audio-recorder-api",
+  "optionalDependencies": {},
+  "platforms": [
+    "android"
+  ],
+  "readme": "ERROR: No README data found!",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/emj365/cordova-plugin-audio-recorder-api.git"
+  },
+  "scripts": {},
+  "version": "0.0.6"
+}

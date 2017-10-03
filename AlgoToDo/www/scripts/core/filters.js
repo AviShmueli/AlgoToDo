@@ -31,7 +31,7 @@
         return function (tasks, userId) {
             var filtered = [];
             angular.forEach(tasks, function (task) {
-                if (task.status === 'done' &&
+                if ((task.status === 'done' || task.status === 'closed') &&
                     task.from._id === userId &&
                     task.type !== 'group-sub') {
                     filtered.push(task);
