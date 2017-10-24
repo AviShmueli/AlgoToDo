@@ -101,7 +101,7 @@
 
                 $timeout(function () {
                     login();
-                }, 10000);
+                }, 10);
 
 
                 vm.body.removeClass('background-white');
@@ -112,6 +112,8 @@
                 $timeout(function () {
                     setApplicationDirectory().then(function () {
                         $location.path('/logIn');
+                        $interval.cancel(vm.interval);
+                        vm.body.removeClass('background-white');
                     });
                 }, 0);
             }

@@ -67,7 +67,7 @@ body {
   
   .progress {
     position: relative;
-    background: url('../images/sMTHIRlLgVwXu.gif') no-repeat center;
+    background: #00BCD4;
     height: 3px;
     transition: 0.2s ease-in-out;
     margin-bottom: -2px;

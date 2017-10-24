@@ -6,11 +6,11 @@
         .controller('signUpCtrl', signUpCtrl);
 
     signUpCtrl.$inject = ['$scope', 'datacontext', 'logger', 'cordovaPlugins', '$q', 'pushNotifications',
-        'device', '$mdDialog', 'DAL', '$location', 'contactsSync', '$timeout'
+        'device', '$mdDialog', 'DAL', '$location', 'contactsSync', '$timeout', '$interval'
     ];
 
     function signUpCtrl($scope, datacontext, logger, cordovaPlugins, $q, pushNotifications,
-        device, $mdDialog, DAL, $location, contactsSync, $timeout) {
+        device, $mdDialog, DAL, $location, contactsSync, $timeout, $interval) {
 
         angular.element(document.querySelectorAll('html')).addClass("hight-auto");
 
@@ -20,6 +20,7 @@
         vm.AllCliqot = [];
         vm.selectedCliqa;
         vm.showCube = false;
+        vm.progress = 10;
         vm.loadingMode = 'syncing';
 
         DAL.getAllCliqot().then(function (allCliqot) {
@@ -81,6 +82,7 @@
                     }
 
                     DAL.registerUser(vm.user).then(function (response) {
+
                         if (response.data.error) {
                             vm.inProgress = false;
                             showRegistrationFailedAlert('מספר הטלפון שהוזן רשום כבר לאפליקציה, נסה להיכנס שוב במסך הקודם.');
@@ -95,7 +97,7 @@
                     });
                 });
             }, false);
-
+            
         };
 
         var verifyUser = function () {
@@ -107,15 +109,48 @@
                         datacontext.saveUserToLocalStorage(vm.user);
 
                         showCube();
+
+                        vm.progress = 30;
+                        vm.loadingMode = 'syncing';
+                        var interval1 = $interval(function () {
+                            if (vm.progress < 75) {
+                                vm.progress = vm.progress + 5;
+                            }
+                        }, 1500);
+
                         contactsSync.syncPhoneContactsWithServer().then(function () {
+                            $interval.cancel(interval1);
+
                             vm.loadingMode = 'loading';
+
                             datacontext.reloadAllTasks().then(function () {
-                                $location.path('/tasksList');
+                                
+                                vm.progress = 80;
+                                var interval2 = $interval(function () {
+                                    if (vm.progress < 100) {
+                                        vm.progress = vm.progress + 5;
+                                    }
+                                    else {
+                                        $interval.cancel(interval2);
+                                        $location.path('/tasksList');
+                                    }
+                                }, 500);
+                                
                             });
                         }, function () {
+                            $interval.cancel(interval1);
                             vm.loadingMode = 'loading';
+                            vm.progress = 75;
                             datacontext.reloadAllTasks().then(function () {
-                                $location.path('/tasksList');
+                                var interval2 = $interval(function () {
+                                    if (vm.progress < 100) {
+                                        vm.progress = vm.progress + 5;
+                                    }
+                                    else {
+                                        $interval.cancel(interval2);
+                                        $location.path('/tasksList');
+                                    }
+                                }, 500);
                             });
                         });
                     } else {
