@@ -847,3 +847,7 @@ md-fab-trigger > .md-icon-button:hover {    background-color: rgb(221,44,0) !imp
 .md-toast-content{
     direction: rtl;
 }
+
+.background-white{
+    background: aliceblue !important;
+}

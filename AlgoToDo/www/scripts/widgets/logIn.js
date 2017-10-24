@@ -69,10 +69,12 @@
                 else {
                     showUserNotExistAlert();
                     vm.inProgress = false;
+                    angular.element(document.getElementsByTagName('body')).removeClass('background-white');
                 }
 
             }, function (error) {
                 vm.inProgress = false;
+                angular.element(document.getElementsByTagName('body')).removeClass('background-white');
                 logger.error("error while trying to check If User Exist", error);
                 showRegistrationFailedAlert();
             });
@@ -92,20 +94,24 @@
                             vm.loadingMode = 'loading';
                             datacontext.reloadAllTasks().then(function () {
                                 $location.path('/tasksList');
+                                angular.element(document.getElementsByTagName('body')).removeClass('background-white');
                             });
                         }, function () {
                             vm.loadingMode = 'loading';
                             datacontext.reloadAllTasks().then(function () {
                                 $location.path('/tasksList');
+                                angular.element(document.getElementsByTagName('body')).removeClass('background-white');
                             });
                         });
                     }
                     else {
                         showVerificationFailedAlert();
                         vm.inProgress = false;
+                        angular.element(document.getElementsByTagName('body')).removeClass('background-white');
                     }
                 }, function (error) {
                     vm.inProgress = false;
+                    angular.element(document.getElementsByTagName('body')).removeClass('background-white');
                     logger.error("error while trying to check If VerificationCode Match", error);
                     showRegistrationFailedAlert();
                 });
@@ -180,6 +186,7 @@
             vm.showCube = true;
             vm.loadingMode = 'syncing';
             angular.element(document.querySelectorAll('html')).removeClass("hight-auto");
+            angular.element(document.getElementsByTagName('body')).addClass('background-white');
         };
 
         vm.exitApp = false;

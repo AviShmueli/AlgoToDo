@@ -56,6 +56,7 @@
         "passport-local": "^1.0.0",
         "path": "^0.12.7",
         "phonegap-plugin-push": "1.8.4",
+        "phonegap-plugin-speech-recognition": "git+https://github.com/macdonst/SpeechRecognitionPlugin.git",
         "skwas-cordova-plugin-datetimepicker": "^1.0.0",
         "socket.io": "^1.4.8",
         "winston": "^2.3.0",
@@ -112,7 +113,11 @@
             "de.appplant.cordova.plugin.local-notification": {},
             "skwas-cordova-plugin-datetimepicker": {},
             "ionic-plugin-keyboard": {},
-            "cordova-plugin-audio-recorder-api": {}
+            "cordova-plugin-audio-recorder-api": {},
+            "phonegap-plugin-speech-recognition": {
+                "MICROPHONE_USAGE_DESCRIPTION": "record voice to comment on a task",
+                "SPEECH_RECOGNITION_USAGE_DESCRIPTION": " "
+            }
         }
     }
 }

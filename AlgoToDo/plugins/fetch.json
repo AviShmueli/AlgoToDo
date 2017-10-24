@@ -273,5 +273,15 @@
         },
         "is_top_level": true,
         "variables": {}
+    },
+    "phonegap-plugin-speech-recognition": {
+        "source": {
+            "type": "registry",
+            "id": "https://github.com/macdonst/SpeechRecognitionPlugin"
+        },
+        "is_top_level": true,
+        "variables": {
+            "MICROPHONE_USAGE_DESCRIPTION": "record voice to comment on a task"
+        }
     }
 }

@@ -143,6 +143,7 @@
     <plugin name="cordova-plugin-app-version" spec="^0.1.9" />
     <plugin name="cordova-plugin-appminimize" spec="^1.0.0" />
     <plugin name="cordova-plugin-apprate" spec="^1.3.0" />
+    <plugin name="cordova-plugin-audio-recorder-api" spec="0.0.6" />
     <plugin name="cordova-plugin-badge" spec="~0.7.2" />
     <plugin name="cordova-plugin-camera" spec="~2.3.1" />
     <plugin name="cordova-plugin-compat" spec="~1.1.0" />
@@ -162,6 +163,7 @@
     <plugin name="cordova-plugin-statusbar" spec="~2.2.1" />
     <plugin name="cordova-plugin-vibration" spec="~2.1.2" />
     <plugin name="cordova-plugin-whitelist" spec="1.3.1" />
+    <plugin name="cordova-plugin-x-socialsharing" spec="^5.2.0" />
     <plugin name="cordova-plugin-x-toast" spec="~2.5.2" />
     <plugin name="cordova-sms-plugin" spec="^0.1.11" />
     <plugin name="de.appplant.cordova.plugin.local-notification" spec="^0.8.5" />
@@ -170,7 +172,9 @@
     <plugin name="phonegap-plugin-push" spec="1.8.4">
         <variable name="SENDER_ID" value="874351794059" />
     </plugin>
+    <plugin name="phonegap-plugin-speech-recognition" spec="git+https://github.com/macdonst/SpeechRecognitionPlugin.git">
+        <variable name="MICROPHONE_USAGE_DESCRIPTION" value="record voice to comment on a task" />
+        <variable name="SPEECH_RECOGNITION_USAGE_DESCRIPTION" value=" " />
+    </plugin>
     <plugin name="skwas-cordova-plugin-datetimepicker" spec="^1.0.0" />
-    <plugin name="cordova-plugin-x-socialsharing" version="5.1.8" />
-    <plugin name="cordova-plugin-audio-recorder-api" spec="0.0.6" />
 </widget>

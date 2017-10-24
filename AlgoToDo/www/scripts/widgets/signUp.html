@@ -1,5 +1,5 @@
-﻿<div layout="column" ng-controller="signUpCtrl as vm" layout-padding="" dir="rtl" class="login-form" ng-cloak="">
-    <div ng-if="!vm.showCube">
+﻿<div layout="column" ng-controller="signUpCtrl as vm" layout-padding="" dir="rtl" class="login-form background-white" ng-cloak="">
+    <div ng-if="false && !vm.showCube">
         <div layout-align="center center" class="login-text">
             <h1>הרשמה לאפליקציה</h1>
             <h3>ברוכים הבאים ל ™Asiti</h3>
@@ -17,9 +17,8 @@
 
                 <md-input-container class="md-block">
                     <md-icon ng-md-icon icon="phone"></md-icon>
-                    <input md-no-asterisk name="phone" ng-model="vm.userPhone" type="tel"
-                           ng-pattern="/^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/"
-                           placeholder="מספר טלפון" ng-required="true">
+                    <input md-no-asterisk name="phone" ng-model="vm.userPhone" type="tel" ng-pattern="/^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/"
+                        placeholder="מספר טלפון" ng-required="true">
                     <div ng-messages="signUpForm.phone.$error">
                         <div ng-message="required">טלפון הוא שדה חובה</div>
                         <div ng-message="pattern">נא להכניס מספר טלפון חוקי</div>
@@ -93,20 +92,38 @@
             </section>
         </form>
     </div>
-    
-    <div ng-if="vm.showCube">
-        <div class='Cube panelLoad' id="Cube_loadder">
+
+    <div ng-if="true || vm.showCube" layout="column" layout-align="center center" flex>
+        <!-- <div class='Cube panelLoad' id="Cube_loadder">
             <div class='cube-face cube-face-front'>A</div>
             <div class='cube-face cube-face-back'>✔</div>
             <div class='cube-face cube-face-left'>s</div>
             <div class='cube-face cube-face-right'>i</div>
             <div class='cube-face cube-face-bottom'>t</div>
             <div class='cube-face cube-face-top'>✔</div>
-        </div>
+        </div> -->
+
 
         <div class="syncing-text" layout="row" layout-align="center center">
             <div ng-if="vm.loadingMode === 'syncing'"> מסנכרן את אנשי הקשר שלך ... </div>
             <div ng-if="vm.loadingMode === 'loading'"> טוען נתונים ... </div>
         </div>
+        <span flex></span>
+
+        <div id="mo-text" class="center" layout="row" layout-align="center center">
+            Asiti
+        </div>
+
+        <div layout="column" layout-align="center center" flex dir="ltr" style="width: 50%"> 
+            <div id="percent" ayout="row">
+                30 %
+            </div>
+            <div class="bar" ayout="row">
+                <div id="progress" class="progress" style="width:30%">
+                </div>
+            </div>
+
+        </div>
+
     </div>
 </div>
