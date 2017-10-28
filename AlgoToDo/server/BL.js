@@ -35,6 +35,7 @@
     BL.getUsersInCliqa = getUsersInCliqa;
     BL.addUsersToCliqa = addUsersToCliqa;
     BL.generateReport = generateReport;
+    BL.testPushRegistration = testPushRegistration;
 
     var ObjectID = require('mongodb').ObjectID;
     var deferred = require('deferred');
@@ -1124,6 +1125,48 @@
 
         }, function (error) {
             io_m.emitStatus(clientId, "error");
+            d.deferred(error);
+        });
+
+        return d.promise;
+    }
+
+    function testPushRegistration(users) {
+
+        var d = deferred();
+
+        var usersIds = [],
+            gcmUsers = [],
+            apnUsers = [];
+
+        for (var index = 0; index < users.length; index++) {
+            usersIds.push(new ObjectID(users[index]));          
+        }
+
+        DAL.getUsersByUsersId(usersIds).then(function (responseUsers) {
+            if (responseUsers.length > 0) {
+                for (var index = 0; index < responseUsers.length; index++) {
+                    var user = responseUsers[0];
+                    if (user.GcmRegistrationId !== undefined) {
+                        gcmUsers.push(user.GcmRegistrationId);
+                    }
+                    if (user.ApnRegistrationId !== undefined) {
+                        apnUsers.push(user.ApnRegistrationId);
+                    }
+                }
+                
+                pushNotifications.testPushRegistration(gcmUsers, apnUsers).then(function (response){
+                    // continue here... (implement this function)
+
+
+                    // d.resolve(wb);
+                }, function (errror) {
+                    winston.log('error', error.message, error.err);
+                    d.deferred(error);
+                });
+            }
+        }, function (error) {
+            winston.log('error', error.message, error.err);
             d.deferred(error);
         });
 

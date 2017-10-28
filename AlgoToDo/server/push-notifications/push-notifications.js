@@ -9,6 +9,7 @@
     pushNotifications.sendSmsViaAdminPhone = sendSmsViaAdminPhone;
     pushNotifications.sendBroadcastUpdateAlert = sendBroadcastUpdateAlert;
     pushNotifications.pushReminder = pushReminder;
+    pushNotifications.testPushRegistration = testPushRegistration;
 
 
     var apn = require('./apn');
@@ -59,6 +60,15 @@
             gcm.sendBroadcastUpdateAlert(usersRegTokens);
         }
         if (platform === 'iOS') {
+            apn.sendBroadcastUpdateAlert(usersRegTokens);
+        }
+    }
+
+    function testPushRegistration(gcmUsers, apnUsers) {
+        if (gcmUsers && gcmUsers.length) {
+            gcm.sendBroadcastUpdateAlert(usersRegTokens);
+        }
+        if (apnUsers && apnUsers.length) {
             apn.sendBroadcastUpdateAlert(usersRegTokens);
         }
     }

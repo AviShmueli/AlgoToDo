@@ -448,7 +448,7 @@
             var req = {
                 method: 'POST',
                 url: appConfig.appDomain() + '/TaskManeger/addUsersToCliqa',
-                r: {
+                data: {
                     cliqa: cliqa,
                     users: users
                 }
@@ -468,6 +468,18 @@
             };
 
             return req;
+        };
+
+        var testPushRegistration = function (users) {
+            var req = {
+                method: 'POST',
+                url: appConfig.appDomain() + '/TaskManeger/testPushRegistration',
+                data: {
+                    users: users
+                }
+            };
+
+            return $http(req);
         };
 
         var service = {
@@ -504,7 +516,8 @@
             deleteGroups: deleteGroups,
             getUsersInCliqa: getUsersInCliqa,
             addUsersToCliqa: addUsersToCliqa,
-            generateReport: generateReport
+            generateReport: generateReport,
+            testPushRegistration: testPushRegistration
         };
 
         return service;

@@ -64,5 +64,16 @@
             Asiti
         </div>
 
+        <div layout="column" layout-align="center center" flex dir="ltr" style="width: 50%"> 
+            <div id="percent" ayout="row">
+                {{vm.progress}} %
+            </div>
+            <div class="bar" ayout="row">
+                <div id="progress" class="progress" ng-style="{'width': vm.progress + '%'}">
+                </div>
+            </div>
+
+        </div>
+
     </div>
 </div>

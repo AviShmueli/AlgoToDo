@@ -6,10 +6,10 @@
         .controller('logInCtrl', logInCtrl);
 
     logInCtrl.$inject = ['$rootScope', '$scope', 'datacontext', 'logger', 'cordovaPlugins', '$q', 'pushNotifications',
-                          'device', '$mdDialog', 'DAL', '$location', 'contactsSync', '$timeout'];
+                          'device', '$mdDialog', 'DAL', '$location', 'contactsSync', '$timeout', '$interval'];
 
     function logInCtrl($rootScope, $scope, datacontext, logger, cordovaPlugins, $q, pushNotifications,
-                        device, $mdDialog, DAL, $location, contactsSync, $timeout) {
+                        device, $mdDialog, DAL, $location, contactsSync, $timeout, $interval) {
 
         angular.element(document.querySelectorAll('html')).addClass("hight-auto");
 
@@ -19,6 +19,7 @@
         vm.inProgress = false;
         vm.user = {};
         vm.loadingMode = 'syncing';
+        vm.progress = 10;
 
         vm.user = datacontext.getUserFromLocalStorage();
         if (vm.user !== undefined) {
@@ -90,17 +91,46 @@
                         datacontext.saveUserToLocalStorage(vm.user);
 
                         showCube();
+
+                        vm.progress = 30;
+                        vm.loadingMode = 'syncing';
+                        var interval1 = $interval(function () {
+                            if (vm.progress < 75) {
+                                vm.progress = vm.progress + 5;
+                            }
+                        }, 1500);
+
                         contactsSync.syncPhoneContactsWithServer().then(function () {
+                            $interval.cancel(interval1);
                             vm.loadingMode = 'loading';
                             datacontext.reloadAllTasks().then(function () {
-                                $location.path('/tasksList');
-                                angular.element(document.getElementsByTagName('body')).removeClass('background-white');
-                            });
+                                vm.progress = 80;
+                                var interval2 = $interval(function () {
+                                    if (vm.progress < 100) {
+                                        vm.progress = vm.progress + 5;
+                                    }
+                                    else {
+                                        $interval.cancel(interval2);
+                                        $location.path('/tasksList');
+                                        angular.element(document.getElementsByTagName('body')).removeClass('background-white');                                        
+                                    }
+                                }, 500);
+                              });
                         }, function () {
+                            $interval.cancel(interval1);
                             vm.loadingMode = 'loading';
+                            vm.progress = 75;
                             datacontext.reloadAllTasks().then(function () {
-                                $location.path('/tasksList');
-                                angular.element(document.getElementsByTagName('body')).removeClass('background-white');
+                                var interval2 = $interval(function () {
+                                    if (vm.progress < 100) {
+                                        vm.progress = vm.progress + 5;
+                                    }
+                                    else {
+                                        $interval.cancel(interval2);
+                                        $location.path('/tasksList');
+                                        angular.element(document.getElementsByTagName('body')).removeClass('background-white');                                        
+                                    }
+                                }, 500);
                             });
                         });
                     }

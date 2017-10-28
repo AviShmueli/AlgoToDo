@@ -22,16 +22,44 @@
         vm.showCube = false;
         vm.progress = 10;
         vm.loadingMode = 'syncing';
+        vm.imagesPath = device.getImagesPath();
+        vm.womanAvatar = '/images/woman-' + Math.floor((Math.random() * 15) + 1) + '.svg';
+        vm.manAvatar = '/images/man-' + Math.floor((Math.random() * 9) + 1) + '.svg';
 
         DAL.getAllCliqot().then(function (allCliqot) {
             vm.AllCliqot = allCliqot.data;
         });
 
-        vm.imagesPath = device.getImagesPath();
+        var user = datacontext.getUserFromLocalStorage();
+        if (user !== undefined) {
+            datacontext.reloadAllTasks();
+            $location.path('/tasksList');
+        }
 
-        vm.womanAvatar = '/images/woman-' + Math.floor((Math.random() * 15) + 1) + '.svg';
-        vm.manAvatar = '/images/man-' + Math.floor((Math.random() * 9) + 1) + '.svg';
+        vm.signupWizardSteps = {
+            1: {
+                stepNum: 1,
+                stepName: 'name&phone'
+            },
+            2: {
+                stepNum: 2,
+                stepName: 'pushNotification_registration'
+            },
+            3: {
+                stepNum: 3,
+                stepName: 'contacts_autorization'
+            },
+            4: {
+                stepNum: 4,
+                stepName: 'storage_autorization'
+            },
+            5: {
+                stepNum: 5,
+                stepName: 'compleate'
+            }
+        };
 
+        vm.currentStep = vm.signupWizardSteps[1];
 
         vm.signMeUp = function () {
             if (vm.inProgress === false) {
@@ -43,12 +71,6 @@
                 registerUser();
             }
         };
-
-        var user = datacontext.getUserFromLocalStorage();
-        if (user !== undefined) {
-            datacontext.reloadAllTasks();
-            $location.path('/tasksList');
-        }
 
         var registerUser = function () {
             vm.user.phone = vm.userPhone;
@@ -69,11 +91,11 @@
 
             document.addEventListener("deviceready", function () {
 
-               vm.user.device = device.getDeviceDetails();
+                vm.user.device = device.getDeviceDetails();
                 datacontext.setDeviceDetailes(vm.user.device, cordova.file.applicationDirectory);
 
                 registerUserForPushService().then(function (registrationId) {
-
+                    
                     if (vm.user.device.platform === 'iOS') {
                         vm.user.ApnRegistrationId = registrationId;
                     }
@@ -92,12 +114,13 @@
                         }
                     }, function (error) {
                         vm.inProgress = false;
+                        angular.element(document.getElementsByTagName('body')).removeClass('background-white');
                         logger.error("error while trying to register user to app: ", error.data || error);
                         showRegistrationFailedAlert();
                     });
                 });
             }, false);
-            
+
         };
 
         var verifyUser = function () {
@@ -124,18 +147,18 @@
                             vm.loadingMode = 'loading';
 
                             datacontext.reloadAllTasks().then(function () {
-                                
+
                                 vm.progress = 80;
                                 var interval2 = $interval(function () {
                                     if (vm.progress < 100) {
                                         vm.progress = vm.progress + 5;
-                                    }
-                                    else {
+                                    } else {
                                         $interval.cancel(interval2);
                                         $location.path('/tasksList');
+                                        angular.element(document.getElementsByTagName('body')).removeClass('background-white');
                                     }
                                 }, 500);
-                                
+
                             });
                         }, function () {
                             $interval.cancel(interval1);
@@ -145,10 +168,10 @@
                                 var interval2 = $interval(function () {
                                     if (vm.progress < 100) {
                                         vm.progress = vm.progress + 5;
-                                    }
-                                    else {
+                                    } else {
                                         $interval.cancel(interval2);
                                         $location.path('/tasksList');
+                                        angular.element(document.getElementsByTagName('body')).removeClass('background-white');
                                     }
                                 }, 500);
                             });
@@ -156,9 +179,11 @@
                     } else {
                         showVerificationFailedAlert();
                         vm.inProgress = false;
+                        angular.element(document.getElementsByTagName('body')).removeClass('background-white');
                     }
                 }, function (error) {
                     vm.inProgress = false;
+                    angular.element(document.getElementsByTagName('body')).removeClass('background-white');
                     logger.error("error while trying to check If VerificationCode Match", error);
                     showRegistrationFailedAlert();
                 });
@@ -270,6 +295,7 @@
             vm.showCube = true;
             vm.loadingMode = 'syncing';
             angular.element(document.querySelectorAll('html')).removeClass("hight-auto");
+            angular.element(document.getElementsByTagName('body')).addClass('background-white');
         };
 
         function pickAvatarCtrl($scope, $mdDialog, imagesPath) {
@@ -297,7 +323,6 @@
                 $mdDialog.hide(answer);
             };
         }
-
 
         vm.exitApp = false;
 

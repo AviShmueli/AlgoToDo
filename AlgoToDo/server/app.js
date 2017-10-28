@@ -444,6 +444,16 @@ app.get('/TaskManeger/generateReport', function (req, res) {
 
 });
 
+app.post('/TaskManeger/testPushRegistration', function (req, res) {
+    
+        BL.testPushRegistration(req.body.users).then(function (response) {
+            res.send(response);
+        }, function (error) {
+            winston.log('error', error.message, error.error);
+            res.status(500).send(error);
+        });
+    
+    });
 
 
 
