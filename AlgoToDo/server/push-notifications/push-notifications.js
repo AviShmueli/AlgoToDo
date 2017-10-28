@@ -14,6 +14,7 @@
 
     var apn = require('./apn');
     var gcm = require('./gcm');
+    var deferred = require('deferred');
 
     function createApnProvider() {
         apn.createApnProvider();
@@ -65,12 +66,41 @@
     }
 
     function testPushRegistration(gcmUsers, apnUsers) {
+        
+        var d = deferred();
+
+        var gcmCompleate = false, apnCompleate = false,
+            apnResualt, gcmResualt;
+
         if (gcmUsers && gcmUsers.length) {
-            gcm.sendBroadcastUpdateAlert(usersRegTokens);
+            gcm.testPush(gcmUsers).then(function(response){
+                gcmCompleate = true;
+                gcmResualt = response;
+                if(apnCompleate){
+                    d.resolve({gcmResualt: gcmResualt, apnResualt: apnResualt});
+                }
+            });
         }
+        else{
+            gcmCompleate = true;
+            gcmResualt = {};
+        }
+
         if (apnUsers && apnUsers.length) {
-            apn.sendBroadcastUpdateAlert(usersRegTokens);
+            apn.testPush(apnUsers).then(function(response){
+                apnCompleate = true;
+                apnResualt = response;
+                if(apnCompleate){
+                    d.resolve({gcmResualt: gcmResualt, apnResualt: apnResualt});
+                }
+            });
         }
+        else{
+            apnCompleate = true;
+            apnResualt = {};
+        }
+
+        return d.promise;
     }
 
     function sendSmsViaAdminPhone(verificationCode, AdminRegToken, user) {

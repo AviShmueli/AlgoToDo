@@ -1156,10 +1156,27 @@
                 }
                 
                 pushNotifications.testPushRegistration(gcmUsers, apnUsers).then(function (response){
-                    // continue here... (implement this function)
+                    
+                    var result = {
+                        'status': 'ok'
+                    };
+
+                    if(response.gcmResualt ){
+                        if (response.gcmResualt.failure) {
+                            result['status'] = 'failure';
+                            result['message'] = response.gcmResualt.results[0].error;
+                        }
+                    }
+
+                    if(response.apnResualt){
+                        if (response.apnResualt.failure) {
+                            result['status'] = 'failure';
+                            result['message'] = response.apnResualt.results[0].error;
+                        }
+                    }
 
 
-                    // d.resolve(wb);
+                     d.resolve(result);
                 }, function (errror) {
                     winston.log('error', error.message, error.err);
                     d.deferred(error);
