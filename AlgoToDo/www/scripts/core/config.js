@@ -130,7 +130,7 @@
                 appDomain: function () {
                     return self.appDomain
                 },
-                appVersion: '0.3.6'
+                appVersion: '0.3.7'
             };
         })
         .run(function (amMoment, $offlineHandler) {

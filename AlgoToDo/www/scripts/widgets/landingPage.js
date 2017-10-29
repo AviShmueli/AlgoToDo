@@ -23,8 +23,20 @@
             // register for push notifications
             if (device.isMobileDevice()) {
                 document.addEventListener("deviceready", function () {
+
+
                     pushNotifications.startListening();
                     pushNotifications.onNotificationReceived();
+
+                    pushNotifications.testPushRegistration([vm.user._id])
+                        .then(function (response) {
+                                if (response.data.status !== 'ok') {
+                                    registerForPushNotification();
+                                }
+                            },
+                            function (error) {
+                                logger.error("Error while try to test user for push notification", error);
+                            });
 
                     device.getAppVersion().then(function (version) {
                         if (version !== vm.user.versionInstalled) {
@@ -60,6 +72,40 @@
             logger.info("user is now connected", vm.user);
         };
 
+
+        var registerForPushNotification = function () {
+            registerUserForPushService().then(function (registrationId) {
+
+                var fieldToUpdate = '';
+
+                if (vm.user.device.platform === 'iOS') {
+                    vm.user.ApnRegistrationId = registrationId;
+                    fieldToUpdate = 'ApnRegistrationId';
+                }
+                if (vm.user.device.platform === 'Android') {
+                    vm.user.GcmRegistrationId = registrationId;
+                    fieldToUpdate = 'GcmRegistrationId';
+                }
+
+                DAL.updateUserDetails(vm.user._id, fieldToUpdate, registrationId);
+            });
+        }
+
+        var registerUserForPushService = function () {
+            var deferred = $q.defer();
+
+            pushNotifications.initializePushV5().then(function () {
+                pushNotifications.registerForPushNotifications().then(function (registrationId) {
+                    deferred.resolve(registrationId);
+                });
+            }, function (error) {
+                logger.error("error while trying to register user to app", error);
+                deferred.reject();
+            });
+
+            return deferred.promise;
+        };
+
         var setApplicationDirectory = function () {
 
             var deferred = $q.defer();
@@ -90,7 +136,7 @@
         var checkIfUserSignIn = function () {
 
             var user = datacontext.getUserFromLocalStorage();
-             
+
             if (user !== undefined) {
 
                 $timeout(function () {
@@ -155,7 +201,6 @@
 
 
         vm.interval = $interval(function () {
-            var a = $location;
             burst.play();
         }, 5000);
 
