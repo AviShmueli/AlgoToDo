@@ -283,5 +283,13 @@
         "variables": {
             "MICROPHONE_USAGE_DESCRIPTION": "record voice to comment on a task"
         }
+    },
+    "cordova-plugin-android-permissions": {
+        "source": {
+            "type": "registry",
+            "id": "cordova-plugin-android-permissions"
+        },
+        "is_top_level": true,
+        "variables": {}
     }
 }

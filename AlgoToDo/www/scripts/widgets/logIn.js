@@ -6,10 +6,10 @@
         .controller('logInCtrl', logInCtrl);
 
     logInCtrl.$inject = ['$rootScope', '$scope', 'datacontext', 'logger', 'cordovaPlugins', '$q', 'pushNotifications',
-                          'device', '$mdDialog', 'DAL', '$location', 'contactsSync', '$timeout', '$interval'];
+                          'device', '$mdDialog', 'DAL', '$location', 'contactsSync', '$timeout', '$interval', 'storage'];
 
     function logInCtrl($rootScope, $scope, datacontext, logger, cordovaPlugins, $q, pushNotifications,
-                        device, $mdDialog, DAL, $location, contactsSync, $timeout, $interval) {
+                        device, $mdDialog, DAL, $location, contactsSync, $timeout, $interval, storage) {
 
         angular.element(document.querySelectorAll('html')).addClass("hight-auto");
 
@@ -26,6 +26,37 @@
             datacontext.reloadAllTasks();
             $location.path('/tasksList');
         }
+
+        vm.signupWizardSteps = {
+            1: {
+                stepNum: 1,
+                stepName: 'name&phone',
+                uiMessage: 'רושם את המשתמש ...'
+            },
+            2: {
+                stepNum: 2,
+                stepName: 'pushNotification_registration',
+                uiMessage: 'רושם את המכשיר ...'
+            },
+            3: {
+                stepNum: 3,
+                stepName: 'contacts_autorization',
+                uiMessage: 'מסנכרן את אנשי הקשר שלך ...'
+            },
+            4: {
+                stepNum: 4,
+                stepName: 'storage_autorization',
+                uiMessage: 'מקבל הרשאה לגלריה ...'
+            },
+            5: {
+                stepNum: 5,
+                stepName: 'compleate',
+                uiMessage: 'טוען נתונים ... '
+            }
+        };
+
+        vm.currentStep = vm.signupWizardSteps[1];
+        var interval_step2, interval_step3, interval_step4, interval_step5;
 
         vm.goToSignUp = function () {
             if (device.isMobileDevice()) {
@@ -52,20 +83,8 @@
         var signUp = function () {
             DAL.checkIfUserExist(vm.userPhone).then(function (response) {
                 if (response.data !== null && response.data !== '') {
-
-                    vm.user = response.data;
-
-                    if (device.isMobileDevice()) {
-                        DAL.saveUsersNewRegistrationId('', vm.user);
-                        registerUserForPushService().then(function (registrationId) {
-                            DAL.saveUsersNewRegistrationId(registrationId, vm.user);
-                            
-                            verifyUser();
-                        });
-                    }
-                    else {
-                        verifyUser();
-                    }
+                    vm.user = response.data;                       
+                    verifyUser();                 
                 }
                 else {
                     showUserNotExistAlert();
@@ -88,53 +107,18 @@
 
                 DAL.checkIfVerificationCodeMatch(vm.user, verificationCode).then(function (result) {
                     if (result.data === 'ok') {
+
                         datacontext.saveUserToLocalStorage(vm.user);
 
                         showCube();
 
-                        vm.progress = 30;
-                        vm.loadingMode = 'syncing';
-                        var interval1 = $interval(function () {
-                            if (vm.progress < 75) {
-                                vm.progress = vm.progress + 5;
-                            }
-                        }, 1500);
-
-                        contactsSync.syncPhoneContactsWithServer().then(function () {
-                            $interval.cancel(interval1);
-                            vm.loadingMode = 'loading';
-                            datacontext.reloadAllTasks().then(function () {
-                                vm.progress = 80;
-                                var interval2 = $interval(function () {
-                                    if (vm.progress < 100) {
-                                        vm.progress = vm.progress + 5;
-                                    }
-                                    else {
-                                        $interval.cancel(interval2);
-                                        $location.path('/tasksList');
-                                        angular.element(document.getElementsByTagName('body')).removeClass('background-white');                                        
-                                    }
-                                }, 500);
-                              });
-                        }, function () {
-                            $interval.cancel(interval1);
-                            vm.loadingMode = 'loading';
-                            vm.progress = 75;
-                            datacontext.reloadAllTasks().then(function () {
-                                var interval2 = $interval(function () {
-                                    if (vm.progress < 100) {
-                                        vm.progress = vm.progress + 5;
-                                    }
-                                    else {
-                                        $interval.cancel(interval2);
-                                        $location.path('/tasksList');
-                                        angular.element(document.getElementsByTagName('body')).removeClass('background-white');                                        
-                                    }
-                                }, 500);
-                            });
-                        });
-                    }
-                    else {
+                        if (device.isMobileDevice()) {
+                            step2_register_for_push();
+                        }
+                        else {
+                            step5_compleate();
+                        }
+                    } else {
                         showVerificationFailedAlert();
                         vm.inProgress = false;
                         angular.element(document.getElementsByTagName('body')).removeClass('background-white');
@@ -147,6 +131,114 @@
                 });
             }, function () {
                 DAL.reSendVerificationCodeToUser(vm.user._id);
+            });
+        }
+
+        var step2_register_for_push = function () {
+
+            vm.progress = 5;
+            vm.currentStep = vm.signupWizardSteps[2];
+            interval_step2 = $interval(function () {
+                if (vm.progress < 30) {
+                    vm.progress = vm.progress + 5;
+                }
+            }, 1500);
+
+            registerUserForPushService().then(function (registrationId) {
+
+                var fieldToUpdate = '';
+
+                if (vm.user.device.platform === 'iOS') {
+                    vm.user.ApnRegistrationId = registrationId;
+                    fieldToUpdate = 'ApnRegistrationId';
+                }
+                if (vm.user.device.platform === 'Android') {
+                    vm.user.GcmRegistrationId = registrationId;
+                    fieldToUpdate = 'GcmRegistrationId';
+                }
+
+                DAL.updateUserDetails(vm.user._id, fieldToUpdate, registrationId).then(function () {
+                    pushNotifications.testPushRegistration([vm.user._id])
+                        .then(function (response) {
+                            if (response.data.status === 'ok') {
+                                step3_contact_sync();
+                            }
+                            else {
+                                logger.error("New user canot get push notification", { user: vm.user, message: response.data.message });
+                                showRegistrationFailedAlert();
+                            }
+                        }
+                        , function (error) {
+                            logger.error("Error while try to test user for push notification", error);
+                        }
+                    );
+                });
+            });
+        }
+
+        var step3_contact_sync = function () {
+
+            $interval.cancel(interval_step2);
+            vm.progress = 30;
+            vm.currentStep = vm.signupWizardSteps[3];
+            interval_step3 = $interval(function () {
+                if (vm.progress < 60) {
+                    vm.progress = vm.progress + 5;
+                }
+            }, 1500);
+
+            contactsSync.syncPhoneContactsWithServer().then(function () {
+                step4_storage_autorization();
+            }, function (error) {
+                logger.error("Error in contacts sync process", error);
+                step4_storage_autorization();
+            });
+        }
+
+        var step4_storage_autorization = function () {
+
+            $interval.cancel(interval_step3);
+            vm.progress = 60;
+            vm.currentStep = vm.signupWizardSteps[4];
+            interval_step4 = $interval(function () {
+                if (vm.progress < 75) {
+                    vm.progress = vm.progress + 5;
+                }
+                
+            }, 1500);
+
+            if (device.isMobileDevice()) {
+                storage.getAutorizationFromUser().then(function () {
+                    step5_compleate();
+                }, function () {
+                    step5_compleate();
+                });
+            }
+            else {
+                step5_compleate();
+            }
+            
+        }
+
+        var step5_compleate = function () {
+
+            $interval.cancel(interval_step4);
+
+            vm.currentStep = vm.signupWizardSteps[5];
+
+            datacontext.reloadAllTasks().then(function () {
+
+                vm.progress = 75;
+                interval_step5 = $interval(function () {
+                    if (vm.progress < 100) {
+                        vm.progress = vm.progress + 5;
+                    } else {
+                        $interval.cancel(interval_step5);
+                        $location.path('/tasksList');
+                        //angular.element(document.getElementsByTagName('body')).removeClass('background-white');
+                    }
+                }, 500);
+
             });
         }
 

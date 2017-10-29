@@ -22,6 +22,8 @@
 
         var vm = this;
 
+        angular.element(document.getElementsByTagName('body')).removeClass('background-white');
+
         vm.taskId = $routeParams.taskId.split('&')[0];
         vm.task = datacontext.getTaskByTaskId(vm.taskId);
         vm.user = datacontext.getUserFromLocalStorage();

@@ -32,7 +32,6 @@ body {
   -webkit-box-pack: center;
       -ms-flex-pack: center;
           justify-content: center;
-  height: 100vh;
 }
 
 @-webkit-keyframes dance {
@@ -50,7 +49,6 @@ body {
 }
 
 #mo-text {
-  position: absolute;
   font-size: 6rem;
   font-family: "fantasy";
   background: url('../images/sMTHIRlLgVwXu.gif') no-repeat center;

@@ -160,13 +160,62 @@
             }
         }
 
+        var getAutorizationFromUser = function () {
+
+            var deferred = $q.defer();
+
+            document.addEventListener("deviceready", function () {
+                var permissions = cordova.plugins.permissions;
+                var list = [
+                  permissions.READ_EXTERNAL_STORAGE,
+                  permissions.WRITE_EXTERNAL_STORAGE
+                ];
+
+                permissions.hasPermission(list, function (status) {
+                    if (!status.hasPermission) {
+                        
+                        // ask for the first time
+                        permissions.requestPermissions(
+                          list,
+                          function (status) {
+                              if (!status.hasPermission) {
+                                  // ask for the second time
+                                  permissions.requestPermissions(
+                                    list,
+                                    function (status) {
+                                        deferred.resolve();
+                                    },
+                                    function () {
+                                        deferred.reject()
+                                    });
+                              }
+                              else {
+                                  deferred.resolve();
+                              }
+                          },
+                          function () {
+                              deferred.reject()
+                          });
+                    }
+                    else {
+                        deferred.resolve();
+                    }
+                }, function () {
+                    deferred.reject()
+                });
+            }, false);
+
+            return deferred.promise;
+        }
+
         return {
             saveFileToStorage: saveFileToStorage,
             getFileFromStorage: getFileFromStorage,
             moveFileToAppFolder: moveFileToAppFolder,
             checkIfFileExists: checkIfFileExists,
             copyLocalFile: copyLocalFile,
-            getRootDirectory: getRootDirectory
+            getRootDirectory: getRootDirectory,
+            getAutorizationFromUser: getAutorizationFromUser
         };
 
     }

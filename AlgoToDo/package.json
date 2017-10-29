@@ -13,6 +13,7 @@
         "cookie-parser": "^1.4.3",
         "cordova-ios": "^4.3.1",
         "cordova-plugin-actionsheet": "^2.3.3",
+        "cordova-plugin-android-permissions": "^1.0.0",
         "cordova-plugin-app-event": "1.2.0",
         "cordova-plugin-app-version": "^0.1.9",
         "cordova-plugin-appminimize": "^1.0.0",
@@ -117,7 +118,8 @@
             "phonegap-plugin-speech-recognition": {
                 "MICROPHONE_USAGE_DESCRIPTION": "record voice to comment on a task",
                 "SPEECH_RECOGNITION_USAGE_DESCRIPTION": " "
-            }
+            },
+            "cordova-plugin-android-permissions": {}
         }
     }
 }
