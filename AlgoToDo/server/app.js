@@ -50,11 +50,11 @@ var jobs = require('./cron-jobs');
 // *********
 // IMPORTANT: uncomment this if deploy to production!!!
 // *********
-/*setTimeout(function(){
+setTimeout(function(){
     jobs.startAllJobs();
     console.log("*** start all cron jobs! ***");
 },0);
-*/
+
 
 // /* ---- Start the server ------ */
 server.listen(process.env.PORT || 5001, function (err) {
