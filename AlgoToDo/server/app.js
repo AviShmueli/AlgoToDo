@@ -50,11 +50,11 @@ var jobs = require('./cron-jobs');
 // *********
 // IMPORTANT: uncomment this if deploy to production!!!
 // *********
-setTimeout(function(){
+/*setTimeout(function(){
     jobs.startAllJobs();
     console.log("*** start all cron jobs! ***");
 },0);
-
+*/
 
 // /* ---- Start the server ------ */
 server.listen(process.env.PORT || 5001, function (err) {
@@ -435,7 +435,7 @@ app.post('/TaskManeger/addUsersToCliqa', function (req, res) {
 
 app.get('/TaskManeger/generateReport', function (req, res) {
     
-    BL.generateReport(req.query, io, io_m).then(function (excelFile) {
+    BL.generateReport(req.query).then(function (excelFile) {
         excelFile.write('MyExcel.xlsx', res);
     }, function (error) {
         winston.log('error', error.message, error.error);
@@ -443,21 +443,3 @@ app.get('/TaskManeger/generateReport', function (req, res) {
     });
 
 });
-
-app.post('/TaskManeger/testPushRegistration', function (req, res) {
-    
-        BL.testPushRegistration(req.body.users).then(function (response) {
-            res.send(response);
-        }, function (error) {
-            winston.log('error', error.message, error.error);
-            res.status(500).send(error);
-        });
-    
-    });
-
-
-
-
-// ----- socket.io ------ //
-var io_m = require('./socket.io');
-var io = io_m.listen(server);
