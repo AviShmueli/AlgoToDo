@@ -12,6 +12,7 @@
                         device, $mdDialog, DAL, $location, contactsSync, $timeout, $interval, storage) {
 
         angular.element(document.querySelectorAll('html')).addClass("hight-auto");
+        angular.element(document.getElementsByTagName('body')).removeClass('background-white');
 
         var vm = this;
         vm.showCube = false;
@@ -116,7 +117,7 @@
                             step2_register_for_push();
                         }
                         else {
-                            step5_compleate();
+                            step3_contact_sync();
                         }
                     } else {
                         showVerificationFailedAlert();

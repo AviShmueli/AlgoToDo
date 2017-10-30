@@ -86,8 +86,11 @@
                 }
             }
             else {
-                contact.selected = true;
-                dvm.selectedContactsList.push(contact);
+                var index = common.arrayObjectIndexOf(dvm.selectedContactsList, '_id', contact._id);
+                if (index === -1) {
+                    contact.selected = true;
+                    dvm.selectedContactsList.push(contact);
+                } 
             }
         }
 
