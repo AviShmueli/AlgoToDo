@@ -25,7 +25,7 @@
         vm.user = datacontext.getUserFromLocalStorage();
         if (vm.user !== undefined) {
             datacontext.reloadAllTasks();
-            $location.path('/tasksList');
+            $location.path('/landingPage');
         }
 
         vm.signupWizardSteps = {
@@ -235,7 +235,7 @@
                         vm.progress = vm.progress + 5;
                     } else {
                         $interval.cancel(interval_step5);
-                        $location.path('/tasksList');
+                        $location.path('/landingPage');
                         //angular.element(document.getElementsByTagName('body')).removeClass('background-white');
                     }
                 }, 500);

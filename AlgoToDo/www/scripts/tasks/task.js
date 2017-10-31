@@ -7,7 +7,7 @@
 
     taskCtrl.$inject = ['$rootScope', '$scope', 'logger', '$q', 'storage',
          'datacontext', '$routeParams', '$window', 'moment',
-         'socket', 'cordovaPlugins', 'dropbox', 'appConfig',
+         'cordovaPlugins', 'dropbox', 'appConfig',
          'localNotifications', 'camera', 'device', '$mdDialog',
          'DAL', '$offlineHandler', '$location', '$timeout',
          'pushNotifications', '$toast', '$transitions', '$mdMedia'
@@ -15,7 +15,7 @@
 
     function taskCtrl($rootScope, $scope, logger, $q, storage,
                       datacontext, $routeParams, $window, moment,
-                      socket, cordovaPlugins, dropbox, appConfig,
+                      cordovaPlugins, dropbox, appConfig,
                       localNotifications, camera, device, $mdDialog,
                       DAL, $offlineHandler, $location, $timeout,
                       pushNotifications, $toast, $transitions, $mdMedia) {

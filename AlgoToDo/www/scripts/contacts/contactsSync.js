@@ -60,7 +60,7 @@
                                         }
                                     } catch (err) {
                                         logger.error('Error while trying to get Number Type: ' + self.currentNumber, err.data || err);
-                                        self.deferred.reject(err);
+                                        //self.deferred.reject(err);
                                     }
                                 }
                             }
@@ -140,6 +140,9 @@
         var isNumberValid = function (phoneNumber) {
 
             if (phoneNumber.length < 8) {
+                return false;
+            }
+            if (phoneNumber.indexOf(',') !== -1) {
                 return false;
             }
             if (!phoneNumber.startsWith('+') && phoneNumber.length > 10) {

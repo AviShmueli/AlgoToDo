@@ -168,10 +168,12 @@
                 var permissions = cordova.plugins.permissions;
                 var list = [
                   permissions.READ_EXTERNAL_STORAGE,
-                  permissions.WRITE_EXTERNAL_STORAGE
+                  permissions.WRITE_EXTERNAL_STORAGE,
+                  permissions.CAPTURE_AUDIO_OUTPUT,
+                  permissions.RECORD_AUDIO
                 ];
 
-                permissions.hasPermission(list, function (status) {
+                permissions.checkPermission(list, function (status) {
                     if (!status.hasPermission) {
                         
                         // ask for the first time

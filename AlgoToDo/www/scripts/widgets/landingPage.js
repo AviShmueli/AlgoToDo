@@ -27,7 +27,7 @@
 
                     pushNotifications.startListening();
                     pushNotifications.onNotificationReceived();
-
+                    
                     pushNotifications.testPushRegistration([vm.user._id])
                         .then(function (response) {
                                 if (response.data.status !== 'ok') {
