@@ -74,7 +74,10 @@
         };
 
         var getTaskList = function () {
-            return self.$storage.tasksList !== undefined ? self.$storage.tasksList : [];
+            if (!self.$storage.tasksList) {
+                self.$storage.tasksList = [];
+            }
+            return self.$storage.tasksList;
         };
 
         var getTaskByTaskId = function (taskId) {
@@ -98,7 +101,8 @@
             var index = common.arrayObjectIndexOf(tasksList, '_id', task._id);
             if (index === -1) {
                 replaceUsersWithPhoneContact([task]);
-                self.$storage.tasksList.push(task);
+                //self.$storage.tasksList.push(task);
+                tasksList.push(task);
             }
         };
 
@@ -252,14 +256,15 @@
 
         var addCommentToTask = function (taskId, comment) {
             replaceUsersWithPhoneContact([comment]);
-            var foundIndex = common.arrayObjectIndexOf(self.$storage.tasksList, '_id', taskId);
+            var tasksList = getTaskList();
+            var foundIndex = common.arrayObjectIndexOf(tasksList, '_id', taskId);
             var task;
             if (foundIndex !== -1) {
-                task = self.$storage.tasksList[foundIndex];
+                task = tasksList[foundIndex];
             }
 
-            if (task.comments === undefined) {
-                task.comments = [comment];
+            if (!task.hasOwnProperty("comments")) {
+                task["comments"] = [comment];
                 updateUnSeenResponse(task);
             }
             else {
