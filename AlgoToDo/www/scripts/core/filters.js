@@ -7,7 +7,7 @@
             var filtered = [];
             angular.forEach(tasks, function (task) {
                 if (task.status === 'inProgress' &&
-                    task.to._id === userId) {
+                    task.to && task.to._id === userId) {
                     filtered.push(task);
                 }
             });

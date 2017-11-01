@@ -196,12 +196,12 @@
         apnProvider.send(note, usersRegTokens).then(function (response) {
 
             if (response.failed.length > 0) {
-                console.error("error while sending push notification to apple user: " + task.to || '', response.failed);
-                winston.log('error', "error while sending push notification to apple user: " + task.to || '', response.failed);
-                d.resolve(err);
+                console.error("error while sending push notification to apple user: ", response.failed);
+                winston.log('error', "error while sending push notification to apple user: ", response.failed);
+                d.resolve(response);
             } else {
                 console.log(response.sent);
-                d.resolve(response.sent);
+                d.resolve(response);
             }
         });
 

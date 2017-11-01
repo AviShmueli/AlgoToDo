@@ -1169,9 +1169,9 @@
                     }
 
                     if(response.apnResualt){
-                        if (response.apnResualt.failure) {
+                        if (response.apnResualt.failed && response.apnResualt.failed.length) {
                             result['status'] = 'failure';
-                            result['message'] = response.apnResualt.results[0].error;
+                            result['message'] = response.apnResualt.failed[0].response.reason;
                         }
                     }
 
