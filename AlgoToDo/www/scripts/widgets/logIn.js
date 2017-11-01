@@ -208,7 +208,7 @@
                 
             }, 1500);
 
-            if (device.isMobileDevice()) {
+            if (device.isMobileDevice() && vm.user.device.platform !== 'iOS') {
                 storage.getAutorizationFromUser().then(function () {
                     step5_compleate();
                 }, function () {
