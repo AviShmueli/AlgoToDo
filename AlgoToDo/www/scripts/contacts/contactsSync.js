@@ -85,7 +85,7 @@
             var appUsers = [];
 
             DAL.getUsersByPhoneNumbers(phoneNumbers).then(function (result) {
-                logger.log("info", "contactSync: user " + self.user.phone  + " got " + esult.data.length + " users back from DB that much the contacts on phone", null);
+                logger.log("info", "contactSync: user " + self.user.phone  + " got " + result.data.length + " users back from DB that much the contacts on phone", null);
                 for (var i = 0; i < result.data.length; i++) {
                     var user = result.data[i];
                     var contact = self.phone_contact_map[user.phone];
