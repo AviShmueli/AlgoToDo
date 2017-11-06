@@ -241,16 +241,16 @@
             }
 
             setMyTaskCount();
-        }
+        };
 
         var getMoreLoadedTasks = function () {
             return self.moreLoadedTasks !== undefined ? self.moreLoadedTasks : [];
-        }
+        };
 
         var addTasksToMoreLoadedTasks = function (tasks) {
             replaceUsersWithPhoneContact(tasks);
             self.moreLoadedTasks = getMoreLoadedTasks().concat(tasks);
-        }
+        };
 
         /* ----- Comments ----- */
 
@@ -305,7 +305,7 @@
                         1;
                 }
             }
-        }
+        };
 
         /* ---- Device ----- */
 
@@ -362,7 +362,7 @@
 
         var deleteRepeatsTaskListFromLocalStorage = function () {
             delete self.$storage.repeatsTasksList;
-        }
+        };
 
         /* ----- Users ----- */
 
@@ -378,7 +378,7 @@
                     user.avatarUrl = allCachedUsers[index].avatarUrl;
                 }
             }
-        }
+        };
 
         var saveUserToLocalStorage = function (user) {
             self.$storage.user = user;           
@@ -487,11 +487,19 @@
             }
         };
 
-        (function () {
+        var saveLoginStepToLocalStorage = function (step) {
+            self.$storage.loginStep = step;
+        }
+
+        var getLoginStepToLocalStorage = function () {
+            return self.$storage.loginStep;
+        }
+
+        //(function () {
             var user = getUserFromLocalStorage();
             if (user !== undefined) {
                 var logUser = { name: user.name, _id: user._id, phone: user.phone, versionInstalled: user.versionInstalled };
-                logUser.device = isMobileDevice() ? user.device.manufacturer + ' ' + user.device.model : 'Browser',
+                logUser.device = isMobileDevice() ? user.device.manufacturer + ' ' + user.device.model : 'Browser';
                 logger.setUser(logUser);
             }
 
@@ -500,7 +508,7 @@
                     reloadAllTasks(true);
                 }, 30000);
             }
-        })();
+        //})();
 
 
         var service = {
@@ -533,7 +541,9 @@
             getMoreLoadedTasks: getMoreLoadedTasks,
             addTasksToMoreLoadedTasks: addTasksToMoreLoadedTasks,
             sortUsersByfrequencyOfUse: sortUsersByfrequencyOfUse,
-            deleteRepeatsTaskListFromLocalStorage: deleteRepeatsTaskListFromLocalStorage
+            deleteRepeatsTaskListFromLocalStorage: deleteRepeatsTaskListFromLocalStorage,
+            saveLoginStepToLocalStorage: saveLoginStepToLocalStorage,
+            getLoginStepToLocalStorage: getLoginStepToLocalStorage
         };
 
         return service;

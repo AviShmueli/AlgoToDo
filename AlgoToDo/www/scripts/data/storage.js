@@ -18,23 +18,22 @@
 
             if (downloadUrl.startsWith("content://")) {
                 resolveAndDownloadNativePath(downloadUrl, folderpath).then(function (entry) {
-                    deferred.resolve(entry.toURL());
-                },
-                function (error) {
-                    logger.error("error while trying to download source", error);
-                    deferred.reject(error);
-                });
-            }
-            else{                       
+                        deferred.resolve(entry.toURL());
+                    },
+                    function (error) {
+                        logger.error("error while trying to download source", error);
+                        deferred.reject(error);
+                    });
+            } else {
                 downloadUrl = downloadUrl.replace("?dl=0", "?dl=1");
                 var fileTransfer = new FileTransfer();
                 downLoadFile(downloadUrl, folderpath).then(function (entry) {
-                    deferred.resolve(entry.toURL());
-                },
-                function (error) {
-                    logger.error("error while trying to download source", error);
-                    deferred.reject(error);
-                });
+                        deferred.resolve(entry.toURL());
+                    },
+                    function (error) {
+                        logger.error("error while trying to download source", error);
+                        deferred.reject(error);
+                    });
             }
 
             return deferred.promise;
@@ -58,8 +57,7 @@
                 }, function (error) {
                     deferred.reject(error);
                 });
-            }
-            else {
+            } else {
                 readAsDataURL(path, fileName).then(function (base64File) {
                     deferred.resolve(base64File);
                 }, function (error) {
@@ -77,15 +75,15 @@
             var deferred = $q.defer();
 
             document.addEventListener("deviceready", function () {
-                window.FilePath.resolveNativePath(path, function (filePath) {                
+                window.FilePath.resolveNativePath(path, function (filePath) {
 
                     // remove "file://" from file path
                     filePath = filePath.substring(7);
 
-                    downLoadFile(filePath, fileURL).then(function (entry) {                   
+                    downLoadFile(filePath, fileURL).then(function (entry) {
                         deferred.resolve(entry);
                     });
-                
+
                 }, function (error) {
                     deferred.reject(error);
                 });
@@ -118,29 +116,29 @@
         var moveFileToAppFolder = function (fileUrl, oldFileName, newPath, newFileName) {
             var deferred = $q.defer();
             $cordovaFile.checkDir(getRootDirectory(), newPath)
-              .then(function (success) {
-                  $cordovaFile.copyFile(fileUrl, oldFileName, getRootDirectory() + newPath, newFileName).then(function (success) {
-                      var s = success;
-                      deferred.resolve(s);
-                  }, function (error) {
-                      var e = error;
-                      deferred.reject(e);
-                  });
-              }, function (error) {
-                  $cordovaFile.createDir(getRootDirectory(), newPath, false)
-                    .then(function (success) {
-                        $cordovaFile.copyFile(fileUrl, oldFileName, getRootDirectory() + newPath, newFileName).then(function (success) {
-                            var s = success;
-                            deferred.resolve(s);
-                        }, function (error) {
-                            var e = error;
-                            deferred.reject(e);
-                        });
+                .then(function (success) {
+                    $cordovaFile.copyFile(fileUrl, oldFileName, getRootDirectory() + newPath, newFileName).then(function (success) {
+                        var s = success;
+                        deferred.resolve(s);
                     }, function (error) {
                         var e = error;
                         deferred.reject(e);
                     });
-              });
+                }, function (error) {
+                    $cordovaFile.createDir(getRootDirectory(), newPath, false)
+                        .then(function (success) {
+                            $cordovaFile.copyFile(fileUrl, oldFileName, getRootDirectory() + newPath, newFileName).then(function (success) {
+                                var s = success;
+                                deferred.resolve(s);
+                            }, function (error) {
+                                var e = error;
+                                deferred.reject(e);
+                            });
+                        }, function (error) {
+                            var e = error;
+                            deferred.reject(e);
+                        });
+                });
             return deferred.promise;
         }
 
@@ -165,46 +163,50 @@
             var deferred = $q.defer();
 
             document.addEventListener("deviceready", function () {
-                var permissions = cordova.plugins.permissions;
-                var list = [
-                  permissions.READ_EXTERNAL_STORAGE,
-                  permissions.WRITE_EXTERNAL_STORAGE,
-                  permissions.CAPTURE_AUDIO_OUTPUT,
-                  permissions.RECORD_AUDIO
-                ];
 
-                permissions.checkPermission(list, function (status) {
-                    if (!status.hasPermission) {
-                        
-                        // ask for the first time
-                        permissions.requestPermissions(
-                          list,
-                          function (status) {
-                              if (!status.hasPermission) {
-                                  // ask for the second time
-                                  permissions.requestPermissions(
-                                    list,
-                                    function (status) {
+                var platformName = cordova.platformId === 'android' ? 'Android' : 'iPhone';
+                if (platformName === 'Android') {
+
+
+                    var permissions = cordova.plugins.permissions;
+                    var list = [
+                        permissions.READ_EXTERNAL_STORAGE,
+                        permissions.WRITE_EXTERNAL_STORAGE,
+                        permissions.CAPTURE_AUDIO_OUTPUT,
+                        permissions.RECORD_AUDIO
+                    ];
+
+                    permissions.checkPermission(list, function (status) {
+                        if (!status.hasPermission) {
+
+                            // ask for the first time
+                            permissions.requestPermissions(
+                                list,
+                                function (status) {
+                                    if (!status.hasPermission) {
+                                        // ask for the second time
+                                        permissions.requestPermissions(
+                                            list,
+                                            function (status) {
+                                                deferred.resolve();
+                                            },
+                                            function () {
+                                                deferred.reject()
+                                            });
+                                    } else {
                                         deferred.resolve();
-                                    },
-                                    function () {
-                                        deferred.reject()
-                                    });
-                              }
-                              else {
-                                  deferred.resolve();
-                              }
-                          },
-                          function () {
-                              deferred.reject()
-                          });
-                    }
-                    else {
-                        deferred.resolve();
-                    }
-                }, function () {
-                    deferred.reject()
-                });
+                                    }
+                                },
+                                function () {
+                                    deferred.reject()
+                                });
+                        } else {
+                            deferred.resolve();
+                        }
+                    }, function () {
+                        deferred.reject()
+                    });
+                }
             }, false);
 
             return deferred.promise;

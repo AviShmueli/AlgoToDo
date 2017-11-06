@@ -1,4 +1,6 @@
-
+tm-sidenav{
+    height: 100%;
+}
 .md-char-counter {
     direction: ltr;
 }

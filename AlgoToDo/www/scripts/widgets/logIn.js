@@ -21,42 +21,7 @@
         vm.user = {};
         vm.loadingMode = 'syncing';
         vm.progress = 10;
-
-        vm.user = datacontext.getUserFromLocalStorage();
-        if (vm.user !== undefined) {
-            datacontext.reloadAllTasks();
-            $location.path('/landingPage');
-        }
-
-        vm.signupWizardSteps = {
-            1: {
-                stepNum: 1,
-                stepName: 'name&phone',
-                uiMessage: 'רושם את המשתמש ...'
-            },
-            2: {
-                stepNum: 2,
-                stepName: 'pushNotification_registration',
-                uiMessage: 'רושם את המכשיר ...'
-            },
-            3: {
-                stepNum: 3,
-                stepName: 'contacts_autorization',
-                uiMessage: 'מסנכרן את אנשי הקשר שלך ...'
-            },
-            4: {
-                stepNum: 4,
-                stepName: 'storage_autorization',
-                uiMessage: 'מקבל הרשאה לגלריה ...'
-            },
-            5: {
-                stepNum: 5,
-                stepName: 'compleate',
-                uiMessage: 'טוען נתונים ... '
-            }
-        };
-
-        vm.currentStep = vm.signupWizardSteps[1];
+     
         var interval_step2, interval_step3, interval_step4, interval_step5;
 
         vm.goToSignUp = function () {
@@ -114,10 +79,10 @@
                         showCube();
 
                         if (device.isMobileDevice()) {
-                            step2_register_for_push();
+                            changeStep(2);
                         }
                         else {
-                            step3_contact_sync();
+                            changeStep(3);
                         }
                     } else {
                         showVerificationFailedAlert();
@@ -138,7 +103,7 @@
         var step2_register_for_push = function () {
 
             vm.progress = 5;
-            vm.currentStep = vm.signupWizardSteps[2];
+            
             interval_step2 = $interval(function () {
                 if (vm.progress < 30) {
                     vm.progress = vm.progress + 5;
@@ -162,11 +127,13 @@
                     pushNotifications.testPushRegistration([vm.user._id])
                         .then(function (response) {
                             if (response.data.status === 'ok' || vm.user.type === "tester" || vm.user.type === "apple-tester") {
-                                step3_contact_sync();
+                                changeStep(3);
                             }
                             else {
                                 logger.error("New user canot get push notification", { user: vm.user, message: response.data.message });
                                 showRegistrationFailedAlert();
+                                changeStep(1);
+                                hideCube();
                             }
                         }
                         , function (error) {
@@ -181,7 +148,7 @@
 
             $interval.cancel(interval_step2);
             vm.progress = 30;
-            vm.currentStep = vm.signupWizardSteps[3];
+            
             interval_step3 = $interval(function () {
                 if (vm.progress < 60) {
                     vm.progress = vm.progress + 5;
@@ -189,10 +156,10 @@
             }, 1500);
 
             contactsSync.syncPhoneContactsWithServer().then(function () {
-                step4_storage_autorization();
+                changeStep(4);
             }, function (error) {
                 logger.error("Error in contacts sync process", error);
-                step4_storage_autorization();
+                changeStep(4);
             });
         }
 
@@ -200,7 +167,7 @@
 
             $interval.cancel(interval_step3);
             vm.progress = 60;
-            vm.currentStep = vm.signupWizardSteps[4];
+
             interval_step4 = $interval(function () {
                 if (vm.progress < 75) {
                     vm.progress = vm.progress + 5;
@@ -210,13 +177,13 @@
 
             if (device.isMobileDevice() && vm.user.device.platform !== 'iOS') {
                 storage.getAutorizationFromUser().then(function () {
-                    step5_compleate();
+                    changeStep(5);
                 }, function () {
-                    step5_compleate();
+                    changeStep(5);
                 });
             }
             else {
-                step5_compleate();
+                changeStep(5);
             }
             
         }
@@ -224,8 +191,6 @@
         var step5_compleate = function () {
 
             $interval.cancel(interval_step4);
-
-            vm.currentStep = vm.signupWizardSteps[5];
 
             datacontext.reloadAllTasks().then(function () {
 
@@ -235,11 +200,16 @@
                         vm.progress = vm.progress + 5;
                     } else {
                         $interval.cancel(interval_step5);
+                        changeStep(null);
                         $location.path('/landingPage');
                         //angular.element(document.getElementsByTagName('body')).removeClass('background-white');
                     }
                 }, 500);
 
+            }, function(error){
+                $interval.cancel(interval_step5);
+                changeStep(null);
+                $location.path('/landingPage');
             });
         }
 
@@ -307,9 +277,15 @@
         
         var showCube = function () {
             vm.showCube = true;
-            vm.loadingMode = 'syncing';
+            vm.inProgress = true;
             angular.element(document.querySelectorAll('html')).removeClass("hight-auto");
             angular.element(document.getElementsByTagName('body')).addClass('background-white');
+        };
+
+        var hideCube = function () {
+            vm.showCube = false;
+            angular.element(document.querySelectorAll('html')).addClass("hight-auto");
+            angular.element(document.getElementsByTagName('body')).aremoveClass('background-white');
         };
 
         vm.exitApp = false;
@@ -346,6 +322,67 @@
             ).then(function () {
                 window.open('http://www.asiti.net/download-asiti', '_blank');
             });
+        }
+
+        var changeStep = function (toStep) {
+            
+            if (toStep) {
+                vm.currentStep = vm.signupWizardSteps[toStep];   
+                vm.currentStep._function(); 
+            }            
+            
+            datacontext.saveLoginStepToLocalStorage(toStep);
+        }
+
+        vm.signupWizardSteps = {
+            1: {
+                stepNum: 1,
+                stepName: 'name&phone',
+                uiMessage: 'רושם את המשתמש ...',
+                _function: function(){}
+            },
+            2: {
+                stepNum: 2,
+                stepName: 'pushNotification_registration',
+                uiMessage: 'רושם את המכשיר ...',
+                _function: step2_register_for_push
+            },
+            3: {
+                stepNum: 3,
+                stepName: 'contacts_autorization',
+                uiMessage: 'מסנכרן את אנשי הקשר שלך ...',
+                _function: step3_contact_sync
+            },
+            4: {
+                stepNum: 4,
+                stepName: 'storage_autorization',
+                uiMessage: 'מקבל הרשאה לגלריה ...',
+                _function: step4_storage_autorization
+            },
+            5: {
+                stepNum: 5,
+                stepName: 'compleate',
+                uiMessage: 'טוען נתונים ... ',
+                _function: step5_compleate
+            }
+        };
+
+        var savedLoginStep = datacontext.getLoginStepToLocalStorage();
+
+        if (savedLoginStep) {
+            if (savedLoginStep > 1){
+                showCube();
+            }
+            changeStep(savedLoginStep);
+        }
+        else{
+            changeStep(1);
+        }
+
+        vm.user = datacontext.getUserFromLocalStorage();
+        if (vm.user !== undefined && !savedLoginStep) {
+            datacontext.reloadAllTasks();
+            $location.path('/landingPage');
         }
 
     }

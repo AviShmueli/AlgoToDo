@@ -583,7 +583,8 @@
 
         var initialRecognitionObject = function () {
             if (!device.isMobileDevice()) {
-                vm.recognition = new webkitSpeechRecognition();
+                vm.recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition || window.mozSpeechRecognition || window.msSpeechRecognition)();
+                //vm.recognition = new webkitSpeechRecognition();
             }
             else {
                 vm.recognition = new SpeechRecognition();

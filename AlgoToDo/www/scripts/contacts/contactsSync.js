@@ -21,11 +21,14 @@
         self.deferred = $q.defer();
         self.currentNumber = '';
         self.user = datacontext.getUserFromLocalStorage();
+        if (!self.user) {
+            self.user = {'phone' : ''}
+        }
 
         var syncPhoneContactsWithServer = function () {
 
             self.deferred = $q.defer();
-
+            logger.log("info", "contactSync: user " + self.user.phone + " is syncing contacts", null);
             getAllUserCliqotContacts().then(function () {
 
                 if (!device.isMobileDevice()) {
@@ -33,8 +36,9 @@
                         self.deferred.resolve();
                     }, 0);
                 } else {
+                    logger.log("info", "contactSync: user " + self.user.phone + " is going to device to get all contacts", null);
                     device.getContacts('').then(function (allContacts) {
-
+                        logger.log("info", "contactSync: user " + self.user.phone + " got " + allContacts.length + " contacts on phone", null);
                         var phoneNumbers = [],
                             contact;
 
@@ -65,7 +69,7 @@
                                 }
                             }
                         }
-
+                        logger.log("info", "contactSync: user " + self.user.phone + " got " + phoneNumbers.length + " numbers to check for cross with DB users", null);
                         crossContacts(phoneNumbers);
                     }, function (error) {
                         logger.error('Error while trying to get contacts list: ', error.data || error);
@@ -81,6 +85,7 @@
             var appUsers = [];
 
             DAL.getUsersByPhoneNumbers(phoneNumbers).then(function (result) {
+                logger.log("info", "contactSync: user " + self.user.phone  + " got " + esult.data.length + " users back from DB that much the contacts on phone", null);
                 for (var i = 0; i < result.data.length; i++) {
                     var user = result.data[i];
                     var contact = self.phone_contact_map[user.phone];
@@ -89,7 +94,7 @@
                         name: contact.displayName !== null ? contact.displayName : contact.name.formatted,
                         phone: user.phone,
                         avatarUrl: user.avatarUrl //self.imagesPath + user.avatarUrl
-                        //cliqot: user.cliqot || ''
+                        //cliqot: user.cliqoe
                     };
 
 
@@ -118,13 +123,17 @@
                 }
 
                 if (self.user !== undefined && common.arrayObjectIndexOf(appUsers, 'phone', self.user.phone) === -1) {
+                    logger.log("info", "contactSync: user " + self.user.phone + " is adding him-self to users list", null);                    
                     appUsers.push(self.user);
                 }
 
 
                 if (appUsers.length > 0) {
+                    logger.log("info", "contactSync: user " + self.user.phone + " is adding users list to cache", null);                                        
                     datacontext.addUsersToUsersCache(appUsers, true);
+                    logger.log("info", "contactSync: user " + self.user.phone + " is sorting the users by frequenccy of use", null);                                        
                     datacontext.sortUsersByfrequencyOfUse();
+                    logger.log("info", "contactSync: user " + self.user.phone + " is updating users photos", null);                                        
                     updateUsersPhoto();
                 }
                 self.deferred.resolve(appUsers.length);
@@ -176,13 +185,16 @@
             var deferred = $q.defer();
 
             var user = datacontext.getUserFromLocalStorage();
+            self.user = user;
 
             // if this is a regular user (with cliqa נסייני מערכת) 
             if (user.cliqot !== undefined && user.cliqot.length < 2 && user.cliqot[0]._id === MAIN_CLIQA_ID) {
+                logger.log("info", "contactSync: user " + user.phone + " is is a regular user, will not search Cliqot users", null);
                 deferred.resolve();
             } else {
                 DAL.searchUsers('', user).then(function (response) {
                     var usersList = response.data;
+                    logger.log("info", "contactSync: user " + user.phone + " got " + usersList.length + " users from cliqot", null);
                     for (var i = 0; i < usersList.length; i++) {
                         usersList[i]['avatarUrl'] = usersList[i].avatarUrl; //self.imagesPath + usersList[i].avatarUrl;
                     }

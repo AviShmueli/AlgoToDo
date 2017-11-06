@@ -136,8 +136,9 @@
         var checkIfUserSignIn = function () {
 
             var user = datacontext.getUserFromLocalStorage();
+            var savedLoginStep = datacontext.getLoginStepToLocalStorage();
 
-            if (user !== undefined) {
+            if (user !== undefined && !savedLoginStep) {
 
                 $timeout(function () {
                     setApplicationDirectory();
