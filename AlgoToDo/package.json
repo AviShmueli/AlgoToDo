@@ -81,14 +81,20 @@
             "com.avishmueli.webintent": {},
             "cordova-plugin-app-event": {},
             "cordova-plugin-badge": {},
-            "cordova-plugin-camera": {},
+            "cordova-plugin-camera": {
+                "CAMERA_USAGE_DESCRIPTION": "send images in a task"
+            },
             "cordova-plugin-compat": {},
-            "cordova-plugin-contacts": {},
+            "cordova-plugin-contacts": {
+                "CONTACT_USAGE_DESCRIPTION": "send task to contacts"
+            },
             "cordova-plugin-datepicker": {},
             "cordova-plugin-datetimepicker": {},
             "cordova-plugin-device": {},
             "cordova-plugin-dialogs": {},
-            "cordova-plugin-file": {},
+            "cordova-plugin-file": {
+                "PHOTO_LIBRARY_USAGE_DESCRIPTION": "send files in a task"
+            },
             "cordova-plugin-file-transfer": {},
             "cordova-plugin-filepath": {},
             "cordova-plugin-globalization": {},
