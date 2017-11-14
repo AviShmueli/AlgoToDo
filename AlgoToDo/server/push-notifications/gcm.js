@@ -77,8 +77,8 @@
                 console.error("error while sending push notification to user: " + task.to || '', err);
                 winston.log('error', "error while sending push notification to user: " + task.to || '', err);
             } else {
-                winston.log("info", "task have been send sucessfuly to user:", task);
-                console.log(response);
+                //winston.log("info", "task have been send sucessfuly to user:", task);
+                //console.log(response);
             }
         });
     }
@@ -248,8 +248,8 @@
                 console.error("error while sending push notification to user: " + task.to || '', err);
                 winston.log('error', "error while sending push notification to user: " + task.to || '', err);
             } else {
-                winston.log("info", "task have been send sucessfuly to user:", task);
-                console.log(response);
+                //winston.log("info", "task have been send sucessfuly to user:", task);
+                //console.log(response);
             }
         });
     }

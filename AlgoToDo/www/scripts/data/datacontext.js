@@ -167,8 +167,12 @@
                 var tasks = getTaskList();
                 var count = 0;
                 if (tasks && tasks.length > 0) {
-                    count = $filter('myTasks')(getTaskList(), userId).length;
+                    count = $filter('myTasks')(tasks, userId).length;
                     $rootScope.taskcount = count;
+                    count = $filter('unReadTasks')($filter('tasksInProgress')(tasks, userId)).length;
+                    $rootScope.newCommentsInTasksInProcessCount = count;
+                    count = $filter('unReadTasks')($filter('doneTasks')(tasks, userId)).length;
+                    $rootScope.newCommentsInDoneTasksCount = count;
                 }
                 return count;
             }

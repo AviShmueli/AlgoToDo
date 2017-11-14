@@ -110,10 +110,32 @@
                             vm.task.comments.push(comment);
                             addImageToGallery(comment.fileName, comment.fileLocalPath);
 
+                            var userIdToNotify = '';
+                            if (vm.task.to._id !== vm.task.from._id) {
+                                if (vm.task.from._id === comment.from._id) {
+                                    userIdToNotify = vm.task.to._id;
+                                }
+                                else {
+                                    userIdToNotify = vm.task.from._id;
+                                }
+                            }
+
                             //if (vm.task.from._id !== vm.task.to._id) {
-                                dropbox.uploadNewImageToDropbox(fileEntry.filesystem.root.nativeURL, fileEntry.name, fileName).then(function () {
+                                dropbox.uploadNewImageToDropbox(fileEntry.filesystem.root.nativeURL, fileEntry.name, fileName)
+                                .then(function () {
                                     DAL.newComment(vm.task._id, tempComment);
                                     camera.cleanupAfterPictureTaken();
+                                }, function (error) {
+                                    if (error.status === -1) {
+                                        error.data = "App lost connection to the server";
+                                    }
+                                    logger.error('Error while trying to upload file to dropbox: ', error.data || error);
+                                    tempComment.offlineMode = true;
+                                    comment.offlineMode = true;
+                                    $offlineHandler.addTasksToCachedImagesList({nativeUrl: fileEntry.filesystem.root.nativeURL, fileName: fileName});
+                                    if (vm.task._id.indexOf('tempId') === -1) {
+                                        $offlineHandler.addCommentToCachedNewCommentsList(vm.task._id, comment, userIdToNotify);
+                                    }
                                 });
                            // }
                             //else {

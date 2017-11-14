@@ -61,6 +61,17 @@
             });
             return filtered;
         };
+    })
+    .filter('unReadTasks', function () {
+        return function (tasks) {
+            var filtered = [];
+            angular.forEach(tasks, function (task) {
+                if (task.unSeenResponses) {
+                    filtered.push(task);
+                }
+            });
+            return filtered;
+        };
     });
 
 })();
