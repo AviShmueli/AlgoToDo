@@ -8,9 +8,11 @@
                 </md-button>
                 <md-menu-content width="4">
                     <md-menu-item>
-                        <md-button class="no-line-height" ng-disabled="!vm.taskIsFromMe" ng-click="vm.closeTask($event)">
+                        <md-button class="no-line-height" ng-disabled="!vm.taskIsFromMe || vm.task.status === 'done' || vm.task.status === 'closed'"
+                            ng-click="vm.closeTask($event)">
                             <div layout="row" flex>
-                                <ng-md-icon class="rotate icon-fill-disabled" ng-class="{'icon-fill': vm.taskIsFromMe}" md-menu-align-target icon="cancel"></ng-md-icon>
+                                <ng-md-icon class="rotate icon-fill-disabled" ng-class="{'icon-fill': vm.taskIsFromMe && (vm.task.status !== 'done' && vm.task.status !== 'closed')}"
+                                    md-menu-align-target icon="cancel"></ng-md-icon>
                                 <p flex class="text-align-right">סגור משימה</p>
                             </div>
                         </md-button>
@@ -24,9 +26,10 @@
                         </md-button>
                     </md-menu-item>
                     <md-menu-item>
-                        <md-button ng-disabled="(vm.taskIsFromMe && vm.taskIsToMe) || !vm.taskIsFromMe" class="no-line-height" ng-click="vm.sendReminder()">
+                        <md-button ng-disabled="(vm.taskIsFromMe && vm.taskIsToMe) || !vm.taskIsFromMe || vm.task.status === 'done' || vm.task.status === 'closed'"
+                            class="no-line-height" ng-click="vm.sendReminder()">
                             <div layout="row" flex>
-                                <ng-md-icon md-menu-align-target icon="notifications_active" class="icon-fill-disabled" ng-class="{'icon-fill': !((vm.taskIsFromMe && vm.taskIsToMe) || !vm.taskIsFromMe)}"></ng-md-icon>
+                                <ng-md-icon md-menu-align-target icon="notifications_active" class="icon-fill-disabled" ng-class="{'icon-fill': !((vm.taskIsFromMe && vm.taskIsToMe) || !vm.taskIsFromMe) && (vm.task.status !== 'done' && vm.task.status !== 'closed')}"></ng-md-icon>
                                 <p flex class="text-align-right">שלח תזכורת</p>
                             </div>
                         </md-button>
@@ -64,7 +67,7 @@
     <!--<div layout="column" flex layout-align="center center">-->
 
     <md-content flex md-scroll-y class="background-color-transparent">
-        <main flex >
+        <main flex>
             <div ng-class="{'task-content-web-view': vm.isGTSMScreen()}">
                 <ui-view layout="column" layout-fill>
                     <md-card dir="rtl" layout="column" flex flex-gt-sm="50" flex-md="66">
@@ -73,15 +76,24 @@
                                 <md-card-avatar>
                                     <img ng-if="(vm.taskIsFromMe && (vm.task.to.avatarUrl.startsWith('content') || vm.task.to.avatarUrl.startsWith('file'))) ||
                                             (!vm.taskIsFromMe && (vm.task.from.avatarUrl.startsWith('content') || vm.task.from.avatarUrl.startsWith('file')))"
-                                         alt="user image" ng-src="{{::((vm.taskIsFromMe) ? vm.task.to.avatarUrl : vm.task.from.avatarUrl)}}" class="md-avatar user-avatar-small margin-left-10px" />
+                                        alt="user image" ng-src="{{::((vm.taskIsFromMe) ? vm.task.to.avatarUrl : vm.task.from.avatarUrl)}}"
+                                        class="md-avatar user-avatar-small margin-left-10px" />
                                     <img ng-if="(vm.taskIsFromMe && (!vm.task.to.avatarUrl.startsWith('content') && !vm.task.to.avatarUrl.startsWith('file'))) ||
                                             (!vm.taskIsFromMe && (!vm.task.from.avatarUrl.startsWith('content') && !vm.task.from.avatarUrl.startsWith('file')))"
-                                         alt="user image" ng-src="{{::vm.imagesPath + ((vm.taskIsFromMe) ? vm.task.to.avatarUrl : vm.task.from.avatarUrl)}}" class="md-avatar user-avatar-small margin-left-10px" />
+                                        alt="user image" ng-src="{{::vm.imagesPath + ((vm.taskIsFromMe) ? vm.task.to.avatarUrl : vm.task.from.avatarUrl)}}"
+                                        class="md-avatar user-avatar-small margin-left-10px" />
                                 </md-card-avatar>
                                 <span class="from">{{ ((vm.taskIsFromMe) ? 'ל' + vm.task.to.name : 'מ' + vm.task.from.name)}}</span>
-                                <span flex></span>
-                                נשלחה&ensp;
+                                <span flex></span> נשלחה&ensp;
                                 <span class="font-bold" ng-bind-html="(vm.task.createTime | amCalendar)"></span>
+                                <p style="position: absolute;left: 24px;" ng-if="vm.task.status === 'done'">
+                                    בוצעה&ensp;
+                                    <span class="font-bold" ng-bind-html="(vm.task.doneTime | amCalendar)"></span>
+                                </p>
+                                <p style="position: absolute;left: 24px;" ng-if="vm.task.status === 'closed'">
+                                    נסגרה&ensp;
+                                    <span class="font-bold" ng-bind-html="(vm.task.doneTime | amCalendar)"></span>
+                                </p>
                             </div>
                             <div layout="row" class="comment-description">
                                 <pre class="comment-description" ng-class="{'pre-wrap' : !vm.isIosDevice}">{{::vm.task.description}}</pre>
@@ -89,7 +101,8 @@
                         </md-card-content>
                         <md-divider></md-divider>
                         <md-card-actions layout="row" layout-align="end center">
-                            <md-button ng-if="vm.taskIsToMe && vm.task.status !== 'done'" class="md-fab md-mini md-icon-button md-secondary background-color-green" ng-click="vm.setTaskStatus(vm.task, 'done')" aria-label="done">
+                            <md-button ng-if="vm.taskIsToMe && vm.task.status !== 'done'" class="md-fab md-mini md-icon-button md-secondary background-color-green"
+                                ng-click="vm.setTaskStatus(vm.task, 'done')" aria-label="done">
                                 <ng-md-icon icon="done"></ng-md-icon>
                             </md-button>
                             <span flex></span>
@@ -99,21 +112,26 @@
                             <!--<md-button ng-disabled="!vm.taskIsFromMe" class="md-icon-button" aria-label="redo">
                         <ng-md-icon icon="settings_backup_restore" class="icon-fill"></ng-md-icon>
                     </md-button>-->
-                            <md-button class="md-icon-button" aria-label="report" ng-click="vm.takePic('PHOTOLIBRARY')">
+                            <md-button ng-disabled="!(vm.task.status !== 'done' && vm.task.status !== 'closed')" class="md-icon-button" aria-label="report"
+                                ng-click="vm.takePic('PHOTOLIBRARY')">
                                 <ng-md-icon icon="attach_file" class="icon-fill"></ng-md-icon>
                             </md-button>
-                            <md-button class="md-icon-button" aria-label="report" ng-click="vm.takePic('camera')">
+                            <md-button ng-disabled="!(vm.task.status !== 'done' && vm.task.status !== 'closed')" class="md-icon-button" aria-label="report"
+                                ng-click="vm.takePic('camera')">
                                 <ng-md-icon icon="add_a_photo" class="icon-fill"></ng-md-icon>
                             </md-button>
                         </md-card-actions>
                     </md-card>
-                    <md-card dir="rtl" class="response-card"
-                             ng-repeat="comment in vm.task.comments | orderBy: createTime:true ">
+                    <md-card dir="rtl" class="response-card" ng-repeat="comment in vm.task.comments | orderBy: createTime:true ">
                         <md-card-content>
                             <div layout="row">
                                 <md-card-avatar>
-                                    <img ng-if="comment.from.avatarUrl.startsWith('content') || comment.from.avatarUrl.startsWith('file')" alt="{{::comment.from.name}}" ng-src="{{::comment.from.avatarUrl}}" class="md-avatar user-avatar-small margin-left-10px" />
-                                    <img ng-if="!comment.from.avatarUrl.startsWith('content')  && !comment.from.avatarUrl.startsWith('file')" alt="{{::comment.from.name}}" ng-src="{{::vm.imagesPath + comment.from.avatarUrl}}" class="md-avatar user-avatar-small margin-left-10px" />
+                                    <img ng-if="comment.from.avatarUrl.startsWith('content') || comment.from.avatarUrl.startsWith('file')" alt="{{::comment.from.name}}"
+                                        ng-src="{{::comment.from.avatarUrl}}" class="md-avatar user-avatar-small margin-left-10px"
+                                    />
+                                    <img ng-if="!comment.from.avatarUrl.startsWith('content')  && !comment.from.avatarUrl.startsWith('file')" alt="{{::comment.from.name}}"
+                                        ng-src="{{::vm.imagesPath + comment.from.avatarUrl}}" class="md-avatar user-avatar-small margin-left-10px"
+                                    />
                                 </md-card-avatar>
                                 <span class="from">{{::comment.from.name}}</span>
                                 <span flex></span>
@@ -124,12 +142,10 @@
                                 <pre class="comment-description font-14px" ng-class="{'pre-wrap' : !vm.isIosDevice}">{{::comment.text}}</pre>
                             </div>
                             <div class="image-wraper" ng-if="comment.fileName !== undefined">
-                                <img md-whiteframe="5" id="myImage" class="md-card-image padded"
-                                     alt="מוריד תמונה" ng-src="{{comment.fileLocalPath}}"
-                                     ng-click="vm.showGalary(comment)">
-                                <md-progress-circular md-mode="indeterminate" ng-if="vm.showProgress && comment.fileLocalPath.indexOf('upload-empty') !== -1" md-diameter="40px" class="md-accent md-hue-2"></md-progress-circular>
-                                <ng-md-icon ng-if="comment.errorDownloadFile"
-                                            icon="error" class="offline-icon-fill " size="40">
+                                <img md-whiteframe="5" id="myImage" class="md-card-image padded" alt="מוריד תמונה" ng-src="{{comment.fileLocalPath}}" ng-click="vm.showGalary(comment)">
+                                <md-progress-circular md-mode="indeterminate" ng-if="vm.showProgress && comment.fileLocalPath.indexOf('upload-empty') !== -1"
+                                    md-diameter="40px" class="md-accent md-hue-2"></md-progress-circular>
+                                <ng-md-icon ng-if="comment.errorDownloadFile" icon="error" class="offline-icon-fill " size="40">
                                 </ng-md-icon>
                             </div>
                         </md-card-content>
@@ -139,24 +155,18 @@
         </main>
     </md-content>
 
-    <footer class="add-comment-footer" ng-if="vm.task.status !== 'done'">
+    <footer class="add-comment-footer" ng-if="vm.task.status !== 'done' && vm.task.status !== 'closed'">
         <md-toolbar class="md-scroll-shrink background-color-transparent" flex>
             <div layout="row" layout-align="center center" flex class="new-comment-text" ng-class="{'task-content-web-view': vm.isGTSMScreen()}">
-                <md-button ng-click="vm.addComment()" class="md-fab md-icon-button md-med" aria-label="done">
+                <!-- <md-button ng-click="vm.addComment()" class="md-fab md-icon-button md-med" aria-label="done">
                     <ng-md-icon icon="send" class="rotate" options='{"rotation": "counterclock"}'></ng-md-icon>
-                </md-button>
-                <!--<md-button id="recordBTN" class="md-fab md-icon-button md-med" aria-label="done">
+                </md-button> -->
+                <md-button id="recordBTN" class="md-fab md-icon-button md-med" aria-label="done">
                     <ng-md-icon icon="{{vm.btnState}}" ng-class="{'rotate' : vm.btnState === 'send'}" options='{"rotation": "counterclock"}'></ng-md-icon>
-                </md-button>-->
+                </md-button>
                 <md-input-container md-no-float class="md-block comment-input">
-                    <textarea id="commentText"
-                              dir="rtl" aria-label="comment"
-                              class="texterea-font-size"
-                              placeholder="כתוב תגובה..."
-                              name="comment" ng-model="vm.newCommentText"
-                              maxlength="150" rows="1" max-rows="2"
-                              md-no-asterisk="true"
-                              ng-change="vm.changeBtnState()"></textarea>
+                    <textarea id="commentText" dir="rtl" aria-label="comment" class="texterea-font-size" placeholder="כתוב תגובה..." name="comment"
+                        ng-model="vm.newCommentText" maxlength="150" rows="1" max-rows="2" md-no-asterisk="true" ng-change="vm.changeBtnState()"></textarea>
                 </md-input-container>
             </div>
         </md-toolbar>

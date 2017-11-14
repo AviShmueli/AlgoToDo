@@ -7,6 +7,7 @@
     apnModule.sendCommentViaApn = sendCommentViaApn;
     apnModule.sendBroadcastUpdateAlert = sendBroadcastUpdateAlert;
     apnModule.sendReminderViaApn = sendReminderViaApn;
+    apnModule.testPush = testPush;
 
     //var pfx = path.join(__dirname, './ApnCertificates/sandbox/Certificates.p12');
     //var cert = path.join(__dirname, './ApnCertificates/sandbox/cert.pem');
@@ -15,6 +16,7 @@
     var winston = require('../logger');
     var path = require('path');
     var apn = require('apn');
+    var deferred = require('deferred');
 
     var APNsAuthKey = path.join(__dirname, './ApnCertificates/APNsAuthKey_DY2XKZ998J.p8'); // new
     //var APNsAuthKey = path.join(__dirname, './ApnCertificates/APNsAuthKey_JXZ3MBK8YA.p8');// old
@@ -94,7 +96,7 @@
                 winston.log('error', "error while sending push notification to apple user: " + task.to || '', response.failed);
             } else {
                 console.log(response.sent);
-                winston.log("info", "task have been send sucessfuly to user:", task);
+                //winston.log("info", "task have been send sucessfuly to user:", task);
             }
         });
     }
@@ -170,6 +172,42 @@
         });
     }
 
+    function testPush(usersRegTokens) {
+
+        var d = deferred();
+
+        createApnProvider();
+
+        var note = new apn.Notification();
+
+        note.expiry = Math.floor(Date.now() / 1000) + 3600; // Expires 1 hour from now.
+        note.priority = 10;
+
+        note.payload = {
+            'additionalData': {
+                type: "testPush"
+            }
+        };
+        //note.payload = task ;
+        note.topic = "com.algotodo.app";
+        note.contentAvailable = 1;
+
+        // Actually send the message
+        apnProvider.send(note, usersRegTokens).then(function (response) {
+
+            if (response.failed.length > 0) {
+                console.error("error while sending push notification to apple user: ", response.failed);
+                winston.log('error', "error while sending push notification to apple user: ", response.failed);
+                d.resolve(response);
+            } else {
+                console.log(response.sent);
+                d.resolve(response);
+            }
+        });
+
+        return d.promise;
+    }
+
     function sendReminderViaApn(task, ApnRegistrationId) {
 
         createApnProvider();
@@ -191,7 +229,7 @@
         note.badge = userUnDoneTaskCount;
         note.sound = "ping.aiff";
         note.body = task.description;
-        note.title = "תזכורת לביצוע משימה";// + task.from.name;
+        note.title = "תזכורת לביצוע משימה"; // + task.from.name;
 
         // Actually send the message
         apnProvider.send(note, ApnRegistrationId).then(function (response) {
@@ -202,7 +240,7 @@
                 winston.log('error', "error while sending push notification to apple user: " + task.to || '', response.failed);
             } else {
                 console.log(response.sent);
-                winston.log("info", "task have been send sucessfuly to user:", task);
+                //winston.log("info", "task have been send sucessfuly to user:", task);
             }
         });
     }

@@ -7,7 +7,7 @@
             var filtered = [];
             angular.forEach(tasks, function (task) {
                 if (task.status === 'inProgress' &&
-                    task.to._id === userId) {
+                    task.to && task.to._id === userId) {
                     filtered.push(task);
                 }
             });
@@ -31,7 +31,7 @@
         return function (tasks, userId) {
             var filtered = [];
             angular.forEach(tasks, function (task) {
-                if (task.status === 'done' &&
+                if ((task.status === 'done' || task.status === 'closed') &&
                     task.from._id === userId &&
                     task.type !== 'group-sub') {
                     filtered.push(task);
@@ -56,6 +56,17 @@
             angular.forEach(tasks, function (task) {
                 if (task.groupMainTaskId === mainTaskId &&
                     task.status === 'done') {
+                    filtered.push(task);
+                }
+            });
+            return filtered;
+        };
+    })
+    .filter('unReadTasks', function () {
+        return function (tasks) {
+            var filtered = [];
+            angular.forEach(tasks, function (task) {
+                if (task.unSeenResponses) {
                     filtered.push(task);
                 }
             });

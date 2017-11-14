@@ -1,0 +1,969 @@
+[{
+        "_id": "59bd92a5c8ca1f0012d2b9f5",
+        "comments": [],
+        "description": "להדפיס זמני תפילות רה",
+        "from": {
+            "_id": "583a9399a0c6ee0011573fbd",
+            "name": "אבי שמואלי",
+            "avatarUrl": "content://com.android.contacts/contacts/3249/photo"
+        },
+        "status": "inProgress",
+        "createTime": "2017-09-16T21:07:49.777Z",
+        "cliqaId": "585c1e3dee630b29fc4b2d3e",
+        "to": {
+            "name": "אבי שמואלי",
+            "_id": "583a9399a0c6ee0011573fbd",
+            "avatarUrl": "content://com.android.contacts/contacts/3249/photo"
+        },
+        "lastModified": "2017-09-16T21:07:49.777Z"
+    }, {
+        "_id": "59bb5040865aef00119c7474",
+        "from": {
+            "_id": "583b4613d0bd8a001119a373",
+            "name": "אריאל חוברה",
+            "avatarUrl": "/images/man-1.svg"
+        },
+        "status": "inProgress",
+        "createTime": "2017-09-15T04:00:00.866Z",
+        "cliqaId": "585c1e3dee630b29fc4b2d3e",
+        "description": "לפתוח את האפליקציה",
+        "comments": [],
+        "to": {
+            "name": "אריאל חוברה",
+            "_id": "583b4613d0bd8a001119a373",
+            "avatarUrl": "/images/man-1.svg"
+        },
+        "lastModified": "2017-09-15T04:00:00.866Z"
+    }, {
+        "_id": "59bb49e39d2c7900122e83b9",
+        "comments": [],
+        "description": "לחשב מזונות ולבצע העברה",
+        "from": {
+            "_id": "583b4613d0bd8a001119a373",
+            "name": "אריאל חוברה",
+            "avatarUrl": "content://com.android.contacts/contacts/3776/photo"
+        },
+        "status": "done",
+        "createTime": "2017-09-15T03:32:51.348Z",
+        "cliqaId": "585c1e3dee630b29fc4b2d3e",
+        "to": {
+            "name": "אריאל חוברה",
+            "_id": "583b4613d0bd8a001119a373",
+            "avatarUrl": "file:///android_asset/www/images/man-1.svg"
+        },
+        "lastModified": "2017-09-15T16:01:43.559Z",
+        "doneTime": "2017-09-15T16:01:43.543Z",
+        "seenTime": null
+    }, {
+        "_id": "59bb4231865aef00119c7473",
+        "from": {
+            "_id": "583b4613d0bd8a001119a373",
+            "name": "אריאל חוברה",
+            "avatarUrl": "content://com.android.contacts/contacts/3776/photo"
+        },
+        "status": "inProgress",
+        "createTime": "2017-09-15T03:00:00.951Z",
+        "cliqaId": "585c1e3dee630b29fc4b2d3e",
+        "description": "לקחת לבית הספר: \nבקבוק מים\nפרי או ירק\nפיתה/לחם, פסטה/אורז\nגבינות-לבנה/צהובה/קוטג'\nקורנפלקס עם חלב",
+        "comments": [],
+        "to": {
+            "name": "בנצי",
+            "_id": "583b3424d0bd8a001119a346",
+            "avatarUrl": "content://com.android.contacts/contacts/1720/photo"
+        },
+        "lastModified": "2017-09-15T03:00:00.951Z"
+    }, {
+        "_id": "59bad2c8df31860012f902c4",
+        "comments": [],
+        "description": "לצלם את השברולט ולשלוח לסיוון",
+        "from": {
+            "_id": "583b4613d0bd8a001119a373",
+            "name": "אריאל חוברה",
+            "avatarUrl": "content://com.android.contacts/contacts/3776/photo"
+        },
+        "status": "inProgress",
+        "createTime": "2017-09-14T19:04:40.788Z",
+        "cliqaId": "585c1e3dee630b29fc4b2d3e",
+        "to": {
+            "name": "אריאל חוברה",
+            "_id": "583b4613d0bd8a001119a373",
+            "avatarUrl": "file:///android_asset/www/images/man-1.svg"
+        },
+        "lastModified": "2017-09-14T19:04:40.788Z"
+    }, {
+        "_id": "59ba6f40369a7b00111f61bd",
+        "from": {
+            "_id": "583a9399a0c6ee0011573fbd",
+            "name": "אבי שמואלי",
+            "avatarUrl": "content://com.android.contacts/contacts/2767/photo"
+        },
+        "status": "done",
+        "createTime": "2017-09-14T12:00:00.235Z",
+        "cliqaId": "585c1e3dee630b29fc4b2d3e",
+        "description": "להתקשר הביתה",
+        "comments": [],
+        "to": {
+            "name": "אבי שמואלי",
+            "_id": "583a9399a0c6ee0011573fbd",
+            "avatarUrl": "content://com.android.contacts/contacts/2767/photo"
+        },
+        "lastModified": "2017-09-14T12:00:37.837Z",
+        "doneTime": "2017-09-14T12:00:37.794Z",
+        "seenTime": null
+    }, {
+        "_id": "59ba1a30eb3eba001231af8b",
+        "comments": [],
+        "description": "לקבע תור למרפאת שיניים",
+        "from": {
+            "_id": "583a9399a0c6ee0011573fbd",
+            "name": "אבי שמואלי",
+            "avatarUrl": "content://com.android.contacts/contacts/3249/photo"
+        },
+        "status": "inProgress",
+        "createTime": "2017-09-14T05:57:04.617Z",
+        "cliqaId": "585c1e3dee630b29fc4b2d3e",
+        "to": {
+            "name": "אבי שמואלי",
+            "_id": "583a9399a0c6ee0011573fbd",
+            "avatarUrl": "content://com.android.contacts/contacts/3249/photo"
+        },
+        "lastModified": "2017-09-14T05:57:04.617Z"
+    }, {
+        "_id": "59b9fec0369a7b00111f612c",
+        "from": {
+            "_id": "583b4613d0bd8a001119a373",
+            "name": "אריאל חוברה",
+            "avatarUrl": "/images/man-1.svg"
+        },
+        "status": "done",
+        "createTime": "2017-09-14T04:00:00.284Z",
+        "cliqaId": "585c1e3dee630b29fc4b2d3e",
+        "description": "לפתוח את האפליקציה",
+        "comments": [],
+        "to": {
+            "name": "אריאל חוברה",
+            "_id": "583b4613d0bd8a001119a373",
+            "avatarUrl": "/images/man-1.svg"
+        },
+        "lastModified": "2017-09-14T07:28:14.917Z",
+        "doneTime": "2017-09-14T07:28:14.899Z",
+        "seenTime": null
+    }, {
+        "_id": "59b9f0b0369a7b00111f612b",
+        "from": {
+            "_id": "583b4613d0bd8a001119a373",
+            "name": "אריאל חוברה",
+            "avatarUrl": "content://com.android.contacts/contacts/3776/photo"
+        },
+        "status": "inProgress",
+        "createTime": "2017-09-14T03:00:00.512Z",
+        "cliqaId": "585c1e3dee630b29fc4b2d3e",
+        "description": "לקחת לבית הספר: \nבקבוק מים\nפרי או ירק\nפיתה/לחם, פסטה/אורז\nגבינות-לבנה/צהובה/קוטג'\nקורנפלקס עם חלב",
+        "comments": [],
+        "to": {
+            "name": "בנצי",
+            "_id": "583b3424d0bd8a001119a346",
+            "avatarUrl": "content://com.android.contacts/contacts/1720/photo"
+        },
+        "lastModified": "2017-09-14T03:00:00.512Z"
+    }, {
+        "_id": "59b9833b6925cb00124e0d4a",
+        "comments": [{
+            "from": {
+                "name": "אבי שמואלי",
+                "_id": "583a9399a0c6ee0011573fbd",
+                "avatarUrl": "content://com.android.contacts/contacts/3249/photo"
+            },
+            "createTime": "2017-09-13T19:13:22.780Z",
+            "text": "אין שם שינוי מהותי , רק מספר תיקוני באגים.",
+            "_id": "59b983536925cb00124e0d4b"
+        }, {
+            "from": {
+                "name": "אריאל חוברה",
+                "_id": "583b4613d0bd8a001119a373",
+                "avatarUrl": "content://com.android.contacts/contacts/3776/photo"
+            },
+            "createTime": "2017-09-14T06:18:07.808Z",
+            "text": "בודק",
+            "_id": "59ba1f21eb3eba001231af8c"
+        }, {
+            "from": {
+                "name": "אבי שמואלי",
+                "_id": "583a9399a0c6ee0011573fbd",
+                "avatarUrl": "content://com.android.contacts/contacts/3249/photo"
+            },
+            "createTime": "2017-09-14T06:18:39.678Z",
+            "text": "👍",
+            "_id": "59ba1f40eb3eba001231af8d"
+        }],
+        "description": "שמתי גירסה בדרופבוקס, מחכה לאישור שלך להעלות אותה לחנות",
+        "from": {
+            "_id": "583a9399a0c6ee0011573fbd",
+            "name": "אבי שמואלי",
+            "avatarUrl": "content://com.android.contacts/contacts/3249/photo"
+        },
+        "status": "inProgress",
+        "createTime": "2017-09-13T19:12:59.154Z",
+        "cliqaId": "585c1e3dee630b29fc4b2d3e",
+        "to": {
+            "name": "אריאל חוברה",
+            "_id": "583b4613d0bd8a001119a373",
+            "avatarUrl": "content://com.android.contacts/contacts/3185/photo"
+        },
+        "lastModified": "2017-09-14T06:18:40.884Z"
+    }, {
+        "_id": "59b91e9876300300115b7d34",
+        "comments": [],
+        "description": "להכניס את הדרכון לתיק",
+        "from": {
+            "_id": "583a9399a0c6ee0011573fbd",
+            "name": "אבי שמואלי",
+            "avatarUrl": "content://com.android.contacts/contacts/3249/photo"
+        },
+        "status": "done",
+        "createTime": "2017-09-13T12:03:36.422Z",
+        "cliqaId": "585c1e3dee630b29fc4b2d3e",
+        "to": {
+            "name": "אבי שמואלי",
+            "_id": "583a9399a0c6ee0011573fbd",
+            "avatarUrl": "content://com.android.contacts/contacts/3249/photo"
+        },
+        "lastModified": "2017-09-13T18:25:19.825Z",
+        "doneTime": "2017-09-13T18:25:19.790Z",
+        "seenTime": null
+    }, {
+        "_id": "59b91dc076300300115b7d33",
+        "from": {
+            "_id": "583a9399a0c6ee0011573fbd",
+            "name": "אבי שמואלי",
+            "avatarUrl": "content://com.android.contacts/contacts/2767/photo"
+        },
+        "status": "done",
+        "createTime": "2017-09-13T12:00:00.239Z",
+        "cliqaId": "585c1e3dee630b29fc4b2d3e",
+        "description": "להתקשר הביתה",
+        "comments": [],
+        "to": {
+            "name": "אבי שמואלי",
+            "_id": "583a9399a0c6ee0011573fbd",
+            "avatarUrl": "content://com.android.contacts/contacts/2767/photo"
+        },
+        "lastModified": "2017-09-13T12:03:09.078Z",
+        "doneTime": "2017-09-13T12:03:09.059Z",
+        "seenTime": null
+    }, {
+        "_id": "59b8e2979f1d5e0012833d25",
+        "comments": [{
+            "from": {
+                "name": "אבי שמואלי",
+                "_id": "583a9399a0c6ee0011573fbd",
+                "avatarUrl": "content://com.android.contacts/contacts/3249/photo"
+            },
+            "createTime": "2017-09-13T07:47:54.996Z",
+            "text": "123",
+            "_id": "59b8e2ab76300300115b7d19"
+        }],
+        "description": "תשלח לי תגובה",
+        "from": {
+            "_id": "583b4613d0bd8a001119a373",
+            "name": "אריאל חוברה",
+            "avatarUrl": "content://com.android.contacts/contacts/3776/photo"
+        },
+        "status": "done",
+        "createTime": "2017-09-13T07:47:35.489Z",
+        "cliqaId": "585c1e3dee630b29fc4b2d3e",
+        "to": {
+            "name": "אבי שמואלי",
+            "_id": "583a9399a0c6ee0011573fbd",
+            "avatarUrl": "content://com.android.contacts/contacts/3781/photo"
+        },
+        "lastModified": "2017-09-13T08:02:43.807Z",
+        "doneTime": "2017-09-13T08:02:43.726Z",
+        "seenTime": null
+    }, {
+        "_id": "59b8d70676300300115b7cf4",
+        "comments": [{
+            "from": {
+                "name": "אריאל חוברה",
+                "_id": "583b4613d0bd8a001119a373",
+                "avatarUrl": "/images/man-1.svg"
+            },
+            "createTime": "2017-09-13T06:58:56.660Z",
+            "text": "למכשיר החדש",
+            "_id": "59b8d73176300300115b7cf5"
+        }, {
+            "from": {
+                "name": "אריאל חוברה",
+                "_id": "583b4613d0bd8a001119a373",
+                "avatarUrl": "/images/man-1.svg"
+            },
+            "createTime": "2017-09-13T06:59:15.915Z",
+            "text": "בקיצור, אפתח לזה יוזר נוסף",
+            "_id": "59b8d74476300300115b7cf6"
+        }, {
+            "from": {
+                "name": "אבי שמואלי",
+                "_id": "583a9399a0c6ee0011573fbd",
+                "avatarUrl": "content://com.android.contacts/contacts/3249/photo"
+            },
+            "createTime": "2017-09-13T06:59:17.386Z",
+            "text": "אוקי. זה מסביר את זה",
+            "_id": "59b8d74576300300115b7cf7"
+        }, {
+            "from": {
+                "name": "אריאל חוברה",
+                "_id": "583b4613d0bd8a001119a373",
+                "avatarUrl": "/images/man-1.svg"
+            },
+            "createTime": "2017-09-13T06:59:24.946Z",
+            "text": "תודה",
+            "_id": "59b8d74d76300300115b7cf8"
+        }, {
+            "from": {
+                "name": "אבי שמואלי",
+                "_id": "583a9399a0c6ee0011573fbd",
+                "avatarUrl": "content://com.android.contacts/contacts/3249/photo"
+            },
+            "createTime": "2017-09-13T06:59:26.838Z",
+            "text": "כן",
+            "_id": "59b8d74e76300300115b7cf9"
+        }],
+        "description": "הגיע? ",
+        "from": {
+            "_id": "583a9399a0c6ee0011573fbd",
+            "name": "אבי שמואלי",
+            "avatarUrl": "content://com.android.contacts/contacts/3249/photo"
+        },
+        "status": "done",
+        "createTime": "2017-09-13T06:58:14.388Z",
+        "cliqaId": "585c1e3dee630b29fc4b2d3e",
+        "to": {
+            "name": "אריאל חוברה",
+            "_id": "583b4613d0bd8a001119a373",
+            "avatarUrl": "content://com.android.contacts/contacts/3185/photo"
+        },
+        "lastModified": "2017-09-13T06:59:26.822Z",
+        "doneTime": "2017-09-13T06:59:26.602Z",
+        "seenTime": null
+    }, {
+        "_id": "59b8ad4076300300115b7cc1",
+        "from": {
+            "_id": "583b4613d0bd8a001119a373",
+            "name": "אריאל חוברה",
+            "avatarUrl": "/images/man-1.svg"
+        },
+        "status": "done",
+        "createTime": "2017-09-13T04:00:00.221Z",
+        "cliqaId": "585c1e3dee630b29fc4b2d3e",
+        "description": "לפתוח את האפליקציה",
+        "comments": [],
+        "to": {
+            "name": "אריאל חוברה",
+            "_id": "583b4613d0bd8a001119a373",
+            "avatarUrl": "/images/man-1.svg"
+        },
+        "lastModified": "2017-09-13T06:59:59.152Z",
+        "doneTime": "2017-09-13T06:59:59.131Z",
+        "seenTime": null
+    }, {
+        "_id": "59b89f3076300300115b7cc0",
+        "from": {
+            "_id": "583b4613d0bd8a001119a373",
+            "name": "אריאל חוברה",
+            "avatarUrl": "content://com.android.contacts/contacts/3776/photo"
+        },
+        "status": "inProgress",
+        "createTime": "2017-09-13T03:00:00.305Z",
+        "cliqaId": "585c1e3dee630b29fc4b2d3e",
+        "description": "לקחת לבית הספר: \nבקבוק מים\nפרי או ירק\nפיתה/לחם, פסטה/אורז\nגבינות-לבנה/צהובה/קוטג'\nקורנפלקס עם חלב",
+        "comments": [],
+        "to": {
+            "name": "בנצי",
+            "_id": "583b3424d0bd8a001119a346",
+            "avatarUrl": "content://com.android.contacts/contacts/1720/photo"
+        },
+        "lastModified": "2017-09-13T03:00:00.305Z"
+    }, {
+        "_id": "59b7cc409af2a80011625dc2",
+        "from": {
+            "_id": "583a9399a0c6ee0011573fbd",
+            "name": "אבי שמואלי",
+            "avatarUrl": "content://com.android.contacts/contacts/2767/photo"
+        },
+        "status": "done",
+        "createTime": "2017-09-12T12:00:00.793Z",
+        "cliqaId": "585c1e3dee630b29fc4b2d3e",
+        "description": "להתקשר הביתה",
+        "comments": [],
+        "to": {
+            "name": "אבי שמואלי",
+            "_id": "583a9399a0c6ee0011573fbd",
+            "avatarUrl": "content://com.android.contacts/contacts/2767/photo"
+        },
+        "lastModified": "2017-09-12T12:11:47.191Z",
+        "doneTime": "2017-09-12T12:11:47.135Z",
+        "seenTime": null
+    }, {
+        "_id": "59b75bc09af2a80011625d50",
+        "from": {
+            "_id": "583b4613d0bd8a001119a373",
+            "name": "אריאל חוברה",
+            "avatarUrl": "/images/man-1.svg"
+        },
+        "status": "done",
+        "createTime": "2017-09-12T04:00:00.500Z",
+        "cliqaId": "585c1e3dee630b29fc4b2d3e",
+        "description": "לפתוח את האפליקציה",
+        "comments": [],
+        "to": {
+            "name": "אריאל חוברה",
+            "_id": "583b4613d0bd8a001119a373",
+            "avatarUrl": "/images/man-1.svg"
+        },
+        "lastModified": "2017-09-13T05:54:17.015Z",
+        "doneTime": "2017-09-13T05:54:16.980Z",
+        "seenTime": null
+    }, {
+        "_id": "59b74db09af2a80011625d4f",
+        "from": {
+            "_id": "583b4613d0bd8a001119a373",
+            "name": "אריאל חוברה",
+            "avatarUrl": "content://com.android.contacts/contacts/3776/photo"
+        },
+        "status": "inProgress",
+        "createTime": "2017-09-12T03:00:00.582Z",
+        "cliqaId": "585c1e3dee630b29fc4b2d3e",
+        "description": "לקחת לבית הספר: \nבקבוק מים\nפרי או ירק\nפיתה/לחם, פסטה/אורז\nגבינות-לבנה/צהובה/קוטג'\nקורנפלקס עם חלב",
+        "comments": [],
+        "to": {
+            "name": "בנצי",
+            "_id": "583b3424d0bd8a001119a346",
+            "avatarUrl": "content://com.android.contacts/contacts/1720/photo"
+        },
+        "lastModified": "2017-09-12T03:00:00.582Z"
+    }, {
+        "_id": "59b6b51c7174b800110287ee",
+        "from": {
+            "_id": "583a9399a0c6ee0011573fbd",
+            "name": "אבי שמואלי",
+            "avatarUrl": "content://com.android.contacts/contacts/3249/photo"
+        },
+        "status": "done",
+        "createTime": "2017-09-11T16:09:00.203Z",
+        "cliqaId": "585c1e3dee630b29fc4b2d3e",
+        "description": "בדיקה",
+        "comments": [{
+            "from": {
+                "name": "אריאל חוברה",
+                "_id": "583b4613d0bd8a001119a373",
+                "avatarUrl": "content://com.android.contacts/contacts/3776/photo"
+            },
+            "createTime": "2017-09-11T16:26:28.147Z",
+            "text": "הגיע",
+            "_id": "59b6bfa679bf350012931f93"
+        }, {
+            "from": {
+                "name": "אריאל חוברה",
+                "_id": "583b4613d0bd8a001119a373",
+                "avatarUrl": "content://com.android.contacts/contacts/3776/photo"
+            },
+            "createTime": "2017-09-11T16:26:28.147Z",
+            "text": "הגיע",
+            "_id": "59b6bfa679bf350012931f94"
+        }],
+        "type": "group-sub",
+        "to": {
+            "name": "אריאל חוברה",
+            "_id": "583b4613d0bd8a001119a373",
+            "avatarUrl": "content://com.android.contacts/contacts/3185/photo"
+        },
+        "lastModified": "2017-09-12T04:22:06.583Z",
+        "groupMainTaskId": "59b6b51c7174b800110287ec",
+        "doneTime": "2017-09-12T04:22:06.344Z",
+        "seenTime": null
+    },
+    {
+        "_id": "59bd92a5c8ca1f0012d2b9f5",
+        "comments": [],
+        "description": "להדפיס זמני תפילות רה",
+        "from": {
+            "_id": "583a9399a0c6ee0011573fbd",
+            "name": "אבי שמואלי",
+            "avatarUrl": "content://com.android.contacts/contacts/3249/photo"
+        },
+        "status": "inProgress",
+        "createTime": "2017-09-16T21:07:49.777Z",
+        "cliqaId": "585c1e3dee630b29fc4b2d3e",
+        "to": {
+            "name": "אבי שמואלי",
+            "_id": "583a9399a0c6ee0011573fbd",
+            "avatarUrl": "content://com.android.contacts/contacts/3249/photo"
+        },
+        "lastModified": "2017-09-16T21:07:49.777Z"
+    }, {
+        "_id": "59bb5040865aef00119c7474",
+        "from": {
+            "_id": "583b4613d0bd8a001119a373",
+            "name": "אריאל חוברה",
+            "avatarUrl": "/images/man-1.svg"
+        },
+        "status": "inProgress",
+        "createTime": "2017-09-15T04:00:00.866Z",
+        "cliqaId": "585c1e3dee630b29fc4b2d3e",
+        "description": "לפתוח את האפליקציה",
+        "comments": [],
+        "to": {
+            "name": "אריאל חוברה",
+            "_id": "583b4613d0bd8a001119a373",
+            "avatarUrl": "/images/man-1.svg"
+        },
+        "lastModified": "2017-09-15T04:00:00.866Z"
+    }, {
+        "_id": "59bb49e39d2c7900122e83b9",
+        "comments": [],
+        "description": "לחשב מזונות ולבצע העברה",
+        "from": {
+            "_id": "583b4613d0bd8a001119a373",
+            "name": "אריאל חוברה",
+            "avatarUrl": "content://com.android.contacts/contacts/3776/photo"
+        },
+        "status": "done",
+        "createTime": "2017-09-15T03:32:51.348Z",
+        "cliqaId": "585c1e3dee630b29fc4b2d3e",
+        "to": {
+            "name": "אריאל חוברה",
+            "_id": "583b4613d0bd8a001119a373",
+            "avatarUrl": "file:///android_asset/www/images/man-1.svg"
+        },
+        "lastModified": "2017-09-15T16:01:43.559Z",
+        "doneTime": "2017-09-15T16:01:43.543Z",
+        "seenTime": null
+    }, {
+        "_id": "59bb4231865aef00119c7473",
+        "from": {
+            "_id": "583b4613d0bd8a001119a373",
+            "name": "אריאל חוברה",
+            "avatarUrl": "content://com.android.contacts/contacts/3776/photo"
+        },
+        "status": "inProgress",
+        "createTime": "2017-09-15T03:00:00.951Z",
+        "cliqaId": "585c1e3dee630b29fc4b2d3e",
+        "description": "לקחת לבית הספר: \nבקבוק מים\nפרי או ירק\nפיתה/לחם, פסטה/אורז\nגבינות-לבנה/צהובה/קוטג'\nקורנפלקס עם חלב",
+        "comments": [],
+        "to": {
+            "name": "בנצי",
+            "_id": "583b3424d0bd8a001119a346",
+            "avatarUrl": "content://com.android.contacts/contacts/1720/photo"
+        },
+        "lastModified": "2017-09-15T03:00:00.951Z"
+    }, {
+        "_id": "59bad2c8df31860012f902c4",
+        "comments": [],
+        "description": "לצלם את השברולט ולשלוח לסיוון",
+        "from": {
+            "_id": "583b4613d0bd8a001119a373",
+            "name": "אריאל חוברה",
+            "avatarUrl": "content://com.android.contacts/contacts/3776/photo"
+        },
+        "status": "inProgress",
+        "createTime": "2017-09-14T19:04:40.788Z",
+        "cliqaId": "585c1e3dee630b29fc4b2d3e",
+        "to": {
+            "name": "אריאל חוברה",
+            "_id": "583b4613d0bd8a001119a373",
+            "avatarUrl": "file:///android_asset/www/images/man-1.svg"
+        },
+        "lastModified": "2017-09-14T19:04:40.788Z"
+    }, {
+        "_id": "59ba6f40369a7b00111f61bd",
+        "from": {
+            "_id": "583a9399a0c6ee0011573fbd",
+            "name": "אבי שמואלי",
+            "avatarUrl": "content://com.android.contacts/contacts/2767/photo"
+        },
+        "status": "done",
+        "createTime": "2017-09-14T12:00:00.235Z",
+        "cliqaId": "585c1e3dee630b29fc4b2d3e",
+        "description": "להתקשר הביתה",
+        "comments": [],
+        "to": {
+            "name": "אבי שמואלי",
+            "_id": "583a9399a0c6ee0011573fbd",
+            "avatarUrl": "content://com.android.contacts/contacts/2767/photo"
+        },
+        "lastModified": "2017-09-14T12:00:37.837Z",
+        "doneTime": "2017-09-14T12:00:37.794Z",
+        "seenTime": null
+    }, {
+        "_id": "59ba1a30eb3eba001231af8b",
+        "comments": [],
+        "description": "לקבע תור למרפאת שיניים",
+        "from": {
+            "_id": "583a9399a0c6ee0011573fbd",
+            "name": "אבי שמואלי",
+            "avatarUrl": "content://com.android.contacts/contacts/3249/photo"
+        },
+        "status": "inProgress",
+        "createTime": "2017-09-14T05:57:04.617Z",
+        "cliqaId": "585c1e3dee630b29fc4b2d3e",
+        "to": {
+            "name": "אבי שמואלי",
+            "_id": "583a9399a0c6ee0011573fbd",
+            "avatarUrl": "content://com.android.contacts/contacts/3249/photo"
+        },
+        "lastModified": "2017-09-14T05:57:04.617Z"
+    }, {
+        "_id": "59b9fec0369a7b00111f612c",
+        "from": {
+            "_id": "583b4613d0bd8a001119a373",
+            "name": "אריאל חוברה",
+            "avatarUrl": "/images/man-1.svg"
+        },
+        "status": "done",
+        "createTime": "2017-09-14T04:00:00.284Z",
+        "cliqaId": "585c1e3dee630b29fc4b2d3e",
+        "description": "לפתוח את האפליקציה",
+        "comments": [],
+        "to": {
+            "name": "אריאל חוברה",
+            "_id": "583b4613d0bd8a001119a373",
+            "avatarUrl": "/images/man-1.svg"
+        },
+        "lastModified": "2017-09-14T07:28:14.917Z",
+        "doneTime": "2017-09-14T07:28:14.899Z",
+        "seenTime": null
+    }, {
+        "_id": "59b9f0b0369a7b00111f612b",
+        "from": {
+            "_id": "583b4613d0bd8a001119a373",
+            "name": "אריאל חוברה",
+            "avatarUrl": "content://com.android.contacts/contacts/3776/photo"
+        },
+        "status": "inProgress",
+        "createTime": "2017-09-14T03:00:00.512Z",
+        "cliqaId": "585c1e3dee630b29fc4b2d3e",
+        "description": "לקחת לבית הספר: \nבקבוק מים\nפרי או ירק\nפיתה/לחם, פסטה/אורז\nגבינות-לבנה/צהובה/קוטג'\nקורנפלקס עם חלב",
+        "comments": [],
+        "to": {
+            "name": "בנצי",
+            "_id": "583b3424d0bd8a001119a346",
+            "avatarUrl": "content://com.android.contacts/contacts/1720/photo"
+        },
+        "lastModified": "2017-09-14T03:00:00.512Z"
+    }, {
+        "_id": "59b9833b6925cb00124e0d4a",
+        "comments": [{
+            "from": {
+                "name": "אבי שמואלי",
+                "_id": "583a9399a0c6ee0011573fbd",
+                "avatarUrl": "content://com.android.contacts/contacts/3249/photo"
+            },
+            "createTime": "2017-09-13T19:13:22.780Z",
+            "text": "אין שם שינוי מהותי , רק מספר תיקוני באגים.",
+            "_id": "59b983536925cb00124e0d4b"
+        }, {
+            "from": {
+                "name": "אריאל חוברה",
+                "_id": "583b4613d0bd8a001119a373",
+                "avatarUrl": "content://com.android.contacts/contacts/3776/photo"
+            },
+            "createTime": "2017-09-14T06:18:07.808Z",
+            "text": "בודק",
+            "_id": "59ba1f21eb3eba001231af8c"
+        }, {
+            "from": {
+                "name": "אבי שמואלי",
+                "_id": "583a9399a0c6ee0011573fbd",
+                "avatarUrl": "content://com.android.contacts/contacts/3249/photo"
+            },
+            "createTime": "2017-09-14T06:18:39.678Z",
+            "text": "👍",
+            "_id": "59ba1f40eb3eba001231af8d"
+        }],
+        "description": "שמתי גירסה בדרופבוקס, מחכה לאישור שלך להעלות אותה לחנות",
+        "from": {
+            "_id": "583a9399a0c6ee0011573fbd",
+            "name": "אבי שמואלי",
+            "avatarUrl": "content://com.android.contacts/contacts/3249/photo"
+        },
+        "status": "inProgress",
+        "createTime": "2017-09-13T19:12:59.154Z",
+        "cliqaId": "585c1e3dee630b29fc4b2d3e",
+        "to": {
+            "name": "אריאל חוברה",
+            "_id": "583b4613d0bd8a001119a373",
+            "avatarUrl": "content://com.android.contacts/contacts/3185/photo"
+        },
+        "lastModified": "2017-09-14T06:18:40.884Z"
+    }, {
+        "_id": "59b91e9876300300115b7d34",
+        "comments": [],
+        "description": "להכניס את הדרכון לתיק",
+        "from": {
+            "_id": "583a9399a0c6ee0011573fbd",
+            "name": "אבי שמואלי",
+            "avatarUrl": "content://com.android.contacts/contacts/3249/photo"
+        },
+        "status": "done",
+        "createTime": "2017-09-13T12:03:36.422Z",
+        "cliqaId": "585c1e3dee630b29fc4b2d3e",
+        "to": {
+            "name": "אבי שמואלי",
+            "_id": "583a9399a0c6ee0011573fbd",
+            "avatarUrl": "content://com.android.contacts/contacts/3249/photo"
+        },
+        "lastModified": "2017-09-13T18:25:19.825Z",
+        "doneTime": "2017-09-13T18:25:19.790Z",
+        "seenTime": null
+    }, {
+        "_id": "59b91dc076300300115b7d33",
+        "from": {
+            "_id": "583a9399a0c6ee0011573fbd",
+            "name": "אבי שמואלי",
+            "avatarUrl": "content://com.android.contacts/contacts/2767/photo"
+        },
+        "status": "done",
+        "createTime": "2017-09-13T12:00:00.239Z",
+        "cliqaId": "585c1e3dee630b29fc4b2d3e",
+        "description": "להתקשר הביתה",
+        "comments": [],
+        "to": {
+            "name": "אבי שמואלי",
+            "_id": "583a9399a0c6ee0011573fbd",
+            "avatarUrl": "content://com.android.contacts/contacts/2767/photo"
+        },
+        "lastModified": "2017-09-13T12:03:09.078Z",
+        "doneTime": "2017-09-13T12:03:09.059Z",
+        "seenTime": null
+    }, {
+        "_id": "59b8e2979f1d5e0012833d25",
+        "comments": [{
+            "from": {
+                "name": "אבי שמואלי",
+                "_id": "583a9399a0c6ee0011573fbd",
+                "avatarUrl": "content://com.android.contacts/contacts/3249/photo"
+            },
+            "createTime": "2017-09-13T07:47:54.996Z",
+            "text": "123",
+            "_id": "59b8e2ab76300300115b7d19"
+        }],
+        "description": "תשלח לי תגובה",
+        "from": {
+            "_id": "583b4613d0bd8a001119a373",
+            "name": "אריאל חוברה",
+            "avatarUrl": "content://com.android.contacts/contacts/3776/photo"
+        },
+        "status": "done",
+        "createTime": "2017-09-13T07:47:35.489Z",
+        "cliqaId": "585c1e3dee630b29fc4b2d3e",
+        "to": {
+            "name": "אבי שמואלי",
+            "_id": "583a9399a0c6ee0011573fbd",
+            "avatarUrl": "content://com.android.contacts/contacts/3781/photo"
+        },
+        "lastModified": "2017-09-13T08:02:43.807Z",
+        "doneTime": "2017-09-13T08:02:43.726Z",
+        "seenTime": null
+    }, {
+        "_id": "59b8d70676300300115b7cf4",
+        "comments": [{
+            "from": {
+                "name": "אריאל חוברה",
+                "_id": "583b4613d0bd8a001119a373",
+                "avatarUrl": "/images/man-1.svg"
+            },
+            "createTime": "2017-09-13T06:58:56.660Z",
+            "text": "למכשיר החדש",
+            "_id": "59b8d73176300300115b7cf5"
+        }, {
+            "from": {
+                "name": "אריאל חוברה",
+                "_id": "583b4613d0bd8a001119a373",
+                "avatarUrl": "/images/man-1.svg"
+            },
+            "createTime": "2017-09-13T06:59:15.915Z",
+            "text": "בקיצור, אפתח לזה יוזר נוסף",
+            "_id": "59b8d74476300300115b7cf6"
+        }, {
+            "from": {
+                "name": "אבי שמואלי",
+                "_id": "583a9399a0c6ee0011573fbd",
+                "avatarUrl": "content://com.android.contacts/contacts/3249/photo"
+            },
+            "createTime": "2017-09-13T06:59:17.386Z",
+            "text": "אוקי. זה מסביר את זה",
+            "_id": "59b8d74576300300115b7cf7"
+        }, {
+            "from": {
+                "name": "אריאל חוברה",
+                "_id": "583b4613d0bd8a001119a373",
+                "avatarUrl": "/images/man-1.svg"
+            },
+            "createTime": "2017-09-13T06:59:24.946Z",
+            "text": "תודה",
+            "_id": "59b8d74d76300300115b7cf8"
+        }, {
+            "from": {
+                "name": "אבי שמואלי",
+                "_id": "583a9399a0c6ee0011573fbd",
+                "avatarUrl": "content://com.android.contacts/contacts/3249/photo"
+            },
+            "createTime": "2017-09-13T06:59:26.838Z",
+            "text": "כן",
+            "_id": "59b8d74e76300300115b7cf9"
+        }],
+        "description": "הגיע? ",
+        "from": {
+            "_id": "583a9399a0c6ee0011573fbd",
+            "name": "אבי שמואלי",
+            "avatarUrl": "content://com.android.contacts/contacts/3249/photo"
+        },
+        "status": "done",
+        "createTime": "2017-09-13T06:58:14.388Z",
+        "cliqaId": "585c1e3dee630b29fc4b2d3e",
+        "to": {
+            "name": "אריאל חוברה",
+            "_id": "583b4613d0bd8a001119a373",
+            "avatarUrl": "content://com.android.contacts/contacts/3185/photo"
+        },
+        "lastModified": "2017-09-13T06:59:26.822Z",
+        "doneTime": "2017-09-13T06:59:26.602Z",
+        "seenTime": null
+    }, {
+        "_id": "59b8ad4076300300115b7cc1",
+        "from": {
+            "_id": "583b4613d0bd8a001119a373",
+            "name": "אריאל חוברה",
+            "avatarUrl": "/images/man-1.svg"
+        },
+        "status": "done",
+        "createTime": "2017-09-13T04:00:00.221Z",
+        "cliqaId": "585c1e3dee630b29fc4b2d3e",
+        "description": "לפתוח את האפליקציה",
+        "comments": [],
+        "to": {
+            "name": "אריאל חוברה",
+            "_id": "583b4613d0bd8a001119a373",
+            "avatarUrl": "/images/man-1.svg"
+        },
+        "lastModified": "2017-09-13T06:59:59.152Z",
+        "doneTime": "2017-09-13T06:59:59.131Z",
+        "seenTime": null
+    }, {
+        "_id": "59b89f3076300300115b7cc0",
+        "from": {
+            "_id": "583b4613d0bd8a001119a373",
+            "name": "אריאל חוברה",
+            "avatarUrl": "content://com.android.contacts/contacts/3776/photo"
+        },
+        "status": "inProgress",
+        "createTime": "2017-09-13T03:00:00.305Z",
+        "cliqaId": "585c1e3dee630b29fc4b2d3e",
+        "description": "לקחת לבית הספר: \nבקבוק מים\nפרי או ירק\nפיתה/לחם, פסטה/אורז\nגבינות-לבנה/צהובה/קוטג'\nקורנפלקס עם חלב",
+        "comments": [],
+        "to": {
+            "name": "בנצי",
+            "_id": "583b3424d0bd8a001119a346",
+            "avatarUrl": "content://com.android.contacts/contacts/1720/photo"
+        },
+        "lastModified": "2017-09-13T03:00:00.305Z"
+    }, {
+        "_id": "59b7cc409af2a80011625dc2",
+        "from": {
+            "_id": "583a9399a0c6ee0011573fbd",
+            "name": "אבי שמואלי",
+            "avatarUrl": "content://com.android.contacts/contacts/2767/photo"
+        },
+        "status": "done",
+        "createTime": "2017-09-12T12:00:00.793Z",
+        "cliqaId": "585c1e3dee630b29fc4b2d3e",
+        "description": "להתקשר הביתה",
+        "comments": [],
+        "to": {
+            "name": "אבי שמואלי",
+            "_id": "583a9399a0c6ee0011573fbd",
+            "avatarUrl": "content://com.android.contacts/contacts/2767/photo"
+        },
+        "lastModified": "2017-09-12T12:11:47.191Z",
+        "doneTime": "2017-09-12T12:11:47.135Z",
+        "seenTime": null
+    }, {
+        "_id": "59b75bc09af2a80011625d50",
+        "from": {
+            "_id": "583b4613d0bd8a001119a373",
+            "name": "אריאל חוברה",
+            "avatarUrl": "/images/man-1.svg"
+        },
+        "status": "done",
+        "createTime": "2017-09-12T04:00:00.500Z",
+        "cliqaId": "585c1e3dee630b29fc4b2d3e",
+        "description": "לפתוח את האפליקציה",
+        "comments": [],
+        "to": {
+            "name": "אריאל חוברה",
+            "_id": "583b4613d0bd8a001119a373",
+            "avatarUrl": "/images/man-1.svg"
+        },
+        "lastModified": "2017-09-13T05:54:17.015Z",
+        "doneTime": "2017-09-13T05:54:16.980Z",
+        "seenTime": null
+    }, {
+        "_id": "59b74db09af2a80011625d4f",
+        "from": {
+            "_id": "583b4613d0bd8a001119a373",
+            "name": "אריאל חוברה",
+            "avatarUrl": "content://com.android.contacts/contacts/3776/photo"
+        },
+        "status": "inProgress",
+        "createTime": "2017-09-12T03:00:00.582Z",
+        "cliqaId": "585c1e3dee630b29fc4b2d3e",
+        "description": "לקחת לבית הספר: \nבקבוק מים\nפרי או ירק\nפיתה/לחם, פסטה/אורז\nגבינות-לבנה/צהובה/קוטג'\nקורנפלקס עם חלב",
+        "comments": [],
+        "to": {
+            "name": "בנצי",
+            "_id": "583b3424d0bd8a001119a346",
+            "avatarUrl": "content://com.android.contacts/contacts/1720/photo"
+        },
+        "lastModified": "2017-09-12T03:00:00.582Z"
+    }, {
+        "_id": "59b6b51c7174b800110287ee",
+        "from": {
+            "_id": "583a9399a0c6ee0011573fbd",
+            "name": "אבי שמואלי",
+            "avatarUrl": "content://com.android.contacts/contacts/3249/photo"
+        },
+        "status": "done",
+        "createTime": "2017-09-11T16:09:00.203Z",
+        "cliqaId": "585c1e3dee630b29fc4b2d3e",
+        "description": "בדיקה",
+        "comments": [{
+            "from": {
+                "name": "אריאל חוברה",
+                "_id": "583b4613d0bd8a001119a373",
+                "avatarUrl": "content://com.android.contacts/contacts/3776/photo"
+            },
+            "createTime": "2017-09-11T16:26:28.147Z",
+            "text": "הגיע",
+            "_id": "59b6bfa679bf350012931f93"
+        }, {
+            "from": {
+                "name": "אריאל חוברה",
+                "_id": "583b4613d0bd8a001119a373",
+                "avatarUrl": "content://com.android.contacts/contacts/3776/photo"
+            },
+            "createTime": "2017-09-11T16:26:28.147Z",
+            "text": "הגיע",
+            "_id": "59b6bfa679bf350012931f94"
+        }],
+        "type": "group-sub",
+        "to": {
+            "name": "אריאל חוברה",
+            "_id": "583b4613d0bd8a001119a373",
+            "avatarUrl": "content://com.android.contacts/contacts/3185/photo"
+        },
+        "lastModified": "2017-09-12T04:22:06.583Z",
+        "groupMainTaskId": "59b6b51c7174b800110287ec",
+        "doneTime": "2017-09-12T04:22:06.344Z",
+        "seenTime": null
+    }
+]

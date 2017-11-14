@@ -34,7 +34,8 @@
     BL.deleteGroups = deleteGroups;
     BL.getUsersInCliqa = getUsersInCliqa;
     BL.addUsersToCliqa = addUsersToCliqa;
-
+    BL.generateReport = generateReport;
+    BL.testPushRegistration = testPushRegistration;
 
     var ObjectID = require('mongodb').ObjectID;
     var deferred = require('deferred');
@@ -46,6 +47,8 @@
     var winston = require('./logger');
     var pushNotifications = require('./push-notifications/push-notifications');
     var sms = require('./sms');
+    var excelHandler = require('./excelHandler');
+
 
     var MAIN_CLIQA_ID = '585c1e28ee630b29fc4b2d3d';
 
@@ -474,7 +477,7 @@
         var query = {};
 
         if (cliqot !== undefined) {
-            
+
             // if request came from old version, convert to Array
             if (typeof cliqot == 'string') {
                 cliqot = [cliqot];
@@ -486,7 +489,7 @@
                 var cliqa = JSON.parse(cliqot[index]);
                 if (cliqa._id !== MAIN_CLIQA_ID) {
                     objectIdCliqot.push(new ObjectID(cliqa._id));
-                }   
+                }
             }
 
             query = {
@@ -553,17 +556,28 @@
         };
 
         if (filter.cliqaId) {
-            filter.cliqaId = {$in : filter.cliqaId};
+            filter.cliqaId = {
+                $in: filter.cliqaId
+            };
         }
 
-        // doto: handel multi values
         if (filter['userId'] !== undefined) {
-            var userId = filter['userId'];
+            var usersIds = filter['userId'];
+
+            var idsList = [];
+            for (var index = 0; index < usersIds.length; index++) {
+                var userId = new ObjectID(usersIds[index]);
+                idsList.push(userId);
+            }
             delete filter['userId'];
             filter['$or'] = [{
-                'from._id': new ObjectID(userId)
+                'from._id': {
+                    $in: idsList
+                }
             }, {
-                'to._id': new ObjectID(userId)
+                'to._id': {
+                    $in: idsList
+                }
             }];
         }
 
@@ -604,16 +618,28 @@
         var d = deferred();
 
         if (filter.cliqaId) {
-            filter.cliqaId = {$in : filter.cliqaId};
+            filter.cliqaId = {
+                $in: filter.cliqaId
+            };
         }
-        
+
         if (filter['userId'] !== undefined) {
-            var userId = filter['userId'];
+            var usersIds = filter['userId'];
+
+            var idsList = [];
+            for (var index = 0; index < usersIds.length; index++) {
+                var userId = new ObjectID(usersIds[index]);
+                idsList.push(userId);
+            }
             delete filter['userId'];
             filter['$or'] = [{
-                'from._id': new ObjectID(userId)
+                'from._id': {
+                    $in: idsList
+                }
             }, {
-                'to._id': new ObjectID(userId)
+                'to._id': {
+                    $in: idsList
+                }
             }];
         }
 
@@ -1059,6 +1085,105 @@
         DAL.addUsersToCliqa(cliqa, users).then(function () {
             d.resolve();
         }, function (error) {
+            d.deferred(error);
+        });
+
+        return d.promise;
+    }
+
+    function generateReport(query, io, io_m) {
+
+        var d = deferred();
+
+        // var order = query.order,
+        //     limit = parseInt(query.limit),
+        //     page = query.page,
+        //     filter = JSON.parse(query.filter);
+
+        var queryFilter = {
+            order: 'createTime',
+            limit: 100,
+            filter: query.filter
+        }
+
+        var clientId = query.clientId;
+        io_m.emitStatus(clientId, "1");
+
+        getAllTasks(queryFilter).then(function (tasks) {
+
+            io_m.emitStatus(clientId, "2");
+
+            excelHandler.downloadExcel(tasks, clientId, io_m).then(function (wb) {
+                d.resolve(wb);
+                io_m.emitStatus(clientId, "compleate");
+                //wb.write('MyExcel.xlsx', res);
+            }, function (error) {
+                winston.log("error", "error while trying to create excel file: ", error);
+                io_m.emitStatus(clientId, "error");
+                d.resolve(error);
+            });
+
+        }, function (error) {
+            io_m.emitStatus(clientId, "error");
+            d.deferred(error);
+        });
+
+        return d.promise;
+    }
+
+    function testPushRegistration(users) {
+
+        var d = deferred();
+
+        var usersIds = [],
+            gcmUsers = [],
+            apnUsers = [];
+
+        for (var index = 0; index < users.length; index++) {
+            usersIds.push(new ObjectID(users[index]));          
+        }
+
+        DAL.getUsersByUsersId(usersIds).then(function (responseUsers) {
+            if (responseUsers.length > 0) {
+                for (var index = 0; index < responseUsers.length; index++) {
+                    var user = responseUsers[0];
+                    if (user.GcmRegistrationId !== undefined) {
+                        gcmUsers.push(user.GcmRegistrationId);
+                    }
+                    if (user.ApnRegistrationId !== undefined) {
+                        apnUsers.push(user.ApnRegistrationId);
+                    }
+                }
+                
+                pushNotifications.testPushRegistration(gcmUsers, apnUsers).then(function (response){
+                    
+                    var result = {
+                        'status': 'ok'
+                    };
+
+                    if(response.gcmResualt ){
+                        if (response.gcmResualt.failure) {
+                            result['status'] = 'failure';
+                            result['message'] = response.gcmResualt.results[0].error;
+                        }
+                    }
+
+                    if(response.apnResualt){
+                        if (response.apnResualt.failed && response.apnResualt.failed.length) {
+                            result['status'] = 'failure';
+                            result['message'] = response.apnResualt.failed[0].response.reason;
+                        }
+                    }
+
+
+                     d.resolve(result);
+                }, function (errror) {
+                    winston.log('error', error.message, error.err);
+                    d.deferred(error);
+                });
+            }
+        }, function (error) {
+            winston.log('error', error.message, error.err);
             d.deferred(error);
         });
 

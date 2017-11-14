@@ -3,7 +3,7 @@
         <div layout-align="center center" class="login-text">
             <h1>הרשמה לאפליקציה</h1>
             <h3>ברוכים הבאים ל ™Asiti</h3>
-            <h3>לפניך טופס הרשמה קצר</h3>
+            <h3>לפניך תהליך הרשמה קצר</h3>
         </div>
         <form name="signUpForm" layout="column" layout-align="center center" flex>
             <md-content class="md-no-momentum" layout-padding>
@@ -17,9 +17,8 @@
 
                 <md-input-container class="md-block">
                     <md-icon ng-md-icon icon="phone"></md-icon>
-                    <input md-no-asterisk name="phone" ng-model="vm.userPhone" type="tel"
-                           ng-pattern="/^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/"
-                           placeholder="מספר טלפון" ng-required="true">
+                    <input md-no-asterisk name="phone" ng-model="vm.userPhone" type="tel" ng-pattern="/^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/"
+                        placeholder="מספר טלפון" ng-required="true">
                     <div ng-messages="signUpForm.phone.$error">
                         <div ng-message="required">טלפון הוא שדה חובה</div>
                         <div ng-message="pattern">נא להכניס מספר טלפון חוקי</div>
@@ -66,13 +65,14 @@
                     </div>
                 </md-input-container>
             </md-content>
+
             <md-input-container>
                 <span calss="font-size-x-small font-width-100">
                     * אנו נשתמש במספר הטלפון שלך רק כדי לזהות אותך
                 </span>
             </md-input-container>
-            <md-input-container>
 
+            <md-input-container>
                 <md-checkbox md-no-asterisk ng-required="true" aria-label="acceptTerms" ng-model="vm.user.acceptTerms">
                     <span calss="font-size-x-small">
                         אנא קרא בקפידה את <a class="href-class" ng-click="vm.showTermsOfServiceAlert($event)">תנאי השירות</a>.
@@ -85,28 +85,14 @@
                     </span> -->
                 </md-checkbox>
             </md-input-container>
+
             <section layout="row" layout-align="center center" layout-wrap>
                 <md-button class="md-raised md-primary circular-progress-button" ng-click="vm.signMeUp()" ng-disabled="signUpForm.$invalid">
                     <span ng-show="!vm.inProgress">הירשם</span>
                     <md-progress-circular md-mode="indeterminate" ng-show="vm.inProgress" md-diameter="20px" class="md-accent md-hue-2"></md-progress-circular>
                 </md-button>
             </section>
+            
         </form>
-    </div>
-    
-    <div ng-if="vm.showCube">
-        <div class='Cube panelLoad' id="Cube_loadder">
-            <div class='cube-face cube-face-front'>A</div>
-            <div class='cube-face cube-face-back'>✔</div>
-            <div class='cube-face cube-face-left'>s</div>
-            <div class='cube-face cube-face-right'>i</div>
-            <div class='cube-face cube-face-bottom'>t</div>
-            <div class='cube-face cube-face-top'>✔</div>
-        </div>
-
-        <div class="syncing-text" layout="row" layout-align="center center">
-            <div ng-if="vm.loadingMode === 'syncing'"> מסנכרן את אנשי הקשר שלך ... </div>
-            <div ng-if="vm.loadingMode === 'loading'"> טוען נתונים ... </div>
-        </div>
     </div>
 </div>

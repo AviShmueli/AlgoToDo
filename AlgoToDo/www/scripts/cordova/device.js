@@ -7,11 +7,13 @@
 
     device.$inject = ['$rootScope', 'datacontext', '$cordovaDevice', '$log', '$q',
                               '$cordovaNetwork', '$cordovaAppVersion', '$cordovaVibration'/*,
-                               '$cordovaStatusbar'*/, '$cordovaContacts', '$cordovaKeyboard'];
+                               '$cordovaStatusbar'*/, '$cordovaContacts', '$cordovaKeyboard',
+                               '$timeout'];
 
     function device($rootScope, datacontext, $cordovaDevice, $log, $q,
                             $cordovaNetwork, $cordovaAppVersion, $cordovaVibration/*,
-                            $cordovaStatusbar*/, $cordovaContacts, $cordovaKeyboard) {
+                            $cordovaStatusbar*/, $cordovaContacts, $cordovaKeyboard,
+                            $timeout) {
 
         var self = this;
         self.appState = 'foreground';
@@ -123,7 +125,6 @@
                 document.addEventListener("deviceready", function () {
                     $timeout(function () {
                         if (window.cordova && window.cordova.plugins && window.cordova.plugins.Keyboard) {
-                            alert(1);
                             cordova.plugins.Keyboard.show(); //open keyboard manually
                         }
                     }, 350);

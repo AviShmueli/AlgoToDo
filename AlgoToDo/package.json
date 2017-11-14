@@ -13,10 +13,12 @@
         "cookie-parser": "^1.4.3",
         "cordova-ios": "^4.3.1",
         "cordova-plugin-actionsheet": "^2.3.3",
+        "cordova-plugin-android-permissions": "^1.0.0",
         "cordova-plugin-app-event": "1.2.0",
         "cordova-plugin-app-version": "^0.1.9",
         "cordova-plugin-appminimize": "^1.0.0",
         "cordova-plugin-apprate": "^1.3.0",
+        "cordova-plugin-audio-recorder-api": "0.0.6",
         "cordova-plugin-badge": "~0.7.2",
         "cordova-plugin-camera": "~2.3.1",
         "cordova-plugin-compat": "~1.1.0",
@@ -55,6 +57,7 @@
         "passport-local": "^1.0.0",
         "path": "^0.12.7",
         "phonegap-plugin-push": "1.8.4",
+        "phonegap-plugin-speech-recognition": "git+https://github.com/macdonst/SpeechRecognitionPlugin.git",
         "skwas-cordova-plugin-datetimepicker": "^1.0.0",
         "socket.io": "^1.4.8",
         "winston": "^2.3.0",
@@ -78,14 +81,20 @@
             "com.avishmueli.webintent": {},
             "cordova-plugin-app-event": {},
             "cordova-plugin-badge": {},
-            "cordova-plugin-camera": {},
+            "cordova-plugin-camera": {
+                "CAMERA_USAGE_DESCRIPTION": "send images in a task"
+            },
             "cordova-plugin-compat": {},
-            "cordova-plugin-contacts": {},
+            "cordova-plugin-contacts": {
+                "CONTACT_USAGE_DESCRIPTION": "send task to contacts"
+            },
             "cordova-plugin-datepicker": {},
             "cordova-plugin-datetimepicker": {},
             "cordova-plugin-device": {},
             "cordova-plugin-dialogs": {},
-            "cordova-plugin-file": {},
+            "cordova-plugin-file": {
+                "PHOTO_LIBRARY_USAGE_DESCRIPTION": "send files in a task"
+            },
             "cordova-plugin-file-transfer": {},
             "cordova-plugin-filepath": {},
             "cordova-plugin-globalization": {},
@@ -110,7 +119,13 @@
             "cordova-sms-plugin": {},
             "de.appplant.cordova.plugin.local-notification": {},
             "skwas-cordova-plugin-datetimepicker": {},
-            "ionic-plugin-keyboard": {}
+            "ionic-plugin-keyboard": {},
+            "cordova-plugin-audio-recorder-api": {},
+            "phonegap-plugin-speech-recognition": {
+                "MICROPHONE_USAGE_DESCRIPTION": "record voice to comment on a task",
+                "SPEECH_RECOGNITION_USAGE_DESCRIPTION": " "
+            },
+            "cordova-plugin-android-permissions": {}
         }
     }
 }

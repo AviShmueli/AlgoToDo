@@ -8,12 +8,14 @@
     pushNotifications.$inject = ['$rootScope', 'datacontext', '$cordovaPushV5',
                               '$log', '$mdToast', '$cordovaVibration', '$q',
                               'dropbox', 'storage', 'device', '$cordovaSms',
-                              '$location', 'cordovaPlugins', '$mdDialog', '$toast'];
+                              '$location', 'cordovaPlugins', '$mdDialog', '$toast',
+                              'DAL'];
 
     function pushNotifications($rootScope, datacontext, $cordovaPushV5,
                              $log, $mdToast, $cordovaVibration, $q,
                              dropbox, storage, device, $cordovaSms,
-                             $location, cordovaPlugins, $mdDialog, $toast) {
+                             $location, cordovaPlugins, $mdDialog, $toast,
+                             DAL) {
 
         var self = this;
         self.push = {};
@@ -349,12 +351,19 @@
                 });
         }
 
+        /* ------- test push registration ------ */
+        var testPushRegistration = function (usersIds) {
+            // this function gets ids of users and call the server to push fake notification to those users
+            return DAL.testPushRegistration(usersIds);
+        }
+
         var service = {
             registerForPushNotifications: registerForPushNotifications,
             initializePushV5: initializePushV5,
             onNotificationReceived: onNotificationReceived,
             startListening: startListening,
-            clearAllNotifications: clearAllNotifications
+            clearAllNotifications: clearAllNotifications,
+            testPushRegistration: testPushRegistration 
         };
 
         return service;

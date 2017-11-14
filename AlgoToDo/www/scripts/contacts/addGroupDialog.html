@@ -20,22 +20,15 @@
                         </md-button>
                     </md-menu-item>
                 </md-menu-content>
-            </md-menu>  
+            </md-menu>
         </div>
     </md-toolbar>
     <md-dialog-content flex md-scroll-y class="md-padding" layout-margin>
         <form name="newTaskForm" novalidate>
             <div layout layout-sm="column">
-                <md-contact-chips flex md-input-name="autocompleteField"
-                                  md-autofocus="true" ng-required="true"
-                                  ng-model="vm.selectedRecipients"
-                                  md-contacts="vm.querySearch($query)"
-                                  md-contact-name="name"
-                                  md-contact-image="avatarUrl"
-                                  md-require-match="true"
-                                  md-highlight-flags="i"
-                                  placeholder="משתתפים"
-                                  secondary-placeholder="משתתפים נוספים">
+                <md-contact-chips flex md-input-name="autocompleteField" md-autofocus="true" ng-required="true" ng-model="vm.selectedRecipients"
+                    md-contacts="vm.querySearch($query)" md-contact-name="name" md-contact-image="avatarUrl" md-require-match="true"
+                    md-highlight-flags="i" placeholder="משתתפים" secondary-placeholder="משתתפים נוספים">
                 </md-contact-chips>
 
             </div>
@@ -46,9 +39,8 @@
                 <md-input-container flex class="md-block">
                     <!--<label>שם הקוצה</label>-->
                     <!--<textarea class="texterea-font-size new-task-text" name="description" ng-model="vm.task.description" md-maxlength="20" rows="2" max-rows="7" required md-no-asterisk="true"></textarea>-->
-                    <input md-no-asterisk ng-model="vm.group.name" name="name" 
-                           type="text" placeholder="שם הקבוצה" 
-                           ng-minlength="5" ng-maxlength="25" ng-required="true"/>
+                    <input md-no-asterisk ng-model="vm.group.name" name="name" type="text" placeholder="שם הקבוצה" ng-minlength="5" ng-maxlength="25"
+                        ng-required="true" />
                     <div ng-messages="newTaskForm.name.$error" ng-if="newTaskForm.name.$touched">
                         <div ng-message="required">נא לתת שם לקבוצה</div>
                         <div ng-message="minlength">השם קצר מידי (בין 5 ל25 תווים)</div>
@@ -60,15 +52,20 @@
         </form>
 
     </md-dialog-content>
-    <md-dialog-actions layout="row" layout-align="center center">
-        <md-button flex flex-gt-sm="20" class="md-raised md-accent"
-                   type="submit" ng-click="vm.save()" ng-disabled="newTaskForm.$invalid">
-            <span ng-hide="vm.submitInProcess">שמור</span>
-            <md-progress-circular md-mode="indeterminate" ng-show="vm.submitInProcess" 
-                                  md-diameter="20px" class="md-accent md-hue-2"></md-progress-circular>
-        </md-button>
-        <md-button flex flex-gt-sm="20" class="md-raised md-accent" type="submit" ng-click="vm.cancel()">
-            <span>בטל</span>
-        </md-button>
+    <md-dialog-actions>
+        <div layout="row" layout-align="space-around center" flex>
+            <div flex flex-gt-sm="20" layout="column" layout-align="space-around stretch">
+                <md-button class="md-raised md-accent" type="submit" ng-click="vm.save()" ng-disabled="newTaskForm.$invalid">
+                    <span ng-hide="vm.submitInProcess">שמור</span>
+                    <md-progress-circular md-mode="indeterminate" ng-show="vm.submitInProcess" md-diameter="20px" class="md-accent md-hue-2"></md-progress-circular>
+                </md-button>
+            </div>
+            <div flex flex-gt-sm="20" layout="column" layout-align="space-around stretch">
+                <md-button class="md-raised md-accent" type="submit" ng-click="vm.cancel()">
+                    <span>בטל</span>
+                </md-button>
+            </div>
+        </div>
     </md-dialog-actions>
 </md-dialog>
+

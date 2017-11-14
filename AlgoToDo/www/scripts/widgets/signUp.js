@@ -6,32 +6,35 @@
         .controller('signUpCtrl', signUpCtrl);
 
     signUpCtrl.$inject = ['$scope', 'datacontext', 'logger', 'cordovaPlugins', '$q', 'pushNotifications',
-        'device', '$mdDialog', 'DAL', '$location', 'contactsSync', '$timeout'
+        'device', '$mdDialog', 'DAL', '$location', 'contactsSync', '$timeout', '$interval', 'storage'
     ];
 
     function signUpCtrl($scope, datacontext, logger, cordovaPlugins, $q, pushNotifications,
-        device, $mdDialog, DAL, $location, contactsSync, $timeout) {
+        device, $mdDialog, DAL, $location, contactsSync, $timeout, $interval, storage) {
 
         angular.element(document.querySelectorAll('html')).addClass("hight-auto");
-
+        angular.element(document.getElementsByTagName('body')).removeClass('background-white');
+        
         var vm = this;
         vm.inProgress = false;
         vm.user = {};
         vm.AllCliqot = [];
         vm.selectedCliqa;
-        vm.showCube = false;
-        vm.loadingMode = 'syncing';
+        vm.progress = 0;
+        vm.imagesPath = device.getImagesPath();
+        vm.womanAvatar = '/images/woman-' + Math.floor((Math.random() * 15) + 1) + '.svg';
+        vm.manAvatar = '/images/man-' + Math.floor((Math.random() * 9) + 1) + '.svg';
 
         DAL.getAllCliqot().then(function (allCliqot) {
             vm.AllCliqot = allCliqot.data;
         });
 
-        vm.imagesPath = device.getImagesPath();
-
-        vm.womanAvatar = '/images/woman-' + Math.floor((Math.random() * 15) + 1) + '.svg';
-        vm.manAvatar = '/images/man-' + Math.floor((Math.random() * 9) + 1) + '.svg';
-
-
+        var user = datacontext.getUserFromLocalStorage();
+        if (user !== undefined) {
+            datacontext.reloadAllTasks();
+            $location.path('/tasksList');
+        }
+        
         vm.signMeUp = function () {
             if (vm.inProgress === false) {
                 vm.inProgress = true;
@@ -42,12 +45,6 @@
                 registerUser();
             }
         };
-
-        var user = datacontext.getUserFromLocalStorage();
-        if (user !== undefined) {
-            datacontext.reloadAllTasks();
-            $location.path('/tasksList');
-        }
 
         var registerUser = function () {
             vm.user.phone = vm.userPhone;
@@ -68,19 +65,11 @@
 
             document.addEventListener("deviceready", function () {
 
-               vm.user.device = device.getDeviceDetails();
+                vm.user.device = device.getDeviceDetails();
                 datacontext.setDeviceDetailes(vm.user.device, cordova.file.applicationDirectory);
-
-                registerUserForPushService().then(function (registrationId) {
-
-                    if (vm.user.device.platform === 'iOS') {
-                        vm.user.ApnRegistrationId = registrationId;
-                    }
-                    if (vm.user.device.platform === 'Android') {
-                        vm.user.GcmRegistrationId = registrationId;
-                    }
-
+              
                     DAL.registerUser(vm.user).then(function (response) {
+
                         if (response.data.error) {
                             vm.inProgress = false;
                             showRegistrationFailedAlert('מספר הטלפון שהוזן רשום כבר לאפליקציה, נסה להיכנס שוב במסך הקודם.');
@@ -90,10 +79,11 @@
                         }
                     }, function (error) {
                         vm.inProgress = false;
+                        angular.element(document.getElementsByTagName('body')).removeClass('background-white');
                         logger.error("error while trying to register user to app: ", error.data || error);
                         showRegistrationFailedAlert();
                     });
-                });
+                
             }, false);
 
         };
@@ -104,26 +94,23 @@
 
                 DAL.checkIfVerificationCodeMatch(vm.user, verificationCode).then(function (result) {
                     if (result.data === 'ok') {
+
                         datacontext.saveUserToLocalStorage(vm.user);
 
-                        showCube();
-                        contactsSync.syncPhoneContactsWithServer().then(function () {
-                            vm.loadingMode = 'loading';
-                            datacontext.reloadAllTasks().then(function () {
-                                $location.path('/tasksList');
-                            });
-                        }, function () {
-                            vm.loadingMode = 'loading';
-                            datacontext.reloadAllTasks().then(function () {
-                                $location.path('/tasksList');
-                            });
-                        });
+                        $timeout(function(){
+                            datacontext.saveLoginStepToLocalStorage(2); 
+                            
+                            $location.path('/logIn');
+                        }, 500);
+                        
                     } else {
                         showVerificationFailedAlert();
                         vm.inProgress = false;
+                        angular.element(document.getElementsByTagName('body')).removeClass('background-white');
                     }
                 }, function (error) {
                     vm.inProgress = false;
+                    angular.element(document.getElementsByTagName('body')).removeClass('background-white');
                     logger.error("error while trying to check If VerificationCode Match", error);
                     showRegistrationFailedAlert();
                 });
@@ -131,21 +118,6 @@
                 DAL.reSendVerificationCodeToUser(vm.user._id);
             });
         }
-
-        var registerUserForPushService = function () {
-            var deferred = $q.defer();
-
-            pushNotifications.initializePushV5().then(function () {
-                pushNotifications.registerForPushNotifications().then(function (registrationId) {
-                    deferred.resolve(registrationId);
-                });
-            }, function (error) {
-                logger.error("error while trying to register user to app", error);
-                deferred.reject();
-            });
-
-            return deferred.promise;
-        };
 
         vm.showCliqaAlert = function (ev) {
             $mdDialog.show(
@@ -231,12 +203,6 @@
 
         };
 
-        var showCube = function () {
-            vm.showCube = true;
-            vm.loadingMode = 'syncing';
-            angular.element(document.querySelectorAll('html')).removeClass("hight-auto");
-        };
-
         function pickAvatarCtrl($scope, $mdDialog, imagesPath) {
             $scope.imagesPath = imagesPath;
             $scope.manAvatars = [];
@@ -262,7 +228,6 @@
                 $mdDialog.hide(answer);
             };
         }
-
 
         vm.exitApp = false;
 

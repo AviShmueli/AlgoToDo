@@ -42,35 +42,14 @@
                         <div layout-gt-xs="column" flex="90" layout="column">
                             <div layout-gt-xs="row" layout="column">
 
-                                <!--<md-input-container class="md-block" flex>
-                                    <label>קליקה</label>
-                                    <md-select md-no-asterisk ng-model="vm.tasksFilter.cliqaId" name="cliqa" ng-change="vm.cliqaChanged()">
-                                        <md-option ng-repeat="(key, value) in vm.allCliqot" value="{{value._id}}" dir="rtl">
-                                            {{value.name}}
-                                        </md-option>
-                                    </md-select>
-                                </md-input-container>-->
+                                <md-select-multi style="width: 25%;max-width: 25%;" select-lable="'קליקה'" select-model="vm.tasksFilter.cliqaId" select-values="vm.allCliqotValues"></md-select-multi>
 
-                                <md-select-multi style="max-width: 25%;" flex="25" select-lable="'קליקה'" select-model="vm.tasksFilter.cliqaId" select-values="vm.allCliqotValues"></md-select-multi>
+                                 <md-select-multi disabled="vm.users.length < 1" style="width: 25%;max-width: 25%;" select-lable="'משתמש'" select-model="vm.tasksFilter.userId" select-values="vm.users"></md-select-multi>
 
-
-                                <!--<md-input-container class="md-block" flex>
-                                    <label>משתמש</label>
-                                    <md-select md-no-asterisk ng-model="vm.tasksFilter.userId" name="user" ng-disabled="vm.users.length < 1">
-                                        <md-option ng-repeat="(key, value) in vm.users" value="{{value._id}}" dir="rtl">
-                                            {{value.name}}
-                                        </md-option>
-                                    </md-select>
-                                </md-input-container>-->
-
-                                 <md-select-multi disabled="vm.users.length < 1" style="max-width: 25%;" flex="25" select-lable="'משתמש'" select-model="vm.tasksFilter.userId" select-values="vm.users"></md-select-multi>
-
-
-                                <md-input-container class="md-block" flex>
+                                <md-input-container class="md-block" style="width: 25%;max-width: 50%;">
                                     <label>חיפוש</label>
                                     <input ng-model="vm.tasksFilterFreeText" name="name">
                                 </md-input-container>
-
 
                             </div>
 
@@ -102,9 +81,9 @@
                             </div>
                         </div>
 
-                        <div class="md-secondary md-block" flex="10" layout="column" layout-align="center center">
-                            <md-button ng-click="vm.getTasks(true)" class="md-warn md-raised md-hue-1">סנן</md-button>
-                            <md-button aria-label="download" ng-click="vm.downloadFilterdTable()" class=" md-raised ">
+                        <div class="md-secondary md-block" flex="10" layout="row" layout-gt-xs="column" layout-align="center center">
+                            <md-button ng-click="vm.getTasksFilter(true)" class="md-warn md-raised md-hue-1">סנן</md-button>
+                            <md-button aria-label="download" ng-click="vm.downloadFilterdTable()" class="md-raised">
                                 <md-icon ng-hide="vm.downloading" style="width:22px;height:22px;" md-svg-src="/images/Exel_download.svg">
                                 </md-icon>
                                 <md-progress-circular ng-show="vm.downloading" class="md-hue-2 btn-circular" md-diameter="20px"></md-progress-circular>
@@ -117,7 +96,7 @@
                 <md-card layout-margin>
                     <md-table-container>
                         <table md-table md-progress="vm.promise">
-                            <thead md-head md-order="vm.query.order" md-on-reorder="vm.getTasks">
+                            <thead md-head md-order="vm.query.order" md-on-reorder="vm.getTasksFilter">
                                 <tr md-row>
                                     <th md-column><span>שולח</span></th>
                                     <th md-column>נמען</th>
@@ -156,7 +135,7 @@
                     <!--</md-card>
                     <md-card>-->
                     <md-table-pagination md-label="{'of': ' מתוך ', 'page': 'עמוד מספר', 'rowsPerPage': 'מספר שורות בעמוד' }" md-limit="vm.query.limit"
-                        md-limit-options="[5, 10, 15, 20]" md-page="vm.query.page" md-total="{{vm.totalTaskCount}}" md-on-paginate="vm.getTasks"
+                        md-limit-options="[5, 10, 15, 20]" md-page="vm.query.page" md-total="{{vm.totalTaskCount}}" md-on-paginate="vm.getNextPage"
                         md-page-select></md-table-pagination>
                 </md-card>
 
@@ -294,7 +273,7 @@
                     </div>
 
                     <div class="md-secondary" layout-gt-xsm="column" flex-xs flex-gt-xs="20" layout-align="center center">
-                        <md-button ng-click="vm.getTasks()" class="md-warn md-raised md-hue-1">סנן</md-button>
+                        <md-button ng-click="vm.getTasksFilter()" class="md-warn md-raised md-hue-1">סנן</md-button>
                     </div>
 
                 </md-card>
@@ -302,7 +281,7 @@
                 <md-card layout-margin>
                     <md-table-container>
                         <table md-table md-row-select multiple ng-model="selected" md-progress="vm.promise">
-                            <thead md-head md-order="vm.query.order" md-on-reorder="vm.getTasks">
+                            <thead md-head md-order="vm.query.order" md-on-reorder="vm.getTasksFilter">
                                 <tr md-row>
                                     <th md-column><span>שולח</span></th>
                                     <th md-column>נמען</th>
@@ -336,7 +315,7 @@
                         </table>
                     </md-table-container>
 
-                    <md-table-pagination md-label="{'of': ' מתוך ', 'page': 'עמוד מספר', 'rowsPerPage': 'מספר שורות בעמוד' }" md-limit="vm.query.limit" md-limit-options="[5, 10, 15, 20]" md-page="vm.query.page" md-total="{{vm.totalTaskCount}}" md-on-paginate="vm.getTasks" md-page-select></md-table-pagination>
+                    <md-table-pagination md-label="{'of': ' מתוך ', 'page': 'עמוד מספר', 'rowsPerPage': 'מספר שורות בעמוד' }" md-limit="vm.query.limit" md-limit-options="[5, 10, 15, 20]" md-page="vm.query.page" md-total="{{vm.totalTaskCount}}" md-on-paginate="vm.getTasksFilter" md-page-select></md-table-pagination>
                 </md-card>
 
             </ui-view>-->

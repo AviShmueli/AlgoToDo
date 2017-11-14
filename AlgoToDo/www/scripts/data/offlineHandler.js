@@ -53,7 +53,7 @@
             }
 
             if (self.$storage.cachedDeleteRepeatsTasksList !== undefined && self.$storage.cachedDeleteRepeatsTasksList.length > 0) {
-                DAL.deleteRepeatsTask(self.$storage.cachedDeleteRepeatsTasksList).then(function (response) {
+                DAL.deleteRepeatsTasks(self.$storage.cachedDeleteRepeatsTasksList).then(function (response) {
                     delete self.$storage.cachedDeleteRepeatsTasksList;
                 });
             }

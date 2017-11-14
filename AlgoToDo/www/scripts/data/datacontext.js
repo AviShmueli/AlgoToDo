@@ -74,7 +74,10 @@
         };
 
         var getTaskList = function () {
-            return self.$storage.tasksList !== undefined ? self.$storage.tasksList : [];
+            if (!self.$storage.tasksList) {
+                self.$storage.tasksList = [];
+            }
+            return self.$storage.tasksList;
         };
 
         var getTaskByTaskId = function (taskId) {
@@ -98,7 +101,8 @@
             var index = common.arrayObjectIndexOf(tasksList, '_id', task._id);
             if (index === -1) {
                 replaceUsersWithPhoneContact([task]);
-                self.$storage.tasksList.push(task);
+                //self.$storage.tasksList.push(task);
+                tasksList.push(task);
             }
         };
 
@@ -163,8 +167,12 @@
                 var tasks = getTaskList();
                 var count = 0;
                 if (tasks && tasks.length > 0) {
-                    count = $filter('myTasks')(getTaskList(), userId).length;
+                    count = $filter('myTasks')(tasks, userId).length;
                     $rootScope.taskcount = count;
+                    count = $filter('unReadTasks')($filter('tasksInProgress')(tasks, userId)).length;
+                    $rootScope.newCommentsInTasksInProcessCount = count;
+                    count = $filter('unReadTasks')($filter('doneTasks')(tasks, userId)).length;
+                    $rootScope.newCommentsInDoneTasksCount = count;
                 }
                 return count;
             }
@@ -237,29 +245,30 @@
             }
 
             setMyTaskCount();
-        }
+        };
 
         var getMoreLoadedTasks = function () {
             return self.moreLoadedTasks !== undefined ? self.moreLoadedTasks : [];
-        }
+        };
 
         var addTasksToMoreLoadedTasks = function (tasks) {
             replaceUsersWithPhoneContact(tasks);
             self.moreLoadedTasks = getMoreLoadedTasks().concat(tasks);
-        }
+        };
 
         /* ----- Comments ----- */
 
         var addCommentToTask = function (taskId, comment) {
             replaceUsersWithPhoneContact([comment]);
-            var foundIndex = common.arrayObjectIndexOf(self.$storage.tasksList, '_id', taskId);
+            var tasksList = getTaskList();
+            var foundIndex = common.arrayObjectIndexOf(tasksList, '_id', taskId);
             var task;
             if (foundIndex !== -1) {
-                task = self.$storage.tasksList[foundIndex];
+                task = tasksList[foundIndex];
             }
 
-            if (task.comments === undefined) {
-                task.comments = [comment];
+            if (!task.hasOwnProperty("comments")) {
+                task["comments"] = [comment];
                 updateUnSeenResponse(task);
             }
             else {
@@ -300,7 +309,7 @@
                         1;
                 }
             }
-        }
+        };
 
         /* ---- Device ----- */
 
@@ -357,7 +366,7 @@
 
         var deleteRepeatsTaskListFromLocalStorage = function () {
             delete self.$storage.repeatsTasksList;
-        }
+        };
 
         /* ----- Users ----- */
 
@@ -373,7 +382,7 @@
                     user.avatarUrl = allCachedUsers[index].avatarUrl;
                 }
             }
-        }
+        };
 
         var saveUserToLocalStorage = function (user) {
             self.$storage.user = user;           
@@ -482,11 +491,19 @@
             }
         };
 
-        (function () {
+        var saveLoginStepToLocalStorage = function (step) {
+            self.$storage.loginStep = step;
+        }
+
+        var getLoginStepToLocalStorage = function () {
+            return self.$storage.loginStep;
+        }
+
+        //(function () {
             var user = getUserFromLocalStorage();
             if (user !== undefined) {
                 var logUser = { name: user.name, _id: user._id, phone: user.phone, versionInstalled: user.versionInstalled };
-                logUser.device = isMobileDevice() ? user.device.manufacturer + ' ' + user.device.model : 'Browser',
+                logUser.device = isMobileDevice() ? user.device.manufacturer + ' ' + user.device.model : 'Browser';
                 logger.setUser(logUser);
             }
 
@@ -495,7 +512,7 @@
                     reloadAllTasks(true);
                 }, 30000);
             }
-        })();
+        //})();
 
 
         var service = {
@@ -528,7 +545,9 @@
             getMoreLoadedTasks: getMoreLoadedTasks,
             addTasksToMoreLoadedTasks: addTasksToMoreLoadedTasks,
             sortUsersByfrequencyOfUse: sortUsersByfrequencyOfUse,
-            deleteRepeatsTaskListFromLocalStorage: deleteRepeatsTaskListFromLocalStorage
+            deleteRepeatsTaskListFromLocalStorage: deleteRepeatsTaskListFromLocalStorage,
+            saveLoginStepToLocalStorage: saveLoginStepToLocalStorage,
+            getLoginStepToLocalStorage: getLoginStepToLocalStorage
         };
 
         return service;

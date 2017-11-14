@@ -7,8 +7,10 @@
     gcmModule.sendSmsViaAdminPhone = sendSmsViaAdminPhone;
     gcmModule.sendBroadcastUpdateAlert = sendBroadcastUpdateAlert;
     gcmModule.sendReminderViaGcm = sendReminderViaGcm;
+    gcmModule.testPush = testPush;
 
     var winston = require('../logger');
+    var deferred = require('deferred');
     var gcm = require('node-gcm');
     var phoneUtil = require('google-libphonenumber').PhoneNumberUtil.getInstance();
 
@@ -75,8 +77,8 @@
                 console.error("error while sending push notification to user: " + task.to || '', err);
                 winston.log('error', "error while sending push notification to user: " + task.to || '', err);
             } else {
-                winston.log("info", "task have been send sucessfuly to user:", task);
-                console.log(response);
+                //winston.log("info", "task have been send sucessfuly to user:", task);
+                //console.log(response);
             }
         });
     }
@@ -184,9 +186,38 @@
         });
     }
 
+    function testPush(usersRegTokens) {
+
+        var d = deferred();
+
+        var message = new gcm.Message({
+            data: {
+                additionalData: {
+                    type: "testPush"
+                }
+            }
+        });
+
+        // Actually send the message
+        GcmSender.send(message, {
+            registrationTokens: usersRegTokens
+        }, function (err, response) {
+            console.log("send message", message);
+            if (err) {
+                winston.log('error', "error while sending push notification: ", err);
+                d.resolve(err);
+            } else {
+                console.log(response);
+                d.resolve(response);
+            }
+        });
+        
+        return d.promise;
+    }
+
     function sendReminderViaGcm(task, regToken) {
 
-         var message = new gcm.Message({
+        var message = new gcm.Message({
             data: {
                 additionalData: {
                     type: "task-reminder",
@@ -217,8 +248,8 @@
                 console.error("error while sending push notification to user: " + task.to || '', err);
                 winston.log('error', "error while sending push notification to user: " + task.to || '', err);
             } else {
-                winston.log("info", "task have been send sucessfuly to user:", task);
-                console.log(response);
+                //winston.log("info", "task have been send sucessfuly to user:", task);
+                //console.log(response);
             }
         });
     }

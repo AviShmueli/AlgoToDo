@@ -7,12 +7,14 @@
 
     managementCtrl.$inject = ['$rootScope', '$scope', 'logger', '$q',
         'datacontext', 'moment', '$mdMedia', 'DAL',
-        '$location', '$timeout', 'appConfig', 'filesHandler'
+        '$location', '$timeout', 'appConfig', 'filesHandler',
+        'socket', '$mdToast'
     ];
 
     function managementCtrl($rootScope, $scope, logger, $q,
         datacontext, moment, $mdMedia, DAL,
-        $location, $timeout, appConfig, filesHandler) {
+        $location, $timeout, appConfig, filesHandler,
+        socket, $mdToast) {
 
         var vm = this;
 
@@ -45,7 +47,7 @@
 
 
         $scope.$watch('vm.tasksFilter.cliqaId', function (cliqot) {
-            if(cliqot && cliqot.length){
+            if (cliqot && cliqot.length) {
                 delete vm.tasksFilter.userId;
                 // if (vm.tasksFilter.cliqaId.indexOf('$in') !== -1) {
                 //     vm.users = [];
@@ -57,25 +59,31 @@
         });
 
         //$timeout(function () {
-            
-            // vm.allCliqot['all'] = {
-            //     name: 'כל הקליקות',
-            //     '_id': {
-            //         $in: userCliqotIds
-            //     }
-            // };
-            for (var i = 0; i < vm.user.cliqot.length; i++) {
-                vm.allCliqot[vm.user.cliqot[i]._id] = vm.user.cliqot[i];
-                userCliqotIds.push(vm.user.cliqot[i]._id);
-            }
-            // { "$exists" : false } - to get the task that dont contains cliqaId filed
-            vm.allCliqotValues = Object.values(vm.allCliqot);
-            // always filer the table according to admin's cliqot!
-            vm.tasksFilter.cliqaId = userCliqotIds;
+
+        // vm.allCliqot['all'] = {
+        //     name: 'כל הקליקות',
+        //     '_id': {
+        //         $in: userCliqotIds
+        //     }
+        // };
+        for (var i = 0; i < vm.user.cliqot.length; i++) {
+            vm.allCliqot[vm.user.cliqot[i]._id] = vm.user.cliqot[i];
+            userCliqotIds.push(vm.user.cliqot[i]._id);
+        }
+        // { "$exists" : false } - to get the task that dont contains cliqaId filed
+        vm.allCliqotValues = Object.values(vm.allCliqot);
+        // always filer the table according to admin's cliqot!
+        vm.tasksFilter.cliqaId = userCliqotIds;
         //}, 0);
 
-        vm.getTasks = function (reset) {
-            
+        vm.getNextPage = function (page, skip) {
+            vm.query.page = page;
+            vm.query.skip = skip;
+            vm.getTasksFilter(false, false);
+        }
+
+        vm.getTasksFilter = function (reset, dontFilter) {
+
             if (reset) {
                 vm.query.page = 1;
             }
@@ -100,8 +108,12 @@
                     }
                     if (vm.tasksFilter[property] === '' || vm.tasksFilter[property].length < 1) {
                         delete vm.tasksFilter[property];
-                    }                   
+                    }
                 }
+            }
+            if (!vm.tasksFilter.hasOwnProperty('cliqaId')) {
+                logger.toast('חובה לבחור קליקה', 700);
+                return;
             }
 
             if (vm.tasksFilterStatusInProgress) {
@@ -127,6 +139,12 @@
                 vm.tasksFilterStatusInProgress = true;
             }
 
+            if (!dontFilter) {
+                getFilterdTasks();
+            }
+        };
+
+        var getFilterdTasks = function () {
 
             DAL.getAllTasksCount(vm.tasksFilter).then(function (response) {
                 vm.totalTaskCount = response.data;
@@ -139,10 +157,10 @@
                 window.localStorage.setItem('fakeData', JSON.stringify(vm.tasks));
                 deferred.resolve();
             });
-        };
+        }
 
         $timeout(function () {
-            vm.getTasks();
+            vm.getTasksFilter();
             //vm.tasks = JSON.parse(window.localStorage.getItem('fakeData'));
         }, 0);
 
@@ -178,7 +196,7 @@
 
             switch (vm.activeTab) {
                 case "tasks":
-                    vm.getTasks();
+                    vm.getTasksFilter();
                     break;
                 case "users":
                     vm.getUsers();
@@ -187,7 +205,7 @@
 
                     break;
                 default:
-                    vm.getTasks();
+                    vm.getTasksFilter();
                     break;
             }
         }
@@ -280,55 +298,60 @@
 
 
         vm.downloadFilterdTable = function () {
-            var fileName = 'משימות' + '_' + moment().format("DD/MM/YYYY");
-            //DAL.getAllTasks(vm.query, vm.tasksFilter, vm.user).then(function (response) {
-                var taskToDownload = convertTasksToExcelFormat(/*response.data*/vm.tasks);
-                filesHandler.downloadAsCSV(taskToDownload, fields, fileName);
-            //});
-        }
 
-        var convertTasksToExcelFormat = function (tasks) {
-            var listToReturn = []
-            for (var index = 0; index < tasks.length; index++) {
-                var task = tasks[index];
-                var excelTask = {
-                    createTime: moment(task.createTime).format("DD/MM/YYYY hh:mm"),
-                    from: task.from.name,
-                    to: task.to.name,
-                    description: task.description,
-                    status: grtStatusHebString(task.status),
-                    totalTime: vm.getTotalTaskTime(task),
-                    comments: getTaskCommentsAsString(task),
-                    photos: getTaskPhotos(task)
+            if (!vm.tasksFilter.hasOwnProperty('cliqaId')) {
+                logger.toast('חובה לבחור קליקה', 700);
+                return;
+            }
+
+            showToast();
+
+            subscribeToIO().then(function (clientId) {
+                var query = {
+                    order: 'createTime'
                 };
-                listToReturn.push(excelTask);
-            }
-            return listToReturn;
-        }
+                //updateToast('filter...');
+                vm.getTasksFilter(false, true);
 
-        var getTaskCommentsAsString = function (task) {
-            var str = '';
-            for (var index = 0; index < task.comments.length; index++) {
-                var comment = task.comments[index];
-                if (comment.text && comment.text !== '') {
-                    str += comment.from.name + ': ' + comment.text + ', ';
+                if (vm.tasksFilter.hasOwnProperty('cliqaId')) {
+                    var req = DAL.generateReport(query, vm.tasksFilter, vm.user);
+
+                    var linkElement = document.createElement('a');
+                    try {
+
+                        var url = req.url + '?query=' +
+                            JSON.stringify(req.params.query) + '&filter=' +
+                            JSON.stringify(req.params.filter) + '&clientId=' +
+                            clientId;
+
+                        linkElement.setAttribute('href', url);
+                        linkElement.setAttribute("download", "MyExcel.xlsx");
+
+                        var clickEvent = new MouseEvent("click", {
+                            "view": window,
+                            "bubbles": true,
+                            "cancelable": false
+                        });
+                        updateToast('שולח נתונים לשרת ...');
+                        linkElement.dispatchEvent(clickEvent);
+
+                        socket.emit('start', "avi");
+                    } catch (ex) {
+                        console.log(ex);
+                    }
+                } else {
+                    updateToast('אירעה שגיאה, נסה שוב');
+                    $timeout(function () {
+                        hideToast();
+                    }, 4000);
+
                 }
-            }
-            return str;
+            });
+
+
         }
 
-        var getTaskPhotos = function (task) {
-            var str = '';
-            for (var index = 0; index < task.comments.length; index++) {
-                var comment = task.comments[index];
-                if (comment.fileName && comment.fileName !== '') {
-                    str += comment.from.name + ': ' + comment.fileName + ', ';
-                }
-            }
-            return str;
-        }
-
-        var grtStatusHebString = function (status) {
+        var getStatusHebString = function (status) {
             switch (status) {
                 case 'inProgress':
                     return 'בתהליך';
@@ -340,6 +363,78 @@
                     break;
             }
         }
+
+        var deferred;
+        var subscribeToIO = function name(params) {
+            deferred = $q.defer();
+
+            socket.emit('start', "avi");
+
+            $timeout(function () {
+                deferred.resolve(clientId);
+            }, 10000);
+
+            return deferred.promise;
+        }
+        socket.on('wellcome', function (data) {
+            clientId = data;
+            if (deferred) {
+                deferred.resolve(clientId);
+            }
+        });
+        socket.on('status', function (data) {
+            handelStatusFromServer(data);
+        });
+        var clientId;
+
+        var handelStatusFromServer = function (statusCode) {
+            switch (statusCode) {
+                case "1":
+                    //updateToast('geting tasks');
+                    break;
+                case "2":
+                    //updateToast('creating worksheet');
+                    break;
+                case "3":
+                    updateToast('מוריד תמונות ...');
+                    break;
+                case "4":
+                    //updateToast('inserting data to worksheet');
+                    break;
+                case "5":
+                    //updateToast('removing temp files');
+                    break;
+                case "6":
+                    //updateToast('compleateing');
+                    break;
+                case "compleate":
+                    //updateToast('done!');
+                    hideToast();
+                    break;
+                case "error":
+                    updateToast('אירעה שגיאה, נסה שוב');
+                    $timeout(function () {
+                        hideToast();
+                    }, 4000);
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        var showToast = function () {
+            $mdToast.show($mdToast.simple().textContent('מכין נתונים ...').hideDelay(300000));
+        }
+
+        var updateToast = function (text) {
+            $mdToast.updateTextContent(text);
+        }
+
+        var hideToast = function () {
+            $mdToast.hide();
+        }
+
+
     }
 
 })();

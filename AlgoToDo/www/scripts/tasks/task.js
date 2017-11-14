@@ -7,7 +7,7 @@
 
     taskCtrl.$inject = ['$rootScope', '$scope', 'logger', '$q', 'storage',
          'datacontext', '$routeParams', '$window', 'moment',
-         'socket', 'cordovaPlugins', 'dropbox', 'appConfig',
+         'cordovaPlugins', 'dropbox', 'appConfig',
          'localNotifications', 'camera', 'device', '$mdDialog',
          'DAL', '$offlineHandler', '$location', '$timeout',
          'pushNotifications', '$toast', '$transitions', '$mdMedia'
@@ -15,12 +15,14 @@
 
     function taskCtrl($rootScope, $scope, logger, $q, storage,
                       datacontext, $routeParams, $window, moment,
-                      socket, cordovaPlugins, dropbox, appConfig,
+                      cordovaPlugins, dropbox, appConfig,
                       localNotifications, camera, device, $mdDialog,
                       DAL, $offlineHandler, $location, $timeout,
                       pushNotifications, $toast, $transitions, $mdMedia) {
 
         var vm = this;
+
+        angular.element(document.getElementsByTagName('body')).removeClass('background-white');
 
         vm.taskId = $routeParams.taskId.split('&')[0];
         vm.task = datacontext.getTaskByTaskId(vm.taskId);
@@ -108,10 +110,32 @@
                             vm.task.comments.push(comment);
                             addImageToGallery(comment.fileName, comment.fileLocalPath);
 
+                            var userIdToNotify = '';
+                            if (vm.task.to._id !== vm.task.from._id) {
+                                if (vm.task.from._id === comment.from._id) {
+                                    userIdToNotify = vm.task.to._id;
+                                }
+                                else {
+                                    userIdToNotify = vm.task.from._id;
+                                }
+                            }
+
                             //if (vm.task.from._id !== vm.task.to._id) {
-                                dropbox.uploadNewImageToDropbox(fileEntry.filesystem.root.nativeURL, fileEntry.name, fileName).then(function () {
+                                dropbox.uploadNewImageToDropbox(fileEntry.filesystem.root.nativeURL, fileEntry.name, fileName)
+                                .then(function () {
                                     DAL.newComment(vm.task._id, tempComment);
                                     camera.cleanupAfterPictureTaken();
+                                }, function (error) {
+                                    if (error.status === -1) {
+                                        error.data = "App lost connection to the server";
+                                    }
+                                    logger.error('Error while trying to upload file to dropbox: ', error.data || error);
+                                    tempComment.offlineMode = true;
+                                    comment.offlineMode = true;
+                                    $offlineHandler.addTasksToCachedImagesList({nativeUrl: fileEntry.filesystem.root.nativeURL, fileName: fileName});
+                                    if (vm.task._id.indexOf('tempId') === -1) {
+                                        $offlineHandler.addCommentToCachedNewCommentsList(vm.task._id, comment, userIdToNotify);
+                                    }
                                 });
                            // }
                             //else {
@@ -558,6 +582,130 @@
 
             vm.goBack();
         }
+
+        /* ---  Speech Recognition -----*/
+
+        // without speech recognition
+        vm.btnState = 'send';
+        
+        // with speech recognition
+        vm.btnState = 'mic';
+
+        vm.changeBtnState = function () {
+            
+            if (vm.newCommentText === '') {
+                vm.btnState = 'mic';
+            }
+            else {
+                vm.btnState = 'send';
+            }
+        }
+
+        vm.recognition;
+
+        var initialRecognitionObject = function () {
+            if (!device.isMobileDevice()) {
+                vm.recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition || window.mozSpeechRecognition || window.msSpeechRecognition)();
+                //vm.recognition = new webkitSpeechRecognition();
+            }
+            else {
+                vm.recognition = new SpeechRecognition();
+            }
+            vm.recognition.continuous = true;
+            vm.recognition.interimResults = false;
+            vm.recognition.lang = 'he-IL';
+            vm.recording = false;
+            vm.recognitionIsAlreadyCalled = false;
+
+            vm.recognition.onresult = function (event) {
+                if (event.results[0][0].transcript !== undefined) {
+                    vm.newCommentText = event.results[0][0].transcript;
+                    vm.btnState = 'send';
+                    if (!$scope.$$phase) {
+                        $scope.$digest();
+                    }
+                }
+            }
+        }
+
+        $timeout(initialRecognitionObject, 0);
+
+        vm.startRecord = function () {
+            vm.isHolded = true;
+
+            $timeout(function () {
+                if (vm.isHolded) {
+                    if (vm.recognitionIsAlreadyCalled === false) {
+                        vm.recognitionIsAlreadyCalled = true;
+                        vm.newCommentText = 'מקליט...';
+                        if (device.isMobileDevice()) {
+                            device.vibrate(100);
+                        }
+                        vm.recognition.start();
+                        
+                    }                           
+                           /*device.recordAudio().then(function (savedFilePath) {
+                               var fileName = savedFilePath.split('/')[savedFilePath.split('/').length - 1];
+                               var folderpath = 'Asiti/' + vm.task._id + '/';
+                               var newFileName = new Date().toISOString().replace(/:/g, "_") + '.m4a';
+                               storage.moveFileToAppFolder(cordova.file.dataDirectory, fileName, folderpath, newFileName).then(function (storageFilePath) {
+                                   var a = storageFilePath;
+                               }, function (error) {
+                                   logger.error("error while trying to save audio file to app folder", error);
+                               });
+                           }, function (error) {
+                               logger.error("error while trying to record audio", error);
+                           });*/
+                    
+                }
+            }, 200);
+        }
+
+        vm.endRecord = function () {
+            vm.isHolded = false;
+            
+            if (vm.newCommentText === 'מקליט...') {
+                vm.newCommentText = '';
+            }
+            vm.recognitionIsAlreadyCalled = false;
+            vm.recognition.stop();
+
+            if (!$scope.$$phase) {
+                $scope.$digest();
+            }
+            /*window.plugins.audioRecorderAPI.stop(function (msg) {
+                // success
+                //alert('ok: ' + msg);
+            }, function (msg) {
+                // failed
+                //alert('ko: ' + msg);
+            });*/
+
+           /* window.plugins.audioRecorderAPI.playback(function (msg) {
+                // complete
+                alert('ok: ' + msg);
+            }, function (msg) {
+                // failed
+                alert('ko: ' + msg);
+            });*/
+        }
+
+        $timeout(function () {
+            angular.element(document.getElementById('recordBTN')).
+                bind('touchstart mousedown', function (event) {
+                    if (vm.btnState === 'mic') {
+                        vm.startRecord();
+                    }
+                    else {
+                        vm.addComment();
+                    }                   
+                });
+
+            angular.element(document.getElementById('recordBTN')).
+                bind('touchend mouseup', function (event) {
+                    vm.endRecord();
+                });
+        }, 100);
     }
 
 })();

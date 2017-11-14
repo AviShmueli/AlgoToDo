@@ -9,10 +9,12 @@
     pushNotifications.sendSmsViaAdminPhone = sendSmsViaAdminPhone;
     pushNotifications.sendBroadcastUpdateAlert = sendBroadcastUpdateAlert;
     pushNotifications.pushReminder = pushReminder;
+    pushNotifications.testPushRegistration = testPushRegistration;
 
 
     var apn = require('./apn');
     var gcm = require('./gcm');
+    var deferred = require('deferred');
 
     function createApnProvider() {
         apn.createApnProvider();
@@ -61,6 +63,44 @@
         if (platform === 'iOS') {
             apn.sendBroadcastUpdateAlert(usersRegTokens);
         }
+    }
+
+    function testPushRegistration(gcmUsers, apnUsers) {
+        
+        var d = deferred();
+
+        var gcmCompleate = false, apnCompleate = false,
+            apnResualt, gcmResualt;
+
+        if (gcmUsers && gcmUsers.length) {
+            gcm.testPush(gcmUsers).then(function(response){
+                gcmCompleate = true;
+                gcmResualt = response;
+                if(apnCompleate){
+                    d.resolve({gcmResualt: gcmResualt, apnResualt: apnResualt});
+                }
+            });
+        }
+        else{
+            gcmCompleate = true;
+            gcmResualt = {};
+        }
+
+        if (apnUsers && apnUsers.length) {
+            apn.testPush(apnUsers).then(function(response){
+                apnCompleate = true;
+                apnResualt = response;
+                if(apnCompleate){
+                    d.resolve({gcmResualt: gcmResualt, apnResualt: apnResualt});
+                }
+            });
+        }
+        else{
+            apnCompleate = true;
+            apnResualt = {};
+        }
+
+        return d.promise;
     }
 
     function sendSmsViaAdminPhone(verificationCode, AdminRegToken, user) {

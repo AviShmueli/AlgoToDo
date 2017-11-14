@@ -265,5 +265,33 @@
         },
         "is_top_level": true,
         "variables": {}
+    },
+    "cordova-plugin-audio-recorder-api": {
+        "source": {
+            "type": "registry",
+            "id": "cordova-plugin-audio-recorder-api"
+        },
+        "is_top_level": true,
+        "variables": {}
+    },
+    "cordova-plugin-android-permissions": {
+        "source": {
+            "type": "registry",
+            "id": "cordova-plugin-android-permissions"
+        },
+        "is_top_level": true,
+        "variables": {}
+    },
+    "phonegap-plugin-speech-recognition": {
+        "source": {
+            "type": "git",
+            "url": "https://github.com/macdonst/SpeechRecognitionPlugin",
+            "subdir": "."
+        },
+        "is_top_level": true,
+        "variables": {
+            "MICROPHONE_USAGE_DESCRIPTION": "send",
+            "SPEECH_RECOGNITION_USAGE_DESCRIPTION": "send"
+        }
     }
 }

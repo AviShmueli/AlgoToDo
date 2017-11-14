@@ -9,7 +9,7 @@
         '$rootScope', '$scope', 'logger', '$location', 'cordovaPlugins',
         '$mdBottomSheet','$filter', '$timeout',
         '$mdSidenav', '$mdDialog', 'datacontext',
-        'socket', '$mdToast', 'moment', '$q',
+        '$mdToast', 'moment', '$q',
         'pushNotifications', 'localNotifications', 'device',
         'DAL', '$offlineHandler', '$toast', '$transitions'
     ];
@@ -17,7 +17,7 @@
     function TasksListCtrl($rootScope, $scope, logger, $location, cordovaPlugins,
                             $mdBottomSheet,$filter, $timeout,
                             $mdSidenav, $mdDialog, datacontext,
-                            socket, $mdToast, moment, $q,
+                            $mdToast, moment, $q,
                             pushNotifications, localNotifications, device,
                             DAL, $offlineHandler, $toast, $transitions) {
 

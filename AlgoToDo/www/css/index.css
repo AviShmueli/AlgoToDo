@@ -1,4 +1,6 @@
-
+tm-sidenav{
+    height: 100%;
+}
 .md-char-counter {
     direction: ltr;
 }
@@ -806,14 +808,15 @@ md-tabs.md-primary > md-tabs-wrapper > md-tabs-canvas > md-pagination-wrapper > 
   font-size: large;
 }
 .syncing-text {
-  color: white;
-  text-shadow:
+  direction: rtl;
+  color: #b7b6b6;
+  /*text-shadow:
    -1px -1px 0 #000,  
     1px -1px 0 #000,
     -1px 1px 0 #000,
-     1px 1px 0 #000;
-  font-size: large;
-  padding-top: 10%;
+     1px 1px 0 #000;*/
+  font-size: small;
+  padding-top: 5%;
 }
 .logo{ width: 40px}
 .timer-text{ color:rgb(186, 195, 196) ; position: relative;}
@@ -842,4 +845,12 @@ md-fab-trigger > .md-icon-button:hover {    background-color: rgb(221,44,0) !imp
     color: blue;
     z-index: 100000;
     cursor: pointer;
+}
+
+.md-toast-content{
+    direction: rtl;
+}
+
+.background-white{
+    background: aliceblue !important;
 }

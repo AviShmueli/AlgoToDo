@@ -7,14 +7,14 @@
 
     groupTaskCtrl.$inject = ['$rootScope', '$scope', 'logger', '$q', 'storage',
          'datacontext', '$routeParams', '$window', 'moment',
-         'socket', 'cordovaPlugins', 'dropbox', 'appConfig',
+         'cordovaPlugins', 'dropbox', 'appConfig',
          'localNotifications', 'camera', 'device', '$filter',
          'DAL', '$offlineHandler', '$location', '$timeout'
     ];
 
     function groupTaskCtrl($rootScope, $scope, logger, $q, storage,
                       datacontext, $routeParams, $window, moment,
-                      socket, cordovaPlugins, dropbox, appConfig,
+                      cordovaPlugins, dropbox, appConfig,
                       localNotifications, camera, device, $filter,
                       DAL, $offlineHandler, $location, $timeout) {
 

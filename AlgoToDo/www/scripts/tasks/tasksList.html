@@ -191,16 +191,18 @@
                                             <span ng-if="item.type === 'group-main'" class="from">{{(item.to.length === 1 ? item.to[0].name : (item.to[0].name + ' +' + (item.to.length - 1)))}}</span>
                                             <span flex></span>
                                             <span class="time">{{vm.getTotalTaskTime(item)}}</span>
-                                            <ng-md-icon icon="timer" size="20"></ng-md-icon>
+                                            <ng-md-icon ng-if="item.status === 'done'" icon="timer" size="20"></ng-md-icon>
+                                            <ng-md-icon ng-if="item.status === 'closed'" icon="block" size="20"></ng-md-icon>                                            
                                         </div>
                                         <div layout="row">
                                             <div layout="row" class="font-14px">
                                                 <span ng-if="item.description.length > vm.descriptionTextLength()">{{item.description.substring(0, vm.descriptionTextLength()) + '...'}}</span>
                                                 <span ng-if="item.description.length <= vm.descriptionTextLength()">{{item.description}}</span>
                                             </div>
-                                            <!--<span flex></span>-->
-                                            <!--<span class="time">{{item.doneTime | date:'HH:mm'}}</span>-->
-                                            <!--<ng-md-icon icon="timer_off" size="20"></ng-md-icon>-->
+                                            <span flex></span>
+                                            <!-- <span class="time">{{item.doneTime | amCalendar}}</span> -->
+                                            <!-- <span class="font-bold" ng-bind-html="(item.createTime | amCalendar)"></span> -->
+                                            <!-- <ng-md-icon icon="timer_off" size="20"></ng-md-icon> -->
                                         </div>
 
                                     </a>

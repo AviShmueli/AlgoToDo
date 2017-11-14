@@ -109,6 +109,14 @@
         },
         "ionic-plugin-keyboard": {
             "PACKAGE_NAME": "com.algotodo.app"
+        },
+        "cordova-plugin-audio-recorder-api": {
+            "PACKAGE_NAME": "com.algotodo.app"
+        },
+        "phonegap-plugin-speech-recognition": {
+            "MICROPHONE_USAGE_DESCRIPTION": "record voice to comment on a task",
+            "SPEECH_RECOGNITION_USAGE_DESCRIPTION": " ",
+            "PACKAGE_NAME": "com.algotodo.app"
         }
     },
     "dependent_plugins": {}

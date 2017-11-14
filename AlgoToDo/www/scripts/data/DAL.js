@@ -457,6 +457,31 @@
             return $http(req);
         };
 
+        var generateReport = function (query, filter, user) {
+            var req = {
+                method: 'GET',
+                url: appConfig.appDomain() + '/TaskManeger/generateReport',
+                params: {
+                    query: query,
+                    filter: filter
+                }
+            };
+
+            return req;
+        };
+
+        var testPushRegistration = function (users) {
+            var req = {
+                method: 'POST',
+                url: appConfig.appDomain() + '/TaskManeger/testPushRegistration',
+                data: {
+                    users: users
+                }
+            };
+
+            return $http(req);
+        };
+
         var service = {
             saveNewTasks: saveNewTasks,
             getTasks: getTasks,
@@ -490,7 +515,9 @@
             addNewGroup: addNewGroup,
             deleteGroups: deleteGroups,
             getUsersInCliqa: getUsersInCliqa,
-            addUsersToCliqa: addUsersToCliqa
+            addUsersToCliqa: addUsersToCliqa,
+            generateReport: generateReport,
+            testPushRegistration: testPushRegistration
         };
 
         return service;

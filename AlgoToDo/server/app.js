@@ -53,10 +53,10 @@ var jobs = require('./cron-jobs');
 /*setTimeout(function(){
     jobs.startAllJobs();
     console.log("*** start all cron jobs! ***");
-},0);
-*/
+},0);*/
 
-/* ---- Start the server ------ */
+
+// /* ---- Start the server ------ */
 server.listen(process.env.PORT || 5001, function (err) {
     console.log("Express server listening on port %d in %s mode", this.address().port, app.settings.env);
 });
@@ -432,3 +432,34 @@ app.post('/TaskManeger/addUsersToCliqa', function (req, res) {
     });
 
 });
+
+app.get('/TaskManeger/generateReport', function (req, res) {
+    
+    BL.generateReport(req.query, io, io_m).then(function (excelFile) {
+        excelFile.write('MyExcel.xlsx', res);
+    }, function (error) {
+        winston.log('error', error.message, error.error);
+        res.status(500).send(error);
+    });
+
+});
+
+
+
+app.post('/TaskManeger/testPushRegistration', function (req, res) {
+    
+        BL.testPushRegistration(req.body.users).then(function (response) {
+            res.send(response);
+        }, function (error) {
+            winston.log('error', error.message, error.error);
+            res.status(500).send(error);
+        });
+    
+    });
+
+
+
+
+// ----- socket.io ------ //
+var io_m = require('./socket.io');
+var io = io_m.listen(server);
