@@ -18,7 +18,8 @@
     var apn = require('apn');
     var deferred = require('deferred');
 
-    var APNsAuthKey = path.join(__dirname, './ApnCertificates/APNsAuthKey_DY2XKZ998J.p8'); // new
+    var APNsAuthKey = path.join(__dirname, './ApnCertificates/AuthKey_KXU7DCTENF.p8'); // newer    
+    //var APNsAuthKey = path.join(__dirname, './ApnCertificates/APNsAuthKey_DY2XKZ998J.p8'); // new
     //var APNsAuthKey = path.join(__dirname, './ApnCertificates/APNsAuthKey_JXZ3MBK8YA.p8');// old
     var pfx = path.join(__dirname, './ApnCertificates/production/prod_Certificates.p12');
     var cert = path.join(__dirname, './ApnCertificates/production/aps_prod_cert.pem');
