@@ -1,21 +1,9 @@
 ﻿<div ng-controller="repeatsTasksCtrl as vm" layout="column" class="relative" layout-fill role="main">
     <md-toolbar class="task-toolbar">
         <div class="md-toolbar-tools">
-            <!--<md-menu md-position-mode="target-left target">
-                <md-button aria-label="Open phone interactions menu" class="md-icon-button" ng-click="vm.openMenu($mdOpenMenu, $event)">
-                    <ng-md-icon icon="more_vert"></ng-md-icon>
-                </md-button>
-                <md-menu-content width="4">
-                    <md-menu-item>
-                        <md-button class="no-line-height" ng-disabled="!vm.taskIsFromMe" ng-click="ctrl.redial($event)">
-                            <div layout="row" flex>
-                                <ng-md-icon class="rotate icon-fill" ng-class="{'icon-fill': vm.taskIsFromMe}" md-menu-align-target icon="forward"></ng-md-icon>
-                                <p flex class="text-align-right">העבר משימה</p>
-                            </div>
-                        </md-button>
-                    </md-menu-item>
-                </md-menu-content>
-            </md-menu>-->
+            <md-button class="md-icon-button" ng-click="vm.showGridBottomSheet()" aria-label="Menu">
+                <ng-md-icon icon="{{vm.selectedViewMode.icon}}"></ng-md-icon>
+            </md-button>
             <span flex></span>
             <h2>
                 <span class="color-white">משימות חוזרות</span>
@@ -34,24 +22,76 @@
 
     <md-content flex md-scroll-y class="height-100P">
         <main flex>
-            <ui-view layout="column" layout-fill>
+            <ui-view layout="column" layout-fill flex>
 
-                <div aria-labelledby="all"
-                     layout="row" layout-align="center center">
+                <script id="customMonthCell.html" type="text/ng-template">
+                    <div class="cal-month-day {{day.cssClass}}" dir="rtl">
+
+                        <span class="pull-right" data-cal-date ng-click="vm.calendarCtrl.dateClicked(day.date)" ng-bind="day.label">
+                        </span>
+
+                        <small style="position: absolute; bottom: 10px; left: 5px" ng-if="day.events.length > 1">
+                            {{day.events.length}} משימות
+                        </small>
+                        <small style="position: absolute; bottom: 10px; left: 5px" ng-if="day.events.length == 1">
+                            משימה אחת
+                        </small>
+
+                    </div>
+                </script>
+                
+                <div layout="row" layout-align="space-around center">
+
+                    <div layout="column">
+                        <md-button class="md-icon-button md-accent" aria-label="Favorite" mwl-date-modifier date="vm.viewDate" decrement="vm.selectedViewMode.modeText">
+                                <ng-md-icon icon="navigate_before"></md-icon>
+                        </md-button>
+                    </div>
+                    <div layout="column">
+                        <h2 class="text-center" ng-if="vm.selectedViewMode.mode !== 7">{{ vm.calendarTitle }}</h2>
+                        <h2 class="text-center" ng-if="vm.selectedViewMode.mode === 7">{{ vm.viewDate | getWeekTitle : 'ds' }}</h2>
+                    </div>
+                    <div layout="column">
+                        <md-button class="md-icon-button md-accent" aria-label="Favorite" mwl-date-modifier date="vm.viewDate" increment="vm.selectedViewMode.modeText">
+                                <ng-md-icon icon="navigate_next"></md-icon>
+                        </md-button>
+                    </div>
+                </div>
+                <mwl-calendar 
+                    events="vm.events" 
+                    view-title="vm.calendarTitle" 
+                    view="vm.selectedViewMode.modeText" 
+                    view-date="vm.viewDate"
+                    cell-is-open="vm.cellIsOpen"
+                    day-view-start="05:00"
+                    day-view-end="23:59"
+                    day-view-split="15"                    
+                    on-event-click="vm.eventClicked(calendarEvent)"    
+                    on-event-times-changed="vm.eventTimesChanged(calendarEvent); calendarEvent.startsAt = calendarNewEventStart; calendarEvent.endsAt = calendarNewEventEnd"                    
+                    custom-template-urls="{calendarMonthCell: 'customMonthCell.html'}" 
+                    cell-modifier="vm.cellModifier(calendarCell)"
+                    on-timespan-click="vm.timespanClicked(calendarDate, calendarCell)"
+                </mwl-calendar>
+
+                <!-- <div aria-labelledby="all" layout="row" layout-align="center center">
+
                     <md-list flex flex-gt-sm="50" flex-md="66" dir="rtl" ng-show="vm.repeatsTasks.length > 0">
                         <md-list-item ng-repeat="task in vm.repeatsTasks" class="noright task-item margin margin-top-7px">
                             <md-card-avatar>
-                                <!--<img alt="avatar" ng-src="{{vm.imagesPath + (task.to.length === 1 ? task.to[0].avatarUrl : '/images/group-1.svg')}}" class="md-avatar user-avatar marg margin-right-10px" />-->
-                            
-                                <img ng-if="task.to.length > 1" alt="avatar" ng-src="{{vm.imagesPath + '/images/group-1.svg'}}" class="md-avatar user-avatar margin-right-10px" />
-                                <img ng-if="task.to.length === 1 && (task.to[0].avatarUrl.startsWith('content') || task.to[0].avatarUrl.startsWith('file'))" alt="{{task.to[0].name}}" ng-src="{{task.to[0].avatarUrl}}" class="md-avatar user-avatar margin-right-10px" />
-                                <img ng-if="task.to.length === 1 && !task.to[0].avatarUrl.startsWith('content')  && !task.to[0].avatarUrl.startsWith('file')" alt="{{task.to[0].name}}" ng-src="{{vm.imagesPath + task.to[0].avatarUrl}}" class="md-avatar user-avatar margin-right-10px" />
+
+                                <img ng-if="task.to.length > 1" alt="avatar" ng-src="{{vm.imagesPath + '/images/group-1.svg'}}" class="md-avatar user-avatar margin-right-10px"
+                                />
+                                <img ng-if="task.to.length === 1 && (task.to[0].avatarUrl.startsWith('content') || task.to[0].avatarUrl.startsWith('file'))"
+                                    alt="{{task.to[0].name}}" ng-src="{{task.to[0].avatarUrl}}" class="md-avatar user-avatar margin-right-10px"
+                                />
+                                <img ng-if="task.to.length === 1 && !task.to[0].avatarUrl.startsWith('content')  && !task.to[0].avatarUrl.startsWith('file')"
+                                    alt="{{task.to[0].name}}" ng-src="{{vm.imagesPath + task.to[0].avatarUrl}}" class="md-avatar user-avatar margin-right-10px"
+                                />
 
                             </md-card-avatar>
                             <a class="md-tile-content margin-bottom-14px" flex="100" ng-click="vm.navigateToTaskPage(item._id)">
                                 <div layout="row">
                                     <span class="from">{{(task.to.length === 1 ? task.to[0].name : (task.to[0].name + ' +' + (task.to.length - 1)))}}</span>
-                                    <!--<ng-md-icon class="head-icon fill-black" icon="send" size="10"></ng-md-icon>-->
                                     <span flex></span>
                                     <span class="font-bold">{{vm.getRepeatedTime(task)}}</span>
                                 </div>
@@ -83,9 +123,9 @@
                         </md-item>
                         <md-divider></md-divider>
                     </md-list>
-                </div>
+                </div> -->
             </ui-view>
         </main>
-</md-content>
+    </md-content>
 
 </div>

@@ -26,6 +26,8 @@
         '720kb.tooltips',
         'pr.longpress',
         'ngFileSaver',
+        'mwl.calendar', 
+        'ui.bootstrap',
 
         /*
          * Everybody has access to these.

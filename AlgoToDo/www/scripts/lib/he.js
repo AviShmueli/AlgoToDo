@@ -73,7 +73,8 @@
                     return number + ' שנה';
                 }
                 return number + ' שנים';
-            }
+            },
+            week: 'ששש'
         },
         meridiemParse: /אחה"צ|לפנה"צ|אחרי הצהריים|לפני הצהריים|לפנות בוקר|בבוקר|בערב/i,
         isPM : function (input) {
@@ -91,6 +92,9 @@
             } else {
                 return 'בערב';
             }
+        },
+        week : {
+            dow : 0// Monday is the first day of the week.
         }
     });
 

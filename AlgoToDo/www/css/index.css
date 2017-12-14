@@ -854,3 +854,20 @@ md-fab-trigger > .md-icon-button:hover {    background-color: rgb(221,44,0) !imp
 .background-white{
     background: aliceblue !important;
 }
+
+/*  Calendar  */
+.custom-template-cell {
+    color: purple;
+}
+.cal-day-hour-part-time{
+    float: right !important;
+    direction: rtl !important;
+}
+.day-event{
+    direction: rtl !important;
+}
+.cal-slide-content{
+    background-color: rgba(0, 188, 212, 0.44)!important;
+    -webkit-box-shadow: unset!important;
+    box-shadow: unset!important;
+}

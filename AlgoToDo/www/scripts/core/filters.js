@@ -72,6 +72,18 @@
             });
             return filtered;
         };
-    });
+    })
+    .filter('getWeekTitle', function (moment) {
+        return function (date) {
+            var momentDate = moment(date);
+            var weekOfMonth = momentDate.week() - momentDate.startOf('month').week() + 1;
+            var month = momentDate.months();
+            var he = moment().locale('he');
+            var monthInHeb = he.localeData().months()[month];
+            var weekInHeb = he.localeData().weekdays()[weekOfMonth -1]
+            var srtToReturn = "שבוע " + weekInHeb + " של " + monthInHeb;
+            return srtToReturn;
+        };
+    });;
 
 })();

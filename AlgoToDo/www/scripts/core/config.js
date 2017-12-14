@@ -4,11 +4,11 @@
     angular.module('app.core')
         .config(function ($routeProvider, $mdThemingProvider, $compileProvider,
             $animateProvider, LogglyLoggerProvider, $mdGestureProvider,
-            $cordovaAppRateProvider) {
+            $cordovaAppRateProvider, calendarConfig) {
 
             LogglyLoggerProvider.inputToken('301ae60a-8898-4a29-8dd0-cfd69ba095f5').sendConsoleErrors(true).includeUserAgent(true);
 
-            $compileProvider.debugInfoEnabled(false);
+            $compileProvider.debugInfoEnabled(true);
             $compileProvider.imgSrcSanitizationWhitelist(/^\s*(https?|ftp|file|blob|content):|data:image\//);
 
             $mdGestureProvider.skipClickHijack();
@@ -32,6 +32,8 @@
                 });
             $mdThemingProvider.theme('input', 'default')
                 .primaryPalette('grey');
+            
+            calendarConfig.dateFormatter = 'moment';
 
             $routeProvider.
             when('/', {
