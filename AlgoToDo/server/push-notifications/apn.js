@@ -29,7 +29,7 @@
     var apnProviderOptions = {
         token: {
             key: APNsAuthKey,
-            keyId: "DY2XKZ998J",
+            keyId: "KXU7DCTENF",
             teamId: "TYMZRJ5DHP",
         },
         /*cert: cert,
