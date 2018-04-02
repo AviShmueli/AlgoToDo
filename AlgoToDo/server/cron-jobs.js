@@ -239,7 +239,7 @@
     var getSfirartHaomerString = function () {
         var stringToReturn = '';
         var today = new Date();
-        var startDate = new Date("4/12/2017");
+        var startDate = new Date("4/1/2018");
         var timeDiff = Math.abs(today.getTime() - startDate.getTime());
         var diffDays = Math.ceil(timeDiff / (1000 * 3600 * 24)) + 1;
 
