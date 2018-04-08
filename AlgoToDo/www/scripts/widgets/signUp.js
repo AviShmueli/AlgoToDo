@@ -100,7 +100,7 @@
                         $timeout(function(){
                             datacontext.saveLoginStepToLocalStorage(2); 
                             
-                            $location.path('/logIn');
+                            $location.path('/landingPage');
                         }, 500);
                         
                     } else {
