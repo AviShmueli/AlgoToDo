@@ -385,11 +385,11 @@
             if (user === null) {
                 d.resolve('');
             } else {
-                if (user.type === undefined || (user.type !== undefined && user.type !== 'apple-tester' && user.type.indexOf('admin') === -1 && user.type !== 'tester')) {
+                /*if (user.type === undefined || (user.type !== undefined && user.type !== 'apple-tester' && user.type.indexOf('admin') === -1 && user.type !== 'tester')) {
                     setTimeout(function () {
                         sendVerificationCodeToUser(user);
                     }, 0);
-                }
+                }*/
                 d.resolve(user);
             }
         }, function (error) {
