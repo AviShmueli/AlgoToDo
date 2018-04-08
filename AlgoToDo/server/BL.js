@@ -350,7 +350,8 @@
                     if (newUser.type === 'apple-tester') {
                         d.resolve(newUser);
                     } else {
-                        sendVerificationCodeToUser(newUser).then(function () {
+                        sendVerificationCodeToUser(newUser).then(function (code) {
+                            newUser["verificationCode"] = code;
                             d.resolve(newUser);
                         }, function (error) {
                             d.deferred(error);
@@ -1025,7 +1026,8 @@
         };
 
         DAL.updateUserDetails(user._id, updateObj).then(function (result) {
-
+            d.resolve(verificationCode);
+            /*
             sms.sendSms(verificationCode, user.phone).then(function () {
                 d.resolve();
             }, function () {
@@ -1038,6 +1040,7 @@
                     d.deferred(error);
                 });
             });
+            */
         }, function (error) {
             d.deferred(error);
         });
