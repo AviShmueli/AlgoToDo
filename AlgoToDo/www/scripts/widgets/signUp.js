@@ -63,7 +63,7 @@
                 vm.user.avatarUrl = vm.womanAvatar;
             }
 
-            document.addEventListener("deviceready", function () {
+            //document.addEventListener("deviceready", function () {
 
                 vm.user.device = device.getDeviceDetails();
                 datacontext.setDeviceDetailes(vm.user.device, cordova.file.applicationDirectory);
@@ -84,7 +84,7 @@
                         showRegistrationFailedAlert();
                     });
                 
-            }, false);
+            //}, false);
 
         };
 
