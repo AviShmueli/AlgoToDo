@@ -30,7 +30,7 @@
         var params = {
             'src': '972540000000', // Sender's phone number with country code
             'dst': phone, // Receiver's phone Number with country code
-            'text': "קוד הזיהוי שלך הוא " + verificationCode + '\n' + 'בברכה מערכת Asiti.'
+            'text': "קוד הזיהוי שלך הוא " + verificationCode + '\n' + 'בברכה מערכת ToDo.'
             /*, 
                         'url' : "http://example.com/report/", // The URL to which with the status of the message is sent
                         'method' : "GET" // The method used to call the url*/
