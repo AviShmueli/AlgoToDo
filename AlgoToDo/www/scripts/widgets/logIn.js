@@ -272,7 +272,8 @@
                 parent: angular.element(document.querySelector('#VerificationCodePromptContainer')),
                 clickOutsideToClose: false,
                 locals: {
-                    userId: userId
+                    userId: userId,
+                    code: null
                 }
             });
         };

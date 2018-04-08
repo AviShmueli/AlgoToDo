@@ -5,7 +5,7 @@
         </div>
     </md-toolbar>
     <br/>
-    <h4>קוד האימות הוא {{code}} זכור אותו לכניסה הבאה</h4>
+    <h4 ng-if="code">קוד האימות הוא {{code}} זכור אותו לכניסה הבאה</h4>
     <md-dialog-content layout="row" layout-padding>
         <md-input-container layout-margin >
             <input md-no-asterisk md-autofocus focus-on="focusVerificationInput" 
