@@ -25,12 +25,12 @@
         var interval_step2, interval_step3, interval_step4, interval_step5;
 
         vm.goToSignUp = function () {
-            if (device.isMobileDevice()) {
+            //if (device.isMobileDevice()) {
                 $location.path('/signUp');
-            }
-            else {
-                showDowlandAppAlert();
-            }
+            //}
+            //else {
+            //    showDowlandAppAlert();
+           // }
         }
 
         vm.submitOnEnter = function (ev) {
