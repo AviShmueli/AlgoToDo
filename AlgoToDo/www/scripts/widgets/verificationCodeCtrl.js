@@ -5,8 +5,9 @@
         .module('app.widgets')
         .controller('verificationCodeCtrl', verificationCodeCtrl);
 
-    function verificationCodeCtrl($scope, userId, $mdDialog, $timeout, DAL) {
+    function verificationCodeCtrl($scope, userId, code, $mdDialog, $timeout, DAL) {
         $scope.showButton = false;
+         $scope.code = code;
 
         $timeout(function () {
             $scope.$broadcast('focusVerificationInput');
