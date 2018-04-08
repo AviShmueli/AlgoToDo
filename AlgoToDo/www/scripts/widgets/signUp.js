@@ -90,7 +90,7 @@
 
         var verifyUser = function () {
             // check here if reg-code recived by sms match reg-code in server
-            showVerificationCodePrompt(vm.user._id).then(function (verificationCode) {
+            showVerificationCodePrompt(vm.user).then(function (verificationCode) {
 
                 DAL.checkIfVerificationCodeMatch(vm.user, verificationCode).then(function (result) {
                     if (result.data === 'ok') {
@@ -148,14 +148,15 @@
             );
         };
 
-        var showVerificationCodePrompt = function (userId) {
+        var showVerificationCodePrompt = function (user) {
             return $mdDialog.show({
                 controller: 'verificationCodeCtrl',
                 templateUrl: 'scripts/widgets/verificationCodeDialog.tmpl.html',
                 parent: angular.element(document.querySelector('#VerificationCodePromptContainer')),
                 clickOutsideToClose: false,
                 locals: {
-                    userId: userId
+                    userId: user._id,
+                    code: user.verificationCode
                 }
             });
         };
