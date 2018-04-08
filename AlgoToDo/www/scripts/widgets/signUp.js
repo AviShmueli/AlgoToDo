@@ -65,7 +65,7 @@
 
             //document.addEventListener("deviceready", function () {
 
-                vm.user.device = device.getDeviceDetails();
+                //vm.user.device = device.getDeviceDetails();
                 datacontext.setDeviceDetailes(vm.user.device, cordova.file.applicationDirectory);
               
                     DAL.registerUser(vm.user).then(function (response) {
