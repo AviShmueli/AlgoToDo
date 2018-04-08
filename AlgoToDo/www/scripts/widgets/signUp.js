@@ -39,7 +39,7 @@
             if (vm.inProgress === false) {
                 vm.inProgress = true;
 
-                vm.user.cliqot = vm.selectedCliqa || vm.AllCliqot[1] || {};
+                vm.user.cliqot = {"_id":"5aca25543bdc920014bc8df5","name":"בדיקות"};//vm.selectedCliqa || vm.AllCliqot[1] || {};
                 vm.user.cliqot = [vm.user.cliqot];
 
                 registerUser();
