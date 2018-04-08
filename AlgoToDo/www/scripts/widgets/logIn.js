@@ -110,7 +110,7 @@
                 }
             }, 1500);
 
-            registerUserForPushService().then(function (registrationId) {
+            /*registerUserForPushService().then(function (registrationId) {
 
                 var fieldToUpdate = '';
 
@@ -141,7 +141,9 @@
                         }
                     );
                 });
-            });
+            });*/
+            
+            changeStep(5);
         }
 
         var step3_contact_sync = function () {
